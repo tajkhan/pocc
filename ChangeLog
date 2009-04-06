@@ -1,0 +1,9 @@
+2009-04-06  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* config/pocc-install.cfg,
+	* config/installer-svn.sh,
+	* install.sh,
+	* README: Initial checkin of the project.
+
+
+
