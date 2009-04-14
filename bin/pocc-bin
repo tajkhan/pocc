@@ -1,0 +1,57 @@
+#!/usr/bin/perl -w
+## pocc-bin.pl for pocc in /Users/pouchet
+## 
+## Made by Louis-Noel Pouchet
+## Contact: <louis-noel.pouchet@inria.fr>
+## 
+## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
+## Last update Wed Apr 15 01:09:09 2009 Louis-Noel Pouchet
+##
+
+use Switch;
+
+## Some global variables.
+$BASEDIR = ".";
+
+## Include command scripts.
+require "$BASEDIR/bin/pocc-checkout";
+#require "$BASEDIR/bin/pocc-make";
+
+sub print_help
+{
+    print "This is the help of pocc\n";
+}
+
+
+# args: command line options
+sub parse_args
+{
+    my $i;
+    my @args = @_;
+    for($i = 0; $i <= $#args; $i++) {
+	switch ($args[$i]) {
+	    case "help" { print_help; exit 1 }
+	    case "checkout" {  
+		if ($i < $#args) {
+		    checkout($args[$i + 1]);
+		}
+		else {
+		    checkout("base");
+		}
+		$i = $#args;
+	    }
+	    else { print "Unknown argument: $args[$i]\n"; }
+	}
+    }
+}
+
+
+# args:
+sub main
+{
+    print "parse args\n";
+    parse_args (@_);
+}
+
+
+main(@ARGV);

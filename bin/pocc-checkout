@@ -1,0 +1,81 @@
+#!/usr/bin/perl -w
+## pocc-checkout for pocc in /Users/pouchet
+##
+## Made by Louis-Noel Pouchet
+## Contact: <louis-noel.pouchet@inria.fr>
+##
+## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
+## Last update Wed Apr 15 01:30:24 2009 Louis-Noel Pouchet
+##
+
+use Switch;
+use Term::ANSIColor;
+
+## Some global variables.
+$BASEDIR = ".";
+$REPOSITORIES = "$BASEDIR/repositories";
+
+
+## Args: soft name, destination directory, url
+sub checkout_git
+{
+    my ($soft, $dir, $url) = @_;
+    print "** Git cloning $soft (from $url) in $dir...\n";
+    my $res = `git clone $url $BASEDIR/$dir/$soft`;
+}
+
+
+## Args: soft name, destination directory, url
+sub checkout_wget
+{
+    my ($soft, $dir, $url) = @_;
+    print "** Wgetting $soft (from $url) in $dir...\n";
+    my $res = `mkdir -p $BASEDIR/$dir && cd $BASEDIR/$dir && wget $url`;
+    my @tmp = split(/\//, $url);
+    my $filename = $tmp[$#tmp];
+    if ($filename =~ /.tar.gz$|.tgz$/) {
+	 $res = `cd $BASEDIR/$dir && tar xzf $filename`;
+    }
+    else {
+	if ($filename =~ /.zip$/) {
+	    $res = `cd $BASEDIR/$dir && unzip $filename`;
+	}
+    }
+}
+
+
+## Args: soft name, destination directory, url, mode
+sub checkout_svn
+{
+    my ($soft, $dir, $url, $mode) = @_;
+    my $svnuser = "";
+    $svnuser = "--username pocc --password pocc" if ($mode =~ /base/);
+    print "** SVN checkouting $soft (from $url) in $dir...\n";
+    $res = `svn co $url/trunk $BASEDIR/$dir/$soft/trunk` if ($mode =~ /trunk/);
+    $res = `svn co $url $BASEDIR/$dir/$soft` if ($mode =~ /devel/);
+    if ($mode =~ /base/) {
+	$res = `svn co $svnuser $url/trunk $BASEDIR/$dir/$soft/trunk`;
+    }
+}
+
+
+## Args: checkout method
+sub checkout
+{
+    my ($repos) = @_;
+    print (colored ("* Full checkout of PoCC. This may take a while...", "green green"), "\n");
+    print "* Checkout mode: $repos\n";
+    open FILE, "$REPOSITORIES" or die $!;
+    while (<FILE>) {
+	if ($_ !~ /^#/) {
+	    my ($soft, $dir, $method, $url) = split(/[\t\s]+/, $_);
+	    switch ($method) {
+		case "svn"  { checkout_svn($soft, $dir, $url, $repos); }
+		case "git"  { checkout_git($soft, $dir, $url); }
+		case "wget" { checkout_wget($soft, $dir, $url); }
+	    }
+	}
+    }
+    print (colored ("* Checkout done", "green green"), "\n");
+}
+

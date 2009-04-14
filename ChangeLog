@@ -1,3 +1,10 @@
+2009-04-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* install.sh: delete.
+	* config/repositories.cfg,
+	* bin/pocc-checkout: New. PoCC checkout system.
+	* bin/pocc-bin: Start the driver.
+
 2009-04-06  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* config/pocc-install.cfg,
