@@ -1,4 +1,15 @@
 2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	
+	* pocc/driver/src/error.h,
+	* pocc/driver/src/common.h: Move to...
+	* pocc/driver/pocc/include/pocc/error.h,
+	* pocc/driver/pocc/include/pocc/common.h: ...these.
+	* pocc/driver/src/xmalloc.c,
+	* pocc/driver/src/error.c: Move to...
+	* pocc/driver/pocc/xmalloc.c,
+	* pocc/driver/pocc/error.c: ...these.
+
+2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: Minor fix.
 	
