@@ -1,3 +1,26 @@
+2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* pocc/driver/options.h
+	* pocc/driver/pocc.c
+	* pocc/driver/getopts.c
+	* pocc/driver/getopts.h
+	* pocc/driver/options.c: New. Skeleton for the driver.
+	* install.sh
+	* configure.ac
+	* Makefile.am
+	* pocc/driver/Makefile.am
+	* pocc/driver/config/pocc.m4: New. Autotools-related files for the
+	driver
+
+	* config/configure.cfg
+	* config/driver.cfg
+	* bin/pocc-make: New. PoCC build system.
+
+	* config/repositories.cfg: Updates.
+	* bin/pocc-bin: renamed to...
+	* bin/pocc-util: ... this.
+	* bin/pocc-checkout: Add pocc-make link.
+
 2009-04-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: delete.
@@ -11,6 +34,3 @@
 	* config/installer-svn.sh,
 	* install.sh,
 	* README: Initial checkin of the project.
-
-
-

@@ -5,15 +5,15 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Wed Apr 15 01:30:24 2009 Louis-Noel Pouchet
+## Last update Wed Apr 15 23:46:37 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
 use Term::ANSIColor;
 
 ## Some global variables.
-$BASEDIR = ".";
-$REPOSITORIES = "$BASEDIR/repositories";
+$BASEDIR = "/Users/pouchet/inria/projects/pocc";
+$REPOSITORIES = "$BASEDIR/config/repositories.cfg";
 
 
 ## Args: soft name, destination directory, url
@@ -21,7 +21,7 @@ sub checkout_git
 {
     my ($soft, $dir, $url) = @_;
     print "** Git cloning $soft (from $url) in $dir...\n";
-    my $res = `git clone $url $BASEDIR/$dir/$soft`;
+    my $res = `git clone $url $BASEDIR/$dir/$soft/trunk`;
 }
 
 
@@ -30,15 +30,15 @@ sub checkout_wget
 {
     my ($soft, $dir, $url) = @_;
     print "** Wgetting $soft (from $url) in $dir...\n";
-    my $res = `mkdir -p $BASEDIR/$dir && cd $BASEDIR/$dir && wget $url`;
+    my $res = `mkdir -p $BASEDIR/$dir/$soft && cd $BASEDIR/$dir/$soft && wget $url`;
     my @tmp = split(/\//, $url);
     my $filename = $tmp[$#tmp];
     if ($filename =~ /.tar.gz$|.tgz$/) {
-	 $res = `cd $BASEDIR/$dir && tar xzf $filename`;
+	 $res = `cd $BASEDIR/$dir/$soft && tar xzf $filename`;
     }
     else {
 	if ($filename =~ /.zip$/) {
-	    $res = `cd $BASEDIR/$dir && unzip $filename`;
+	    $res = `cd $BASEDIR/$dir/$soft && unzip $filename`;
 	}
     }
 }

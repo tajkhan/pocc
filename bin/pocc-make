@@ -1,0 +1,170 @@
+#!/usr/bin/perl -w
+## pocc-make.pl for pocc in /Users/pouchet
+##
+## Made by Louis-Noel Pouchet
+## Contact: <louis-noel.pouchet@inria.fr>
+##
+## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
+## Last update Thu Apr 16 19:22:51 2009 Louis-Noel Pouchet
+##
+
+use Switch;
+use Term::ANSIColor;
+
+## Some global variables.
+$BASEDIR = "/Users/pouchet/inria/projects/pocc";
+$CONFIGURE = "$BASEDIR/config/configure.cfg";
+$DRIVER = "$BASEDIR/config/driver.cfg";
+
+
+sub print_config
+{
+    my (%config) = @_;
+    ## Print config table.
+    for $soft (keys %config) {
+	for $field (keys %{$config{$soft}}) {
+	    $value = $config{$soft}{$field};
+	    print "$soft: $field -> $value\n";
+	}
+    }
+}
+
+
+sub read_config_file
+{
+    my ($file) = @_;
+    my %config_data;
+
+    open FILE, "$file" or die $!;
+    my $mode = "";
+    my $line;
+    while (<FILE>) {
+	if ($_ !~ /^#|^[\s\t]*\n/) {
+	    $_ =~ s/(.*)\n/$1/g;
+	    if ($_ =~ /^\[.*\]/) {
+		$mode = $_;
+		$mode =~ s/^\[(.*)\].*/$1/g;
+	    }
+	    else {
+		my @entry = split(/:/, $_);
+		$entry[0] =~ s/\s//g;
+		$config_data{$mode}{$entry[0]} = $entry[1];
+	    }
+	}
+    }
+    
+    print_config(%config_data);
+    
+    return %config_data;
+}
+
+
+sub get_all_soft
+{
+    my %driver_data = read_config_file($DRIVER);
+    my $softlist = $driver_data{"pocc-driver"}{"software-versions"};
+    print "XX $softlist XX\n";
+    $softlist =~ s/\s+/ /g; 
+    $softlist =~ s/^\s//g; 
+    print "XX $softlist XX\n";
+    return split(/ /, $softlist);
+}
+
+
+sub get_basedir
+{
+    my ($soft) = @_;
+    my @softbase = split(/-/, $soft);
+    my $atomicsoft = $softbase[0];
+    # find the directory prefix.
+    my $val = `find $BASEDIR -name "*$atomicsoft*" -type d -maxdepth 2`;
+    $val =~ s/(.*)\n/$1/g;
+    return $val; #."/install-$soft";
+}
+
+
+sub needs_install
+{
+    return 1;
+}
+
+
+sub make_soft
+{
+    my ($soft, %softinfo) = @_;
+    my $softbootstrap = "";
+    my $prefix = get_basedir($soft);# . "/install-$soft";
+    my @tmp = split(/-/, $soft);
+    my $atomicsoft = $tmp[0];
+    my $dir = $prefix;
+    if ($tmp[0] eq $soft) {
+	$dir = $dir . "/trunk";
+    }
+    else {
+	$dir = $dir . "/branches/$soft";
+    }	
+    ## Bootstrap.
+    if (defined($softinfo{"bootstrap"})) {
+	$softbootstrap = $softinfo{"bootstrap"};
+	$softbootstrap =~ s/^\s//g; 
+	$res = `find $dir -name "*configure" -maxdepth 1`;
+	if ($res eq "") {
+	    print "Bootstrapping in $dir\n";
+	    $val = system("cd $dir && ./$softbootstrap");
+	    die "Error in bootsraping of $soft\n" if ($val != 0);
+	}
+    }
+    ## Configure.
+    $prefix = $prefix . "/install-$soft";
+    print "Configuring $soft in $dir\n";
+    my $config_args = "";
+    if (defined($softinfo{"configure"})) {
+	$config_args = $softinfo{"configure"};
+	$config_args =~ s/\$poccsrcdir/$BASEDIR/g;
+    }
+    $res = `find $dir -name "*Makefile" -maxdepth 1`;
+    if ($res eq "") {
+	$val = system("cd $dir && ./configure --disable-static --enable-shared --prefix=$prefix $config_args");
+	die "Error in configuration of $soft\n" if ($val != 0);
+    }
+    $val = system("cd $dir && make");
+    die "Error in making of $soft\n" if ($val != 0);
+    if (needs_install($dir)) {
+	$val = system("cd $dir && make install");
+	die "Error in making of $soft\n" if ($val != 0);
+    }
+}
+
+
+sub order_by_deps
+{
+    my (@soft) = @_;
+
+    return @soft;
+}
+
+
+sub make_all_soft
+{
+    print "make all soft\n";
+    my ($mode, %config) = @_;
+    my @soft = get_all_soft($mode);
+    @soft = order_by_deps(@soft);
+    my $i;
+
+    for ($i = 0; $i <= $#soft; $i++) {
+	make_soft($soft[$i], %{$config{$soft[$i]}});
+    }
+}
+
+
+sub make_all
+{
+    my ($mode) = @_;
+    print (colored ("* Full Make of PoCC. This takes a while...", "green green"), "\n");
+    my %config_data = read_config_file($CONFIGURE);
+
+    make_all_soft($mode, %config_data);
+
+    print (colored ("* Make done", "green green"), "\n");
+}
