@@ -1,5 +1,28 @@
 2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* install.sh: Minor fix.
+	
+	* pocc/driver/options.h,
+	* pocc/driver/pocc.c,
+	* pocc/driver/getopts.c,
+	* pocc/driver/getopts.h,
+	* pocc/driver/options.c,
+	* pocc/driver/Makefile.am: Move to...
+	* pocc/driver/src/options.h,
+	* pocc/driver/src/pocc.c,
+	* pocc/driver/src/getopts.h,
+	* pocc/driver/src/options.c,
+	* pocc/driver/src/Makefile.am: ...these.
+	* pocc/driver/src/error.h,
+	* pocc/driver/src/xmalloc.c,
+	* pocc/driver/src/error.c,
+	* pocc/driver/src/common.h: New. Add files for driver.
+	* pocc/driver/pocc/Makefile.am: New.
+	
+	* configure.ac: Update accordingly.
+
+2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* pocc/driver/options.h
 	* pocc/driver/pocc.c
 	* pocc/driver/getopts.c

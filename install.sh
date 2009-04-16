@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ## 
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Thu Apr 16 19:45:55 2009 Louis-Noel Pouchet
+## Last update Thu Apr 16 19:52:52 2009 Louis-Noel Pouchet
 ##
 
 if ! [ -f ./configure ]; then # || true
@@ -15,7 +15,7 @@ if ! [ -f ./configure ]; then # || true
 fi;
 
 ./configure --prefix=`pwd`/bin --disable-static --enable-shared
-#bin/pocc-bin checkout trunk
-#bin/pocc-bin make
+bin/pocc-util checkout trunk
+bin/pocc-util make
 make
 make install

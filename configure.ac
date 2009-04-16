@@ -25,9 +25,9 @@ AC_PREREQ([2.54])
 ## Fill here the @bug email adress.
 AC_INIT([pocc], [0.1.0], [louis-noel.pouchet@inria.fr])
 ## Automatic generation of config.h
-AC_CONFIG_HEADERS([pocc/driver/config.h:pocc/driver/config-h.in])
+AC_CONFIG_HEADERS([pocc/driver/pocc/include/config.h:pocc/driver/pocc/include/config-h.in])
 ## A common file, which should be included by every source file.
-AC_CONFIG_SRCDIR([pocc/driver/options.h])
+AC_CONFIG_SRCDIR([pocc/driver/src/options.h])
 ## Put as most as possible configuration files to an auxialiry
 ## directory.
 AC_CONFIG_AUX_DIR([pocc/driver/config])
@@ -62,10 +62,11 @@ AC_SUBST(ac_aux_dir)
 #############################################################################
 ## Configure Makefiles.
 AC_CONFIG_FILES([
-	Makefile
-	pocc/driver/Makefile
-	],
-	[test -z "$CONFIG_HEADERS" || echo timestamp > pocc/driver/stamp-h.in])
+  Makefile
+  pocc/driver/pocc/Makefile
+  pocc/driver/src/Makefile
+  ],
+  [test -z "$CONFIG_HEADERS" || echo timestamp > pocc/driver/pocc/stamp-h.in])
 
 ## Output the result.
 AC_OUTPUT

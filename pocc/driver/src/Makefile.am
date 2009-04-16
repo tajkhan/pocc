@@ -18,24 +18,23 @@
 #
 
 #############################################################################
-SUBDIRS 		= 
+SUBDIRS 		=
 
 #############################################################################
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_builddir)/src -I$(top_srcdir)/src	\
-			  -I$(top_builddir) -I$(top_builddir)/letsee	\
-			  -I$(top_srcdir) -I$(top_srcdir)/letsee	\
-			  -I$(top_builddir)/letsee/include		\
-			  -I$(top_srcdir)/letsee/include
+INCLUDES		= -I$(top_builddir) -I$(top_builddir)/pocc/driver \
+			  -I$(top_srcdir) -I$(top_srcdir)/pocc/driver
 
 #############################################################################
 
-EXTRA_DIST		 = 
+EXTRA_DIST		 =
 
 #############################################################################
 
 noinst_HEADERS		=			\
+	error.h					\
+	common.h				\
 	getopts.h				\
 	options.h
 
@@ -43,14 +42,18 @@ bin_PROGRAMS		= pocc
 
 
 pocc_SOURCES		=			\
+	xmalloc.c				\
+	xstrdup.c				\
+	xstrerror.c				\
+	error.c					\
 	pocc.c					\
 	getopts.c				\
 	options.c
 
-pocc_LDADD		= 						\
-	$(top_srcdir)/pocc/analyzers/clan/clan-install/libclan.la	\
-	$(top_srcdir)/pocc/analyzers/candl/candl-install/libcandl.la	\
-	$(top_srcdir)/pocc/math/piplib/piplib-install/libpiplib.la	\
-	$(top_srcdir)/pocc/math/fm/fm-install/libfm.la
+pocc_LDADD		= 						  \
+	$(top_srcdir)/analyzers/clan/install-clan/lib/libclan.la	  \
+	$(top_srcdir)/analyzers/candl/install-candl/lib/libcandl.la 	  \
+	$(top_srcdir)/math/piplib/install-piplib/lib/libpiplib64.la	  \
+	$(top_srcdir)/math/fm/install-fm/lib/libfm.la
 
 #############################################################################

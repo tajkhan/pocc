@@ -90,7 +90,7 @@ pocc_usage ()
 
 
 int
-pocc_getopts (s_ls_options_t* options, int argc, char** argv)
+pocc_getopts (void* options, int argc, char** argv)
 {
   char          **opt_tab;
   int		ret;

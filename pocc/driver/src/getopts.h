@@ -20,8 +20,7 @@
 #ifndef LETSEE_GETOPTS_H
 # define LETSEE_GETOPTS_H
 
-# include <letsee/common.h>
-
+# include "common.h"
 
 BEGIN_C_DECLS
 
