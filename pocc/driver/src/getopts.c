@@ -18,7 +18,7 @@
  *
  */
 #if HAVE_CONFIG_H
-# include "config.h"
+# include <pocc-utils/config.h>
 #endif
 
 #include <stdlib.h>

@@ -1,5 +1,5 @@
 /*
- * xmalloc.c: this file is part of the PoCC project.
+ * driver-letsee.c: this file is part of the PoCC project.
  *
  * PoCC, the Polyhedral Compiler Collection package
  *
@@ -21,37 +21,19 @@
 # include <pocc-utils/config.h>
 #endif
 
-#include <pocc/common.h>
-#include <pocc/error.h>
+# include <pocc/driver-letsee.h>
+# include <letsee/pocc-driver.h>
 
-void *
-xmalloc (size_t num)
+
+void 
+pocc_driver_letsee (void* program, 
+		    s_pocc_options_t* poptions,
+		    s_pocc_utils_options_t* puoptions)
 {
-  void *new = malloc (num);
-  if (! new)
-    pocc_fatal ("Memory exhausted");
-  return new;
-}
+  printf ("LetSee\n");
+  s_ls_options_t* options = ls_options_malloc ();
 
-void *
-xrealloc (void *p, size_t num)
-{
-  void *new;
+/*   letsee_pocc (program, options, puoptions, pocc_codegen); */
 
-  if (! p)
-    return xmalloc (num);
-
-  new = realloc (p, num);
-  if (! new)
-    pocc_fatal ("Memory exhausted");
-
-  return new;
-}
-
-void *
-xcalloc (size_t num, size_t size)
-{
-  void *new = xmalloc (num * size);
-  bzero (new, num * size);
-  return new;
+  ls_options_free (options);
 }

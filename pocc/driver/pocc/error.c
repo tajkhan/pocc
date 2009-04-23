@@ -18,11 +18,11 @@
  * 
  */
 #if HAVE_CONFIG_H
-# include "config.h"
+# include <pocc-utils/config.h>
 #endif
 
-#include "common.h"
-#include "error.h"
+#include <pocc/common.h>
+#include <pocc/error.h>
 
 char* basename (const char*);
 
@@ -31,8 +31,9 @@ static void error (int exit_status, const char *mode,
 
 static const char *program_name = NULL;
 
+
 void
-set_program_name (const char *path)
+pocc_set_program_name (const char *path)
 {
   if (! program_name)
     program_name = xstrdup (basename (path));

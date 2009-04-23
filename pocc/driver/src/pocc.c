@@ -17,13 +17,19 @@
  * Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
  *
  */
+#if HAVE_CONFIG_H
+# include <pocc-utils/config.h>
+#endif
 
 #include <stdio.h>
 #include "getopts.h"
 #include "options.h"
-
-//#include <ir/scop/install-scop/scop/include/scop.h>
-#include <analyzers/clan/install-clan/include/clan/scop.h>
+#include <pocc/driver-clan.h>
+#include <pocc/driver-candl.h>
+#include <pocc/driver-letsee.h>
+#include <pocc/driver-pluto.h>
+#include <pocc/driver-codegen.h>
+#include <pocc/driver-cloog.h>
 
 
 int pass_thru(s_pocc_options_t* options)
@@ -31,13 +37,21 @@ int pass_thru(s_pocc_options_t* options)
 
 }
 
+
 int main(int argc, char** argv)
 {
   printf ("PoCC compiler\n");
 
-  // (1) Analyze from source.
+  pocc_driver_clan (NULL, NULL, NULL);
+  pocc_driver_candl (NULL, NULL, NULL);
+  pocc_driver_letsee (NULL, NULL, NULL);
+  pocc_driver_pluto (NULL, NULL, NULL);
+  pocc_driver_codegen (NULL, NULL, NULL);
+  pocc_driver_cloog (NULL, NULL, NULL);
 
-  // (1) Analyze from source.
+  pip_close ();
 
+  printf ("PoCC compiler: done\n");
 
+  return 0;
 }

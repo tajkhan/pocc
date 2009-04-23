@@ -24,32 +24,19 @@ SUBDIRS 		=
 MAINTAINERCLEANFILES	= Makefile.in
 
 INCLUDES		= -I$(top_builddir)				   \
-			  -I$(top_builddir)/pocc/driver/pocc/include	   \
 			  -I$(top_builddir)/pocc/driver/pocc-utils/include \
-			  -I$(top_builddir)/pocc/driver/src		   \
 			  -I$(top_srcdir)				   \
-			  -I$(top_srcdir)/pocc/driver/pocc/include	   \
-			  -I$(top_srcdir)/pocc/driver/pocc-utils/include   \
-			  -I$(top_srcdir)/pocc/driver/src
+			  -I$(top_srcdir)/pocc/driver/pocc-utils/include
 
 #############################################################################
 
-EXTRA_DIST		 =
+poccheaddir = $(pkgincludedir)/../pocc-utils
 
-#############################################################################
+pocchead_HEADERS =					\
+			  include/pocc-utils/options.h	\
+			  include/pocc-utils/types.h
 
-noinst_HEADERS		=			\
-	getopts.h				\
-	options.h
-
-bin_PROGRAMS		= pocc
+lib_LTLIBRARIES 	= libpocc-utils.la
 
 
-pocc_SOURCES		=			\
-	pocc.c					\
-	getopts.c				\
-	options.c
-
-pocc_LDADD		= $(top_srcdir)/pocc/driver/pocc/libpocc.la
-
-#############################################################################
+libpocc_utils_la_SOURCES 	=	options.c

@@ -1,5 +1,5 @@
 /*
- * xmalloc.c: this file is part of the PoCC project.
+ * driver-clan.c: this file is part of the PoCC project.
  *
  * PoCC, the Polyhedral Compiler Collection package
  *
@@ -21,37 +21,14 @@
 # include <pocc-utils/config.h>
 #endif
 
-#include <pocc/common.h>
-#include <pocc/error.h>
+# include <pocc/driver-clan.h>
+# include <clan/clan.h>
 
-void *
-xmalloc (size_t num)
+
+void 
+pocc_driver_clan (FILE* program, 
+		  s_pocc_options_t* poptions,
+		  s_pocc_utils_options_t* puoptions)
 {
-  void *new = malloc (num);
-  if (! new)
-    pocc_fatal ("Memory exhausted");
-  return new;
-}
-
-void *
-xrealloc (void *p, size_t num)
-{
-  void *new;
-
-  if (! p)
-    return xmalloc (num);
-
-  new = realloc (p, num);
-  if (! new)
-    pocc_fatal ("Memory exhausted");
-
-  return new;
-}
-
-void *
-xcalloc (size_t num, size_t size)
-{
-  void *new = xmalloc (num * size);
-  bzero (new, num * size);
-  return new;
+  printf ("Clan\n");
 }

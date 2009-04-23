@@ -18,7 +18,10 @@
 #
 
 #############################################################################
-SUBDIRS 		= pocc/driver
+SUBDIRS 		= 				\
+			  pocc/driver/pocc-utils 	\
+			  pocc/driver/pocc 		\
+			  pocc/driver/src
 
 
 #############################################################################
@@ -42,12 +45,12 @@ AUX_DIST                =			\
 EXTRA_DIST		=
 
 
-MAINTAINERCLEANFILES 	=			\
-	Makefile.in				\
-	aclocal.m4				\
-	configure				\
-	pocc/driver/config-h.in			\
-	pocc/driver/stamp-h.in			\
+MAINTAINERCLEANFILES 	=					\
+	Makefile.in						\
+	aclocal.m4						\
+	configure						\
+	pocc/driver/pocc-utils/include/pocc-utils/config-h.in	\
+	pocc/driver/pocc/stamp-h.in				\
 	$(AUX_DIST)
 
 dist-hook:

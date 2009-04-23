@@ -1,5 +1,5 @@
 /*
- * xmalloc.c: this file is part of the PoCC project.
+ * options.c: this file is part of the PoCC project.
  *
  * PoCC, the Polyhedral Compiler Collection package
  *
@@ -21,37 +21,31 @@
 # include <pocc-utils/config.h>
 #endif
 
-#include <pocc/common.h>
-#include <pocc/error.h>
+# include <pocc/options.h>
 
-void *
-xmalloc (size_t num)
+
+s_pocc_options_t*
+pocc_options_malloc ()
 {
-  void *new = malloc (num);
-  if (! new)
-    pocc_fatal ("Memory exhausted");
-  return new;
+  s_pocc_options_t* ret = XMALLOC(s_pocc_options_t, 1);
+  ret->input_file = NULL;
+  ret->input_file_name = NULL;
+  ret->output_file = NULL;
+  ret->output_file_name = NULL;
+  ret->verbose = 0;
+
+  return ret;
 }
 
-void *
-xrealloc (void *p, size_t num)
+
+void
+pocc_options_free (s_pocc_options_t* options)
 {
-  void *new;
-
-  if (! p)
-    return xmalloc (num);
-
-  new = realloc (p, num);
-  if (! new)
-    pocc_fatal ("Memory exhausted");
-
-  return new;
-}
-
-void *
-xcalloc (size_t num, size_t size)
-{
-  void *new = xmalloc (num * size);
-  bzero (new, num * size);
-  return new;
+  fclose (options->input_file);
+  XFREE(options->input_file_name);
+  if (options->output_file)
+    fclose (options->output_file);
+  if (options->output_file_name)
+    XFREE(options->output_file_name);
+  XFREE(options);
 }

@@ -21,7 +21,7 @@
 # define POCC_COMMON_H
 
 # if HAVE_CONFIG_H
-#  include "config.h"
+#  include <pocc-utils/config.h>
 # endif
 
 # include <stdio.h>

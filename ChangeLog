@@ -1,5 +1,57 @@
+2009-04-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch is a huge step towards PoCC usability.
+	(1) Creation of pocc-utils, a package that third-party tools can link
+	with.
+	(2) Significant design of the PoCC library, to drive all compiler
+	passes.
+	(3) First demo shot of the pocc binary.
+
+	* pocc/driver/pocc-utils/include/pocc-utils/options.h,
+	* pocc/driver/pocc-utils/include/pocc-utils/types.h,
+	* pocc/driver/pocc-utils/Makefile.am,
+	* pocc/driver/pocc-utils/options.c: New. Create the pocc-utils
+	library.
+
+	* pocc/driver/pocc/include/pocc/driver-candl.h,
+	* pocc/driver/pocc/include/pocc/driver-letsee.h,
+	* pocc/driver/pocc/include/pocc/driver-cloog.h,
+	* pocc/driver/pocc/include/pocc/driver-pluto.h,
+	* pocc/driver/pocc/include/pocc/driver-codegen.h,
+	* pocc/driver/pocc/include/pocc/driver-clan.h,
+	* pocc/driver/pocc/include/pocc/common.h,
+	* pocc/driver/pocc/driver-clan.c,
+	* pocc/driver/pocc/driver-candl.c,
+	* pocc/driver/pocc/driver-letsee.c,
+	* pocc/driver/pocc/driver-cloog.c,
+	* pocc/driver/pocc/driver-pluto.c,
+	* pocc/driver/pocc/driver-codegen.c: New. Empty drivers for most
+	PoCC passes.
+	* pocc/driver/pocc/Makefile.am: Update accordingly.
+	* pocc/driver/pocc/include/pocc/error.h,
+	* pocc/driver/pocc/include/pocc/options.h,
+	* pocc/driver/pocc/xmalloc.c,
+	* pocc/driver/pocc/error.c,
+	* pocc/driver/pocc/options.c: Minor updates.
+
+	* pocc/driver/src/options.h,
+	* pocc/driver/src/pocc.c,
+	* pocc/driver/src/getopts.c,
+	* pocc/driver/src/getopts.h,
+	* pocc/driver/src/options.c,
+	* pocc/driver/src/Makefile.am: Update the main driver.
+
+	* install.sh,
+	* configure.ac,
+	* pocc/driver/config/pocc.m4,
+	* config/configure.cfg,
+	* config/repositories.cfg,
+	* config/driver.cfg,
+	* bin/pocc-make,
+	* bin/pocc-checkout,
+	* Makefile.am: Updates.
+
 2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
-	
+
 	* pocc/driver/src/error.h,
 	* pocc/driver/src/common.h: Move to...
 	* pocc/driver/pocc/include/pocc/error.h,
@@ -12,7 +64,7 @@
 2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: Minor fix.
-	
+
 	* pocc/driver/options.h,
 	* pocc/driver/pocc.c,
 	* pocc/driver/getopts.c,
@@ -29,7 +81,7 @@
 	* pocc/driver/src/error.c,
 	* pocc/driver/src/common.h: New. Add files for driver.
 	* pocc/driver/pocc/Makefile.am: New.
-	
+
 	* configure.ac: Update accordingly.
 
 2009-04-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>

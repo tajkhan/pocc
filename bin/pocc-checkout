@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Wed Apr 15 23:46:37 2009 Louis-Noel Pouchet
+## Last update Thu Apr 23 04:40:42 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -21,7 +21,7 @@ sub checkout_git
 {
     my ($soft, $dir, $url) = @_;
     print "** Git cloning $soft (from $url) in $dir...\n";
-    my $res = `git clone $url $BASEDIR/$dir/$soft/trunk`;
+    system("git clone $url $BASEDIR/$dir/$soft/trunk");
 }
 
 
@@ -30,15 +30,15 @@ sub checkout_wget
 {
     my ($soft, $dir, $url) = @_;
     print "** Wgetting $soft (from $url) in $dir...\n";
-    my $res = `mkdir -p $BASEDIR/$dir/$soft && cd $BASEDIR/$dir/$soft && wget $url`;
+    system("mkdir -p $BASEDIR/$dir/$soft && cd $BASEDIR/$dir/$soft && wget $url");
     my @tmp = split(/\//, $url);
     my $filename = $tmp[$#tmp];
     if ($filename =~ /.tar.gz$|.tgz$/) {
-	 $res = `cd $BASEDIR/$dir/$soft && tar xzf $filename`;
+	system("cd $BASEDIR/$dir/$soft && tar xzf $filename");
     }
     else {
 	if ($filename =~ /.zip$/) {
-	    $res = `cd $BASEDIR/$dir/$soft && unzip $filename`;
+	    system("cd $BASEDIR/$dir/$soft && unzip $filename");
 	}
     }
 }
@@ -51,10 +51,10 @@ sub checkout_svn
     my $svnuser = "";
     $svnuser = "--username pocc --password pocc" if ($mode =~ /base/);
     print "** SVN checkouting $soft (from $url) in $dir...\n";
-    $res = `svn co $url/trunk $BASEDIR/$dir/$soft/trunk` if ($mode =~ /trunk/);
-    $res = `svn co $url $BASEDIR/$dir/$soft` if ($mode =~ /devel/);
+    system("svn co $url/trunk $BASEDIR/$dir/$soft/trunk") if ($mode =~ /trunk/);
+    system("svn co $url $BASEDIR/$dir/$soft") if ($mode =~ /devel/);
     if ($mode =~ /base/) {
-	$res = `svn co $svnuser $url/trunk $BASEDIR/$dir/$soft/trunk`;
+	system("svn co $svnuser $url/trunk $BASEDIR/$dir/$soft/trunk");
     }
 }
 

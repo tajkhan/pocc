@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Thu Apr 16 19:22:51 2009 Louis-Noel Pouchet
+## Last update Thu Apr 23 05:02:40 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -104,26 +104,28 @@ sub make_soft
 	$dir = $dir . "/branches/$soft";
     }	
     ## Bootstrap.
+    my $force_configure = "no";
     if (defined($softinfo{"bootstrap"})) {
 	$softbootstrap = $softinfo{"bootstrap"};
 	$softbootstrap =~ s/^\s//g; 
 	$res = `find $dir -name "*configure" -maxdepth 1`;
 	if ($res eq "") {
-	    print "Bootstrapping in $dir\n";
+	    print "[PoCC] Bootstrapping in $dir\n";
 	    $val = system("cd $dir && ./$softbootstrap");
+	    $force_configure = "yes";
 	    die "Error in bootsraping of $soft\n" if ($val != 0);
 	}
     }
     ## Configure.
     $prefix = $prefix . "/install-$soft";
-    print "Configuring $soft in $dir\n";
     my $config_args = "";
     if (defined($softinfo{"configure"})) {
 	$config_args = $softinfo{"configure"};
 	$config_args =~ s/\$poccsrcdir/$BASEDIR/g;
     }
+    print "[PoCC] Configuring $soft in $dir with --disable-static --enable-shared --prefix=$prefix $config_args\n";
     $res = `find $dir -name "*Makefile" -maxdepth 1`;
-    if ($res eq "") {
+    if ($res eq "" || $force_configure eq "yes") {
 	$val = system("cd $dir && ./configure --disable-static --enable-shared --prefix=$prefix $config_args");
 	die "Error in configuration of $soft\n" if ($val != 0);
     }
@@ -146,7 +148,7 @@ sub order_by_deps
 
 sub make_all_soft
 {
-    print "make all soft\n";
+    print "[PoCC] make all soft\n";
     my ($mode, %config) = @_;
     my @soft = get_all_soft($mode);
     @soft = order_by_deps(@soft);

@@ -17,28 +17,28 @@
  * Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
  *
  */
-#ifndef POCC_BIN_OPTIONS_H
-# define POCC_BIN_OPTIONS_H
+#ifndef POCC_SRC_OPTIONS_H
+# define POCC_SRC_OPTIONS_H
+
+# include <stdio.h>
 
 # if HAVE_CONFIG_H
-#  include "config.h"
+#  include <pocc-utils/config.h>
 # endif
 
+# include <pocc/options.h>
 # include "getopts.h"
 
 
-# define LS_NB_OPTS                26
+# define POCC_NB_OPTS                3
 
-struct s_pocc_option
-{
-  
-
-};
-typedef struct s_pocc_option s_pocc_option_t;
+# define POCC_OPT_HELP		     0
+# define POCC_OPT_VERBOSE	     1
+# define POCC_OPT_OUTFILE	     2
 
 
 int
-pocc_getopts(void* options, int argc, char** argv);
+pocc_getopts(s_pocc_options_t* options, int argc, char** argv);
 
 
-#endif // POCC_BIN_OPTIONS_H
+#endif // POCC_SRC_OPTIONS_H

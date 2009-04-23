@@ -25,9 +25,9 @@ AC_PREREQ([2.54])
 ## Fill here the @bug email adress.
 AC_INIT([pocc], [0.1.0], [louis-noel.pouchet@inria.fr])
 ## Automatic generation of config.h
-AC_CONFIG_HEADERS([pocc/driver/pocc/include/config.h:pocc/driver/pocc/include/config-h.in])
+AC_CONFIG_HEADERS([pocc/driver/pocc-utils/include/pocc-utils/config.h:pocc/driver/pocc-utils/include/pocc-utils/config-h.in])
 ## A common file, which should be included by every source file.
-AC_CONFIG_SRCDIR([pocc/driver/src/options.h])
+AC_CONFIG_SRCDIR([pocc/driver/pocc/include/pocc/common.h])
 ## Put as most as possible configuration files to an auxialiry
 ## directory.
 AC_CONFIG_AUX_DIR([pocc/driver/config])
@@ -54,6 +54,7 @@ AC_C_VOLATILE
 
 ## Check dependencies path.
 AC_CHECK_PROGS(DOXYGEN,doxygen)
+#POCC_ARG_LIBS_DEPENDENCIES
 
 #############################################################################
 ## Variable substitutions.
@@ -63,6 +64,7 @@ AC_SUBST(ac_aux_dir)
 ## Configure Makefiles.
 AC_CONFIG_FILES([
   Makefile
+  pocc/driver/pocc-utils/Makefile
   pocc/driver/pocc/Makefile
   pocc/driver/src/Makefile
   ],
