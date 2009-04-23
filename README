@@ -1,0 +1,38 @@
+========
+= PoCC =
+========
+
+PoCC, the POlyhedral Compiler Collection package
+
+-*- version 0.1 -*-
+
+
+* Installation
+--------------
+
+$> ./install.sh
+
+
+
+* Troubleshoot
+--------------
+For any error please contact the author directly.
+
+
+
+
+* Acknowledgements
+------------------
+
+This package could not exist without the great software it contains!
+Many thanks to: 
+= Cedric Bastoul
+= Uday Bondhugula
+= Sven Verdoolaege
+= Doran Wilde, Bart Kienhuis, Vincent Loechner, and Tanguy Risset for
+the PolyLib
+= Paul Feautrier for the PIPLib
+
+-- 
+Written by: 
+Louis-Noel Pouchet <louis-noel.pouchet@inria.fr>
