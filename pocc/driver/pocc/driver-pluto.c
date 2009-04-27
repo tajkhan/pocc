@@ -33,7 +33,5 @@ pocc_driver_pluto (clan_scop_p program,
   PlutoOptions* ploptions = pluto_options_alloc ();
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
-  printf("HERE\n");
   pluto_pocc (program, ploptions, puoptions);
-  clan_scop_print (stdout, program);
 }
