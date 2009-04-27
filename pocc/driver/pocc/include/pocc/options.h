@@ -23,21 +23,62 @@
 # include <stdio.h>
 # include <pocc/common.h>
 # include <cloog/options.h>
+# include <pluto/pluto.h>
+# include <letsee/options.h>
 
+#define POCC_TIMER_CODE_ASM	1
+#define POCC_TIMER_CODE_TIME	2
 
 struct s_pocc_options
 {
+  // In/Out file information
   FILE*		input_file;
   char*		input_file_name;
   FILE*		output_file;
   char*		output_file_name;
-  int		verbose;
-  CloogOptions*	cloog_options;
 
-  int		vectorize;
-  int		parallel;
-  int		unroll;
-  int		timer;
+  // Verbose.
+  int		verbose;
+
+  // LetSee Options.
+  int		letsee; // Run LetSee (default: no)
+  int		letsee_space;
+  int		letsee_traversal;
+  int		letsee_normspace;
+  int*		letsee_scheme_m1;
+  int		letsee_prune_precut;
+  int		letsee_backtrack_multi;
+  int		letsee_rtries;
+
+  // PLuTo Options.
+  int		pluto; // Run PLuTo (default: no)
+  int		pluto_unroll;
+  int		pluto_parallel;
+  int		pluto_tile;
+  int		pluto_rar;
+  int		pluto_fuse;
+  int		pluto_polyunroll;
+  int		pluto_bee;
+  int		pluto_prevector;
+  int		pluto_ufactor;
+  int		pluto_quiet;
+  int		pluto_context;
+  int		pluto_ft; 
+  int		pluto_lt; 
+  int		pluto_multipipe;
+  int		pluto_l2tile;
+  int		pluto_lastwriter;
+  int		pluto_scalpriv;
+
+
+  // Codegen Options.
+  int		codegen; // Perform codegen (default: yes)
+  CloogOptions*	cloog_options;
+  int		cloog_f;
+  int		cloog_l; 
+  int		codegen_timercode;
+  int		codegen_timer_asm;
+  int		codegen_timer_papi;
 
 };
 typedef struct s_pocc_options s_pocc_options_t;

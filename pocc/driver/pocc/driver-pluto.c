@@ -30,7 +30,28 @@ pocc_driver_pluto (clan_scop_p program,
 		  s_pocc_utils_options_t* puoptions)
 {
   printf ("[PoCC] Running Pluto...\n");
+
   PlutoOptions* ploptions = pluto_options_alloc ();
+  ploptions->parallel = poptions->pluto_parallel;
+  ploptions->tile = poptions->pluto_tile;
+  ploptions->rar = poptions->pluto_rar;
+  ploptions->unroll = poptions->pluto_unroll;
+  ploptions->fuse = poptions->pluto_fuse;
+  ploptions->polyunroll = poptions->pluto_polyunroll;
+  ploptions->bee = poptions->pluto_bee;
+  ploptions->prevector = poptions->pluto_prevector;
+  ploptions->ufactor = poptions->pluto_ufactor; // int
+  ploptions->quiet = poptions->pluto_quiet;
+  ploptions->context = poptions->pluto_context; // int
+  ploptions->cloogf = poptions->cloog_f; // int
+  ploptions->cloogl = poptions->cloog_l; // int
+  ploptions->ft = poptions->pluto_ft; // int
+  ploptions->lt = poptions->pluto_lt; // int
+  ploptions->multipipe = poptions->pluto_multipipe;
+  ploptions->l2tile = poptions->pluto_l2tile;
+  ploptions->lastwriter = poptions->pluto_lastwriter;
+  ploptions->scalpriv = poptions->pluto_scalpriv;
+  
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
   pluto_pocc (program, ploptions, puoptions);

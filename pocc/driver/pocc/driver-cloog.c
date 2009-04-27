@@ -36,7 +36,11 @@ pocc_driver_cloog (clan_scop_p program,
 
   /* Create a CloogProgram from it. */
   CloogOptions* coptions = puoptions->cloog_options;
+  if (coptions == NULL)
+    coptions = cloog_options_malloc ();
   CloogProgram * cp = cloog_program_scop_to_cloogprogram (program, coptions);
+  coptions->f = poptions->cloog_f;
+  coptions->l = poptions->cloog_l;
   /* Store the .scop corresponding to the input program. */
   cp->scop = program;
 

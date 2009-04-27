@@ -26,6 +26,69 @@
 # define TO_STRING_(x) TO_STRING__(x)
 # define STR_POCC_ROOT_DIR TO_STRING_(POCC_ROOT_DIR)
 
+
+/**
+ * Execute a command line (supplied by args) and return a long long
+ * int read from its standard output (supposed to be the metric, eg,
+ * cycles).
+ *
+ * Dedicated to execute a transformation.
+ *
+ */
+static
+void
+pocc_execprog (char** args)
+{
+  pid_t pid;
+  int rv;
+  int commpipe[2];
+  char buf[1024];
+  int i;
+
+  if (pipe (commpipe))
+    {
+      fprintf (stderr, "Pipe error.\n");
+      exit (1);
+    }
+
+  if((pid = fork ()) == -1)
+    {
+      fprintf (stderr, "Fork error.\n");
+      exit (1);
+    }
+
+  if (pid)
+    {
+      // Parent.
+      dup2 (commpipe[0], 0);
+      close (commpipe[1]);
+      for (i = 0; i < 1024; ++i)
+	buf[i] = '\0';
+      while (read (0, buf, 1024))
+	;
+      wait (&rv);
+      if (rv != 0)
+	{
+	  printf ("exit status: %d\n", rv);
+	  printf ("output: %s\n", buf);
+	}
+      close (commpipe[0]);
+    }
+  else
+    {
+      // Child.
+      dup2 (commpipe[1], 1);
+      close (commpipe[0]);
+      if (execvp (args[0], args) == -1)
+	{
+	  fprintf (stderr, "execv Error.\n");
+	  exit (1);
+	}
+      close (commpipe[1]);
+    }
+}
+
+
 void
 pocc_driver_codegen_post_processing (FILE* body_file, 
 				     s_pocc_options_t* poptions)
@@ -33,50 +96,49 @@ pocc_driver_codegen_post_processing (FILE* body_file,
   char* args[4];
   args[2] = args[3] = NULL;
   args[1] = ".body.c";
-  if (poptions->parallel) 
+  if (poptions->pluto_parallel) 
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
-      execvp(STR_POCC_ROOT_DIR "/generators/scripts/ploog", args);
+      pocc_execprog (args);
     }
-  if (poptions->unroll) 
+  if (poptions->pluto_unroll) 
     {
       // Run plann.
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/plann";
       args[2] = STR_POCC_ROOT_DIR "/generators/scripts/annotations";
-      execvp(STR_POCC_ROOT_DIR "/generators/scripts/plann", args);
+      pocc_execprog (args);
       args[2] = NULL;
     }
 
-  if (poptions->vectorize)
+  if (poptions->pluto_prevector)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/vloog";
-      execvp(STR_POCC_ROOT_DIR "/generators/scripts/vloog", args);
+      pocc_execprog (args);
     }
 }
 
 void
 pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 {
-
   char* args[4];
   args[3] = NULL;
   args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
   args[1] = poptions->input_file_name;
   args[2] = ".body.c";
   args[3] = poptions->output_file_name;
-  execvp(STR_POCC_ROOT_DIR "/generators/scripts/inscop", args);
-  if (poptions->timer)
+  pocc_execprog (args);
+  if (poptions->codegen_timercode)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timercode";
       args[1] = poptions->output_file_name;
-      execvp(STR_POCC_ROOT_DIR "/generators/scripts/timercode", args);
+      pocc_execprog (args);
     }
 
-  if (poptions->parallel)
+  if (poptions->pluto_parallel)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/omp";
       args[1] = poptions->output_file_name;
-      execvp(STR_POCC_ROOT_DIR "/generators/scripts/omp", args);
+      pocc_execprog (args);
     }
 }
 

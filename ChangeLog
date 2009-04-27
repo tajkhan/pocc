@@ -1,4 +1,22 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the support for the most useful LetSee and PLuTo
+	options.
+	
+	* pocc/driver/pocc/include/pocc/options.h,
+	* pocc/driver/pocc/driver-letsee.c,
+	* pocc/driver/pocc/options.c,
+	* pocc/driver/pocc/driver-cloog.c,
+	* pocc/driver/pocc/driver-pluto.c,
+	* pocc/driver/pocc/driver-codegen.c,
+	* pocc/driver/src/options.h,
+	* pocc/driver/src/pocc.c,
+	* pocc/driver/src/options.c: Add LetSee and PLuTo options.
+
+	* README: Update with requirements.
+	* configure.ac: Require autoconf 2.60, due to PolyLib req.
+	* bin/pocc-make: Minor fix.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* bin/pocc-util: Rename to...
 	* bin/pocc-util.in: ...this.

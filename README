@@ -20,6 +20,11 @@ Requirements:
 - latex
 - gcc or another working C compiler
 
+Note that the installation will fail if one of the dependency is not
+met. In case of troubles to build PoCC after adding a missing
+dependency, restart the installation from scracth, with a fresh source
+tree.
+
 $> ./install.sh
 
 

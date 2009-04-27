@@ -35,10 +35,44 @@ pocc_options_malloc ()
   ret->verbose = 0;
   ret->cloog_options = NULL;
 
-  ret->vectorize = 0;
-  ret->parallel = 0;
-  ret->unroll = 0;
-  ret->timer = 0;
+  // Letsee options.
+  ret->letsee = 0; // Run LetSee (default: no)
+  ret->letsee_space = LS_TYPE_FS;
+  ret->letsee_traversal = LS_HEURISTIC_EXHAUST;
+  ret->letsee_normspace = 0;
+  ret->letsee_scheme_m1 = NULL;
+  ret->letsee_prune_precut = 0;
+  ret->letsee_backtrack_multi = 0;
+  ret->letsee_rtries = 50;
+
+  // Pluto options.
+  ret->pluto_parallel = 0;
+  ret->pluto_tile = 0;
+  ret->pluto_rar = 0;
+  ret->pluto_fuse = PLUTO_SMART_FUSE;
+  ret->pluto_unroll = 0;
+  ret->pluto_polyunroll = 0;
+  ret->pluto_bee = 0;
+  ret->pluto_prevector = 0;
+  ret->pluto_ufactor = 4;
+  ret->pluto_quiet = 0;
+  ret->pluto_context = 1;
+  ret->pluto_ft = -1; 
+  ret->pluto_lt = -1; 
+  ret->pluto_multipipe = 0;
+  ret->pluto_l2tile = 0;
+  ret->pluto_lastwriter = 0;
+  ret->pluto_scalpriv = 0;
+
+  // Cloog options.
+  ret->cloog_f =  1;
+  ret->cloog_l = -1; 
+
+  // Codegen options.
+  ret->codegen = 1;
+  ret->codegen_timercode = 0;
+  ret->codegen_timer_asm = 0;
+  ret->codegen_timer_papi = 0;
 
   return ret;
 }

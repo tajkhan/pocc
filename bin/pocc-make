@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 06:12:58 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 07:01:07 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -63,10 +63,8 @@ sub get_all_soft
 {
     my %driver_data = read_config_file($DRIVER);
     my $softlist = $driver_data{"pocc-driver"}{"software-versions"};
-    print "XX $softlist XX\n";
     $softlist =~ s/\s+/ /g;
     $softlist =~ s/^\s//g;
-    print "XX $softlist XX\n";
     return split(/ /, $softlist);
 }
 

@@ -24,7 +24,6 @@
 # include <pocc/driver-letsee.h>
 # include <letsee/pocc-driver.h>
 
-
 void 
 pocc_driver_letsee (void* program, 
 		    s_pocc_options_t* poptions,
@@ -32,6 +31,17 @@ pocc_driver_letsee (void* program,
 {
   printf ("LetSee\n");
   s_ls_options_t* options = ls_options_malloc ();
+
+  options->type = poptions->letsee_space;
+  options->create_schedfiles = poptions->codegen;
+  options->transfo_dir = strdup ("letsee-transformations");
+  options->heuristic = poptions->letsee_traversal;
+  options->scheme_m1 = poptions->letsee_scheme_m1;
+  options->backtrack_mode = poptions->letsee_backtrack_multi;
+  options->prune_oset = poptions->letsee_prune_precut;
+  options->normalize_space = poptions->letsee_normspace;
+  //options->thresold = poptions->letsee_thresold;
+  options->rtries = poptions->letsee_rtries;
 
 /*   letsee_pocc (program, options, puoptions, pocc_codegen); */
 
