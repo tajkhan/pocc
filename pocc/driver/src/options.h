@@ -36,9 +36,12 @@
 # define POCC_OPT_VERBOSE	     1
 # define POCC_OPT_OUTFILE	     2
 
+BEGIN_C_DECLS
 
+extern
 int
 pocc_getopts(s_pocc_options_t* options, int argc, char** argv);
 
+END_C_DECLS
 
 #endif // POCC_SRC_OPTIONS_H

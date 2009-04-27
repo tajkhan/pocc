@@ -5,16 +5,16 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Thu Apr 23 05:33:35 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 05:11:04 2009 Louis-Noel Pouchet
 ##
 
 ## (1) Self bootstrap, if needed.
 FORCE="";
 if ! [ -f ./configure ]; then
     echo "[PoCC] Bootstrap...";
-    aclocal -I pocc/driver/config
-    libtoolize --force --copy
-    autoreconf -vfi
+    aclocal -I pocc/driver/config;
+    libtoolize --force --copy;
+    autoreconf -vfi;
     FORCE=y;
 fi;
 

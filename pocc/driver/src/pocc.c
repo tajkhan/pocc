@@ -41,14 +41,36 @@ int pass_thru(s_pocc_options_t* options)
 int main(int argc, char** argv)
 {
   printf ("PoCC compiler\n");
+  FILE* f = fopen (argv[1], "r");
+  if (!f)
+    {
+      fprintf (stderr, "Cannot open file: %s\n", argv[1]);
+      exit (1);
+    }
 
-  pocc_driver_clan (NULL, NULL, NULL);
-  pocc_driver_candl (NULL, NULL, NULL);
-  pocc_driver_letsee (NULL, NULL, NULL);
-  pocc_driver_pluto (NULL, NULL, NULL);
-  pocc_driver_codegen (NULL, NULL, NULL);
-  pocc_driver_cloog (NULL, NULL, NULL);
+  s_pocc_options_t* poptions = pocc_options_malloc ();
+  s_pocc_utils_options_t* puoptions = pocc_utils_options_malloc ();
 
+  poptions->input_file_name = argv[1];
+  poptions->output_file_name = "outputpocc.c";
+
+  // (1) Parse the file.
+  clan_scop_p scop = pocc_driver_clan (f, poptions, puoptions);
+
+  if (! scop || scop->statement == NULL)
+    pocc_error ("Possible parsing error: no statement in SCoP");
+
+  // (2) Perform LetSee.
+  pocc_driver_letsee (scop, poptions, puoptions);
+
+  // (3) Perform PLuTo.
+  pocc_driver_pluto (scop, poptions, puoptions);
+
+  // (3) Perform codgen.
+  pocc_driver_codegen (scop, poptions, puoptions);
+
+
+  fclose (f);
   pip_close ();
 
   printf ("PoCC compiler: done\n");

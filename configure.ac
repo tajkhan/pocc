@@ -58,8 +58,8 @@ AC_CHECK_PROGS(DOXYGEN,doxygen)
 
 #############################################################################
 ## Variable substitutions.
-AC_SUBST(ac_aux_dir)
-
+AC_SUBST([ac_aux_dir])
+AC_SUBST([abs_top_srcdir])
 #############################################################################
 ## Configure Makefiles.
 AC_CONFIG_FILES([

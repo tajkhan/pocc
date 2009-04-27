@@ -1,3 +1,44 @@
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch activates PoCC as a full source-to-source compiler for
+	PLuTo.
+	
+	* pocc/driver/pocc-utils/include/pocc-utils/options.h,
+	* pocc/driver/pocc-utils/options.c,
+	* pocc/driver/pocc/include/pocc/options.h,
+	* pocc/driver/pocc/include/pocc/driver-cloog.h,
+	* pocc/driver/pocc/include/pocc/driver-pluto.h,
+	* pocc/driver/pocc/include/pocc/driver-codegen.h,
+	* pocc/driver/pocc/include/pocc/driver-clan.h,
+	* pocc/driver/pocc/driver-clan.c,
+	* pocc/driver/pocc/Makefile.am,
+	* pocc/driver/pocc/options.c,
+	* pocc/driver/pocc/driver-cloog.c,
+	* pocc/driver/pocc/driver-pluto.c,
+	* pocc/driver/pocc/driver-codegen.c,
+	* pocc/driver/src/options.h,
+	* pocc/driver/src/pocc.c,
+	* pocc/driver/src/Makefile.am: Severe update of the PoCC library,
+	the pocc-utils library, and the driver.
+
+	* install.sh: Minor update.
+
+	* configure.ac: Propagate abs_top_srcdir.
+
+	* config/configure.cfg,
+	* config/repositories.cfg,
+	* config/driver.cfg: Updates to support more software.
+
+	* generators/scripts/ploog,
+	* generators/scripts/vloog,
+	* generators/scripts/plann,
+	* generators/scripts/inscop,
+	* generators/scripts/omp,
+	* generators/scripts/timercode: New. Post-processing scripts,
+	mostly grabbed from PLuTo.
+	
+	* generators/scripts/annotations: New. Syntactic annotation module
+	in Python, grabbed from PLuTo.
+	
 2009-04-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch is a huge step towards PoCC usability.
 	(1) Creation of pocc-utils, a package that third-party tools can link

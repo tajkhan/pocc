@@ -44,6 +44,8 @@ struct s_pocc_utils_options
 {
   int		codegen_mode;
   int		iterative;
+  void*		cloog_options;
+  void*		pocc_options;
 };
 typedef struct s_pocc_utils_options s_pocc_utils_options_t;
 

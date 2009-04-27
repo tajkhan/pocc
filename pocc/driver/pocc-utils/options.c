@@ -27,7 +27,7 @@
 s_pocc_utils_options_t*
 pocc_utils_options_malloc ()
 {
-  s_pocc_utils_options_t* ret = 
+  s_pocc_utils_options_t* ret =
     (s_pocc_utils_options_t*) malloc (sizeof(s_pocc_utils_options_t));
   if (! ret)
     {
@@ -37,6 +37,8 @@ pocc_utils_options_malloc ()
 
   ret->iterative = 0;
   ret->codegen_mode = POCC_UTILS_CODEGEN_FULL;
+  ret->cloog_options = NULL;
+  ret->pocc_options = NULL;
 
   return ret;
 }

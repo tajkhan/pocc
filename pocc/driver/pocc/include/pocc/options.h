@@ -21,12 +21,8 @@
 # define POCC_OPTIONS_H
 
 # include <stdio.h>
-
-# if HAVE_CONFIG_H
-#  include <pocc-utils/config.h>
-# endif
-
 # include <pocc/common.h>
+# include <cloog/options.h>
 
 
 struct s_pocc_options
@@ -36,8 +32,32 @@ struct s_pocc_options
   FILE*		output_file;
   char*		output_file_name;
   int		verbose;
+  CloogOptions*	cloog_options;
+
+  int		vectorize;
+  int		parallel;
+  int		unroll;
+  int		timer;
+
 };
 typedef struct s_pocc_options s_pocc_options_t;
+
+
+
+BEGIN_C_DECLS
+
+extern
+s_pocc_options_t* pocc_options_malloc ();
+
+extern
+void pocc_options_init_cloog (s_pocc_options_t* options);
+
+extern
+void pocc_options_free (s_pocc_options_t* options);
+
+
+END_C_DECLS
+
 
 
 #endif // POCC_OPTIONS_H

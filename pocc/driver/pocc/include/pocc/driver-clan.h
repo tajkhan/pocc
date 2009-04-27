@@ -29,12 +29,14 @@
 # include <pocc/common.h>
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
+# include <clan/clan.h>
+# include <clan/options.h>
 
 
 BEGIN_C_DECLS
 
 extern
-void
+clan_scop_p
 pocc_driver_clan (FILE* program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions);

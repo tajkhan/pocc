@@ -30,12 +30,17 @@
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
 
+# ifndef CLAN_INT_T_IS_LONGLONG
+#  define CLAN_INT_T_IS_LONGLONG
+# endif
+# include <clan/scop.h>
+
 
 BEGIN_C_DECLS
 
 extern
 void
-pocc_driver_cloog (FILE* program,
+pocc_driver_cloog (clan_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions);
 

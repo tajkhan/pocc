@@ -1,0 +1,37 @@
+#! /bin/sh
+
+echo "[PoCC] Insert timer code around kernel";
+
+
+MAXLINES=`wc -l $1 | awk '{print $1}'`;
+
+echo "#include <stdio.h>
+#include <unistd.h>
+#include <sys/time.h>" > .head;
+
+grep -B $MAXLINES "#pragma scop" $1 >> .head;
+
+echo "#ifdef TIME
+#define IF_TIME(foo) foo;
+#else
+#define IF_TIME(foo)
+#endif
+#define TIMER_CODE(timer)						\
+{									\
+    struct timezone Tzp;						\
+    struct timeval Tp;							\
+    int stat;								\
+    stat = gettimeofday (&Tp, &Tzp);					\
+    if (stat != 0) printf(\"Error return from gettimeofday: %d\",stat);	\
+    timer = (Tp.tv_sec + Tp.tv_usec*1.0e-6);				\
+}
+    double poc_t_start, pocc_t_end;
+    IF_TIME(TIMER_CODE(t_start));
+" >> .head;
+
+echo "IF_TIME(TIMER_CODE(pocc_t_end);
+    IF_TIME(printf("%0.6lfs\n", pocc_t_end - pocc_t_start));" > .tail;
+grep -A $MAXLINES "#pragma endscop" $1 >> .tail;
+
+cat .head .tail $1;
+rm -f .head .tail;

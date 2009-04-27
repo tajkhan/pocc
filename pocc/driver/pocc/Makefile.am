@@ -28,6 +28,7 @@ INCLUDES		=						\
 	-I$(top_builddir)/pocc/driver/pocc/include			\
 	-I$(top_builddir)/pocc/driver/pocc-utils/include		\
 	-I$(top_builddir)/optimizers/letsee/install-letsee/include	\
+	-I$(top_builddir)/optimizers/pluto/install-pluto/include	\
 	-I$(top_builddir)/analyzers/clan/install-clan/include		\
 	-I$(top_builddir)/analyzers/candl/install-candl/include		\
 	-I$(top_builddir)/generators/cloog/install-cloog/include	\
@@ -38,12 +39,13 @@ INCLUDES		=						\
 	-I$(top_srcdir)/pocc/driver/pocc/include			\
 	-I$(top_srcdir)/pocc/driver/pocc-utils/include			\
 	-I$(top_srcdir)/optimizers/letsee/install-letsee/include	\
+	-I$(top_srcdir)/optimizers/pluto/install-pluto/include		\
 	-I$(top_srcdir)/analyzers/clan/install-clan/include		\
 	-I$(top_srcdir)/analyzers/candl/install-candl/include		\
 	-I$(top_srcdir)/generators/cloog/install-cloog/include		\
 	-I$(top_srcdir)/math/piplib/install-piplib/include		\
 	-I$(top_srcdir)/math/polylib/install-polylib/include		\
-	-I$(top_srcdir)/math/fm/install-fm/include	
+	-I$(top_srcdir)/math/fm/install-fm/include
 
 #############################################################################
 
@@ -72,6 +74,8 @@ libpocc_la_SOURCES 	=			\
 		  	  options.c		\
 			  xmalloc.c
 
+libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
+
 libpocc_la_LIBADD	=						     \
 	$(top_srcdir)/pocc/driver/pocc-utils/libpocc-utils.la		     \
 	$(top_srcdir)/analyzers/clan/install-clan/lib/libclan.la	     \
@@ -79,5 +83,8 @@ libpocc_la_LIBADD	=						     \
 	$(top_srcdir)/math/piplib/install-piplib/lib/libpiplib64.la	     \
 	$(top_srcdir)/math/polylib/install-polylib/lib/libpolylib64.la	     \
 	$(top_srcdir)/optimizers/letsee/install-letsee/lib/libletsee.la	     \
+	$(top_srcdir)/optimizers/pluto/install-pluto/lib/libpluto.la	     \
 	$(top_srcdir)/generators/cloog/install-cloog/lib/libcloog-polylib.la \
 	$(top_srcdir)/math/fm/install-fm/lib/libfm.la
+
+
