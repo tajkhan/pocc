@@ -1,4 +1,9 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* pocc/driver: Rename to...
+	* driver: ... this. According modifications where in previous patch.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch finalizes a working version of PoCC.
 
 	* install.sh,
