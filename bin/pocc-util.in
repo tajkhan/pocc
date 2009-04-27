@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ## 
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 05:21:07 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 05:58:47 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -14,8 +14,8 @@ use Switch;
 $BASEDIR = "@abs_top_srcdir@";
 
 ## Include command scripts.
-use "$BASEDIR/bin/pocc-checkout";
-use "$BASEDIR/bin/pocc-make";
+do "$BASEDIR/bin/pocc-checkout";
+do "$BASEDIR/bin/pocc-make";
 
 sub print_help
 {

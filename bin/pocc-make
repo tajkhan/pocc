@@ -5,14 +5,14 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 05:23:11 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 05:57:33 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
 use Term::ANSIColor;
 
 ## Some global variables.
-$BASEDIR = "";
+$BDIR_MK = ".";
 $CONFIGURE = "";
 $DRIVER = "";
 
@@ -52,9 +52,9 @@ sub read_config_file
 	    }
 	}
     }
-    
+
     print_config(%config_data);
-    
+
     return %config_data;
 }
 
@@ -64,8 +64,8 @@ sub get_all_soft
     my %driver_data = read_config_file($DRIVER);
     my $softlist = $driver_data{"pocc-driver"}{"software-versions"};
     print "XX $softlist XX\n";
-    $softlist =~ s/\s+/ /g; 
-    $softlist =~ s/^\s//g; 
+    $softlist =~ s/\s+/ /g;
+    $softlist =~ s/^\s//g;
     print "XX $softlist XX\n";
     return split(/ /, $softlist);
 }
@@ -77,7 +77,7 @@ sub get_basedir
     my @softbase = split(/-/, $soft);
     my $atomicsoft = $softbase[0];
     # find the directory prefix.
-    my $val = `find $BASEDIR -name "*$atomicsoft*" -type d -maxdepth 2`;
+    my $val = `find $BDIR_MK -name "*$atomicsoft*" -type d -maxdepth 2`;
     $val =~ s/(.*)\n/$1/g;
     return $val; #."/install-$soft";
 }
@@ -102,12 +102,12 @@ sub make_soft
     }
     else {
 	$dir = $dir . "/branches/$soft";
-    }	
+    }
     ## Bootstrap.
     my $force_configure = "no";
     if (defined($softinfo{"bootstrap"})) {
 	$softbootstrap = $softinfo{"bootstrap"};
-	$softbootstrap =~ s/^\s//g; 
+	$softbootstrap =~ s/^\s//g;
 	$res = `find $dir -name "*configure" -maxdepth 1`;
 	if ($res eq "") {
 	    print "[PoCC] Bootstrapping in $dir\n";
@@ -121,7 +121,7 @@ sub make_soft
     my $config_args = "";
     if (defined($softinfo{"configure"})) {
 	$config_args = $softinfo{"configure"};
-	$config_args =~ s/\$poccsrcdir/$BASEDIR/g;
+	$config_args =~ s/\$poccsrcdir/$BDIR_MK/g;
     }
     print "[PoCC] Configuring $soft in $dir with --disable-static --enable-shared --prefix=$prefix $config_args\n";
     $res = `find $dir -name "*Makefile" -maxdepth 1`;
@@ -162,14 +162,14 @@ sub make_all_soft
 
 sub make_all
 {
-    my ($basedir, $mode) = @_;
-    $BASEDIR = $basedir;
-    $CONFIGURE = "$BASEDIR/config/configure.cfg";
-    $DRIVER = "$BASEDIR/config/driver.cfg";
+    my ($basedir, $soft) = @_;
+    $BDIR_MK = $basedir;
+    $CONFIGURE = "$BDIR_MK/config/configure.cfg";
+    $DRIVER = "$BDIR_MK/config/driver.cfg";
     print (colored ("* Full Make of PoCC. This takes a while...", "green green"), "\n");
     my %config_data = read_config_file($CONFIGURE);
 
     make_all_soft($mode, %config_data);
 
-    print (colored ("* Make done", "green green"), "\n");
+     print (colored ("* Make done", "green green"), "\n");
 }

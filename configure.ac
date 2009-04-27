@@ -18,8 +18,8 @@ dnl Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
 dnl
 
 #############################################################################
-## Require for autoconf >= 2.54.
-AC_PREREQ([2.54])
+## Require for autoconf >= 2.60, because PolyLib needs it.
+AC_PREREQ([2.60])
 
 #############################################################################
 ## Fill here the @bug email adress.
@@ -33,7 +33,7 @@ AC_CONFIG_SRCDIR([pocc/driver/pocc/include/pocc/common.h])
 AC_CONFIG_AUX_DIR([pocc/driver/config])
 ## Initialize automake. Here, a special tar version that enables
 ## (very) long filenames.
-AM_INIT_AUTOMAKE([1.9 tar-ustar no-define foreign dist-bzip2])
+AM_INIT_AUTOMAKE([1.10 tar-ustar no-define foreign dist-bzip2])
 #############################################################################
 
 ## Use C language.
