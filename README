@@ -10,6 +10,16 @@ PoCC, the POlyhedral Compiler Collection package
 * Installation
 --------------
 
+Requirements:
+- autoconf > 2.60
+- automake > 1.10
+- libtool > 1.5.22
+- flex
+- bison
+- doxygen
+- latex
+- gcc or another working C compiler
+
 $> ./install.sh
 
 

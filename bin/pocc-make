@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 06:03:24 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 06:12:58 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -53,7 +53,7 @@ sub read_config_file
 	}
     }
 
-    print_config(%config_data);
+    #print_config(%config_data);
 
     return %config_data;
 }
