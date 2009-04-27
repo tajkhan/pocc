@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 05:57:33 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 06:03:24 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -77,7 +77,7 @@ sub get_basedir
     my @softbase = split(/-/, $soft);
     my $atomicsoft = $softbase[0];
     # find the directory prefix.
-    my $val = `find $BDIR_MK -name "*$atomicsoft*" -type d -maxdepth 2`;
+    my $val = `find $BDIR_MK -maxdepth 2 -name "*$atomicsoft*" -type d`;
     $val =~ s/(.*)\n/$1/g;
     return $val; #."/install-$soft";
 }
@@ -108,7 +108,7 @@ sub make_soft
     if (defined($softinfo{"bootstrap"})) {
 	$softbootstrap = $softinfo{"bootstrap"};
 	$softbootstrap =~ s/^\s//g;
-	$res = `find $dir -name "*configure" -maxdepth 1`;
+	$res = `find $dir -maxdepth 1 -name "*configure"`;
 	if ($res eq "") {
 	    print "[PoCC] Bootstrapping in $dir\n";
 	    $val = system("cd $dir && ./$softbootstrap");
@@ -124,7 +124,7 @@ sub make_soft
 	$config_args =~ s/\$poccsrcdir/$BDIR_MK/g;
     }
     print "[PoCC] Configuring $soft in $dir with --disable-static --enable-shared --prefix=$prefix $config_args\n";
-    $res = `find $dir -name "*Makefile" -maxdepth 1`;
+    $res = `find $dir -maxdepth 1 -name "*Makefile"`;
     if ($res eq "" || $force_configure eq "yes") {
 	$val = system("cd $dir && ./configure --disable-static --enable-shared --prefix=$prefix $config_args");
 	die "Error in configuration of $soft\n" if ($val != 0);
