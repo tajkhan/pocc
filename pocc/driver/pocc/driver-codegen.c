@@ -28,16 +28,13 @@
 
 
 /**
- * Execute a command line (supplied by args) and return a long long
- * int read from its standard output (supposed to be the metric, eg,
- * cycles).
- *
- * Dedicated to execute a transformation.
+ * Execute a command line (supplied by args) and return a string from
+ * its standard output (supposed to be the metric, eg, cycles).
  *
  */
 static
-void
-pocc_execprog (char** args)
+char*
+pocc_execprog_ (char** args, int return_result)
 {
   pid_t pid;
   int rv;
@@ -70,7 +67,7 @@ pocc_execprog (char** args)
       if (rv != 0)
 	{
 	  printf ("exit status: %d\n", rv);
-	  printf ("output: %s\n", buf);
+	  exit (rv);
 	}
       close (commpipe[0]);
     }
@@ -86,22 +83,40 @@ pocc_execprog (char** args)
 	}
       close (commpipe[1]);
     }
+
+  if (return_result)
+      return strdup (buf);
+  return NULL;
+}
+
+static
+void
+pocc_execprog (char** args)
+{
+  pocc_execprog_ (args, 0);
+}
+
+static
+char*
+pocc_execprog_string (char** args)
+{
+  return pocc_execprog_ (args, 1);
 }
 
 
 void
-pocc_driver_codegen_post_processing (FILE* body_file, 
+pocc_driver_codegen_post_processing (FILE* body_file,
 				     s_pocc_options_t* poptions)
 {
   char* args[4];
   args[2] = args[3] = NULL;
   args[1] = ".body.c";
-  if (poptions->pluto_parallel) 
+  if (poptions->pluto_parallel)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
       pocc_execprog (args);
     }
-  if (poptions->pluto_unroll) 
+  if (poptions->pluto_unroll)
     {
       // Run plann.
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/plann";
@@ -117,11 +132,12 @@ pocc_driver_codegen_post_processing (FILE* body_file,
     }
 }
 
+
 void
 pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 {
-  char* args[4];
-  args[3] = NULL;
+  char* args[5];
+  args[3] = args[4] = NULL;
   args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
   args[1] = poptions->input_file_name;
   args[2] = ".body.c";
@@ -140,15 +156,44 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[1] = poptions->output_file_name;
       pocc_execprog (args);
     }
+
+  // Compile the program, if necessary.
+  if (poptions->compile_program)
+    {
+      args[0] = STR_POCC_ROOT_DIR "/generators/scripts/compile";
+      args[1] = poptions->output_file_name;
+      char buffer[8192];
+      strcpy (buffer, poptions->compile_command);
+      strcat (buffer, " -lm -DTIME");
+      args[2] = buffer;
+      args[3] = strdup (poptions->output_file_name);
+      // Remove the .c extension.
+      args[3][strlen(args[3]) - 2] = '\0';
+      printf ("[PoCC] Compile program %s: %s -o %s\n", 
+	      args[1], args[2], args[3]);
+      pocc_execprog (args);
+    }
+
+  // Run the program, if necessary.
+  if (poptions->execute_program)
+    {
+      args[0] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
+      strcpy (args[0], "./");
+      strcat (args[0], poptions->output_file_name);
+      args[0][strlen(args[0]) - 2] = '\0';
+      printf ("[PoCC] Running program %s\n", args[0]);
+      poptions->program_exec_result = pocc_execprog_string (args);
+    }
+
 }
 
 
-void 
-pocc_driver_codegen (clan_scop_p program, 
+void
+pocc_driver_codegen (clan_scop_p program,
 		     s_pocc_options_t* poptions,
 		     s_pocc_utils_options_t* puoptions)
 {
-  printf ("[PoCC] Running Codegen...\n");
+  printf ("[PoCC] Starting Codegen\n");
   // Backup the default output file.
   FILE* out_file = poptions->output_file;
   FILE* body_file = fopen (".body.c", "w+");
@@ -165,13 +210,4 @@ pocc_driver_codegen (clan_scop_p program,
   pocc_driver_codegen_program_finalize (poptions);
   // Restore the default output file.
   poptions->output_file = out_file;
-}
-
-
-
-void* 
-pocc_codegen (void* program, 
-	      s_pocc_utils_options_t* puoptions)
-{
-  
 }

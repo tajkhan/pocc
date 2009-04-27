@@ -33,6 +33,11 @@ pocc_options_malloc ()
   ret->output_file = NULL;
   ret->output_file_name = NULL;
   ret->verbose = 0;
+  ret->compile_command = NULL;
+  ret->compile_program = 0;
+  ret->execute_program = NULL;
+  ret->program_exec_result = NULL;
+
   ret->cloog_options = NULL;
 
   // Letsee options.
@@ -65,8 +70,8 @@ pocc_options_malloc ()
   ret->pluto_scalpriv = 0;
 
   // Cloog options.
-  ret->cloog_f =  1;
-  ret->cloog_l = -1; 
+  ret->cloog_f = POCC_CLOOG_UNDEF;
+  ret->cloog_l = POCC_CLOOG_UNDEF; 
 
   // Codegen options.
   ret->codegen = 1;
@@ -90,12 +95,16 @@ pocc_options_free (s_pocc_options_t* options)
 {
   fclose (options->input_file);
   XFREE(options->input_file_name);
-  if (options->output_file)
-    fclose (options->output_file);
   if (options->output_file_name)
     XFREE(options->output_file_name);
   if (options->cloog_options)
     cloog_options_free (options->cloog_options);
-
+  if (options->letsee_scheme_m1)
+    XFREE(options->letsee_scheme_m1);
+  if (options->compile_command)
+    XFREE(options->compile_command);
+  if (options->program_exec_result)
+    XFREE(options->program_exec_result);
+  
   XFREE(options);
 }

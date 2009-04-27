@@ -25,25 +25,67 @@
 # include <letsee/pocc-driver.h>
 
 void 
-pocc_driver_letsee (void* program, 
+pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
+{
+  s_pocc_options_t* poptions = puoptions->pocc_options;
+  // Backup the input scop.
+  clan_scop_p input_scop = clan_scop_dup (puoptions->program);
+
+  // Run PLuTo, if required.
+  if (poptions->pluto || poptions->letsee_space == LS_TYPE_FS)
+      pocc_driver_pluto (puoptions->program, poptions, puoptions);
+
+  // Generate the code, if required.
+  if (poptions->codegen)
+    {
+      char* backup_output_file_name = poptions->output_file_name;
+      poptions->output_file_name = puoptions->output_file_name;
+      poptions->compile_program = 1;
+      poptions->execute_program = 1;
+      pocc_driver_codegen (puoptions->program, poptions, puoptions);
+      poptions->output_file_name = backup_output_file_name;
+    }
+  puoptions->program_exec_result = poptions->program_exec_result;
+
+  // Restore the input scop.
+  clan_scop_free (puoptions->program);
+  puoptions->program = input_scop;
+}
+
+void 
+pocc_driver_letsee (clan_scop_p program, 
 		    s_pocc_options_t* poptions,
 		    s_pocc_utils_options_t* puoptions)
 {
-  printf ("LetSee\n");
-  s_ls_options_t* options = ls_options_malloc ();
+  printf ("[PoCC] Running LetSee\n");
+  s_ls_options_t* loptions = ls_options_malloc ();
 
-  options->type = poptions->letsee_space;
-  options->create_schedfiles = poptions->codegen;
-  options->transfo_dir = strdup ("letsee-transformations");
-  options->heuristic = poptions->letsee_traversal;
-  options->scheme_m1 = poptions->letsee_scheme_m1;
-  options->backtrack_mode = poptions->letsee_backtrack_multi;
-  options->prune_oset = poptions->letsee_prune_precut;
-  options->normalize_space = poptions->letsee_normspace;
-  //options->thresold = poptions->letsee_thresold;
-  options->rtries = poptions->letsee_rtries;
+  loptions->type = poptions->letsee_space;
+  loptions->create_schedfiles = poptions->codegen;
+  XFREE(loptions->transfo_dir);
+  loptions->transfo_dir = XMALLOC(char, 8192);
+  strcpy (loptions->transfo_dir, poptions->output_file_name);
+  loptions->transfo_dir[strlen (loptions->transfo_dir) - 2] = '\0';
+  strcat (loptions->transfo_dir, "-letsee-transformations");
+  loptions->heuristic = poptions->letsee_traversal;
+  loptions->scheme_m1 = poptions->letsee_scheme_m1;
+  loptions->backtrack_mode = poptions->letsee_backtrack_multi;
+  loptions->prune_oset = poptions->letsee_prune_precut;
+  loptions->normalize_space = poptions->letsee_normspace;
+  //loptions->thresold = poptions->letsee_thresold;
+  loptions->rtries = poptions->letsee_rtries;
+  loptions->verbose = poptions->verbose;
 
-/*   letsee_pocc (program, options, puoptions, pocc_codegen); */
+  // Convert the scop to a candl program (LetSee IR).
+  candl_program_p cprogram = candl_program_convert_scop(program, NULL);
+  // Store the .scop in the pocc-utils wrapper.
+  puoptions->program = program;
+  puoptions->pocc_options = poptions;
+  puoptions->pocc_codegen = pocc_driver_after_letsee;
+  puoptions->input_file_name = poptions->input_file_name;
+  puoptions->output_file_name = NULL;
 
-  ls_options_free (options);
+  letsee_pocc (cprogram, loptions, puoptions);
+
+  ls_options_free (loptions);
 }

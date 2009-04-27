@@ -21,7 +21,5 @@
 # define POCC_UTILS_TYPES_H
 
 
-typedef void* (*pocc_codegen_fun_t)(void*, void*);
-
 
 #endif // POCC_UTILS_TYPES_H

@@ -40,6 +40,13 @@ pocc_utils_options_malloc ()
   ret->cloog_options = NULL;
   ret->pocc_options = NULL;
 
+  ret->program; // clan_scop_p
+  ret->pocc_codegen = NULL;
+  ret->program_exec_result = NULL;
+
+  ret->input_file_name = NULL;
+  ret->output_file_name = NULL;
+
   return ret;
 }
 

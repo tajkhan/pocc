@@ -29,7 +29,7 @@ pocc_driver_pluto (clan_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
-  printf ("[PoCC] Running Pluto...\n");
+  printf ("[PoCC] Running Pluto\n");
 
   PlutoOptions* ploptions = pluto_options_alloc ();
   ploptions->parallel = poptions->pluto_parallel;
@@ -55,4 +55,7 @@ pocc_driver_pluto (clan_scop_p program,
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
   pluto_pocc (program, ploptions, puoptions);
+  poptions->cloog_options = puoptions->cloog_options;
+  
+/*   clan_scop_print (stdout, program); */
 }

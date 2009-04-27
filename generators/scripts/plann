@@ -181,5 +181,5 @@ cp -f $1 .ancc
 mv -f $1.ancc $1
 echo "[PLann] Finished running ancc"
 
-rm -f .header .lb .ub .header .footer .vecloop .middle .footer .annotation .annotation_end .unroll1 .unroll2 .unrollbody .ancc
+rm -f .header .lb .ub .header .footer .vecloop .middle .footer .annotation .annotation_end .unroll1 .unroll2 .unrollbody .ancc .unroll
 exit 0

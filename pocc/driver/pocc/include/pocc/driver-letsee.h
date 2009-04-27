@@ -36,7 +36,7 @@ BEGIN_C_DECLS
 
 extern
 void
-pocc_driver_letsee (void* program,
+pocc_driver_letsee (clan_scop_p program,
 		    s_pocc_options_t* poptions,
 		    s_pocc_utils_options_t* puoptions);
 

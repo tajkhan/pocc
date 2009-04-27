@@ -30,9 +30,10 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'h', "help", 0, "\tPrint this help" },
   { 'v', "verbose", 0, "\tVerbose output [off]" },
   { 'o', "output", 1, "\tOutput file [filename.pocc.c]\n" },
+  { 'c', "compile", 1, "\tCompilation command [gcc -O3 -lm]\n" },
   { 'l', "letsee", 0, "\tOptimize with LetSee [off]" },
-  { '\0', "letsee-searchspace", 1, "LetSee: search space ([precut], multi)" },
-  { '\0', "letsee-traversal", 1, "LetSee: traversal heuristic \n\t\t\t\t[exhaust], skip, m1, h1, r1, r1m, h1m" },
+  { '\0', "letsee-searchspace", 1, "LetSee: search space: [precut], multi" },
+  { '\0', "letsee-traversal", 1, "LetSee: traversal heuristic:\n\t\t\t\t[exhaust], skip, m1, h1, r1, r1m, h1m" },
   { '\0', "letsee-normspace", 0, "LetSee: normalize search space [off]" },
 
   { '\0', "letsee-scheme-m1", 0, "LetSee: scheme for M1 traversal [i+p,i,0]" },
@@ -43,7 +44,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "pluto-parallel", 0, "PLuTo: OpenMP parallelization [off]" },
   { '\0', "pluto-tile", 0, "\tPLuTo: polyhedral tiling [off]" },
   { '\0', "pluto-l2tile", 0, "PLuTo: perform L2 tiling [off]" },
-  { '\0', "pluto-fuse", 1, "\tPLuTo: fusion heuristic \n\t\t\t\tmaxfuse, [smartfuse], nofuse" },
+  { '\0', "pluto-fuse", 1, "\tPLuTo: fusion heuristic:\n\t\t\t\tmaxfuse, [smartfuse], nofuse" },
   { '\0', "pluto-unroll", 0, "PLuTo: unroll loops [off]" },
   { '\0', "pluto-ufactor", 1, "PLuTo: unrolling factor [4]" },
   { '\0', "pluto-polyunroll", 0, "PLuTo: polyhedral unrolling [off]" },
@@ -80,7 +81,11 @@ static void     print_help (void)
 {
   int           i;
 
-  printf("Options for pocc are: \n");
+  printf("PoCC, the Polyhedral Compiler Collection, version " 
+	 PACKAGE_VERSION ".\n\n");
+  printf("Written by Louis-Noel Pouchet <" PACKAGE_BUGREPORT ">\n");
+  printf("Major contributions by Cedric Bastoul and Uday Bondhugula.\n\n");
+  printf("Available options for PoCC are: \n");
   for (i = 0; i < POCC_NB_OPTS; ++i)
     if (opts[i].short_opt != '\0')
       printf ("-%c\t--%s  \t%s\n",
@@ -153,6 +158,15 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_VERBOSE])
     options->verbose = 1;
 
+  // Compile command.
+  if (opt_tab[POCC_OPT_COMPILE])
+    {
+      options->compile_command = strdup (opt_tab[POCC_OPT_COMPILE]);
+      options->compile_program = 1;
+    }
+  else
+    options->compile_command = strdup ("gcc -O3 -lm");
+
   // LetSee options.
   if (opt_tab[POCC_OPT_LETSEE])
     options->letsee = 1;
@@ -221,11 +235,11 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PLUTO])
     options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_PARALLEL])
-    options->pluto_parallel = 1;
+    options->pluto_parallel = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_TILE])
-    options->pluto_tile = 1;
+    options->pluto_tile = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_L2TILE])
-    options->pluto_l2tile = 1;
+    options->pluto_l2tile = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_FUSE])
     {
       if (! strcmp(opt_tab[POCC_OPT_PLUTO_FUSE], "maxfuse"))
@@ -234,31 +248,41 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	options->pluto_fuse = PLUTO_SMART_FUSE;
       else if (! strcmp(opt_tab[POCC_OPT_PLUTO_FUSE], "nofuse"))
 	options->pluto_fuse = PLUTO_NO_FUSE;
+      options->pluto = 1;
     }
   if (opt_tab[POCC_OPT_PLUTO_UNROLL])
-    options->pluto_unroll = 1;
-  if (opt_tab[POCC_OPT_PLUTO_UFACTOR])
-    options->pluto_ufactor = atoi (opt_tab[POCC_OPT_PLUTO_UFACTOR]);
+    options->pluto_unroll = options->pluto = 1;
+  if (opt_tab[POCC_OPT_PLUTO_UFACTOR]) 
+    {
+      options->pluto_ufactor = atoi (opt_tab[POCC_OPT_PLUTO_UFACTOR]);
+      options->pluto = 1;
+    }
   if (opt_tab[POCC_OPT_PLUTO_POLYUNROLL])
-    options->pluto_polyunroll = 1;
+    options->pluto_polyunroll = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_PREVECTOR])
-    options->pluto_prevector = 1;
+    options->pluto_prevector = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_MULTIPIPE])
-    options->pluto_multipipe = 1;
+    options->pluto_multipipe = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_RAR])
-    options->pluto_rar = 1;
+    options->pluto_rar = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_LASTWRITER])
-    options->pluto_lastwriter = 1;
+    options->pluto_lastwriter = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_SCALPRIV])
-    options->pluto_scalpriv = 1;
+    options->pluto_scalpriv = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_BEE])
-    options->pluto_bee = 1;
+    options->pluto_bee = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_QUIET])
-    options->pluto_quiet = 1;
+    options->pluto_quiet = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_FT])
-    options->pluto_ft = atoi (opt_tab[POCC_OPT_PLUTO_FT]);
+    {
+      options->pluto_ft = atoi (opt_tab[POCC_OPT_PLUTO_FT]);
+      options->pluto = 1;
+    }
   if (opt_tab[POCC_OPT_PLUTO_LT])
-    options->pluto_ft = atoi (opt_tab[POCC_OPT_PLUTO_LT]);
+    {
+      options->pluto_ft = options->pluto = atoi (opt_tab[POCC_OPT_PLUTO_LT]);
+      options->pluto = 1;
+    }
 
   // Codegen/Cloog options.
   if (opt_tab[POCC_OPT_NOCODEGEN])

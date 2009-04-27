@@ -32,11 +32,6 @@
 #include <pocc/driver-cloog.h>
 
 
-int pass_thru(s_pocc_options_t* options)
-{
-
-}
-
 
 int main(int argc, char** argv)
 {
@@ -45,10 +40,10 @@ int main(int argc, char** argv)
   s_pocc_utils_options_t* puoptions = pocc_utils_options_malloc ();
   pocc_getopts (poptions, argc, argv);
 
-  printf ("[PoCC] Compiling %s...\n", poptions->input_file_name);
+  printf ("[PoCC] Compiling file: %s\n", poptions->input_file_name);
 
   // (1) Parse the file.
-  clan_scop_p scop = 
+  clan_scop_p scop =
     pocc_driver_clan (poptions->input_file, poptions, puoptions);
   if (! scop || scop->statement == NULL)
     pocc_error ("Possible parsing error: no statement in SCoP");
@@ -66,17 +61,19 @@ int main(int argc, char** argv)
     }
 
   // (3) Perform codgen.
-  if (poptions->codegen)
+  // Don't do it if already performed through letsee.
+  if (poptions->codegen && ! poptions->letsee)
     {
       pocc_driver_codegen (scop, poptions, puoptions);
     }
 
+  // Be clean.
   fclose (poptions->input_file);
   fclose (poptions->output_file);
+  clan_scop_free (puoptions->program);
   pip_close ();
-
-  printf ("[PoCC] Output is %s. All done.\n", poptions->output_file_name);
-
+  if (! poptions->letsee)
+    printf ("[PoCC] Output is %s. All done.\n", poptions->output_file_name);
   pocc_options_free (poptions);
 
   return 0;

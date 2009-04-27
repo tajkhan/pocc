@@ -29,6 +29,8 @@
 #define POCC_TIMER_CODE_ASM	1
 #define POCC_TIMER_CODE_TIME	2
 
+#define POCC_CLOOG_UNDEF	-2
+
 struct s_pocc_options
 {
   // In/Out file information
@@ -39,6 +41,12 @@ struct s_pocc_options
 
   // Verbose.
   int		verbose;
+
+  // Compile command.
+  int		compile_program; // Internal field
+  char*		compile_command;
+  int		execute_program;
+  char*		program_exec_result; // Internal field
 
   // LetSee Options.
   int		letsee; // Run LetSee (default: no)
@@ -63,8 +71,8 @@ struct s_pocc_options
   int		pluto_ufactor;
   int		pluto_quiet;
   int		pluto_context;
-  int		pluto_ft; 
-  int		pluto_lt; 
+  int		pluto_ft;
+  int		pluto_lt;
   int		pluto_multipipe;
   int		pluto_l2tile;
   int		pluto_lastwriter;
@@ -75,7 +83,7 @@ struct s_pocc_options
   int		codegen; // Perform codegen (default: yes)
   CloogOptions*	cloog_options;
   int		cloog_f;
-  int		cloog_l; 
+  int		cloog_l;
   int		codegen_timercode;
   int		codegen_timer_asm;
   int		codegen_timer_papi;

@@ -1,4 +1,29 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the support for LetSee in PoCC, including the
+	LetSee+PLuTo scheme (formerly lppcc).
+
+	* pocc/driver/pocc-utils/include/pocc-utils/options.h,
+	* pocc/driver/pocc-utils/include/pocc-utils/types.h,
+	* pocc/driver/pocc-utils/options.c,
+	* pocc/driver/pocc/include/pocc/driver-letsee.h,
+	* pocc/driver/pocc/include/pocc/options.h,
+	* pocc/driver/pocc/driver-clan.c,
+	* pocc/driver/pocc/driver-letsee.c,
+	* pocc/driver/pocc/options.c,
+	* pocc/driver/pocc/driver-cloog.c,
+	* pocc/driver/pocc/driver-pluto.c,
+	* pocc/driver/pocc/driver-codegen.c,
+	* pocc/driver/src/options.h,
+	* pocc/driver/src/pocc.c,
+	* pocc/driver/src/options.c: Support letsee+pluto scheme in PoCC.
+
+	* generators/scripts/compile: New. Helper script to compile a program.
+	* generators/scripts/ploog,
+	* generators/scripts/plann,
+	* generators/scripts/inscop,
+	* generators/scripts/omp: Minor fixes.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the support for the most useful LetSee and PLuTo
 	options.
 	

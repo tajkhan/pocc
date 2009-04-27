@@ -40,12 +40,20 @@
 
 BEGIN_C_DECLS
 
+struct s_pocc_utils_options;
+typedef void (*pocc_codegen_fun_t)(struct s_pocc_utils_options*);
+
 struct s_pocc_utils_options
 {
-  int		codegen_mode;
-  int		iterative;
-  void*		cloog_options;
-  void*		pocc_options;
+  int			codegen_mode;
+  int			iterative;
+  void*			cloog_options; // CloogOptions*
+  void*			pocc_options; // s_pocc_options_t*
+  void*			program; // clan_scop_p
+  pocc_codegen_fun_t	pocc_codegen;
+  char*			program_exec_result;
+  char*			input_file_name;
+  char*			output_file_name;
 };
 typedef struct s_pocc_utils_options s_pocc_utils_options_t;
 
