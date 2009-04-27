@@ -1,7 +1,15 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
-	This patch activates PoCC as a full source-to-source compiler for
-	PLuTo.
-	
+
+	* bin/pocc-util: Rename to...
+	* bin/pocc-util.in: ...this.
+	* bin/pocc-make,
+	* bin/pocc-checkout,
+	* configure.ac: Substitute root directory from configure.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch activates PoCC as a full source-to-source compiler,
+	validated with clan -> candl -> pluto -> cloog.
+
 	* pocc/driver/pocc-utils/include/pocc-utils/options.h,
 	* pocc/driver/pocc-utils/options.c,
 	* pocc/driver/pocc/include/pocc/options.h,
@@ -35,10 +43,10 @@
 	* generators/scripts/omp,
 	* generators/scripts/timercode: New. Post-processing scripts,
 	mostly grabbed from PLuTo.
-	
+
 	* generators/scripts/annotations: New. Syntactic annotation module
 	in Python, grabbed from PLuTo.
-	
+
 2009-04-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch is a huge step towards PoCC usability.
 	(1) Creation of pocc-utils, a package that third-party tools can link

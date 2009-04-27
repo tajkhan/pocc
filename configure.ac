@@ -67,8 +67,10 @@ AC_CONFIG_FILES([
   pocc/driver/pocc-utils/Makefile
   pocc/driver/pocc/Makefile
   pocc/driver/src/Makefile
+  bin/pocc-util
   ],
-  [test -z "$CONFIG_HEADERS" || echo timestamp > pocc/driver/pocc/stamp-h.in])
-
+  [test -z "$CONFIG_HEADERS" || echo timestamp > pocc/driver/pocc/stamp-h.in;
+   chmod +x bin/pocc-util
+  ])
 ## Output the result.
 AC_OUTPUT

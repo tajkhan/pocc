@@ -5,16 +5,16 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Thu Apr 23 05:02:40 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 05:23:11 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
 use Term::ANSIColor;
 
 ## Some global variables.
-$BASEDIR = "/Users/pouchet/inria/projects/pocc";
-$CONFIGURE = "$BASEDIR/config/configure.cfg";
-$DRIVER = "$BASEDIR/config/driver.cfg";
+$BASEDIR = "";
+$CONFIGURE = "";
+$DRIVER = "";
 
 
 sub print_config
@@ -162,7 +162,10 @@ sub make_all_soft
 
 sub make_all
 {
-    my ($mode) = @_;
+    my ($basedir, $mode) = @_;
+    $BASEDIR = $basedir;
+    $CONFIGURE = "$BASEDIR/config/configure.cfg";
+    $DRIVER = "$BASEDIR/config/driver.cfg";
     print (colored ("* Full Make of PoCC. This takes a while...", "green green"), "\n");
     my %config_data = read_config_file($CONFIGURE);
 

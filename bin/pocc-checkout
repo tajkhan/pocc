@@ -5,16 +5,15 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Thu Apr 23 04:40:42 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 05:22:15 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
 use Term::ANSIColor;
 
 ## Some global variables.
-$BASEDIR = "/Users/pouchet/inria/projects/pocc";
-$REPOSITORIES = "$BASEDIR/config/repositories.cfg";
-
+$REPOSITORIES = "";
+$BASEDIR = "";
 
 ## Args: soft name, destination directory, url
 sub checkout_git
@@ -62,7 +61,9 @@ sub checkout_svn
 ## Args: checkout method
 sub checkout
 {
-    my ($repos) = @_;
+    my ($basedir, $repos) = @_;
+    $BASEDIR = $basedir;
+    $REPOSITORIES = "$BASEDIR/config/repositories.cfg";
     print (colored ("* Full checkout of PoCC. This may take a while...", "green green"), "\n");
     print "* Checkout mode: $repos\n";
     open FILE, "$REPOSITORIES" or die $!;

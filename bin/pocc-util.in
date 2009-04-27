@@ -5,17 +5,17 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ## 
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Thu Apr 16 19:52:17 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 05:21:07 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
 
 ## Some global variables.
-$BASEDIR = "/Users/pouchet/inria/projects/pocc";
+$BASEDIR = "@abs_top_srcdir@";
 
 ## Include command scripts.
-require "$BASEDIR/bin/pocc-checkout";
-require "$BASEDIR/bin/pocc-make";
+use "$BASEDIR/bin/pocc-checkout";
+use "$BASEDIR/bin/pocc-make";
 
 sub print_help
 {
@@ -33,14 +33,14 @@ sub parse_args
 	    case "help" { print_help; exit 1; }
 	    case "checkout" {  
 		if ($i < $#args) {
-		    checkout($args[$i + 1]);
+		    checkout($BASEDIR, $args[$i + 1]);
 		}
 		else {
-		    checkout("base");
+		    checkout($BASEDIR, "base");
 		}
 		$i = $#args;
 	    }
-	    case "make" { make_all(); }
+	    case "make" { make_all($BASEDIR); }
 	    else { print "Unknown argument: $args[$i]\n"; }
 	}
     }
