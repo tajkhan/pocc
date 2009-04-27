@@ -84,8 +84,18 @@ pocc_driver_letsee (clan_scop_p program,
   puoptions->pocc_codegen = pocc_driver_after_letsee;
   puoptions->input_file_name = poptions->input_file_name;
   puoptions->output_file_name = NULL;
-
+  // Open the iterative.dat file.
+  puoptions->data_file = fopen ("iterative.dat", "w");
+  if (puoptions->data_file == NULL)
+    pocc_error ("Cannot create file iterative.dat");
+  fprintf (puoptions->data_file, "# LetSee results for %s\n",
+	   puoptions->input_file_name);
+  // Run LetSee.
   letsee_pocc (cprogram, loptions, puoptions);
 
+  printf ("[PoCC] Iterative results stored in file iterative.dat\n");
+
+  // Be clean.
+  fclose (puoptions->data_file);
   ls_options_free (loptions);
 }

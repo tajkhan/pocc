@@ -54,6 +54,7 @@ struct s_pocc_utils_options
   char*			program_exec_result;
   char*			input_file_name;
   char*			output_file_name;
+  FILE*			data_file;
 };
 typedef struct s_pocc_utils_options s_pocc_utils_options_t;
 

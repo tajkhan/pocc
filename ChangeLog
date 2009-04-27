@@ -1,4 +1,10 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* pocc/driver/pocc-utils/include/pocc-utils/options.h,
+	* pocc/driver/pocc-utils/options.c,
+	* pocc/driver/pocc/driver-letsee.c: Minor fixes to improve the output.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the support for LetSee in PoCC, including the
 	LetSee+PLuTo scheme (formerly lppcc).
 
@@ -26,7 +32,7 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the support for the most useful LetSee and PLuTo
 	options.
-	
+
 	* pocc/driver/pocc/include/pocc/options.h,
 	* pocc/driver/pocc/driver-letsee.c,
 	* pocc/driver/pocc/options.c,

@@ -46,6 +46,8 @@ pocc_utils_options_malloc ()
 
   ret->input_file_name = NULL;
   ret->output_file_name = NULL;
+  
+  ret->data_file = NULL;
 
   return ret;
 }
