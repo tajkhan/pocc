@@ -23,29 +23,29 @@ SUBDIRS 		=
 #############################################################################
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		=						\
-	-I$(top_builddir)						\
-	-I$(top_builddir)/pocc/driver/pocc/include			\
-	-I$(top_builddir)/pocc/driver/pocc-utils/include		\
-	-I$(top_builddir)/optimizers/letsee/install-letsee/include	\
-	-I$(top_builddir)/optimizers/pluto/install-pluto/include	\
-	-I$(top_builddir)/analyzers/clan/install-clan/include		\
-	-I$(top_builddir)/analyzers/candl/install-candl/include		\
-	-I$(top_builddir)/generators/cloog/install-cloog/include	\
-	-I$(top_builddir)/math/piplib/install-piplib/include		\
-	-I$(top_builddir)/math/polylib/install-polylib/include		\
-	-I$(top_builddir)/math/fm/install-fm/include			\
-	-I$(top_srcdir)							\
-	-I$(top_srcdir)/pocc/driver/pocc/include			\
-	-I$(top_srcdir)/pocc/driver/pocc-utils/include			\
-	-I$(top_srcdir)/optimizers/letsee/install-letsee/include	\
-	-I$(top_srcdir)/optimizers/pluto/install-pluto/include		\
-	-I$(top_srcdir)/analyzers/clan/install-clan/include		\
-	-I$(top_srcdir)/analyzers/candl/install-candl/include		\
-	-I$(top_srcdir)/generators/cloog/install-cloog/include		\
-	-I$(top_srcdir)/math/piplib/install-piplib/include		\
-	-I$(top_srcdir)/math/polylib/install-polylib/include		\
-	-I$(top_srcdir)/math/fm/install-fm/include
+INCLUDES		=					\
+	-I$(top_builddir)					\
+	-I$(top_builddir)/driver/pocc/include			\
+	-I$(top_builddir)/driver/pocc-utils/include		\
+	-I$(top_builddir)/optimizers/install-letsee/include	\
+	-I$(top_builddir)/optimizers/install-pluto/include	\
+	-I$(top_builddir)/analyzers/install-clan/include	\
+	-I$(top_builddir)/analyzers/install-candl/include	\
+	-I$(top_builddir)/generators/install-cloog/include	\
+	-I$(top_builddir)/math/install-piplib/include		\
+	-I$(top_builddir)/math/install-polylib/include		\
+	-I$(top_builddir)/math/install-fm/include		\
+	-I$(top_srcdir)						\
+	-I$(top_srcdir)/driver/pocc/include			\
+	-I$(top_srcdir)/driver/pocc-utils/include		\
+	-I$(top_srcdir)/optimizers/install-letsee/include	\
+	-I$(top_srcdir)/optimizers/install-pluto/include	\
+	-I$(top_srcdir)/analyzers/install-clan/include		\
+	-I$(top_srcdir)/analyzers/install-candl/include		\
+	-I$(top_srcdir)/generators/install-cloog/include	\
+	-I$(top_srcdir)/math/install-piplib/include		\
+	-I$(top_srcdir)/math/install-polylib/include		\
+	-I$(top_srcdir)/math/install-fm/include
 
 #############################################################################
 
@@ -76,15 +76,15 @@ libpocc_la_SOURCES 	=			\
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
-libpocc_la_LIBADD	=						     \
-	$(top_srcdir)/pocc/driver/pocc-utils/libpocc-utils.la		     \
-	$(top_srcdir)/analyzers/clan/install-clan/lib/libclan.la	     \
-	$(top_srcdir)/analyzers/candl/install-candl/lib/libcandl.la	     \
-	$(top_srcdir)/math/piplib/install-piplib/lib/libpiplib64.la	     \
-	$(top_srcdir)/math/polylib/install-polylib/lib/libpolylib64.la	     \
-	$(top_srcdir)/optimizers/letsee/install-letsee/lib/libletsee.la	     \
-	$(top_srcdir)/optimizers/pluto/install-pluto/lib/libpluto.la	     \
-	$(top_srcdir)/generators/cloog/install-cloog/lib/libcloog-polylib.la \
-	$(top_srcdir)/math/fm/install-fm/lib/libfm.la
+libpocc_la_LIBADD	=						\
+	$(top_srcdir)/driver/pocc-utils/libpocc-utils.la		\
+	$(top_srcdir)/analyzers/install-clan/lib/libclan.la		\
+	$(top_srcdir)/analyzers/install-candl/lib/libcandl.la		\
+	$(top_srcdir)/math/install-piplib/lib/libpiplib64.la		\
+	$(top_srcdir)/math/install-polylib/lib/libpolylib64.la		\
+	$(top_srcdir)/optimizers/install-letsee/lib/libletsee.la	\
+	$(top_srcdir)/optimizers/install-pluto/lib/libpluto.la		\
+	$(top_srcdir)/generators/install-cloog/lib/libcloog-polylib.la	\
+	$(top_srcdir)/math/install-fm/lib/libfm.la
 
 

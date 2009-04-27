@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 07:01:07 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 19:23:12 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -48,7 +48,12 @@ sub read_config_file
 	    else {
 		my @entry = split(/:/, $_);
 		$entry[0] =~ s/\s//g;
-		$config_data{$mode}{$entry[0]} = $entry[1];
+		my $data = $entry[1];
+		my $i;
+		for ($i = 2; $i <= $#entry; $i++) {
+		    $data = $data . ":" . $entry[$i];
+		}
+		$config_data{$mode}{$entry[0]} = $data;
 	    }
 	}
     }
@@ -69,18 +74,6 @@ sub get_all_soft
 }
 
 
-sub get_basedir
-{
-    my ($soft) = @_;
-    my @softbase = split(/-/, $soft);
-    my $atomicsoft = $softbase[0];
-    # find the directory prefix.
-    my $val = `find $BDIR_MK -maxdepth 2 -name "*$atomicsoft*" -type d`;
-    $val =~ s/(.*)\n/$1/g;
-    return $val; #."/install-$soft";
-}
-
-
 sub needs_install
 {
     return 1;
@@ -91,16 +84,11 @@ sub make_soft
 {
     my ($soft, %softinfo) = @_;
     my $softbootstrap = "";
-    my $prefix = get_basedir($soft);# . "/install-$soft";
-    my @tmp = split(/-/, $soft);
-    my $atomicsoft = $tmp[0];
-    my $dir = $prefix;
-    if ($tmp[0] eq $soft) {
-	$dir = $dir . "/trunk";
-    }
-    else {
-	$dir = $dir . "/branches/$soft";
-    }
+    my $category = $softinfo{"category"};
+    $category =~ s/\s//g;
+    my $prefix = $BDIR_MK . "/" . $category;
+    my $dir = $prefix . "/" . $soft;
+
     ## Bootstrap.
     my $force_configure = "no";
     if (defined($softinfo{"bootstrap"})) {
@@ -115,7 +103,9 @@ sub make_soft
 	}
     }
     ## Configure.
-    $prefix = $prefix . "/install-$soft";
+    my $mod = $softinfo{"module"};
+    $mod =~ s/\s//g;
+    $prefix = $prefix . "/install-$mod";
     my $config_args = "";
     if (defined($softinfo{"configure"})) {
 	$config_args = $softinfo{"configure"};
@@ -158,7 +148,7 @@ sub make_all_soft
 }
 
 
-sub make_all
+sub make
 {
     my ($basedir, $soft) = @_;
     $BDIR_MK = $basedir;
@@ -167,7 +157,15 @@ sub make_all
     print (colored ("* Full Make of PoCC. This takes a while...", "green green"), "\n");
     my %config_data = read_config_file($CONFIGURE);
 
-    make_all_soft($mode, %config_data);
+    if ($soft eq "all") {
+	make_all_soft($mode, %config_data);
+    }
+    else {
+	if (! defined($config_data{$soft})) {
+	    die "Unkown software $soft. Please update config/configure.cfg\n";
+	}
+	make_soft($soft, $config_data{$soft});
+    }
 
      print (colored ("* Make done", "green green"), "\n");
 }

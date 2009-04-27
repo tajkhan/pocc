@@ -51,6 +51,7 @@ pocc_driver_pluto (clan_scop_p program,
   ploptions->l2tile = poptions->pluto_l2tile;
   ploptions->lastwriter = poptions->pluto_lastwriter;
   ploptions->scalpriv = poptions->pluto_scalpriv;
+  ploptions->debug = poptions->verbose;
   
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;

@@ -1,4 +1,27 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch finalizes a working version of PoCC.
+
+	* install.sh,
+	* pocc/driver/pocc/Makefile.am,
+	* pocc/driver/pocc/driver-pluto.c,
+	* pocc/driver/src/pocc.c,
+	* pocc/driver/src/Makefile.am,
+	* pocc/driver/src/options.c,
+	* config/driver.cfg,
+	* bin/pocc-make,
+	* bin/pocc-checkout,
+	* Makefile.am,
+	* configure.ac,
+	* config/configure.cfg: Improve the checkout/make system, improve
+	pocc verbosity.
+
+	* README: Update.
+
+	* config/repositories.cfg,
+	* config/pocc-install.cfg,
+	* config/installer-svn.sh: delete.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* pocc/driver/pocc-utils/include/pocc-utils/options.h,
 	* pocc/driver/pocc-utils/options.c,

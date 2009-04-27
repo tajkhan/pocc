@@ -29,6 +29,13 @@ $> ./install.sh
 
 
 
+* Usage
+-------
+
+#> bin/pocc -h
+Gives an overview of the options
+
+
 * Troubleshoot
 --------------
 For any error please contact the author directly.

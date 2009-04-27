@@ -25,12 +25,12 @@ AC_PREREQ([2.60])
 ## Fill here the @bug email adress.
 AC_INIT([pocc], [0.1.0], [louis-noel.pouchet@inria.fr])
 ## Automatic generation of config.h
-AC_CONFIG_HEADERS([pocc/driver/pocc-utils/include/pocc-utils/config.h:pocc/driver/pocc-utils/include/pocc-utils/config-h.in])
+AC_CONFIG_HEADERS([driver/pocc-utils/include/pocc-utils/config.h:driver/pocc-utils/include/pocc-utils/config-h.in])
 ## A common file, which should be included by every source file.
-AC_CONFIG_SRCDIR([pocc/driver/pocc/include/pocc/common.h])
+AC_CONFIG_SRCDIR([driver/pocc/include/pocc/common.h])
 ## Put as most as possible configuration files to an auxialiry
 ## directory.
-AC_CONFIG_AUX_DIR([pocc/driver/config])
+AC_CONFIG_AUX_DIR([driver/autoconf])
 ## Initialize automake. Here, a special tar version that enables
 ## (very) long filenames.
 AM_INIT_AUTOMAKE([1.9 tar-ustar no-define foreign dist-bzip2])
@@ -64,12 +64,12 @@ AC_SUBST([abs_top_srcdir])
 ## Configure Makefiles.
 AC_CONFIG_FILES([
   Makefile
-  pocc/driver/pocc-utils/Makefile
-  pocc/driver/pocc/Makefile
-  pocc/driver/src/Makefile
+  driver/pocc-utils/Makefile
+  driver/pocc/Makefile
+  driver/src/Makefile
   bin/pocc-util
   ],
-  [test -z "$CONFIG_HEADERS" || echo timestamp > pocc/driver/pocc/stamp-h.in;
+  [test -z "$CONFIG_HEADERS" || echo timestamp > driver/pocc/stamp-h.in;
    chmod +x bin/pocc-util
   ])
 ## Output the result.

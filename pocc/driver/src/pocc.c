@@ -41,6 +41,8 @@ int main(int argc, char** argv)
   pocc_getopts (poptions, argc, argv);
 
   printf ("[PoCC] Compiling file: %s\n", poptions->input_file_name);
+  if (poptions->letsee == 0 && poptions->pluto == 0)
+    printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
 
   // (1) Parse the file.
   clan_scop_p scop =

@@ -32,14 +32,14 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'o', "output", 1, "\tOutput file [filename.pocc.c]\n" },
   { 'c', "compile", 1, "\tCompilation command [gcc -O3 -lm]\n" },
   { 'l', "letsee", 0, "\tOptimize with LetSee [off]" },
-  { '\0', "letsee-searchspace", 1, "LetSee: search space: [precut], multi" },
-  { '\0', "letsee-traversal", 1, "LetSee: traversal heuristic:\n\t\t\t\t[exhaust], skip, m1, h1, r1, r1m, h1m" },
+  { '\0', "letsee-searchspace", 1, "LetSee: search space: [precut], schedule" },
+  { '\0', "letsee-traversal", 1, "LetSee: traversal heuristic:\n\t\t\t\t[exhaust], random, skip, m1, dh" },
   { '\0', "letsee-normspace", 0, "LetSee: normalize search space [off]" },
 
   { '\0', "letsee-scheme-m1", 0, "LetSee: scheme for M1 traversal [i+p,i,0]" },
-  { '\0', "letsee-rtries", 0, "LetSee: number of random draws [50]" },
+  { '\0', "letsee-rtries", 1, "LetSee: number of random draws [50]" },
   { '\0', "letsee-prune-precut", 0, "LetSee: prune precut space" },
-  { '\0', "letsee-backtrack", 0, "LetSee: allow bactracking in multi mode\n" },
+  { '\0', "letsee-backtrack", 0, "LetSee: allow bactracking in schedule mode\n" },
   { 'p', "pluto", 0, "\tOptimize with PLuTo [off]" },
   { '\0', "pluto-parallel", 0, "PLuTo: OpenMP parallelization [off]" },
   { '\0', "pluto-tile", 0, "\tPLuTo: polyhedral tiling [off]" },
@@ -60,7 +60,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'n', "no-codegen", 0, "\tDo not generate code [off]" },
   { '\0', "cloog-cloogf", 0, "CLooG: first level to scan [1]" },
   { '\0', "cloog-cloogl", 0, "CLooG: last level to scan [-1]" },
-  { '\0', "codegen-timercode", 0, "Codegen: insert timer code [on]" },
+  { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]" },
 
@@ -154,6 +154,9 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (options->output_file == NULL)
     pocc_error ("Cannot open output file\n");
 
+  // Help, again.
+  if (opt_tab[POCC_OPT_HELP])
+    print_help();
   // Verbose.
   if (opt_tab[POCC_OPT_VERBOSE])
     options->verbose = 1;
@@ -174,21 +177,17 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     {
       if (! strcmp(opt_tab[POCC_OPT_LETSEE_SEARCHSPACE], "precut"))
 	options->letsee_space = LS_TYPE_FS;
-      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_SEARCHSPACE], "multi"))
+      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_SEARCHSPACE], "schedule"))
 	options->letsee_space = LS_TYPE_MULTI;
     }
   if (opt_tab[POCC_OPT_LETSEE_TRAVERSAL])
     {
       if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "exhaust"))
 	options->letsee_traversal = LS_HEURISTIC_EXHAUST;
-      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "h1"))
-	options->letsee_traversal = LS_HEURISTIC_H1;
-      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "r1"))
-	options->letsee_traversal = LS_HEURISTIC_R1;
-      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "h1m"))
-	options->letsee_traversal = LS_HEURISTIC_H1M;
-      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "r1m"))
-	options->letsee_traversal = LS_HEURISTIC_R1M;
+      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "dh"))
+	options->letsee_traversal = LS_HEURISTIC_DH;
+      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "random"))
+	options->letsee_traversal = LS_HEURISTIC_RANDOM;
       else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "m1"))
 	options->letsee_traversal = LS_HEURISTIC_M1;
       else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "skip"))

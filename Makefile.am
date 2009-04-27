@@ -18,16 +18,16 @@
 #
 
 #############################################################################
-SUBDIRS 		= 				\
-			  pocc/driver/pocc-utils 	\
-			  pocc/driver/pocc 		\
-			  pocc/driver/src
+SUBDIRS 		=			\
+			  driver/pocc-utils	\
+			  driver/pocc		\
+			  driver/src
 
 
 #############################################################################
-ACLOCAL_AMFLAGS		= -I pocc/driver/config
+ACLOCAL_AMFLAGS		= -I driver/autoconf
 
-CONFIGURE_DEPENDENCIES 	= $(srcdir)/pocc/driver/config/pocc.m4
+CONFIGURE_DEPENDENCIES 	= $(srcdir)/driver/autoconf/pocc.m4
 
 m4datadir		= $(datadir)/aclocal
 
@@ -49,8 +49,8 @@ MAINTAINERCLEANFILES 	=					\
 	Makefile.in						\
 	aclocal.m4						\
 	configure						\
-	pocc/driver/pocc-utils/include/pocc-utils/config-h.in	\
-	pocc/driver/pocc/stamp-h.in				\
+	driver/pocc-utils/include/pocc-utils/config-h.in	\
+	driver/pocc/stamp-h.in					\
 	$(AUX_DIST)
 
 dist-hook:

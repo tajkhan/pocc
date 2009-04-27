@@ -5,25 +5,23 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 05:51:52 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 19:11:17 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
 use Term::ANSIColor;
 
 ## Some global variables.
-#$BASEDIR = "/Users/pouchet/inria/projects/pocc";
-#$BDIR_CO = "$BASEDIR";
-#$REPOSITORIES = "$BDIR_CO/config/repositories.cfg";
-$REPOSITORIES = "";
+$CONFIG_DATA = "";
 $BDIR_CO = ".";
+$MODE = "devel";
 
 ## Args: soft name, destination directory, url
 sub checkout_git
 {
     my ($soft, $dir, $url) = @_;
     print "** Git cloning $soft (from $url) in $dir...\n";
-    system("git clone $url $BDIR_CO/$dir/$soft/trunk");
+    system("git clone $url $BDIR_CO/$dir/$soft");
 }
 
 
@@ -53,33 +51,45 @@ sub checkout_svn
     my $svnuser = "";
     $svnuser = "--username pocc --password pocc" if ($mode =~ /base/);
     print "** SVN checkouting $soft (from $url) in $dir...\n";
-    system("svn co $url/trunk $BDIR_CO/$dir/$soft/trunk") if ($mode =~ /trunk/);
-    system("svn co $url $BDIR_CO/$dir/$soft") if ($mode =~ /devel/);
-    if ($mode =~ /base/) {
-	system("svn co $svnuser $url/trunk $BDIR_CO/$dir/$soft/trunk");
-    }
+    system("svn co $url $BDIR_CO/$dir/$soft");
+}
+
+## Args: destination directory (category), soft name, retrieve-method, location 
+sub checkout_soft
+{
+    my ($category, $soft, $method, $link) = @_;
+    $category =~ s/\s//g;
+    checkout_svn ($soft, $category, $link, $MODE) if ($method =~ /svn/);
+    checkout_git ($soft, $category, $link) if ($method =~ /git/);
+    checkout_wget ($soft, $category, $link) if ($method =~ /wget/);
 }
 
 
 ## Args: checkout method
 sub checkout
 {
-#    my ($repos) = @_;
-    my ($basedir, $repos) = @_;
+    my ($basedir, $repos, $mode) = @_;
     $BDIR_CO = $basedir;
-    $REPOSITORIES = "$BDIR_CO/config/repositories.cfg";
+    $CONFIG_DATA = "$BDIR_CO/config/configure.cfg";
+    $MODE = $mode;
     print (colored ("* Full checkout of PoCC. This may take a while...", "green green"), "\n");
-    print "* Checkout mode: $repos\n";
-    open FILE, "$REPOSITORIES" or die $!;
-    while (<FILE>) {
-	if ($_ !~ /^#/) {
-	    my ($soft, $dir, $method, $url) = split(/[\t\s]+/, $_);
-	    switch ($method) {
-		case "svn"  { checkout_svn($soft, $dir, $url, $repos); }
-		case "git"  { checkout_git($soft, $dir, $url); }
-		case "wget" { checkout_wget($soft, $dir, $url); }
-	    }
+    print "* Checkout: $repos\n";
+
+    my %config_data = read_config_file($CONFIG_DATA);
+    if ($repos eq "all") {
+	for $soft (keys %config_data) {
+	    checkout_soft($config_data{$soft}{"category"}, $soft, 
+			  $config_data{$soft}{"retrieve-method"}, 
+			  $config_data{$soft}{"location"});
 	}
+    }
+    else {
+	if (! defined($config_data{$repos})) {
+	    die "Unkown software $soft. Please update config/configure.cfg\n";
+	}
+	checkout_soft($config_data{$repos}{"category"}, $repos, 
+		      $config_data{$repos}{"retrieve-method"}, 
+		      $config_data{$repos}{"location"});
     }
     print (colored ("* Checkout done", "green green"), "\n");
 }
