@@ -64,6 +64,7 @@ AC_SUBST([abs_top_srcdir])
 ## Configure Makefiles.
 AC_CONFIG_FILES([
   Makefile
+  doc/Makefile
   driver/pocc-utils/Makefile
   driver/pocc/Makefile
   driver/src/Makefile

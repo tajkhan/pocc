@@ -19,6 +19,7 @@
 
 #############################################################################
 SUBDIRS 		=			\
+			  doc			\
 			  driver/pocc-utils	\
 			  driver/pocc		\
 			  driver/src

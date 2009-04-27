@@ -1,0 +1,209 @@
+\input texinfo
+
+@c % /*************************************************************************
+@c %  *                              PART I: HEADER                           *
+@c %  *************************************************************************/
+@setfilename pocc.info
+@settitle PoCC - The Polyhedral Compiler Collection package
+
+@set EDITION 0.1
+@set VERSION 0.1.0
+@set UPDATED April 27th 2009
+@setchapternewpage odd
+
+
+@c % /*************************************************************************
+@c %  *                 PART II: SUMMARY DESCRIPTION AND COPYRIGHT            *
+@c %  *************************************************************************/
+
+@copying
+This manual is dedicated to PoCC version @value{VERSION}, a flexible
+source-to-source compiler in the polyhedral model.
+
+Copyright @copyright{} 2009 Louis-No@"el Pouchet.
+
+@c quotation
+Permission is granted to copy, distribute and/or modify this document under
+the terms of the GNU Free Documentation License, Version 1.2 
+published by the Free Software Foundation. To receive a copy of the
+GNU Free Documentation License, write to the Free Software Foundation, Inc.,
+59 Temple Place, Suite 330, Boston, MA  02111-1307 USA.
+@c end quotation
+@end copying
+
+@c % /*************************************************************************
+@c %  *                 PART III: TITLEPAGE, CONTENTS, COPYRIGHT              *
+@c %  *************************************************************************/
+@titlepage
+@title PoCC
+@subtitle The Polyhedral Compiler Collection package
+@subtitle Edition @value{EDITION}, for PoCC @value{VERSION}
+@subtitle @value{UPDATED}
+@author Louis-No@"el Pouchet
+     
+@c The following two commands start the copyright page.
+@page
+
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+     
+@c Output the table of contents at the beginning.
+@contents
+
+@c % /*************************************************************************
+@c %  *                     PART IV: TOP NODE AND MASTER MENU                 *
+@c %  *************************************************************************/
+@ifnottex
+@node Top
+@top PoCC
+     
+@insertcopying
+@end ifnottex
+
+@menu
+* Introduction::
+* PoCC Installation::
+* The PoCC Compiler::
+* Developping with PoCC::
+* Troubleshoot::
+@c * Hacking::
+@c * Installing::
+@c * Documentation::
+* References::
+@end menu
+ 
+
+
+@c % /*************************************************************************
+@c %  *                       PART V: BODY OF THE DOCUMENT                    *
+@c %  *************************************************************************/
+
+@node Introduction
+@chapter Introduction
+
+FM is a library dedicated to manipulating Q-polyhedra, and especially
+those representing the projection of a given system of inequalities. The
+projection is computed with an improved version of the Fourier-Motzkin
+algorithm. The library offers features such as:
+@itemize
+@item A redundancy-aware C implementation of the Fourier-Motzkin projection algorithm.
+@item A lexicographic min/max computation (for Q and Z polyhedra).
+@item A lot of convenience functions to manipulate Q-polyhedra.
+@end itemize
+
+@*
+@b{Communication}: one group is available for subscription
+@uref{http://groups.google.com/group/fm-announce,fm-announce}, to
+receive announces about releases of the software.  
+Please contact the
+author directly for any question.
+@*
+
+@*
+@b{API Documentation}:
+There is a Doxygen documentation of the API available in
+@code{doc/htmldoc.tar.gz}.
+
+@*
+@b{License}:
+Starting version 0.5.0, FM is released under the terms of the GNU Lesser
+General Public License version 3 and later. Before version 0.5.0 FM was
+released under the terms of the GNU GPL v2 and later license.
+@*
+
+@c % /*************************************************************************
+@c % /*************************************************************************
+
+@node PoCC Installation
+@chapter PoCC Installation
+
+
+The installation of PoCC requires some pre-requesites
+
+@cartouche
+@example
+$> tar xzf pocc-@value{VERSION}.tar.gz
+$> cd pocc-@value{VERSION}
+$> ./install.sh
+@end example
+@end cartouche
+
+
+@c % /*************************************************************************
+@c % /*************************************************************************
+
+@node The PoCC Compiler
+@chapter The PoCC Compiler
+
+This chapter describes briefly the input/output of FM binaries. 
+
+@section Input file
+
+@c % /*************************************************************************
+@c % /*************************************************************************
+
+@node Developping with PoCC
+@chapter Developping with PoCC
+
+This chapter describes briefly the input/output of FM binaries. 
+
+
+@c % /*************************************************************************
+@c % /*************************************************************************
+
+@node Troubleshoot
+@chapter Troubleshoot
+
+This chapter describes briefly the input/output of FM binaries. 
+
+
+
+
+@c % /*************************************************************************
+@c %  *************************************************************************/
+
+@node References
+@chapter References
+
+@c @itemize
+@c @item
+@table @asis
+@item @anchor{pouchet.07.acaces}@b{[1]} 
+Louis-No@"el Pouchet. When iterative optimization meets the polyhedral
+model: one-dimensional date. Master thesis, University of Paris-Sud 11,
+France, September 2006.
+
+@c @item
+@c @noindent
+@item @anchor{pouchet.07.cgo}@b{[2]} 
+Louis-No@"el Pouchet, C@'edric Bastoul,
+Albert Cohen and Nicolas Vasilache. Iterative optimization in the
+polyhedral model: Part I, one-dimensional time. In @emph{IEEE/ACM Fifth
+International Symposium on Code Generation and Optimization (CGO'07)},
+pp 144--156, IEEE Computer Society Press, San Jose, California, March
+2007.
+
+
+@c @item
+@c @noindent
+@item @anchor{pouchet.08.pldi}@b{[3]} 
+Louis-No@"el Pouchet, C@'edric
+Bastoul, Albert Cohen and John Cavazos. Iterative optimization in the
+polyhedral model: Part II, multidimensional time. In @emph{ACM SIGPLAN
+Conference on Programming Language Design and Implementation
+(PLDI'08)}, pp 90--100, ACM Press, Tucson, Arizona, June 2008.
+
+@end table
+@c @end itemize
+
+
+
+@c % /*************************************************************************
+@c %  *                       PART VI: END OF THE DOCUMENT                    *
+@c %  *************************************************************************/
+@c @unnumbered Index
+     
+@c @printindex cp
+     
+@bye

@@ -1,11 +1,11 @@
 #!/usr/bin/perl -w
 ## pocc-bin for pocc in /Users/pouchet
-## 
+##
 ## Made by Louis-Noel Pouchet
 ## Contact: <louis-noel.pouchet@inria.fr>
-## 
+##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 05:58:47 2009 Louis-Noel Pouchet
+## Last update Mon Apr 27 23:07:08 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -19,7 +19,10 @@ do "$BASEDIR/bin/pocc-make";
 
 sub print_help
 {
-    print "This is the help of pocc\n";
+    print "Usage: pocc-util <command>\n";
+    print "<command>: checkout [software-name]\n";
+    print "<command>: make [software-name]\n";
+    print "<command>: help\n";
 }
 
 
@@ -31,16 +34,24 @@ sub parse_args
     for($i = 0; $i <= $#args; $i++) {
 	switch ($args[$i]) {
 	    case "help" { print_help; exit 1; }
-	    case "checkout" {  
+	    case "checkout" {
 		if ($i < $#args) {
-		    checkout($BASEDIR, $args[$i + 1]);
+		    checkout($BASEDIR, $args[$i + 1], "base");
 		}
 		else {
-		    checkout($BASEDIR, "base");
+		    checkout($BASEDIR, "all", "devel");
 		}
 		$i = $#args;
 	    }
-	    case "make" { make_all($BASEDIR); }
+	    case "make" {
+		if ($i < $#args) {
+		    make($BASEDIR, $args[$i + 1]);
+		}
+		else {
+		    make($BASEDIR, "all");
+		}
+		$i = $#args;
+	    }
 	    else { print "Unknown argument: $args[$i]\n"; }
 	}
     }

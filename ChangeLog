@@ -1,5 +1,19 @@
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* doc/Makefile.am,
+	* doc/doxygen.cfg,
+	* doc/pocc.texi: New. Start documentation skeleton.
+	* Makefile.am,
+	* configure.ac: Update accordingly.
+
+	* driver/pocc-utils/Makefile.am,
+	* driver/src/Makefile.am,
+	* config/configure.cfg,
+	* bin/pocc-util.in,
+	* install.sh: Minor updates.
+
+2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* pocc/driver: Rename to...
 	* driver: ... this. According modifications where in previous patch.
 

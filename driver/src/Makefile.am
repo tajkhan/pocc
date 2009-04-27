@@ -67,6 +67,6 @@ pocc_SOURCES		=			\
 	getopts.c				\
 	options.c
 
-pocc_LDADD		= $(top_srcdir)/pocc/driver/pocc/libpocc.la
+pocc_LDADD		= $(top_srcdir)/driver/pocc/libpocc.la
 
 #############################################################################

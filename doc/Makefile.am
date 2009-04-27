@@ -20,23 +20,30 @@
 #############################################################################
 SUBDIRS 		=
 
+
 #############################################################################
+
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_builddir)				\
-			  -I$(top_builddir)/driver/pocc-utils/include	\
-			  -I$(top_srcdir)				\
-			  -I$(top_srcdir)/driver/pocc-utils/include
+EXTRA_DIST		= 			\
+			htmldoc.tar.gz
+
+info_TEXINFOS		= pocc.texi
+
+# The following requires a fixed version of the Emacs 19.30 etags.
+ETAGS_ARGS		= --lang=none \
+ --regex='/^@node[ \t]+\([^,]+\)/\1/' $(srcdir)/pocc.texi
+TAGS_DEPENDENCIES	= pocc.texi doxygen.cfg
+
+
+DOCDIR			= htmldoc
+DOXYFILE		= doxygen.cfg
+DOXYGEN			= @DOXYGEN@
+
+htmldoc.tar.gz:
+	rm -rf $(top_srcdir)/doc/htmldoc
+	mkdir -p $(top_srcdir)/doc/htmldoc
+	$(DOXYGEN) $(DOXYFILE)
+	tar czf htmldoc.tar.gz htmldoc
 
 #############################################################################
-
-poccheaddir = $(pkgincludedir)/../pocc-utils
-
-pocchead_HEADERS =					\
-			  include/pocc-utils/options.h	\
-			  include/pocc-utils/types.h
-
-lib_LTLIBRARIES 	= libpocc-utils.la
-
-
-libpocc_utils_la_SOURCES 	=	options.c
