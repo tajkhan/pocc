@@ -13,7 +13,7 @@ echo "#include <stdio.h>
 #include <sys/time.h>" > .head;
 fi
 
-grep -B $MAXLINES "#pragma scop" $1 >> .head;
+grep -B $MAXLINES "#pragma scop" $1 | grep -v "#pragma scop" >> .head;
 
 if [ $2 = "time" ]; then
     echo "#ifdef TIME
@@ -47,7 +47,7 @@ else
 " >> .head
 	fi;
 fi;
- grep -A $MAXLINES "#pragma scop" $1 | grep -v "#pragma scop" >> .head;
+ grep -A $MAXLINES "#pragma scop" $1 >> .head;
 
 MAXLINES=`wc -l .head | awk '{print $1}'`;
 

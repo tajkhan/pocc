@@ -82,21 +82,14 @@ GNU Free Documentation License, write to the Free Software Foundation, Inc.,
 @node Introduction
 @chapter Introduction
 
-FM is a library dedicated to manipulating Q-polyhedra, and especially
-those representing the projection of a given system of inequalities. The
-projection is computed with an improved version of the Fourier-Motzkin
-algorithm. The library offers features such as:
-@itemize
-@item A redundancy-aware C implementation of the Fourier-Motzkin projection algorithm.
-@item A lexicographic min/max computation (for Q and Z polyhedra).
-@item A lot of convenience functions to manipulate Q-polyhedra.
-@end itemize
+PoCC is a full compiler for polyhedral optimization. It leverages most
+of the state-of-the-art polyhedral tools in the public domain, resulting
+in a flexible compiler.
 
 @*
 @b{Communication}: one group is available for subscription
-@uref{http://groups.google.com/group/fm-announce,fm-announce}, to
-receive announces about releases of the software.  
-Please contact the
+@uref{http://groups.google.com/group/pocc-announce,pocc-announce}, to
+receive announces about releases of the software.  Please contact the
 author directly for any question.
 @*
 
@@ -105,11 +98,26 @@ author directly for any question.
 There is a Doxygen documentation of the API available in
 @code{doc/htmldoc.tar.gz}.
 
+@* 
+@b{License}: PoCC is released under the terms of the GNU General
+Public License version 2 and later. The software it uses is released
+under the terms of the GNU GPL v2 or GNU Lesser GPL v3.
 @*
-@b{License}:
-Starting version 0.5.0, FM is released under the terms of the GNU Lesser
-General Public License version 3 and later. Before version 0.5.0 FM was
-released under the terms of the GNU GPL v2 and later license.
+
+@*
+@b{Acknowledgments} 
+
+PoCC could not exist without the wonderful software it includes, and their
+authors diserve most of the credit.
+@itemize 
+@item CLooG has been developped by C@'edric Bastoul and Sven Verdoolaege
+@item Clan and Candl have been developped by C@'edric Bastoul and Louis-No@"el Pouchet
+@item PLuTo has been developped by Uday Bondhugula
+@item LetSee has been developped by Louis-No@"el Pouchet
+@item PIPLib has been developped by Paul Feautrier and C@'edric Bastoul
+@item PolyLib has been developped mainly by Doran Wilde, Bart Kienhuis, Vincent Loechner, and Tanguy Risset
+@item FM has been developped by Louis-No@"el Pouchet
+@end itemize
 @*
 
 @c % /*************************************************************************
@@ -118,8 +126,22 @@ released under the terms of the GNU GPL v2 and later license.
 @node PoCC Installation
 @chapter PoCC Installation
 
+@*
+PoCC requires @code{bison} and @code{flex} to be installed in order to
+work properly. It also requires a reasonably recent version of
+@code{libtool} (1.5.22 at least), and, of course, a working C compiler.
+@*
 
-The installation of PoCC requires some pre-requesites
+@*
+The development version of PoCC (currently the only one being
+distributed) additionally requires the standard GNU development tools:
+@code{autoconf 2.60}, @code{automake 1.10}, @code{doxygen}, and both a
+@code{subversion} and @code{git} client.
+@*
+
+@*
+To install PoCC and all its components, simply do the following:
+@*
 
 @cartouche
 @example
@@ -129,6 +151,31 @@ $> ./install.sh
 @end example
 @end cartouche
 
+@*
+This will configure and build the development version of PoCC on your
+system. PoCC is not aimed at being installed on the computer in one of
+the standard locations (@code{/usr/bin} for instance). Instead, add the
+@code{bin} directory to your PATH variable to be able to use PoCC.
+@*
+
+@cartouche
+@example
+$> export PATH=`pwd`/bin:$PATH
+@end example
+@end cartouche
+
+
+
+@*
+Finally, to test that the compiler works, use the @code{gemver.c} file
+at the root of the archive for a test run.  
+@*
+
+@cartouche
+@example
+$> pocc gemver.c
+@end example
+@end cartouche
 
 @c % /*************************************************************************
 @c % /*************************************************************************
@@ -136,9 +183,161 @@ $> ./install.sh
 @node The PoCC Compiler
 @chapter The PoCC Compiler
 
-This chapter describes briefly the input/output of FM binaries. 
+This chapter describes briefly the possibilities of the PoCC compiler.
 
-@section Input file
+
+@section Input Code
+
+@* 
+To delimit which part of the code is going to be compiled by the
+polyhedral optimizer(s), it is required to delimit the code with
+@code{#pragma scop} and @code{#pragma endscop}. For the @emph{devel}
+configuration of PoCC, the code fragment inside the pragmas must be a
+regular static control part: a consecutive set of statements with only
+for loops, where loop bounds, @code{if} statement conditionals and array
+accesses are affine functions of the iterators and the global
+parameters. The ternary operator can be used to provide data-dependent
+code.
+
+@cartouche
+@example
+#pragma scop
+    for (i = 0; i < N; i++)
+        for (j = 0; j < N; j++) {
+            A[i][j] = A[i][j] + u1[i]*v1[j]
+            if (N - i > 2)
+               A[i][j] -= 2;
+         }
+     res = A[0][0] == 0 ? u1[i] : v1[j];
+#pragma endscop
+@end example
+@end cartouche
+
+@*
+For a better treatment of irregular program, consider the @emph{irregular}
+configuration of PoCC:
+@*
+
+@cartouche
+@example
+$> pocc-util alternate irregular
+@end example
+@end cartouche
+
+
+
+@section Available Software
+
+PoCC leverages several GNU tools for polyhedral compilation. Namely:
+@itemize
+@item Clan, the Chunky loop analyzer
+@item Candl, the Chunky analyzer for dependences in loops
+@item LetSee, the Legal transformation Space explorator
+@item PLuTo, an automatic parallelizer and locality optimizer for multicores
+@item CLooG, the Chunky Loop Generator
+@item PIPLib, the Parametric Integer Programming Library
+@item PolyLib, the Polyhedral Library
+@item FM, the Fourier-Motzkin library
+@end itemize
+
+
+@section Available Options
+
+These are the available options for PoCC.
+
+@subsection General Options
+@itemize
+@item -h, --help, 0, Print this help
+@item -v, --verbose: Verbose output [off]
+@item -o, --output: Output file [filename.pocc.c]
+@item -c, --compile: Compilation command [gcc -O3 -lm]
+@end itemize
+
+@*
+For instance, to perform a full compilation and create a binary, type:
+@*
+
+@cartouche
+@example
+$> pocc --compile "gcc -O3" gemver.c -o gemver
+@end example
+@end cartouche
+
+@subsection Optimization Options
+
+@*
+About LetSee:
+@*
+@itemize
+@item -l, --letsee: Optimize with LetSee [off] 
+@item --letsee-searchspace: search space: [precut], schedule 
+@item --letsee-traversal: traversal heuristic:\n[exhaust], random, skip, m1, dh 
+@item --letsee-normspace: normalize search space [off] 
+
+@item --letsee-scheme-m1: scheme for M1 traversal [i+p,i,0] 
+@item --letsee-rtries: number of random draws [50] 
+@item --letsee-prune-precut: prune precut space 
+@item --letsee-backtrack: allow bactracking in schedule mode\n 
+@end itemize
+
+@*
+About PLuTo:
+@*
+@itemize
+@item -p, --pluto: Optimize with PLuTo [off] 
+@item --pluto-parallel: OpenMP parallelization [off] 
+@item --pluto-tile: polyhedral tiling [off] 
+@item --pluto-l2tile: perform L2 tiling [off] 
+@item --pluto-fuse: fusion heuristic:\nmaxfuse, [smartfuse], nofuse 
+@item --pluto-unroll: unroll loops [off] 
+@item --pluto-ufactor: unrolling factor [4] 
+@item --pluto-polyunroll: polyhedral unrolling [off] 
+@item --pluto-prevector: perform prevectorization [off] 
+@item --pluto-multipipe: multipipe [off] 
+@item --pluto-rar: consider RAR dependences [off] 
+@item --pluto-lastwriter: perform lastwriter dep. simp. [off] 
+@item --pluto-scalpriv: perform scalar privatization [off] 
+@item --pluto-bee: use Bee [off] 
+@item --pluto-quiet: be quiet [off] 
+@item --pluto-ft: ft [off] 
+@item --pluto-lt: lt [off]\n 
+@end itemize
+
+@* 
+For instance, to perform tiling with the Tiling Hyperplane method of
+Bondhugula et al, type:
+@* 
+@cartouche
+@example
+$> pocc -v --pluto-tile gemver.c
+@end example
+@end cartouche
+
+@* 
+As a more complicated example, to perform 5 random tests in the space
+of legal fusion structures for @code{gemver.c}, together with tiling and
+parallelization activated, type: 
+@*
+
+@cartouche
+@example
+$> pocc --compile "gcc -O3 -fopenmp" --letsee-traversal random \
+--letsee-rtries 5 --pluto-tile --pluto-parallel  gemver.c
+@end example
+@end cartouche
+
+@subsection Code Generation Options
+
+@itemize 
+@item -n, --no-codegen: Do not generate code [off] 
+@item --cloog-cloogf: CLooG: first level to scan [1] 
+@item --cloog-cloogl: CLooG: last level to scan [-1] 
+@item --codegen-timercode: Codegen: insert timer code [off] 
+@item --codegen-timer-asm: Codegen: insert ASM timer code [off] 
+@c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off] 
+@end itemize
+
+
 
 @c % /*************************************************************************
 @c % /*************************************************************************
@@ -146,7 +345,8 @@ This chapter describes briefly the input/output of FM binaries.
 @node Developping with PoCC
 @chapter Developping with PoCC
 
-This chapter describes briefly the input/output of FM binaries. 
+
+This chapter describes briefly how to program in PoCC.
 
 
 @c % /*************************************************************************
@@ -155,7 +355,6 @@ This chapter describes briefly the input/output of FM binaries.
 @node Troubleshoot
 @chapter Troubleshoot
 
-This chapter describes briefly the input/output of FM binaries. 
 
 
 

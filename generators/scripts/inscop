@@ -9,8 +9,7 @@ echo "#include <math.h>" > .head
 grep -B $MAXLINES "#pragma scop" $1 | grep -v "#pragma scop" >> .head
 grep -A $MAXLINES "#pragma endscop" $1 | grep -v "#pragma endscop" > .tail
 
-# The gcc preprocessor inserts some useless comments like "# 1 "<built-in>"
-# preprocessor doesn't like pragma's in #defines and so it was not put in from pluto
+# Preprocessor doesn't like pragma's in #defines and so it was not put in from pluto
 # when '--bee' was used - instead we will add it here
 gcc -E -P -CC $2 | sed -e 's/_NL_DELIMIT_/\n/' >> __tmp
 
@@ -23,4 +22,4 @@ echo -e "#define min(x,y)    ((x) < (y)? (x) : (y))\n" >> .head
 
 cat .head __tmp > $3
 
-rm -f .head .tail __tmp .body.c .opt.cloog .pluto.c .fst .unroll .pragmas
+rm -f .head .tail __tmp .opt.cloog .pluto.c .fst .unroll .pragmas

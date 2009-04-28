@@ -1,4 +1,24 @@
 2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch finalizes a decent version of PoCC. Beta mode is on!
+	
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/irregular/configure.cfg: Workaround for polylib
+	configuration bug.
+
+	* install.sh,
+	* driver/src/options.c,
+	* bin/pocc-make,
+	* bin/pocc-util.in,
+	* bin/pocc-checkout,
+	* generators/scripts/inscop,
+	* generators/scripts/timercode: Fixes.
+
+	* doc/pocc.texi: Improve documentation.
+	
+2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	
 	* config/configure.cfg,
 	* config/devel/configure.cfg,

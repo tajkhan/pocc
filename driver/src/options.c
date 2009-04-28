@@ -81,7 +81,7 @@ static void     print_help (void)
 {
   int           i;
 
-  printf("PoCC, the Polyhedral Compiler Collection, version " 
+  printf("PoCC, the Polyhedral Compiler Collection, version "
 	 PACKAGE_VERSION ".\n\n");
   printf("Written by Louis-Noel Pouchet <" PACKAGE_BUGREPORT ">\n");
   printf("Major contributions by Cedric Bastoul and Uday Bondhugula.\n\n");
@@ -179,6 +179,7 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	options->letsee_space = LS_TYPE_FS;
       else if (! strcmp(opt_tab[POCC_OPT_LETSEE_SEARCHSPACE], "schedule"))
 	options->letsee_space = LS_TYPE_MULTI;
+      options->letsee = 1;
     }
   if (opt_tab[POCC_OPT_LETSEE_TRAVERSAL])
     {
@@ -192,9 +193,13 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	options->letsee_traversal = LS_HEURISTIC_M1;
       else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "skip"))
 	options->letsee_traversal = LS_HEURISTIC_SKIP;
+      options->letsee = 1;
     }
   if (opt_tab[POCC_OPT_LETSEE_NORMSPACE])
-    options->letsee_normspace = 1;
+    {
+      options->letsee_normspace = 1;
+      options->letsee = 1;
+    }
   if (opt_tab[POCC_OPT_LETSEE_SCHEME_M1])
     {
       char buff[1024];
@@ -222,14 +227,17 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	  if (opt_tab[POCC_OPT_LETSEE_SCHEME_M1][i])
 	    ++i;
 	}
+      options->letsee = 1;
     }
   if (opt_tab[POCC_OPT_LETSEE_PRUNE_PRECUT])
-    options->letsee_prune_precut = 1;
+    options->letsee_prune_precut = options->letsee = 1;
   if (opt_tab[POCC_OPT_LETSEE_BACKTRACK_MULTI])
-    options->letsee_backtrack_multi = 1;
+    options->letsee_backtrack_multi = options->letsee = 1;
   if (opt_tab[POCC_OPT_LETSEE_RTRIES])
-    options->letsee_rtries = atoi (opt_tab[POCC_OPT_LETSEE_RTRIES]);
-
+    {
+      options->letsee_rtries = atoi (opt_tab[POCC_OPT_LETSEE_RTRIES]);
+      options->letsee = 1;
+    }
   // Pluto options.
   if (opt_tab[POCC_OPT_PLUTO])
     options->pluto = 1;
@@ -251,7 +259,7 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     }
   if (opt_tab[POCC_OPT_PLUTO_UNROLL])
     options->pluto_unroll = options->pluto = 1;
-  if (opt_tab[POCC_OPT_PLUTO_UFACTOR]) 
+  if (opt_tab[POCC_OPT_PLUTO_UFACTOR])
     {
       options->pluto_ufactor = atoi (opt_tab[POCC_OPT_PLUTO_UFACTOR]);
       options->pluto = 1;

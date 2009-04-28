@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 14:46:24 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 16:25:23 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -35,7 +35,6 @@ sub read_config_file
 {
     my ($file) = @_;
     my %config_data;
-
     open FILE, "$file" or die $!;
     my $mode = "";
     my $line;
@@ -83,7 +82,7 @@ sub needs_install
 
 sub make_soft
 {
-    my ($soft, %softinfo) = @_;
+    my ($soft, $force, %softinfo) = @_;
     my $softbootstrap = "";
     my $category = $softinfo{"category"};
     $category =~ s/\s//g;
@@ -119,7 +118,7 @@ sub make_soft
 	die "Error in configuration of $soft\n" if ($val != 0);
     }
 
-    $needs_build = `find $dir -newer $prefix/include/$soft | grep -v ".svn"`;
+    $needs_build = `find $dir -newer $prefix/include/$mod | grep -v ".svn"`;
     if ($needs_build eq "") {
 	if (defined($softinfo{"make-depends"})) {
 	    $softinfo{"make-depends"} =~ s/\s+/ /g;
@@ -131,7 +130,7 @@ sub make_soft
 	    }
 	}
     }
-    if (! ($needs_build eq "")) {
+    if (! ($needs_build eq "") || ($force eq "force")) {
 	$val = system("cd $dir && make");
 	die "Error in making of $soft\n" if ($val != 0);
 	if (needs_install($dir)) {
@@ -139,6 +138,9 @@ sub make_soft
 	    die "Error in making install of $soft\n" if ($val != 0);
 	}
 	$BUILDED_LIST = $BUILDED_LIST . " " . $softinfo{"module"};
+    }
+    else {
+	print "[PoCC-make] $soft already up-to-date\n";
     }
 }
 
@@ -192,35 +194,35 @@ sub order_by_deps
 
 sub make_all_soft
 {
-    print "[PoCC] make all soft\n";
-    my ($mode, %config) = @_;
+    print "[PoCC-make] Making all required soft\n";
+    my ($mode, $force, %config) = @_;
     my @soft = order_by_deps($mode, %config);
     my $i;
 
     for ($i = 0; $i <= $#soft; $i++) {
-	make_soft($soft[$i], %{$config{$soft[$i]}});
+	make_soft($soft[$i], $force, %{$config{$soft[$i]}});
     }
 }
 
 
 sub make
 {
-    my ($basedir, $soft) = @_;
+    my ($basedir, $soft, $force) = @_;
     $BDIR_MK = $basedir;
     $CONFIGURE = "$BDIR_MK/config/configure.cfg";
     $DRIVER = "$BDIR_MK/config/driver.cfg";
-    print (colored ("* Full Make of PoCC. This takes a while...", "green green"), "\n");
+    print (colored ("[PoCC-make] Full Make of PoCC. This takes a while...", "green green"), "\n");
     my %config_data = read_config_file($CONFIGURE);
 
     if ($soft eq "all") {
-	make_all_soft($mode, %config_data);
+	make_all_soft($mode, $force, %config_data);
     }
     else {
 	if (! defined($config_data{$soft})) {
 	    die "Unkown software $soft. Please update config/configure.cfg\n";
 	}
-	make_soft($soft, $config_data{$soft});
+	make_soft($soft, $force, $config_data{$soft});
     }
 
-     print (colored ("* Make done", "green green"), "\n");
+     print (colored ("[PoCC-make] Done", "green green"), "\n");
 }

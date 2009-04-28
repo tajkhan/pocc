@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 15:28:26 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 15:58:27 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -21,7 +21,7 @@ $MODE = "";
 sub checkout_git
 {
     my ($soft, $dir, $url) = @_;
-    print "** Git cloning $soft (from $url) in $dir...\n";
+    print "[PoCC-checkout] Git cloning $soft (from $url) in $dir...\n";
     system("git clone $url $BDIR_CO/$dir/$soft");
 }
 
@@ -30,7 +30,7 @@ sub checkout_git
 sub checkout_wget
 {
     my ($soft, $dir, $url) = @_;
-    print "** Wgetting $soft (from $url) in $dir...\n";
+    print "[PoCC-checkout] Wgetting $soft (from $url) in $dir...\n";
     system("mkdir -p $BDIR_CO/$dir/$soft && cd $BDIR_CO/$dir/$soft && wget $url");
     my @tmp = split(/\//, $url);
     my $filename = $tmp[$#tmp];
@@ -51,11 +51,11 @@ sub checkout_svn
     my ($soft, $dir, $url, $mode) = @_;
     my $svnuser = "";
     $svnuser = "--username pocc --password pocc" if ($mode =~ /base/);
-    print "** SVN checkouting $soft (from $url) in $dir...\n";
+    print "[PoCC-checkout] SVN checkouting $soft (from $url) in $dir...\n";
     system("svn co $url $BDIR_CO/$dir/$soft");
 }
 
-## Args: destination directory (category), soft name, retrieve-method, location 
+## Args: destination directory (category), soft name, retrieve-method, location
 sub checkout_soft
 {
     my ($category, $soft, $method, $link) = @_;
@@ -72,17 +72,16 @@ sub checkout
     my ($basedir, $repos) = @_;
     $BDIR_CO = $basedir;
     $CONFIG_DATA = "$BDIR_CO/config/configure.cfg";
-    $CONFIG_DATA = "$BDIR_CO/config/driver.cfg";
-    print (colored ("* Full checkout of PoCC. This may take a while...", "green green"), "\n");
-    print "* Checkout: $repos\n";
-
+    $CONFIG_DRIVER = "$BDIR_CO/config/driver.cfg";
+    print (colored ("[PoCC-checkout] Full checkout of PoCC. This may take a while...", "green green"), "\n");
+    print "[PoCC-checkout] Checkout: $repos\n";
     my %config_data = read_config_file($CONFIG_DATA);
     my %config_driver = read_config_file($CONFIG_DRIVER);
     $MODE = $config_driver{"pocc-driver"}{"configuration"};;
     if ($repos eq "all") {
 	for $soft (keys %config_data) {
-	    checkout_soft($config_data{$soft}{"category"}, $soft, 
-			  $config_data{$soft}{"retrieve-method"}, 
+	    checkout_soft($config_data{$soft}{"category"}, $soft,
+			  $config_data{$soft}{"retrieve-method"},
 			  $config_data{$soft}{"location"});
 	}
     }
@@ -90,10 +89,10 @@ sub checkout
 	if (! defined($config_data{$repos})) {
 	    die "Unkown software $soft. Please update config/configure.cfg\n";
 	}
-	checkout_soft($config_data{$repos}{"category"}, $repos, 
-		      $config_data{$repos}{"retrieve-method"}, 
+	checkout_soft($config_data{$repos}{"category"}, $repos,
+		      $config_data{$repos}{"retrieve-method"},
 		      $config_data{$repos}{"location"});
     }
-    print (colored ("* Checkout done", "green green"), "\n");
+    print (colored ("[PoCC-checkout] Done", "green green"), "\n");
 }
 
