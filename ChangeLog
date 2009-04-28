@@ -1,4 +1,22 @@
 2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	
+	* config/configure.cfg,
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: New. Configuration files for
+	different modes.
+
+	* bin/pocc-make,
+	* bin/pocc-util.in,
+	* bin/pocc-checkout: Update the scripts.
+
+2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/options.c,
 	* driver/pocc/driver-codegen.c,

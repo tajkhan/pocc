@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 23:07:08 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 15:30:34 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -14,12 +14,14 @@ use Switch;
 $BASEDIR = "@abs_top_srcdir@";
 
 ## Include command scripts.
+do "$BASEDIR/bin/pocc-alternate";
 do "$BASEDIR/bin/pocc-checkout";
 do "$BASEDIR/bin/pocc-make";
 
 sub print_help
 {
     print "Usage: pocc-util <command>\n";
+    print "<command>: alternate [configuration-name]\n";
     print "<command>: checkout [software-name]\n";
     print "<command>: make [software-name]\n";
     print "<command>: help\n";
@@ -34,12 +36,19 @@ sub parse_args
     for($i = 0; $i <= $#args; $i++) {
 	switch ($args[$i]) {
 	    case "help" { print_help; exit 1; }
+	    case "alternate" { 
+		die "Missing argument\n" if ($i eq $#args);
+		alternate($BASEDIR, $args[$i + 1]);
+		checkout($BASEDIR, "all");
+		make($BASEDIR, "all");
+		$i = $#args;
+	    }
 	    case "checkout" {
 		if ($i < $#args) {
-		    checkout($BASEDIR, $args[$i + 1], "base");
+		    checkout($BASEDIR, $args[$i + 1]);
 		}
 		else {
-		    checkout($BASEDIR, "all", "devel");
+		    checkout($BASEDIR, "all");
 		}
 		$i = $#args;
 	    }

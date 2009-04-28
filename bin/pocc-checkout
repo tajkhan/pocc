@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 12:11:48 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 15:28:26 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -13,8 +13,9 @@ use Term::ANSIColor;
 
 ## Some global variables.
 $CONFIG_DATA = "";
+$CONFIG_DRIVER = "";
 $BDIR_CO = ".";
-$MODE = "devel";
+$MODE = "";
 
 ## Args: soft name, destination directory, url
 sub checkout_git
@@ -68,14 +69,16 @@ sub checkout_soft
 ## Args: checkout method
 sub checkout
 {
-    my ($basedir, $repos, $mode) = @_;
+    my ($basedir, $repos) = @_;
     $BDIR_CO = $basedir;
     $CONFIG_DATA = "$BDIR_CO/config/configure.cfg";
-    $MODE = $mode;
+    $CONFIG_DATA = "$BDIR_CO/config/driver.cfg";
     print (colored ("* Full checkout of PoCC. This may take a while...", "green green"), "\n");
     print "* Checkout: $repos\n";
 
     my %config_data = read_config_file($CONFIG_DATA);
+    my %config_driver = read_config_file($CONFIG_DRIVER);
+    $MODE = $config_driver{"pocc-driver"}{"configuration"};;
     if ($repos eq "all") {
 	for $soft (keys %config_data) {
 	    checkout_soft($config_data{$soft}{"category"}, $soft, 

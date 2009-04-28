@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Apr 27 19:23:12 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 14:46:24 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -16,6 +16,7 @@ $BDIR_MK = ".";
 $CONFIGURE = "";
 $DRIVER = "";
 
+$BUILDED_LIST = "";
 
 sub print_config
 {
@@ -111,24 +112,79 @@ sub make_soft
 	$config_args = $softinfo{"configure"};
 	$config_args =~ s/\$poccsrcdir/$BDIR_MK/g;
     }
-    print "[PoCC] Configuring $soft in $dir with --disable-static --enable-shared --prefix=$prefix $config_args\n";
     $res = `find $dir -maxdepth 1 -name "*Makefile"`;
     if ($res eq "" || $force_configure eq "yes") {
+	print "[PoCC] Configuring $soft in $dir with --disable-static --enable-shared --prefix=$prefix $config_args\n";
 	$val = system("cd $dir && ./configure --disable-static --enable-shared --prefix=$prefix $config_args");
 	die "Error in configuration of $soft\n" if ($val != 0);
     }
-    $val = system("cd $dir && make");
-    die "Error in making of $soft\n" if ($val != 0);
-    if (needs_install($dir)) {
-	$val = system("cd $dir && make install");
+
+    $needs_build = `find $dir -newer $prefix/include/$soft | grep -v ".svn"`;
+    if ($needs_build eq "") {
+	if (defined($softinfo{"make-depends"})) {
+	    $softinfo{"make-depends"} =~ s/\s+/ /g;
+	    $softinfo{"make-depends"} =~ s/^\s//g;
+	    @dep_modules = split(/ /, $softinfo{"make-depends"});
+	    my $i;
+	    for ($i = 0; $i <= $#dep_modules; $i++) {
+		$needs_build = "yes" if ($BUILDED_LIST =~ /$dep_modules[$i]/);
+	    }
+	}
+    }
+    if (! ($needs_build eq "")) {
+	$val = system("cd $dir && make");
 	die "Error in making of $soft\n" if ($val != 0);
+	if (needs_install($dir)) {
+	    $val = system("cd $dir && make install");
+	    die "Error in making install of $soft\n" if ($val != 0);
+	}
+	$BUILDED_LIST = $BUILDED_LIST . " " . $softinfo{"module"};
     }
 }
 
 
 sub order_by_deps
 {
-    my (@soft) = @_;
+    my ($mode, %config) = @_;
+    my @soft = get_all_soft($mode);
+    my $i;
+    my $j;
+    my $deps_i;
+    my $deps_j;
+    my $mod_i;
+    my $mod_j;
+
+    for ($i = 0; $i < $#soft; $i++) {
+	if (defined($config{$soft[$i]}{"make-depends"})) {
+	    $deps_i = $config{$soft[$i]}{"make-depends"};
+	    $deps_i =~ s/\s+/ /g;
+	    $deps_i =~ s/^\s//g;
+	}
+	else {
+	    $deps_i = "";
+	}
+	$mod_i = $config{$soft[$i]}{"module"};
+	$mod_i =~ s/ //g;
+	for ($j = $i + 1; $j < $#soft; $j++) {
+	    if (defined($config{$soft[$j]}{"make-depends"})) {
+		$deps_j = $config{$soft[$j]}{"make-depends"};
+		$deps_j =~ s/\s+/ /g;
+		$deps_j =~ s/^\s//g;
+	    }
+	    else {
+		$deps_j = "";
+	    }
+	    $mod_j = $config{$soft[$j]}{"module"};
+	    $mod_j =~ s/ //g;
+	    if ($deps_i =~ $mod_j) {
+		my $tmp = $soft[$i];
+		$soft[$i] = $soft[$j];
+		$soft[$j] = $tmp;
+		$deps_i = $deps_j;
+		$mod_i = $mod_j;
+	    }
+	}
+    }
 
     return @soft;
 }
@@ -138,8 +194,7 @@ sub make_all_soft
 {
     print "[PoCC] make all soft\n";
     my ($mode, %config) = @_;
-    my @soft = get_all_soft($mode);
-    @soft = order_by_deps(@soft);
+    my @soft = order_by_deps($mode, %config);
     my $i;
 
     for ($i = 0; $i <= $#soft; $i++) {
