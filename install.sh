@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 18:57:46 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 19:10:01 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -21,7 +21,7 @@
 ## To Change version on the fly, after the first installation, use
 ## bin/pocc-util alternate <version>
 ##
-POCC_VERSION="devel";
+POCC_VERSION="base";
 
 
 ## (1) Self bootstrap, if needed.

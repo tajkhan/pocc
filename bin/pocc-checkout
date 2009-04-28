@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 15:58:27 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 19:44:37 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -50,7 +50,7 @@ sub checkout_svn
 {
     my ($soft, $dir, $url, $mode) = @_;
     my $svnuser = "";
-    $svnuser = "--username pocc --password pocc" if ($mode =~ /base/);
+    $svnuser = "--username lppcc --password lppcc" if ($mode =~ /base/);
     print "[PoCC-checkout] SVN checkouting $soft (from $url) in $dir...\n";
     system("svn co $url $BDIR_CO/$dir/$soft");
 }

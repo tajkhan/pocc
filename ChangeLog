@@ -1,6 +1,13 @@
 2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* install.sh: Move the default configuration to "base".
+	* bin/pocc-checkout: Change default SVN user.
+	* bin/pocc-util.in: Fixes.
+	* doc/pocc.texi: Updates.
+
+2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch finalizes a decent version of PoCC. Beta mode is on!
-	
+
 	* config/devel/configure.cfg,
 	* config/base/configure.cfg,
 	* config/stable/configure.cfg,
@@ -17,9 +24,9 @@
 	* generators/scripts/timercode: Fixes.
 
 	* doc/pocc.texi: Improve documentation.
-	
+
 2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
-	
+
 	* config/configure.cfg,
 	* config/devel/configure.cfg,
 	* config/devel/driver.cfg,

@@ -107,7 +107,7 @@ under the terms of the GNU GPL v2 or GNU Lesser GPL v3.
 @*
 @b{Acknowledgments} 
 
-PoCC could not exist without the wonderful software it includes, and their
+PoCC could not exist without the wonderful software it includes, and its
 authors diserve most of the credit.
 @itemize 
 @item CLooG has been developped by C@'edric Bastoul and Sven Verdoolaege
@@ -188,26 +188,27 @@ This chapter describes briefly the possibilities of the PoCC compiler.
 
 @section Input Code
 
-@* 
+@*
 To delimit which part of the code is going to be compiled by the
 polyhedral optimizer(s), it is required to delimit the code with
-@code{#pragma scop} and @code{#pragma endscop}. For the @emph{devel}
-configuration of PoCC, the code fragment inside the pragmas must be a
-regular static control part: a consecutive set of statements with only
-for loops, where loop bounds, @code{if} statement conditionals and array
-accesses are affine functions of the iterators and the global
+@code{#pragma scop} and @code{#pragma endscop}. For the @emph{base} and
+@emph{devel} configuration of PoCC, the code fragment inside the pragmas
+must be a regular static control part: a consecutive set of statements
+with only for loops, where loop bounds, @code{if} statement conditionals
+and array accesses are affine functions of the iterators and the global
 parameters. The ternary operator can be used to provide data-dependent
 code.
+@*
 
 @cartouche
 @example
 #pragma scop
     for (i = 0; i < N; i++)
-        for (j = 0; j < N; j++) {
+        for (j = 0; j < N; j++) @{
             A[i][j] = A[i][j] + u1[i]*v1[j]
             if (N - i > 2)
                A[i][j] -= 2;
-         }
+         @}
      res = A[0][0] == 0 ? u1[i] : v1[j];
 #pragma endscop
 @end example
@@ -224,17 +225,38 @@ $> pocc-util alternate irregular
 @end example
 @end cartouche
 
+@*
+This will rebuild PoCC with the irregular modules (highly
+experimental). To restore to the initial configuration, do:
+@*
+
+@cartouche
+@example
+$> pocc-util alternate base
+@end example
+@end cartouche
+
+@* 
+Or, if you are a development user with access to the SVN of ALCHEMY
+at Inria:
+@*
+
+@cartouche
+@example
+$> pocc-util alternate devel
+@end example
+@end cartouche
 
 
 @section Available Software
 
 PoCC leverages several GNU tools for polyhedral compilation. Namely:
 @itemize
-@item Clan, the Chunky loop analyzer
-@item Candl, the Chunky analyzer for dependences in loops
-@item LetSee, the Legal transformation Space explorator
-@item PLuTo, an automatic parallelizer and locality optimizer for multicores
-@item CLooG, the Chunky Loop Generator
+@item Clan, the Chunky loop analyzer, to extract a polyhedral intermediate representation from the source code.
+@item Candl, the Chunky analyzer for dependences in loops, to compute polyhedral dependences from the polyhedral IR.
+@item LetSee, the Legal transformation Space explorator, for iterative compilation using affine multidimensional schedules
+@item PLuTo, an automatic parallelizer and locality optimizer for multicores, for powerful optimization with tiling and parallelism in the polyhedral model
+@item CLooG, the Chunky Loop Generator, to generate syntactic code from the polyhedral representation
 @item PIPLib, the Parametric Integer Programming Library
 @item PolyLib, the Polyhedral Library
 @item FM, the Fourier-Motzkin library
@@ -247,10 +269,10 @@ These are the available options for PoCC.
 
 @subsection General Options
 @itemize
-@item -h, --help, 0, Print this help
-@item -v, --verbose: Verbose output [off]
-@item -o, --output: Output file [filename.pocc.c]
-@item -c, --compile: Compilation command [gcc -O3 -lm]
+@item @code{-h}, @code{--help} Print this help
+@item @code{-v}, @code{--verbose} Verbose output [off]
+@item @code{-o}, @code{--output} Output file [filename.pocc.c]
+@item @code{-c}, @code{--compile} Compilation command [gcc -O3 -lm]
 @end itemize
 
 @*
@@ -269,38 +291,38 @@ $> pocc --compile "gcc -O3" gemver.c -o gemver
 About LetSee:
 @*
 @itemize
-@item -l, --letsee: Optimize with LetSee [off] 
-@item --letsee-searchspace: search space: [precut], schedule 
-@item --letsee-traversal: traversal heuristic:\n[exhaust], random, skip, m1, dh 
-@item --letsee-normspace: normalize search space [off] 
+@item @code{-l}, @code{--letsee} Optimize with LetSee [off] 
+@item @code{--letsee-searchspace} search space: [precut], schedule 
+@item @code{--letsee-traversal} traversal heuristic: [exhaust], random, skip, m1, dh 
+@item @code{--letsee-normspace} normalize search space [off] 
 
-@item --letsee-scheme-m1: scheme for M1 traversal [i+p,i,0] 
-@item --letsee-rtries: number of random draws [50] 
-@item --letsee-prune-precut: prune precut space 
-@item --letsee-backtrack: allow bactracking in schedule mode\n 
+@item @code{--letsee-scheme-m1} scheme for M1 traversal [i+p,i,0] 
+@item @code{--letsee-rtries} number of random draws [50] 
+@item @code{--letsee-prune-precut} prune precut space 
+@item @code{--letsee-backtrack} allow bactracking in schedule mode\n 
 @end itemize
 
 @*
 About PLuTo:
 @*
 @itemize
-@item -p, --pluto: Optimize with PLuTo [off] 
-@item --pluto-parallel: OpenMP parallelization [off] 
-@item --pluto-tile: polyhedral tiling [off] 
-@item --pluto-l2tile: perform L2 tiling [off] 
-@item --pluto-fuse: fusion heuristic:\nmaxfuse, [smartfuse], nofuse 
-@item --pluto-unroll: unroll loops [off] 
-@item --pluto-ufactor: unrolling factor [4] 
-@item --pluto-polyunroll: polyhedral unrolling [off] 
-@item --pluto-prevector: perform prevectorization [off] 
-@item --pluto-multipipe: multipipe [off] 
-@item --pluto-rar: consider RAR dependences [off] 
-@item --pluto-lastwriter: perform lastwriter dep. simp. [off] 
-@item --pluto-scalpriv: perform scalar privatization [off] 
-@item --pluto-bee: use Bee [off] 
-@item --pluto-quiet: be quiet [off] 
-@item --pluto-ft: ft [off] 
-@item --pluto-lt: lt [off]\n 
+@item @code{-p}, @code{--pluto} Optimize with PLuTo [off] 
+@item @code{--pluto-parallel} OpenMP parallelization [off] 
+@item @code{--pluto-tile} polyhedral tiling [off] 
+@item @code{--pluto-l2tile} perform L2 tiling [off] 
+@item @code{--pluto-fuse} fusion heuristic: nmaxfuse, [smartfuse], nofuse 
+@item @code{--pluto-unroll} unroll loops [off] 
+@item @code{--pluto-ufactor} unrolling factor [4] 
+@item @code{--pluto-polyunroll} polyhedral unrolling [off] 
+@item @code{--pluto-prevector} perform prevectorization [off] 
+@item @code{--pluto-multipipe} multipipe [off] 
+@item @code{--pluto-rar} consider RAR dependences [off] 
+@item @code{--pluto-lastwriter} perform lastwriter dep. simp. [off] 
+@item @code{--pluto-scalpriv} perform scalar privatization [off] 
+@item @code{--pluto-bee} use Bee [off] 
+@item @code{--pluto-quiet} be quiet [off] 
+@item @code{--pluto-ft} ft [off] 
+@item @code{--pluto-lt} lt [off]
 @end itemize
 
 @* 
@@ -329,11 +351,11 @@ $> pocc --compile "gcc -O3 -fopenmp" --letsee-traversal random \
 @subsection Code Generation Options
 
 @itemize 
-@item -n, --no-codegen: Do not generate code [off] 
-@item --cloog-cloogf: CLooG: first level to scan [1] 
-@item --cloog-cloogl: CLooG: last level to scan [-1] 
-@item --codegen-timercode: Codegen: insert timer code [off] 
-@item --codegen-timer-asm: Codegen: insert ASM timer code [off] 
+@item @code{-n}, @code{--no-codegen} Do not generate code [off] 
+@item @code{--cloog-cloogf} CLooG: first level to scan [1] 
+@item @code{--cloog-cloogl} CLooG: last level to scan [-1] 
+@item @code{--codegen-timercode} Codegen: insert timer code [off] 
+@item @code{--codegen-timer-asm} Codegen: insert ASM timer code [off] 
 @c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off] 
 @end itemize
 
@@ -368,34 +390,37 @@ This chapter describes briefly how to program in PoCC.
 @c @itemize
 @c @item
 @table @asis
-@item @anchor{pouchet.07.acaces}@b{[1]} 
-Louis-No@"el Pouchet. When iterative optimization meets the polyhedral
-model: one-dimensional date. Master thesis, University of Paris-Sud 11,
-France, September 2006.
+@item @anchor{bastoul.04.pact}@b{[1]} 
+C@'edric Bastoul. Code Generation in the Polyhedral Model Is Easier Than
+You Think. In @emph{IEEE International Conference on Parallel
+Architecture and Compilation Techniques (PACT'04)}, pp 7--16,
+Juan-les-Pins, France, September 2004.
+
+@item @anchor{bondhugula.08.pldi}@b{[2]} 
+Uday Bondhugula and Albert Hartono and J. Ramanujam and P. Sadayappan. A
+Practical Automatic Polyhedral Program Optimization System. In @emph{ACM
+SIGPLAN Conference on Programming Language Design and Implementation
+(PLDI'08)}, ACM Press, Tucson, Arizona, June 2008.
+
+@item @anchor{feautrier.98.rairo}@b{[3]} 
+Paul Feautrier. Parametric Integer Programming. In @emph{RAIRO Recherche
+op@'erationnelle}, Vol 22, num 3, pp 243--268, 1998.
 
 @c @item
 @c @noindent
-@item @anchor{pouchet.07.cgo}@b{[2]} 
-Louis-No@"el Pouchet, C@'edric Bastoul,
-Albert Cohen and Nicolas Vasilache. Iterative optimization in the
-polyhedral model: Part I, one-dimensional time. In @emph{IEEE/ACM Fifth
-International Symposium on Code Generation and Optimization (CGO'07)},
-pp 144--156, IEEE Computer Society Press, San Jose, California, March
-2007.
-
-
-@c @item
-@c @noindent
-@item @anchor{pouchet.08.pldi}@b{[3]} 
+@item @anchor{pouchet.08.pldi}@b{[4]} 
 Louis-No@"el Pouchet, C@'edric
 Bastoul, Albert Cohen and John Cavazos. Iterative optimization in the
 polyhedral model: Part II, multidimensional time. In @emph{ACM SIGPLAN
 Conference on Programming Language Design and Implementation
 (PLDI'08)}, pp 90--100, ACM Press, Tucson, Arizona, June 2008.
 
+@item @anchor{wilde.00.jpaa}@b{[5]} 
+Doran Wilde. A library for doing polyhedral operations. In @emph{Journal
+of Parallel Algorithms and Applications}, Vol 15, pp 137--166, 2000.
+
 @end table
 @c @end itemize
-
 
 
 @c % /*************************************************************************
