@@ -1,3 +1,16 @@
+2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/options.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/pocc.c: Minor updates, remove bugs.
+
+	* bin/pocc-checkout,
+	* generators/scripts/compile,
+	* generators/scripts/omp,
+	* generators/scripts/timercode: Fix the scripts.
+
+	* gemver.c: Remove timer code, now automatically inserted.
+
 2009-04-27  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* doc/Makefile.am,

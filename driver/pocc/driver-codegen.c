@@ -26,6 +26,8 @@
 # define TO_STRING_(x) TO_STRING__(x)
 # define STR_POCC_ROOT_DIR TO_STRING_(POCC_ROOT_DIR)
 
+# define POCC_EXECV_HIDE_OUTPUT 0
+# define POCC_EXECV_SHOW_OUTPUT 1
 
 /**
  * Execute a command line (supplied by args) and return a string from
@@ -34,12 +36,12 @@
  */
 static
 char*
-pocc_execprog_ (char** args, int return_result)
+pocc_execprog_ (char** args, int return_result, int show_output)
 {
   pid_t pid;
   int rv;
   int commpipe[2];
-  char buf[1024];
+  char buf[32000];
   int i;
 
   if (pipe (commpipe))
@@ -59,10 +61,11 @@ pocc_execprog_ (char** args, int return_result)
       // Parent.
       dup2 (commpipe[0], 0);
       close (commpipe[1]);
-      for (i = 0; i < 1024; ++i)
+      for (i = 0; i < 32000; ++i)
 	buf[i] = '\0';
-      while (read (0, buf, 1024))
-	;
+      while (read (0, buf, 32000))
+	if (show_output)
+	  printf ("%s", buf);
       wait (&rv);
       if (rv != 0)
 	{
@@ -91,16 +94,16 @@ pocc_execprog_ (char** args, int return_result)
 
 static
 void
-pocc_execprog (char** args)
+pocc_execprog (char** args, int show_output)
 {
-  pocc_execprog_ (args, 0);
+  pocc_execprog_ (args, 0, show_output);
 }
 
 static
 char*
-pocc_execprog_string (char** args)
+pocc_execprog_string (char** args, int show_output)
 {
-  return pocc_execprog_ (args, 1);
+  return pocc_execprog_ (args, 1, show_output);
 }
 
 
@@ -114,21 +117,21 @@ pocc_driver_codegen_post_processing (FILE* body_file,
   if (poptions->pluto_parallel)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
-      pocc_execprog (args);
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
   if (poptions->pluto_unroll)
     {
       // Run plann.
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/plann";
       args[2] = STR_POCC_ROOT_DIR "/generators/scripts/annotations";
-      pocc_execprog (args);
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
       args[2] = NULL;
     }
 
   if (poptions->pluto_prevector)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/vloog";
-      pocc_execprog (args);
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 }
 
@@ -137,24 +140,35 @@ void
 pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 {
   char* args[5];
-  args[3] = args[4] = NULL;
   args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
   args[1] = poptions->input_file_name;
   args[2] = ".body.c";
   args[3] = poptions->output_file_name;
-  pocc_execprog (args);
+  args[4] = NULL;
+  pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
   if (poptions->codegen_timercode)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timercode";
       args[1] = poptions->output_file_name;
-      pocc_execprog (args);
+      args[2] = "time";
+      args[3] = NULL;
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+    }
+  else if (poptions->codegen_timer_asm)
+    {
+      args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timercode";
+      args[1] = poptions->output_file_name;
+      args[2] = "asm";
+      args[3] = NULL;
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 
   if (poptions->pluto_parallel)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/omp";
       args[1] = poptions->output_file_name;
-      pocc_execprog (args);
+      args[2] = NULL;
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 
   // Compile the program, if necessary.
@@ -164,14 +178,15 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[1] = poptions->output_file_name;
       char buffer[8192];
       strcpy (buffer, poptions->compile_command);
-      strcat (buffer, " -lm -DTIME");
+      strcat (buffer, " -lm");
+      if (poptions->codegen_timer_asm || poptions->codegen_timercode)
+	strcat (buffer, " -DTIME");
       args[2] = buffer;
       args[3] = strdup (poptions->output_file_name);
       // Remove the .c extension.
       args[3][strlen(args[3]) - 2] = '\0';
-      printf ("[PoCC] Compile program %s: %s -o %s\n", 
-	      args[1], args[2], args[3]);
-      pocc_execprog (args);
+      args[4] = NULL;
+      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 
   // Run the program, if necessary.
@@ -181,8 +196,10 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       strcpy (args[0], "./");
       strcat (args[0], poptions->output_file_name);
       args[0][strlen(args[0]) - 2] = '\0';
+      args[1] = NULL;
       printf ("[PoCC] Running program %s\n", args[0]);
-      poptions->program_exec_result = pocc_execprog_string (args);
+      poptions->program_exec_result =
+	pocc_execprog_string (args, POCC_EXECV_HIDE_OUTPUT);
     }
 
 }

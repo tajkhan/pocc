@@ -93,7 +93,6 @@ pocc_options_init_cloog (s_pocc_options_t* options)
 void
 pocc_options_free (s_pocc_options_t* options)
 {
-  fclose (options->input_file);
   XFREE(options->input_file_name);
   if (options->output_file_name)
     XFREE(options->output_file_name);

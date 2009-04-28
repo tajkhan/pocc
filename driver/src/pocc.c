@@ -57,21 +57,20 @@ int main(int argc, char** argv)
     }
 
   // (3) Perform PLuTo.
-  if (poptions->pluto)
+  // Don't do it if already performed through LetSee.
+  if (poptions->pluto && ! poptions->letsee)
     {
       pocc_driver_pluto (scop, poptions, puoptions);
     }
 
   // (3) Perform codgen.
-  // Don't do it if already performed through letsee.
+  // Don't do it if already performed through LetSee.
   if (poptions->codegen && ! poptions->letsee)
     {
       pocc_driver_codegen (scop, poptions, puoptions);
     }
 
   // Be clean.
-  fclose (poptions->input_file);
-  fclose (poptions->output_file);
   clan_scop_free (puoptions->program);
   pip_close ();
   if (! poptions->letsee)

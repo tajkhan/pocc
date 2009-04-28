@@ -5,33 +5,65 @@ echo "[PoCC] Insert timer code around kernel";
 
 MAXLINES=`wc -l $1 | awk '{print $1}'`;
 
+if [ $# -ne 2 ]; then echo "error in arguments" ; exit 1; fi
+
+if [ $2 = "time" ]; then
 echo "#include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>" > .head;
+fi
 
 grep -B $MAXLINES "#pragma scop" $1 >> .head;
 
-echo "#ifdef TIME
+if [ $2 = "time" ]; then
+    echo "#ifdef TIME
 #define IF_TIME(foo) foo;
 #else
 #define IF_TIME(foo)
 #endif
-#define TIMER_CODE(timer)						\
-{									\
-    struct timezone Tzp;						\
-    struct timeval Tp;							\
-    int stat;								\
-    stat = gettimeofday (&Tp, &Tzp);					\
-    if (stat != 0) printf(\"Error return from gettimeofday: %d\",stat);	\
-    timer = (Tp.tv_sec + Tp.tv_usec*1.0e-6);				\
+#define TIMER_CODE(timer)						\\
+{									\\
+    struct timezone Tzp;						\\
+    struct timeval Tp;							\\
+    int stat;								\\
+    stat = gettimeofday (&Tp, &Tzp);					\\
+    if (stat != 0) printf(\"Error return from gettimeofday: %d\",stat);	\\
+    timer = (Tp.tv_sec + Tp.tv_usec*1.0e-6);				\\
 }
-    double poc_t_start, pocc_t_end;
-    IF_TIME(TIMER_CODE(t_start));
+	double pocc_t_start, pocc_t_end;
+	IF_TIME(TIMER_CODE(pocc_t_start));
 " >> .head;
+else
+    if [ $2 = "asm" ]; then
+	echo "#define IF_TIME(foo) foo;
+#else
+#define IF_TIME(foo)
+#endif
+#define TIMER_CODE(timer)						\\
+      { __asm__ volatile (\"RDTSC\" : \"=A\" (timer)); }
 
-echo "IF_TIME(TIMER_CODE(pocc_t_end);
-    IF_TIME(printf("%0.6lfs\n", pocc_t_end - pocc_t_start));" > .tail;
-grep -A $MAXLINES "#pragma endscop" $1 >> .tail;
+	unsigned long long int pocc_cycle_start, pocc_cycle_stop;
+	IF_TIME(TIMER_CODE(pocc_cycle_start));
+" >> .head
+	fi;
+fi;
+ grep -A $MAXLINES "#pragma scop" $1 | grep -v "#pragma scop" >> .head;
 
-cat .head .tail $1;
-rm -f .head .tail;
+MAXLINES=`wc -l .head | awk '{print $1}'`;
+
+grep -B $MAXLINES "#pragma endscop" .head > .head2;
+
+if [ $2 = "time" ]; then
+    echo "	IF_TIME(TIMER_CODE(pocc_t_end));
+	IF_TIME(printf(\"%0.6lfs\\n\", pocc_t_end - pocc_t_start));" > .tail;
+else
+    if [ $2 = "asm" ]; then
+	echo "	IF_TIME(TIMER_CODE(pocc_cycle_stop));
+	IF_TIME(printf(\"%llu\\n\", pocc_cycle_stop - pocc_cycle_start));" > .tail;
+    fi;
+fi;
+
+grep -A $MAXLINES "#pragma endscop" .head | grep -v "#pragma endscop" >> .tail;
+
+cat .head2 .tail > $1;
+rm -f .head .head2 .tail;

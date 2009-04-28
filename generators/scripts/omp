@@ -3,11 +3,8 @@
 echo "[PoCC] Insert OpenMP includes";
 
 
-MAXLINES=`wc -l $1 | awk '{print $1}'`;
-
 echo "#include <omp.h>" > .head;
-grep -B $MAXLINES "#pragma scop" $1 >> .head;
-grep -A $MAXLINES "#pragma endscop" $1 > .tail;
+cat $1 > .tail
 
 cat .head .tail > $1;
 rm -f .head .tail;

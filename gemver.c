@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/time.h>
 
 #define N 4000
 
@@ -18,13 +17,6 @@ double v1[N];
 double w[N];
 double y[N];
 double z[N];
-
-
-#ifdef TIME
-#define IF_TIME(foo) foo;
-#else
-#define IF_TIME(foo)
-#endif
 
 void init_array()
 {
@@ -57,15 +49,6 @@ void print_array()
 }
 
 
-double rtclock()
-{
-    struct timezone Tzp;
-    struct timeval Tp;
-    int stat;
-    stat = gettimeofday (&Tp, &Tzp);
-    if (stat != 0) printf("Error return from gettimeofday: %d",stat);
-    return(Tp.tv_sec + Tp.tv_usec*1.0e-6);
-}
 
 main()
 {
@@ -73,8 +56,6 @@ main()
     int i, j;
 
     init_array();
-
-    IF_TIME(t_start = rtclock());
 
 #pragma scop
     for (i=0; i<N; i++)
@@ -93,8 +74,6 @@ main()
             w[i] = w[i] +  A[i][j]*x[j];
 #pragma endscop
 
-    IF_TIME(t_end = rtclock());
-    IF_TIME(printf("%0.6lfs\n", t_end - t_start));
 
 #ifdef TEST
     print_array();

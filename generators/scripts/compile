@@ -1,6 +1,6 @@
 #! /bin/sh
 
 # syntax: compile <program.c> <compile command> <output file>
-echo "[PoCC] Compile program";
+echo "[PoCC] Compile program: $2 $1 -o $3";
 
 $2 $1 -o $3
