@@ -53,6 +53,14 @@ EXTRA_DIST		=			\
 	bin/pocc-alternate			\
 	bin/pocc-checkout			\
 	bin/pocc-make				\
+	config/base/configure.cfg		\
+	config/base/driver.cfg			\
+	config/devel/configure.cfg		\
+	config/devel/driver.cfg			\
+	config/irregular/configure.cfg		\
+	config/irregular/driver.cfg		\
+	config/stable/configure.cfg		\
+	config/stable/driver.cfg		\
 	generators/scripts/annotations.tar.gz	\
 	generators/scripts/compile		\
 	generators/scripts/inscop		\

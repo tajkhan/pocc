@@ -1,5 +1,10 @@
 2009-04-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* bin/pocc-alternate: New. Add missing file.
+	* Makefile.am: updates.
+
+2009-04-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* driver/pocc/include/pocc/options.h,
 	* driver/pocc/include/pocc/driver-pluto.h,
 	* driver/pocc/driver-clan.c,
@@ -19,7 +24,7 @@
 	* generators/scripts/annotations: Delete. Substitute by...
 	* generators/scripts/annotations.tar.gz: ... this archive.
 	* install.sh: Automatically inflate annotations.tar.gz.
-	
+
 2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: Move the default configuration to "base".

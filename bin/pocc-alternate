@@ -1,0 +1,50 @@
+#!/usr/bin/perl -w
+## pocc-alternate.pl for pocc in /Users/pouchet
+##
+## Made by Louis-Noel Pouchet
+## Contact: <louis-noel.pouchet@inria.fr>
+##
+## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
+## Last update Tue Apr 28 16:25:53 2009 Louis-Noel Pouchet
+##
+
+use Switch;
+use Term::ANSIColor;
+
+## Some global variables.
+$BDIR_ALT = ".";
+$CONFIGURE = "";
+$DRIVER = "";
+
+sub get_available_confs
+{
+    $val = `find $BDIR_ALT/config -maxdepth 1 -type d | grep -v "/\.svn" | grep -v "pocc/config\$"`;
+    $val =~ s/$BDIR_ALT\/config\///g;
+    @ret = split(/\n/, $val);
+
+    return @ret;
+}
+
+
+sub switch_conf
+{
+    my ($conf) = @_;
+    system ("cp -f $BDIR_ALT/config/$conf/* $BDIR_ALT/config");
+}
+
+
+sub alternate
+{
+    my ($basedir, $altconfig) = @_;
+    $BDIR_ALT = $basedir;
+    @avail_confs = get_available_confs();
+    my $i;
+    for ($i = 0; $i <= $#avail_confs; $i++) {
+	if ($avail_confs[$i] eq $altconfig) {
+	    switch_conf($altconfig);
+	    print "[PoCC-alternate] Alternate config loaded: $altconfig\n";
+	    return 0;
+	}
+    }
+    die "[PoCC-alternate] Unknown configuration: $altconfig\n";
+}
