@@ -40,9 +40,11 @@ int main(int argc, char** argv)
   s_pocc_utils_options_t* puoptions = pocc_utils_options_malloc ();
   pocc_getopts (poptions, argc, argv);
 
-  printf ("[PoCC] Compiling file: %s\n", poptions->input_file_name);
+  if (! poptions->quiet)
+    printf ("[PoCC] Compiling file: %s\n", poptions->input_file_name);
   if (poptions->letsee == 0 && poptions->pluto == 0)
-    printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
+    if (! poptions->quiet)
+      printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
 
   // (1) Parse the file.
   clan_scop_p scop =
@@ -60,7 +62,8 @@ int main(int argc, char** argv)
   // Don't do it if already performed through LetSee.
   if (poptions->pluto && ! poptions->letsee)
     {
-      pocc_driver_pluto (scop, poptions, puoptions);
+      if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
+	exit (EXIT_FAILURE);
     }
 
   // (3) Perform codgen.
@@ -73,8 +76,8 @@ int main(int argc, char** argv)
   // Be clean.
   clan_scop_free (puoptions->program);
   pip_close ();
-  if (! poptions->letsee)
-    printf ("[PoCC] Output is %s. All done.\n", poptions->output_file_name);
+  if (! poptions->quiet)
+    printf ("[PoCC] All done.\n");
   pocc_options_free (poptions);
 
   return 0;

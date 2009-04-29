@@ -270,9 +270,10 @@ These are the available options for PoCC.
 @subsection General Options
 @itemize
 @item @code{-h}, @code{--help} Print this help
-@item @code{-v}, @code{--verbose} Verbose output [off]
-@item @code{-o}, @code{--output} Output file [filename.pocc.c]
-@item @code{-c}, @code{--compile} Compilation command [gcc -O3 -lm]
+@item @code{-v}, @code{--version} Print version information
+@item @code{-o}, @code{--output <arg>} Output file [filename.pocc.c]
+@item @code{--verbose} Verbose output [off]
+@item @code{--quiet} Minimal output [off]
 @end itemize
 
 @*
@@ -292,14 +293,15 @@ About LetSee:
 @*
 @itemize
 @item @code{-l}, @code{--letsee} Optimize with LetSee [off] 
-@item @code{--letsee-searchspace} search space: [precut], schedule 
-@item @code{--letsee-traversal} traversal heuristic: [exhaust], random, skip, m1, dh 
+@item @code{--letsee-space <arg>} search space: [precut], schedule 
+@item @code{--letsee-walk <arg>} traversal heuristic: [exhaust], random, skip, m1, dh 
+@item @code{--letsee-dry-run} Don't compile and run programs for iterative search [off]
 @item @code{--letsee-normspace} normalize search space [off] 
 
-@item @code{--letsee-scheme-m1} scheme for M1 traversal [i+p,i,0] 
-@item @code{--letsee-rtries} number of random draws [50] 
+@item @code{--letsee-mode-m1 <arg>} scheme for M1 traversal [i+p,i,0] 
+@item @code{--letsee-rtries <arg>} number of random draws [50] 
 @item @code{--letsee-prune-precut} prune precut space 
-@item @code{--letsee-backtrack} allow bactracking in schedule mode\n 
+@item @code{--letsee-backtrack} allow bactracking in schedule mode
 @end itemize
 
 @*
@@ -310,9 +312,9 @@ About PLuTo:
 @item @code{--pluto-parallel} OpenMP parallelization [off] 
 @item @code{--pluto-tile} polyhedral tiling [off] 
 @item @code{--pluto-l2tile} perform L2 tiling [off] 
-@item @code{--pluto-fuse} fusion heuristic: nmaxfuse, [smartfuse], nofuse 
+@item @code{--pluto-fuse <arg>} fusion heuristic: nmaxfuse, [smartfuse], nofuse 
 @item @code{--pluto-unroll} unroll loops [off] 
-@item @code{--pluto-ufactor} unrolling factor [4] 
+@item @code{--pluto-ufactor <arg>} unrolling factor [4] 
 @item @code{--pluto-polyunroll} polyhedral unrolling [off] 
 @item @code{--pluto-prevector} perform prevectorization [off] 
 @item @code{--pluto-multipipe} multipipe [off] 
@@ -331,19 +333,36 @@ Bondhugula et al, type:
 @* 
 @cartouche
 @example
-$> pocc -v --pluto-tile gemver.c
+$> pocc --pluto-tile gemver.c
 @end example
 @end cartouche
 
 @* 
-As a more complicated example, to perform 5 random tests in the space
-of legal fusion structures for @code{gemver.c}, together with tiling and
-parallelization activated, type: 
+
+As a more complicated example, let us consider the precut (aka fusion
+structure) method. To compute (without executing) the number of points
+in the search space for @code{gemver.c} type: 
 @*
 
 @cartouche
 @example
-$> pocc --compile "gcc -O3 -fopenmp" --letsee-traversal random \
+$> pocc ---letsee --verbose --no-codegen  gemver.c
+
+[...]
+[LetSee] Generated 0 fusion structures from 8 schedules
+[...]
+@end example
+@end cartouche
+
+@*
+To perform 5 random tests in the space of legal fusion structures for
+@code{gemver.c}, together with tiling and parallelization activated,
+type: 
+@*
+
+@cartouche
+@example
+$> pocc --compile-cmd "gcc -O3 -fopenmp" --letsee-walk random \
 --letsee-rtries 5 --pluto-tile --pluto-parallel  gemver.c
 @end example
 @end cartouche
@@ -352,10 +371,12 @@ $> pocc --compile "gcc -O3 -fopenmp" --letsee-traversal random \
 
 @itemize 
 @item @code{-n}, @code{--no-codegen} Do not generate code [off] 
-@item @code{--cloog-cloogf} CLooG: first level to scan [1] 
-@item @code{--cloog-cloogl} CLooG: last level to scan [-1] 
+@item @code{--cloog-cloogf <arg>} CLooG: first level to scan [1] 
+@item @code{--cloog-cloogl <arg>} CLooG: last level to scan [-1] 
 @item @code{--codegen-timercode} Codegen: insert timer code [off] 
 @item @code{--codegen-timer-asm} Codegen: insert ASM timer code [off] 
+@item @code{-c}, @code{--compile} Compile program with C compiler [off]
+@item @code{--compile-cmd <arg>} Compilation command [gcc -O3 -lm]
 @c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off] 
 @end itemize
 

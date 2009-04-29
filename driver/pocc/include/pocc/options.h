@@ -41,6 +41,7 @@ struct s_pocc_options
 
   // Verbose.
   int		verbose;
+  int		quiet;
 
   // Compile command.
   int		compile_program; // Internal field

@@ -22,4 +22,4 @@ echo -e "#define min(x,y)    ((x) < (y)? (x) : (y))\n" >> .head
 
 cat .head __tmp > $3
 
-rm -f .head .tail __tmp .opt.cloog .pluto.c .fst .unroll .pragmas
+rm -f .head .tail __tmp .opt.cloog .pluto.c .fst .unroll .pragmas .vectorize .body.c

@@ -1,3 +1,25 @@
+2009-04-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/include/pocc/driver-pluto.h,
+	* driver/pocc/driver-clan.c,
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/options.h,
+	* driver/src/pocc.c,
+	* driver/src/options.c,
+	* doc/pocc.texi,
+	* bin/pocc-make,
+	* generators/scripts/inscop: Various fixes.
+	* Makefile.am: Update distribution package.
+
+	* generators/scripts/annotations: Delete. Substitute by...
+	* generators/scripts/annotations.tar.gz: ... this archive.
+	* install.sh: Automatically inflate annotations.tar.gz.
+	
 2009-04-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: Move the default configuration to "base".

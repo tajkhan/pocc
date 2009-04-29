@@ -24,7 +24,7 @@
 # include <pocc/driver-letsee.h>
 # include <letsee/pocc-driver.h>
 
-void 
+void
 pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
 {
   s_pocc_options_t* poptions = puoptions->pocc_options;
@@ -33,27 +33,32 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
 
   // Run PLuTo, if required.
   if (poptions->pluto || poptions->letsee_space == LS_TYPE_FS)
-      pocc_driver_pluto (puoptions->program, poptions, puoptions);
+    if (pocc_driver_pluto (puoptions->program, poptions, puoptions) ==
+	EXIT_FAILURE)
+      {
+	if (! poptions->quiet)
+	  printf ("[PoCC] Error in performing PLuTo. Optimization aborted\n");
+	return;
+      }
 
   // Generate the code, if required.
   if (poptions->codegen)
     {
       char* backup_output_file_name = poptions->output_file_name;
       poptions->output_file_name = puoptions->output_file_name;
-      poptions->compile_program = 1;
-      poptions->execute_program = 1;
+      if (poptions->compile_program)
+	poptions->execute_program = 1;
       pocc_driver_codegen (puoptions->program, poptions, puoptions);
       poptions->output_file_name = backup_output_file_name;
     }
   puoptions->program_exec_result = poptions->program_exec_result;
-
   // Restore the input scop.
   clan_scop_free (puoptions->program);
   puoptions->program = input_scop;
 }
 
-void 
-pocc_driver_letsee (clan_scop_p program, 
+void
+pocc_driver_letsee (clan_scop_p program,
 		    s_pocc_options_t* poptions,
 		    s_pocc_utils_options_t* puoptions)
 {
@@ -85,17 +90,20 @@ pocc_driver_letsee (clan_scop_p program,
   puoptions->input_file_name = poptions->input_file_name;
   puoptions->output_file_name = NULL;
   // Open the iterative.dat file.
-  puoptions->data_file = fopen ("iterative.dat", "w");
-  if (puoptions->data_file == NULL)
-    pocc_error ("Cannot create file iterative.dat");
-  fprintf (puoptions->data_file, "# LetSee results for %s\n",
-	   puoptions->input_file_name);
+  if (poptions->compile_program)
+    {
+      puoptions->data_file = fopen ("iterative.dat", "w");
+      if (puoptions->data_file == NULL)
+	pocc_error ("Cannot create file iterative.dat");
+      fprintf (puoptions->data_file, "# LetSee results for %s\n",
+	       puoptions->input_file_name);
+    }
   // Run LetSee.
   letsee_pocc (cprogram, loptions, puoptions);
-
-  printf ("[PoCC] Iterative results stored in file iterative.dat\n");
-
+  if (poptions->compile_program)
+    printf ("[PoCC] Iterative results stored in file iterative.dat\n");
   // Be clean.
-  fclose (puoptions->data_file);
+  if (poptions->compile_program)
+    fclose (puoptions->data_file);
   ls_options_free (loptions);
 }

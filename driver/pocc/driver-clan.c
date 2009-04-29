@@ -25,11 +25,12 @@
 
 
 clan_scop_p
-pocc_driver_clan (FILE* program, 
+pocc_driver_clan (FILE* program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
-  printf ("[PoCC] Running Clan\n");
+  if (! poptions->quiet)
+    printf ("[PoCC] Running Clan\n");
   clan_options_p coptions = clan_options_malloc ();
   clan_scop_p scop = clan_parse (program, coptions);
 /*   clan_scop_print (stdout, scop); */

@@ -24,7 +24,7 @@
 # include <pocc/driver-pluto.h>
 
 
-void 
+int
 pocc_driver_pluto (clan_scop_p program, 
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
@@ -55,8 +55,10 @@ pocc_driver_pluto (clan_scop_p program,
   
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
-  pluto_pocc (program, ploptions, puoptions);
+  if (pluto_pocc (program, ploptions, puoptions) == PLUTO_EXIT_ERROR)
+    return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;
   
 /*   clan_scop_print (stdout, program); */
+  return EXIT_SUCCESS;
 }

@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 19:10:01 2009 Louis-Noel Pouchet
+## Last update Wed Apr 29 17:45:25 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -34,30 +34,37 @@ if ! [ -f ./configure ]; then
     FORCE=y;
 fi;
 
-## (2) Configure pocc.
+## (2) Extract generators/scripts/annotations.
+if ! [ -d "generators/scripts/annotations" ]; then
+    echo "[PoCC] Inflate archives...";
+    cd generators/scripts && tar xzf annotations.tar.gz;
+fi;
+
+## (3) Configure pocc.
 echo "[PoCC] Configure...";
 if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
     ./configure --exec-prefix=`pwd` --bindir=`pwd`/bin --libdir=`pwd`/driver/install-pocc/lib --includedir=`pwd`/driver/install-pocc/include --datarootdir=`pwd`  --disable-static --enable-shared;
 fi;
 
-## (3) Build and install pocc-utils
+## (4) Build and install pocc-utils
 echo "[PoCC] Make pocc-utils...";
-needed=`find driver/pocc-utils -newer driver/install-pocc/include/pocc-utils | grep -v ".svn"`;
-if ! [ -z "$needed" ]; then
+needed_pu=`find driver/pocc-utils -newer driver/install-pocc/include/pocc-utils 2>&1 | grep -v ".svn"`;
+if ! [ -z "$needed_pu" ]; then
     cd driver/pocc-utils && make && make install && cd -;
     if [ $? -ne 0 ]; then echo "[PoCC] pocc-utils: fatal error"; exit 1; fi;
 fi;
 
-## (4) Checkout all files, and build all modules.
-echo "[PoCC] Select alternate configuration $POCC_VERSION...";
+## (5) Checkout all files, and build all modules.
+echo "[PoCC] Checkout and build for configuration $POCC_VERSION...";
 bin/pocc-util alternate $POCC_VERSION;
 if [ $? -ne 0 ]; then echo "[PoCC] fatal error"; exit 1; fi;
 
-## (5) Build and install pocc.
+## (6) Build and install pocc.
 echo "[PoCC] Make pocc...";
-needed=`find driver/pocc -newer driver/install-pocc/include/pocc | grep -v ".svn"`;
-if ! [ -z "$needed" ]; then
+needed=`find driver/pocc -newer driver/install-pocc/include/pocc 2>&1 | grep -v ".svn"`;
+if ! [ -z "$needed" ] || ! [ -z "$needed_pu" ]; ; then
     make && make install;
     if [ $? -ne 0 ]; then echo "[PoCC] fatal error"; exit 1; fi;
 fi;
+
 echo "[PoCC] Installation complete.";

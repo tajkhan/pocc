@@ -43,7 +43,24 @@ AUX_DIST                =			\
 	$(ac_aux_dir)/depcomp
 
 
-EXTRA_DIST		=
+EXTRA_DIST		=			\
+	install.sh				\
+	README					\
+	gemver.c				\
+	configure.ac				\
+	bin/pocc-util				\
+	bin/pocc-util.in			\
+	bin/pocc-alternate			\
+	bin/pocc-checkout			\
+	bin/pocc-make				\
+	generators/scripts/annotations.tar.gz	\
+	generators/scripts/compile		\
+	generators/scripts/inscop		\
+	generators/scripts/omp			\
+	generators/scripts/plann		\
+	generators/scripts/ploog		\
+	generators/scripts/timercode		\
+	generators/scripts/vloog
 
 
 MAINTAINERCLEANFILES 	=					\

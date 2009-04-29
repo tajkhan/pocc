@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 16:25:23 2009 Louis-Noel Pouchet
+## Last update Wed Apr 29 17:42:44 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -117,8 +117,9 @@ sub make_soft
 	$val = system("cd $dir && ./configure --disable-static --enable-shared --prefix=$prefix $config_args");
 	die "Error in configuration of $soft\n" if ($val != 0);
     }
-
-    $needs_build = `find $dir -newer $prefix/include/$mod | grep -v ".svn"`;
+    $needed_pu = `find $BDIR_MK/driver/pocc-utils -newer $BDIR_MK/driver/install-pocc/include/pocc-utils 2>&1 | grep -v ".svn"`;
+    $needs_build = `find $dir -newer $prefix/include/$mod 2>&1| grep -v ".svn"`;
+    $needs_build = "yes" if (! ($needed_pu eq ""));
     if ($needs_build eq "") {
 	if (defined($softinfo{"make-depends"})) {
 	    $softinfo{"make-depends"} =~ s/\s+/ /g;

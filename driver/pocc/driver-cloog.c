@@ -32,7 +32,8 @@ pocc_driver_cloog (clan_scop_p program,
 {
   int i;
   FILE* body_file = poptions->output_file;
-  printf ("[PoCC] Running CLooG\n");
+  if (! poptions->quiet)
+    printf ("[PoCC] Running CLooG\n");
 
   clan_statement_p stm;
   /* Update statement iterators with tile iterators. */
@@ -73,7 +74,7 @@ pocc_driver_cloog (clan_scop_p program,
     coptions = cloog_options_malloc ();
   CloogProgram * cp = cloog_program_scop_to_cloogprogram (program, coptions);
   /* Generate loop counters. */
-  fprintf (body_file, 
+  fprintf (body_file,
 	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
   int done = 0;
   for (i = 0; i < cp->nb_scattdims; ++i)

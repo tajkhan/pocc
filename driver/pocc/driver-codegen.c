@@ -145,14 +145,20 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
   args[2] = ".body.c";
   args[3] = poptions->output_file_name;
   args[4] = NULL;
-  pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+  if (poptions->quiet)
+    pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+  else
+    pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
   if (poptions->codegen_timercode)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timercode";
       args[1] = poptions->output_file_name;
       args[2] = "time";
       args[3] = NULL;
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
   else if (poptions->codegen_timer_asm)
     {
@@ -160,7 +166,10 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[1] = poptions->output_file_name;
       args[2] = "asm";
       args[3] = NULL;
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 
   if (poptions->pluto_parallel)
@@ -168,7 +177,10 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/omp";
       args[1] = poptions->output_file_name;
       args[2] = NULL;
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 
   // Compile the program, if necessary.
@@ -186,18 +198,22 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       // Remove the .c extension.
       args[3][strlen(args[3]) - 2] = '\0';
       args[4] = NULL;
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 
   // Run the program, if necessary.
-  if (poptions->execute_program)
+  if (poptions->compile_program && poptions->execute_program)
     {
       args[0] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
       strcpy (args[0], "./");
       strcat (args[0], poptions->output_file_name);
       args[0][strlen(args[0]) - 2] = '\0';
       args[1] = NULL;
-      printf ("[PoCC] Running program %s\n", args[0]);
+      if (! poptions->quiet)
+	printf ("[PoCC] Running program %s\n", args[0]);
       poptions->program_exec_result =
 	pocc_execprog_string (args, POCC_EXECV_HIDE_OUTPUT);
     }
@@ -210,7 +226,8 @@ pocc_driver_codegen (clan_scop_p program,
 		     s_pocc_options_t* poptions,
 		     s_pocc_utils_options_t* puoptions)
 {
-  printf ("[PoCC] Starting Codegen\n");
+  if (! poptions->quiet)
+    printf ("[PoCC] Starting Codegen\n");
   // Backup the default output file.
   FILE* out_file = poptions->output_file;
   FILE* body_file = fopen (".body.c", "w+");
@@ -225,6 +242,8 @@ pocc_driver_codegen (clan_scop_p program,
   pocc_driver_codegen_post_processing (body_file, poptions);
   // Build the final output file.
   pocc_driver_codegen_program_finalize (poptions);
+  if (! poptions->quiet)
+    printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
   // Restore the default output file.
   poptions->output_file = out_file;
 }

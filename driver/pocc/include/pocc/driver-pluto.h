@@ -41,7 +41,7 @@
 BEGIN_C_DECLS
 
 extern
-void
+int
 pocc_driver_pluto (clan_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions);
