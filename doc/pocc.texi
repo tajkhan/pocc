@@ -276,13 +276,27 @@ These are the available options for PoCC.
 @item @code{--quiet} Minimal output [off]
 @end itemize
 
+@subsection Code Generation Options
+
+@itemize 
+@item @code{-n}, @code{--no-codegen} Do not generate code [off] 
+@item @code{--cloog-cloogf <arg>} CLooG: first level to scan [1] 
+@item @code{--cloog-cloogl <arg>} CLooG: last level to scan [-1] 
+@item @code{--codegen-timercode} Codegen: insert timer code [off] 
+@item @code{--codegen-timer-asm} Codegen: insert ASM timer code [off] 
+@item @code{-c}, @code{--compile} Compile program with C compiler [off]
+@item @code{--compile-cmd <arg>} Compilation command [gcc -O3 -lm]
+@c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off] 
+@end itemize
+
+
 @*
 For instance, to perform a full compilation and create a binary, type:
 @*
 
 @cartouche
 @example
-$> pocc --compile "gcc -O3" gemver.c -o gemver
+$> pocc --compile gemver.c -o gemver
 @end example
 @end cartouche
 
@@ -366,19 +380,6 @@ $> pocc --compile-cmd "gcc -O3 -fopenmp" --letsee-walk random \
 --letsee-rtries 5 --pluto-tile --pluto-parallel  gemver.c
 @end example
 @end cartouche
-
-@subsection Code Generation Options
-
-@itemize 
-@item @code{-n}, @code{--no-codegen} Do not generate code [off] 
-@item @code{--cloog-cloogf <arg>} CLooG: first level to scan [1] 
-@item @code{--cloog-cloogl <arg>} CLooG: last level to scan [-1] 
-@item @code{--codegen-timercode} Codegen: insert timer code [off] 
-@item @code{--codegen-timer-asm} Codegen: insert ASM timer code [off] 
-@item @code{-c}, @code{--compile} Compile program with C compiler [off]
-@item @code{--compile-cmd <arg>} Compilation command [gcc -O3 -lm]
-@c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off] 
-@end itemize
 
 
 
