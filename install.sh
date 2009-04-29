@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Wed Apr 29 17:45:25 2009 Louis-Noel Pouchet
+## Last update Wed Apr 29 17:57:34 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -37,7 +37,7 @@ fi;
 ## (2) Extract generators/scripts/annotations.
 if ! [ -d "generators/scripts/annotations" ]; then
     echo "[PoCC] Inflate archives...";
-    cd generators/scripts && tar xzf annotations.tar.gz;
+    cd generators/scripts && tar xzf annotations.tar.gz; cd -;
 fi;
 
 ## (3) Configure pocc.
@@ -62,7 +62,7 @@ if [ $? -ne 0 ]; then echo "[PoCC] fatal error"; exit 1; fi;
 ## (6) Build and install pocc.
 echo "[PoCC] Make pocc...";
 needed=`find driver/pocc -newer driver/install-pocc/include/pocc 2>&1 | grep -v ".svn"`;
-if ! [ -z "$needed" ] || ! [ -z "$needed_pu" ]; ; then
+if ! [ -z "$needed" ] || ! [ -z "$needed_pu" ]; then
     make && make install;
     if [ $? -ne 0 ]; then echo "[PoCC] fatal error"; exit 1; fi;
 fi;

@@ -25,7 +25,8 @@ SUBDIRS 		=
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-EXTRA_DIST		= 			\
+EXTRA_DIST		=			\
+			pocc.pdf		\
 			htmldoc.tar.gz
 
 info_TEXINFOS		= pocc.texi

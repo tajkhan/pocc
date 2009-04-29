@@ -62,16 +62,14 @@ AC_SUBST([ac_aux_dir])
 AC_SUBST([abs_top_srcdir])
 #############################################################################
 ## Configure Makefiles.
+AC_CONFIG_FILES([bin/pocc-util], [chmod +x bin/pocc-util])
 AC_CONFIG_FILES([
   Makefile
   doc/Makefile
   driver/pocc-utils/Makefile
   driver/pocc/Makefile
   driver/src/Makefile
-  bin/pocc-util
   ],
-  [test -z "$CONFIG_HEADERS" || echo timestamp > driver/pocc/stamp-h.in;
-   chmod +x bin/pocc-util
-  ])
+  [test -z "$CONFIG_HEADERS" || echo timestamp > driver/pocc/stamp-h.in; ])
 ## Output the result.
 AC_OUTPUT
