@@ -52,26 +52,24 @@ int main(int argc, char** argv)
   if (! scop || scop->statement == NULL)
     pocc_error ("Possible parsing error: no statement in SCoP");
 
-  // (2) Perform LetSee.
-  if (poptions->letsee)
-    {
-      pocc_driver_letsee (scop, poptions, puoptions);
-    }
+  // (2) If pass-thru, run candl.
+  if (! poptions->letsee || ! poptions->pluto)
+    pocc_driver_candl (scop, poptions, puoptions);
 
-  // (3) Perform PLuTo.
+  // (3) Perform LetSee.
+  if (poptions->letsee)
+    pocc_driver_letsee (scop, poptions, puoptions);
+
+  // (4) Perform PLuTo.
   // Don't do it if already performed through LetSee.
   if (poptions->pluto && ! poptions->letsee)
-    {
-      if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
-	exit (EXIT_FAILURE);
-    }
+    if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
+      exit (EXIT_FAILURE);
 
-  // (3) Perform codgen.
+  // (5) Perform codgen.
   // Don't do it if already performed through LetSee.
   if (poptions->codegen && ! poptions->letsee)
-    {
-      pocc_driver_codegen (scop, poptions, puoptions);
-    }
+    pocc_driver_codegen (scop, poptions, puoptions);
 
   // Be clean.
   clan_scop_free (puoptions->program);

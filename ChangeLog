@@ -1,5 +1,11 @@
 2009-04-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* driver/pocc/include/pocc/driver-candl.h,
+	* driver/pocc/driver-candl.c,
+	* driver/src/pocc.c: Add candl pass to pass-thru mode.
+
+2009-04-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* install.sh,
 	* configure.ac,
 	* doc/Makefile.am: Fixes.

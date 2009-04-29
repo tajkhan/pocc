@@ -29,13 +29,26 @@
 # include <pocc/common.h>
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
+# ifndef LINEAR_VALUE_IS_LONGLONG
+#  define LINEAR_VALUE_IS_LONGLONG
+# endif
+# ifndef CANDL_SUPPORTS_CLAN
+#  define CANDL_SUPPORTS_CLAN
+# endif
+# include <candl/program.h>
+# include <candl/dependence.h>
+# include <candl/options.h>
+# ifndef CLAN_INT_T_IS_LONGLONG
+#  define CLAN_INT_T_IS_LONGLONG
+# endif
+# include <clan/scop.h>
 
 
 BEGIN_C_DECLS
 
 extern
 void
-pocc_driver_candl (void* program,
+pocc_driver_candl (clan_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions);
 

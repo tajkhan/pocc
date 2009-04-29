@@ -24,10 +24,19 @@
 # include <pocc/driver-candl.h>
 
 
-void 
-pocc_driver_candl (void* program, 
+void
+pocc_driver_candl (clan_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions)
 {
-  printf ("Candl\n");
+  if (! poptions->quiet)
+    printf ("[PoCC] Running Candl\n");
+  CandlOptions* coptions = candl_options_malloc ();
+  CandlProgram* cprogram = candl_program_convert_scop (program, NULL);
+  CandlDependence* deps = candl_dependence (cprogram, coptions);
+  if (poptions->verbose)
+    candl_dependence_pprint (stdout, deps);
+
+  candl_dependence_free (deps);
+  candl_options_free (coptions);
 }
