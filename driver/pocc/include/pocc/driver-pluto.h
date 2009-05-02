@@ -30,10 +30,10 @@
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
 
-# ifndef CLAN_INT_T_IS_LONGLONG
-#  define CLAN_INT_T_IS_LONGLONG
+# ifndef SCOPLIB_INT_T_IS_LONGLONG
+#  define SCOPLIB_INT_T_IS_LONGLONG
 # endif
-# include <clan/scop.h>
+# include <scoplib/scop.h>
 
 # include <pluto/pluto.h>
 
@@ -42,9 +42,9 @@ BEGIN_C_DECLS
 
 extern
 int
-pocc_driver_pluto (clan_scop_p program,
-		  s_pocc_options_t* poptions,
-		  s_pocc_utils_options_t* puoptions);
+pocc_driver_pluto (scoplib_scop_p program,
+		   s_pocc_options_t* poptions,
+		   s_pocc_utils_options_t* puoptions);
 
 
 END_C_DECLS

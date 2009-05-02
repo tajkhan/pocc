@@ -23,7 +23,7 @@ AC_PREREQ([2.60])
 
 #############################################################################
 ## Fill here the @bug email adress.
-AC_INIT([pocc], [0.1.0], [louis-noel.pouchet@inria.fr])
+AC_INIT([pocc], [0.1.0-pre], [louis-noel.pouchet@inria.fr])
 ## Automatic generation of config.h
 AC_CONFIG_HEADERS([driver/pocc-utils/include/pocc-utils/config.h:driver/pocc-utils/include/pocc-utils/config-h.in])
 ## A common file, which should be included by every source file.
@@ -52,8 +52,28 @@ AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_C_VOLATILE
 
-## Check dependencies path.
-AC_CHECK_PROGS(DOXYGEN,doxygen)
+AC_CHECK_PROGS(DOXYGEN, doxygen, doxygen)
+AC_CHECK_PROGS(SVN,svn,svn)
+AC_CHECK_PROGS(GIT,git,git)
+AC_CHECK_PROGS(AUTOCONF,autoconf,autoconf)
+AC_CHECK_PROGS(AUTOMAKE,automake,automake)
+## Check dependencies path. This is all for devel mode.
+dnl Offer --enable-devel.
+AC_ARG_ENABLE(devel,
+	      AC_HELP_STRING([--enable-devel=DIR],
+              	             [Check for dependences for development mode]),
+              [with_devel=$withval],
+              [with_devel=no])
+dnl Check for fm existence.
+AS_IF([test "x$with_devel" != xno],
+[
+if test -z "$DOXYGEN"; then AC_MSG_ERROR(doxygen not found); exit 1; fi;
+if test -z "$SVN"; then AC_MSG_ERROR(svn not found); exit 1; fi;
+if test -z "$GIT"; then AC_MSG_ERROR(git not found); exit 1; fi;
+if test -z "$AUTOCONF"; then AC_MSG_ERROR(autoconf not found); exit 1; fi;
+if test -z "$AUTOMAKE"; then AC_MSG_ERROR(automake not found); exit 1; fi;
+])
+
 #POCC_ARG_LIBS_DEPENDENCIES
 
 #############################################################################

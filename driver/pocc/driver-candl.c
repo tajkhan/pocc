@@ -25,7 +25,7 @@
 
 
 void
-pocc_driver_candl (clan_scop_p program,
+pocc_driver_candl (scoplib_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions)
 {

@@ -1,3 +1,41 @@
+2009-05-03  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch mainly enables the support of ScopLib
+
+	* driver/pocc/include/pocc/driver-candl.h,
+	* driver/pocc/include/pocc/driver-letsee.h,
+	* driver/pocc/include/pocc/driver-cloog.h,
+	* driver/pocc/include/pocc/driver-pluto.h,
+	* driver/pocc/include/pocc/driver-codegen.h,
+	* driver/pocc/include/pocc/driver-clan.h,
+	* driver/pocc/driver-clan.c,
+	* driver/pocc/Makefile.am,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/pocc.c,
+	* driver/src/Makefile.am,
+	* driver/src/options.c: Severe update to support the migration
+	from Clan to ScopLib.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Update with ScopLib.
+
+	* configure.ac: Optionally check dependences when in devel mode.
+	* install.sh: Update accordingly.
+
+	* bin/pocc-make: Fix a tiny bug in order_by_dep.
+
+	* doc/mainpage.dox: New. Main page for the doxygen documentation.
+	* README,
+	* doc/doxygen.cfg,
+	* doc/pocc.texi: Improve the documentation.
+
 2009-04-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/include/pocc/driver-candl.h,

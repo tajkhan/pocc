@@ -34,7 +34,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "quiet", 0, "\tMinimal output [off]\n" },
   { 'l', "letsee", 0, "\tOptimize with LetSee [off]" },
   { '\0', "letsee-space", 1, "LetSee: search space: [precut], schedule" },
-  { '\0', "letsee-walk", 1, "LetSee: traversal heuristic:\n\t\t\t\t[exhaust], random, skip, m1, dh" },
+  { '\0', "letsee-walk", 1, "LetSee: traversal heuristic:\n\t\t\t\t[exhaust], random, skip, m1, dh, ga" },
   { '\0', "letsee-dry-run", 0, "Only generate source files [off]" },
   { '\0', "letsee-normspace", 0, "LetSee: normalize search space [off]" },
 
@@ -80,14 +80,25 @@ static const struct s_option    option =
     1
   };
 
+
 static void     print_version (void)
 {
   printf ("PoCC, the Polyhedral Compiler Collection, version "
 	 PACKAGE_VERSION ".\n\n");
   printf ("Written by Louis-Noel Pouchet <" PACKAGE_BUGREPORT ">\n");
   printf ("Major contributions by Cedric Bastoul and Uday Bondhugula.\n\n");
+  printf("PoCC packages several free software:\n");
+  printf ("* Clan \t\thttp://www.lri.fr/~bastoul/development/clan\n");
+  printf ("* Candl \thttp://www.lri.fr/~bastoul/development/candl\n");
+  printf ("* LetSee \thttp://www-rocq.inria.fr/~pouchet/software/letsee\n");
+  printf ("* PLuTo \thttp://www.cse.ohio-state.edu/~bondhugu/pluto\n");
+  printf ("* CLooG \thttp://www.cloog.org\n");
+  printf ("* PIPLib \thttp://www.piplib.org\n");
+  printf ("* PolyLib \thttp://icps.u-strasbg.fr/polylib\n");
+  printf ("* FM \t\thttp://www-rocq.inria.fr/~pouchet/software/fm\n");
   exit (1);
 }
+
 
 static void     print_help (void)
 {

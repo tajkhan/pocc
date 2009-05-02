@@ -29,6 +29,10 @@
 # include <pocc/common.h>
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
+# ifndef SCOPLIB_INT_T_IS_LONGLONG
+#  define SCOPLIB_INT_T_IS_LONGLONG
+# endif
+# define LINEAR_VALUE_IS_LONGLONG
 # include <clan/clan.h>
 # include <clan/options.h>
 
@@ -36,7 +40,7 @@
 BEGIN_C_DECLS
 
 extern
-clan_scop_p
+scoplib_scop_p
 pocc_driver_clan (FILE* program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions);

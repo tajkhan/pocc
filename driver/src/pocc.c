@@ -47,7 +47,7 @@ int main(int argc, char** argv)
       printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
 
   // (1) Parse the file.
-  clan_scop_p scop =
+  scoplib_scop_p scop =
     pocc_driver_clan (poptions->input_file, poptions, puoptions);
   if (! scop || scop->statement == NULL)
     pocc_error ("Possible parsing error: no statement in SCoP");
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     pocc_driver_codegen (scop, poptions, puoptions);
 
   // Be clean.
-  clan_scop_free (puoptions->program);
+  scoplib_scop_free (puoptions->program);
   pip_close ();
   if (! poptions->quiet)
     printf ("[PoCC] All done.\n");

@@ -115,7 +115,7 @@ authors diserve most of the credit.
 @item PLuTo has been developped by Uday Bondhugula
 @item LetSee has been developped by Louis-No@"el Pouchet
 @item PIPLib has been developped by Paul Feautrier and C@'edric Bastoul
-@item PolyLib has been developped mainly by Doran Wilde, Bart Kienhuis, Vincent Loechner, and Tanguy Risset
+@item PolyLib has been developped mainly by Doran Wilde, Bart Kienhuis, Vincent Loechner, Tanguy Risset and Sven Verdoolaege
 @item FM has been developped by Louis-No@"el Pouchet
 @end itemize
 @*
@@ -377,7 +377,7 @@ type:
 @cartouche
 @example
 $> pocc --compile-cmd "gcc -O3 -fopenmp" --letsee-walk random \
---letsee-rtries 5 --pluto-tile --pluto-parallel  gemver.c
+--letsee-rtries 5 --pluto-tile --pluto-parallel --codegen-timercode gemver.c
 @end example
 @end cartouche
 

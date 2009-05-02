@@ -29,7 +29,7 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
 {
   s_pocc_options_t* poptions = puoptions->pocc_options;
   // Backup the input scop.
-  clan_scop_p input_scop = clan_scop_dup (puoptions->program);
+  scoplib_scop_p input_scop = scoplib_scop_dup (puoptions->program);
 
   // Run PLuTo, if required.
   if (poptions->pluto || poptions->letsee_space == LS_TYPE_FS)
@@ -53,12 +53,12 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
     }
   puoptions->program_exec_result = poptions->program_exec_result;
   // Restore the input scop.
-  clan_scop_free (puoptions->program);
+  scoplib_scop_free (puoptions->program);
   puoptions->program = input_scop;
 }
 
 void
-pocc_driver_letsee (clan_scop_p program,
+pocc_driver_letsee (scoplib_scop_p program,
 		    s_pocc_options_t* poptions,
 		    s_pocc_utils_options_t* puoptions)
 {

@@ -1,0 +1,43 @@
+
+/** @mainpage PoCC
+*
+* @section dummy PoCC: the Polyhedral Compiler Collection
+*
+* @author Louis-No&euml;l Pouchet <louis-noel.pouchet@inria.fr>
+*
+*
+* @section intro Introduction
+* 
+* 
+* PoCC is a flexible source-to-source iterative and model-driven
+* compiler, embedding most of the state-of-the-art tools for polyhedral
+* compilation. The main features are:
+* 
+* - a full-flavored compiler, from C code to optimized C code
+* - the state-of-the art techniques in polyhedral optimization
+*   (iterative search among legal schedules, powerful model-driven
+*   tiling and parallelization)
+* - a flexible platform to quickly prototype and develop optimizations
+*   leveraging the polyhedral model
+* - modular design, configuration files-oriented, ...
+* 
+* PoCC embeds powerful Free software for polyhedral compilation. This
+* software is accessible from the main driver, and several IR conversion
+* functions allows to communicate easily between passes of the compiler.
+* 
+* - <a href="http://www.lri.fr/~bastoul/development/clan">Clan</a>, the Chunky loop analyzer, to extract a polyhedral intermediate representation from the source code
+* - <a href="http://www.lri.fr/~bastoul/development/candl">Candl</a>, the Chunky analyzer for dependences in loops, to compute polyhedral dependences from the polyhedral IR
+* - <a href="http://www-rocq.inria.fr/~pouchet/software/letsee">LetSee</a>, the Legal transformation Space explorator, for iterative compilation using affine multidimensional schedules
+* - <a href="http://www.cse.ohio-state.edu/~bondhugu/pluto">PLuTo</a>, an automatic parallelizer and locality optimizer for multicores, for powerful optimization with tiling and parallelism in the polyhedral model
+* - <a href="http://www.cloog.org">CLooG</a>, the Chunky Loop Generator, to generate syntactic code from the polyhedral representation
+* - <a href="http://www.piplib.org">PIPLib</a>, the Parametric Integer Programming Library
+* - <a href="http://icps.u-strasbg.fr/polylib">PolyLib</a>, the Polyhedral Library
+* - <a href="http://www-rocq.inria.fr/~pouchet/software/fm">FM</a>, the Fourier-Motzkin library
+* 
+* 
+* @b{Communication}: three groups are available for subscription
+* - <a href="http://groups.google.com/group/pocc-announces">pocc-announces</a>: receive announces about releases of the software
+* - <a href="http://groups.google.com/group/pocc-users">pocc-users</a>: discuss any matter about how to use PoCC
+* - <a href="http://groups.google.com/group/pocc-dev">pocc-dev</a>: discuss any matter related to the software's implementation, bug fixes, desired features, etc...
+* 
+*/ 

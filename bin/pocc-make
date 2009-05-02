@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Wed Apr 29 17:42:44 2009 Louis-Noel Pouchet
+## Last update Sun May  3 01:34:33 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -168,7 +168,7 @@ sub order_by_deps
 	}
 	$mod_i = $config{$soft[$i]}{"module"};
 	$mod_i =~ s/ //g;
-	for ($j = $i + 1; $j < $#soft; $j++) {
+	for ($j = $i + 1; $j <= $#soft; $j++) {
 	    if (defined($config{$soft[$j]}{"make-depends"})) {
 		$deps_j = $config{$soft[$j]}{"make-depends"};
 		$deps_j =~ s/\s+/ /g;
@@ -216,7 +216,9 @@ sub make
     my %config_data = read_config_file($CONFIGURE);
 
     if ($soft eq "all") {
+	#make_pocc_utils();
 	make_all_soft($mode, $force, %config_data);
+	#make_pocc();
     }
     else {
 	if (! defined($config_data{$soft})) {

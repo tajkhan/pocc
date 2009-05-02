@@ -117,21 +117,30 @@ pocc_driver_codegen_post_processing (FILE* body_file,
   if (poptions->pluto_parallel)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
   if (poptions->pluto_unroll)
     {
       // Run plann.
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/plann";
       args[2] = STR_POCC_ROOT_DIR "/generators/scripts/annotations";
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
       args[2] = NULL;
     }
 
   if (poptions->pluto_prevector)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/vloog";
-      pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      if (poptions->quiet)
+	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+      else
+	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
     }
 }
 
@@ -222,7 +231,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 
 
 void
-pocc_driver_codegen (clan_scop_p program,
+pocc_driver_codegen (scoplib_scop_p program,
 		     s_pocc_options_t* poptions,
 		     s_pocc_utils_options_t* puoptions)
 {

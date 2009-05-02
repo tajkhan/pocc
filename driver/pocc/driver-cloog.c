@@ -26,7 +26,7 @@
 
 
 void
-pocc_driver_cloog (clan_scop_p program,
+pocc_driver_cloog (scoplib_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
@@ -35,7 +35,7 @@ pocc_driver_cloog (clan_scop_p program,
   if (! poptions->quiet)
     printf ("[PoCC] Running CLooG\n");
 
-  clan_statement_p stm;
+  scoplib_statement_p stm;
   /* Update statement iterators with tile iterators. */
   for (stm = program->statement; stm; stm = stm->next)
     {

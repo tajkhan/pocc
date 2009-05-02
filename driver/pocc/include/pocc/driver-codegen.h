@@ -31,19 +31,19 @@
 # include <pocc/options.h>
 # include <pocc/driver-cloog.h>
 
-# ifndef CLAN_INT_T_IS_LONGLONG
-#  define CLAN_INT_T_IS_LONGLONG
+# ifndef SCOPLIB_INT_T_IS_LONGLONG
+#  define SCOPLIB_INT_T_IS_LONGLONG
 # endif
-# include <clan/scop.h>
+# include <scoplib/scop.h>
 
 
 BEGIN_C_DECLS
 
 extern
 void
-pocc_driver_codegen (clan_scop_p program,
-		    s_pocc_options_t* poptions,
-		    s_pocc_utils_options_t* puoptions);
+pocc_driver_codegen (scoplib_scop_p program,
+		     s_pocc_options_t* poptions,
+		     s_pocc_utils_options_t* puoptions);
 
 extern
 void*

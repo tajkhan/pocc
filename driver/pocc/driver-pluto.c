@@ -25,7 +25,7 @@
 
 
 int
-pocc_driver_pluto (clan_scop_p program, 
+pocc_driver_pluto (scoplib_scop_p program, 
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
@@ -59,6 +59,6 @@ pocc_driver_pluto (clan_scop_p program,
     return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;
   
-/*   clan_scop_print (stdout, program); */
+/*   scoplib_scop_print (stdout, program); */
   return EXIT_SUCCESS;
 }

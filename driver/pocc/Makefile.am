@@ -29,6 +29,7 @@ INCLUDES		=					\
 	-I$(top_builddir)/driver/pocc-utils/include		\
 	-I$(top_builddir)/optimizers/install-letsee/include	\
 	-I$(top_builddir)/optimizers/install-pluto/include	\
+	-I$(top_builddir)/ir/install-scoplib/include	\
 	-I$(top_builddir)/analyzers/install-clan/include	\
 	-I$(top_builddir)/analyzers/install-candl/include	\
 	-I$(top_builddir)/generators/install-cloog/include	\
@@ -40,6 +41,7 @@ INCLUDES		=					\
 	-I$(top_srcdir)/driver/pocc-utils/include		\
 	-I$(top_srcdir)/optimizers/install-letsee/include	\
 	-I$(top_srcdir)/optimizers/install-pluto/include	\
+	-I$(top_srcdir)/ir/install-scoplib/include	\
 	-I$(top_srcdir)/analyzers/install-clan/include		\
 	-I$(top_srcdir)/analyzers/install-candl/include		\
 	-I$(top_srcdir)/generators/install-cloog/include	\
@@ -78,6 +80,7 @@ libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
 libpocc_la_LIBADD	=						\
 	$(top_srcdir)/driver/pocc-utils/libpocc-utils.la		\
+	$(top_srcdir)/ir/install-scoplib/lib/libscoplib.la		\
 	$(top_srcdir)/analyzers/install-clan/lib/libclan.la		\
 	$(top_srcdir)/analyzers/install-candl/lib/libcandl.la		\
 	$(top_srcdir)/math/install-piplib/lib/libpiplib64.la		\

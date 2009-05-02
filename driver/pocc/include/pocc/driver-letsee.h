@@ -25,6 +25,9 @@
 # if HAVE_CONFIG_H
 #  include <pocc-utils/config.h>
 # endif
+# ifndef SCOPLIB_INT_T_IS_LONGLONG
+#  define SCOPLIB_INT_T_IS_LONGLONG
+# endif
 # define LINEAR_VALUE_IS_LONGLONG
 # include <pocc/common.h>
 # include <pocc/driver-codegen.h>
@@ -36,7 +39,7 @@ BEGIN_C_DECLS
 
 extern
 void
-pocc_driver_letsee (clan_scop_p program,
+pocc_driver_letsee (scoplib_scop_p program,
 		    s_pocc_options_t* poptions,
 		    s_pocc_utils_options_t* puoptions);
 

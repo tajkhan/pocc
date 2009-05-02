@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Wed Apr 29 17:57:34 2009 Louis-Noel Pouchet
+## Last update Sun May  3 01:52:12 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -18,19 +18,19 @@
 ##               irregular programs support. Requires SVN access to ALCHEMY.
 ## - stable: all modules (released version)
 ##
-## To Change version on the fly, after the first installation, use
-## bin/pocc-util alternate <version>
+## To Change the mode on the fly, after the first installation, use
+## bin/pocc-util alternate <mode>
 ##
-POCC_VERSION="base";
-
+POCC_MODE="base";
 
 ## (1) Self bootstrap, if needed.
 FORCE="";
 if ! [ -f ./configure ]; then
     echo "[PoCC] Bootstrap...";
-    aclocal -I driver/autoconf;
-    libtoolize --force --copy;
+    aclocal -I driver/autoconf &&
+    libtoolize --force --copy &&
     autoreconf -vfi;
+    if [ $? -ne 0 ]; then echo "[PoCC] bootstrap: fatal error"; exit 1; fi;
     FORCE=y;
 fi;
 
@@ -43,7 +43,12 @@ fi;
 ## (3) Configure pocc.
 echo "[PoCC] Configure...";
 if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
-    ./configure --exec-prefix=`pwd` --bindir=`pwd`/bin --libdir=`pwd`/driver/install-pocc/lib --includedir=`pwd`/driver/install-pocc/include --datarootdir=`pwd`  --disable-static --enable-shared;
+    enable_devel="--enable-devel";
+    if [ "$POCC_VERSION" = "stable" ]; then
+	enable_devel="";
+    fi;
+    ./configure --exec-prefix=`pwd` --bindir=`pwd`/bin --libdir=`pwd`/driver/install-pocc/lib --includedir=`pwd`/driver/install-pocc/include --datarootdir=`pwd`  --disable-static --enable-shared $enable_devel;
+    if [ $? -ne 0 ]; then echo "[PoCC] configure: fatal error"; exit 1; fi;
 fi;
 
 ## (4) Build and install pocc-utils
@@ -55,8 +60,8 @@ if ! [ -z "$needed_pu" ]; then
 fi;
 
 ## (5) Checkout all files, and build all modules.
-echo "[PoCC] Checkout and build for configuration $POCC_VERSION...";
-bin/pocc-util alternate $POCC_VERSION;
+echo "[PoCC] Checkout and build for configuration $POCC_MODE...";
+bin/pocc-util alternate $POCC_MODE;
 if [ $? -ne 0 ]; then echo "[PoCC] fatal error"; exit 1; fi;
 
 ## (6) Build and install pocc.
