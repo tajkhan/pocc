@@ -47,6 +47,8 @@ struct s_pocc_utils_options
 {
   int			codegen_mode;
   int			iterative;
+  int			point_idx;
+  void*			transfo_matrices; // s_fm_vector_t**
   void*			cloog_options; // CloogOptions*
   void*			pocc_options; // s_pocc_options_t*
   void*			program; // clan_scop_p

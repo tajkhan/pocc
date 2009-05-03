@@ -1,4 +1,12 @@
 2009-05-03  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc-utils/include/pocc-utils/options.h,
+	* driver/pocc-utils/options.c,
+	* driver/pocc/include/pocc/driver-letsee.h,
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/driver-codegen.c: Enable schedule mode for LetSee.
+
+2009-05-03  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch mainly enables the support of ScopLib
 
 	* driver/pocc/include/pocc/driver-candl.h,

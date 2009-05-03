@@ -154,20 +154,15 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
   args[2] = ".body.c";
   args[3] = poptions->output_file_name;
   args[4] = NULL;
-  if (poptions->quiet)
-    pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
-  else
-    pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+  int mode = poptions->quiet ? POCC_EXECV_HIDE_OUTPUT : POCC_EXECV_SHOW_OUTPUT;
+  pocc_execprog (args, mode);
   if (poptions->codegen_timercode)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timercode";
       args[1] = poptions->output_file_name;
       args[2] = "time";
       args[3] = NULL;
-      if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
-      else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      pocc_execprog (args, mode);
     }
   else if (poptions->codegen_timer_asm)
     {
@@ -175,10 +170,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[1] = poptions->output_file_name;
       args[2] = "asm";
       args[3] = NULL;
-      if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
-      else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      pocc_execprog (args, mode);
     }
 
   if (poptions->pluto_parallel)
@@ -186,10 +178,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/omp";
       args[1] = poptions->output_file_name;
       args[2] = NULL;
-      if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
-      else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      pocc_execprog (args, mode);
     }
 
   // Compile the program, if necessary.
@@ -207,10 +196,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       // Remove the .c extension.
       args[3][strlen(args[3]) - 2] = '\0';
       args[4] = NULL;
-      if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
-      else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+      pocc_execprog (args, mode);
     }
 
   // Run the program, if necessary.
@@ -239,7 +225,7 @@ pocc_driver_codegen (scoplib_scop_p program,
     printf ("[PoCC] Starting Codegen\n");
   // Backup the default output file.
   FILE* out_file = poptions->output_file;
-  FILE* body_file = fopen (".body.c", "w+");
+  FILE* body_file = fopen (".body.c", "w");
   if (body_file == NULL)
     pocc_error ("Cannot create file .body.c\n");
 

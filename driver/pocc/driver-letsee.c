@@ -24,6 +24,54 @@
 # include <pocc/driver-letsee.h>
 # include <letsee/pocc-driver.h>
 
+
+void
+pocc_copy_transfo_to_scop (s_pocc_utils_options_t* puoptions,
+			   scoplib_scop_p scop)
+{
+  s_fm_vector_t** transfo = puoptions->transfo_matrices;
+  scoplib_statement_p stm;
+  int nb_par = scop->context->NbColumns - 2;
+  int dim;
+  int count = 0;
+  int iter_pos = 1;
+  int par_pos = 1;
+  int cst_pos = 0;
+  int i, j;
+
+  for (dim = 0; transfo[dim]; ++dim)
+    ;
+
+  for (stm = scop->statement; stm; stm = stm->next)
+    {
+      par_pos += stm->nb_iterators;
+      cst_pos += nb_par;
+    }
+  cst_pos += par_pos;
+  for (stm = scop->statement; stm; stm = stm->next)
+    {
+      scoplib_matrix_free (stm->schedule);
+      stm->schedule =
+	scoplib_matrix_malloc (dim, 1 + stm->nb_iterators + nb_par + 1);
+      for (i = 0, count = 1; i < dim; ++i)
+	{
+	  for (j = 0; j < stm->nb_iterators; ++j)
+	    SCOPVAL_set_si(stm->schedule->p[i][count++],
+			   transfo[i]->vector[j + iter_pos].num);
+	  for (j = 0; j < nb_par; ++j)
+	    SCOPVAL_set_si(stm->schedule->p[i][count++],
+			   transfo[i]->vector[j + par_pos].num);
+	  SCOPVAL_set_si(stm->schedule->p[i][count++],
+			 transfo[i]->vector[cst_pos].num);
+	}
+      iter_pos += stm->nb_iterators;
+      par_pos += nb_par;
+      cst_pos++;
+    }
+}
+
+
+
 void
 pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
 {
@@ -32,7 +80,7 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
   scoplib_scop_p input_scop = scoplib_scop_dup (puoptions->program);
 
   // Run PLuTo, if required.
-  if (poptions->pluto || poptions->letsee_space == LS_TYPE_FS)
+  if (poptions->letsee_space == LS_TYPE_FS)
     if (pocc_driver_pluto (puoptions->program, poptions, puoptions) ==
 	EXIT_FAILURE)
       {
@@ -40,6 +88,8 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
 	  printf ("[PoCC] Error in performing PLuTo. Optimization aborted\n");
 	return;
       }
+  if (poptions->letsee_space == LS_TYPE_MULTI)
+    pocc_copy_transfo_to_scop (puoptions, puoptions->program);
 
   // Generate the code, if required.
   if (poptions->codegen)
@@ -65,6 +115,11 @@ pocc_driver_letsee (scoplib_scop_p program,
   printf ("[PoCC] Running LetSee\n");
   s_ls_options_t* loptions = ls_options_malloc ();
 
+  if (poptions->letsee_space == LS_TYPE_MULTI)
+    {
+      loptions->normalize_space = 1;
+      loptions->noredundancy_solver = 1;
+    }
   loptions->type = poptions->letsee_space;
   loptions->create_schedfiles = poptions->codegen;
   XFREE(loptions->transfo_dir);
@@ -80,7 +135,6 @@ pocc_driver_letsee (scoplib_scop_p program,
   //loptions->thresold = poptions->letsee_thresold;
   loptions->rtries = poptions->letsee_rtries;
   loptions->verbose = poptions->verbose;
-
   // Convert the scop to a candl program (LetSee IR).
   candl_program_p cprogram = candl_program_convert_scop(program, NULL);
   // Store the .scop in the pocc-utils wrapper.
@@ -92,7 +146,7 @@ pocc_driver_letsee (scoplib_scop_p program,
   // Open the iterative.dat file.
   if (poptions->compile_program)
     {
-      puoptions->data_file = fopen ("iterative.dat", "w");
+      puoptions->data_file = fopen ("iterative.dat", "w+");
       if (puoptions->data_file == NULL)
 	pocc_error ("Cannot create file iterative.dat");
       fprintf (puoptions->data_file, "# LetSee results for %s\n",

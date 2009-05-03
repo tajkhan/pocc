@@ -36,6 +36,8 @@ pocc_utils_options_malloc ()
     }
 
   ret->iterative = 0;
+  ret->point_idx = 0;
+  ret->transfo_matrices = NULL;
   ret->codegen_mode = POCC_UTILS_CODEGEN_FULL;
   ret->cloog_options = NULL;
   ret->pocc_options = NULL;
