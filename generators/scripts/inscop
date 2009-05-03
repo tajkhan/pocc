@@ -6,8 +6,8 @@
 MAXLINES=`wc -l $1 | awk '{print $1}'`
 
 echo "#include <math.h>" > .head
-grep -B $MAXLINES "#pragma scop" $1 | grep -v "#pragma scop" >> .head
-grep -A $MAXLINES "#pragma endscop" $1 | grep -v "#pragma endscop" > .tail
+grep -B $MAXLINES "#pragma[[:space:]]\+scop" $1 | grep -v "#pragma[[:space:]]\+scop" >> .head
+grep -A $MAXLINES "#pragma[[:space:]]\+endscop" $1 | grep -v "#pragma[[:space:]]\+endscop" > .tail
 
 # Preprocessor doesn't like pragma's in #defines and so it was not put in from pluto
 # when '--bee' was used - instead we will add it here
