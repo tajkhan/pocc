@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon May  4 01:39:41 2009 Louis-Noel Pouchet
+## Last update Mon May  4 01:47:11 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -52,7 +52,7 @@ sub checkout_svn
     my $svnuser = "";
     $svnuser = "--username lppcc --password lppcc" if ($mode =~ /base/);
     print "[PoCC-checkout] SVN checkouting $soft (from $url) in $dir...\n";
-    system("svn co $url $BDIR_CO/$dir/$soft");
+    system("svn co $ENV{'SVN_OPTIONS'} $url $BDIR_CO/$dir/$soft");
 }
 
 ## Args: destination directory (category), soft name, retrieve-method, location
