@@ -52,17 +52,17 @@ AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_C_VOLATILE
 
-AC_CHECK_PROGS(DOXYGEN, doxygen, doxygen)
-AC_CHECK_PROGS(SVN,svn,svn)
-AC_CHECK_PROGS(GIT,git,git)
-AC_CHECK_PROGS(AUTOCONF,autoconf,autoconf)
-AC_CHECK_PROGS(AUTOMAKE,automake,automake)
+AC_CHECK_PROGS(DOXYGEN, doxygen)
+AC_CHECK_PROGS(SVN,svn)
+AC_CHECK_PROGS(GIT,git)
+AC_CHECK_PROGS(AUTOCONF,autoconf)
+AC_CHECK_PROGS(AUTOMAKE,automake)
 ## Check dependencies path. This is all for devel mode.
 dnl Offer --enable-devel.
 AC_ARG_ENABLE(devel,
 	      AC_HELP_STRING([--enable-devel=DIR],
               	             [Check for dependences for development mode]),
-              [with_devel=$withval],
+              [with_devel=$enableval],
               [with_devel=no])
 dnl Check for fm existence.
 AS_IF([test "x$with_devel" != xno],
