@@ -67,7 +67,6 @@ AC_ARG_ENABLE(devel,
 dnl Check for fm existence.
 AS_IF([test "x$with_devel" != xno],
 [
-#if test -z "$DOXYGEN"; then AC_MSG_ERROR(doxygen not found); exit 1; fi;
 if test -z "$SVN"; then AC_MSG_ERROR(svn not found); exit 1; fi;
 if test -z "$GIT"; then AC_MSG_ERROR(git not found); exit 1; fi;
 if test -z "$AUTOCONF"; then AC_MSG_ERROR(autoconf not found); exit 1; fi;
