@@ -87,10 +87,17 @@ of the state-of-the-art polyhedral tools in the public domain, resulting
 in a flexible compiler.
 
 @*
-@b{Communication}: one group is available for subscription
-@uref{http://groups.google.com/group/pocc-announce,pocc-announce}, to
-receive announces about releases of the software.  Please contact the
-author directly for any question.
+@b{Communication}: three groups are available for subscription
+@itemize
+@item @uref{http://groups.google.com/group/pocc-announces,pocc-announces}, to
+receive announces about releases of the software.  
+@item @uref{http://groups.google.com/group/pocc-users,pocc-users}, to
+discuss any matter about how to use PoCC.
+@item @uref{http://groups.google.com/group/pocc-dev,pocc-dev}, to
+discuss any matter related to the software's implementation, bug fixes,
+desired features, etc...
+@end itemize
+Please contact the author directly for any question.  
 @*
 
 @*
@@ -310,8 +317,8 @@ About LetSee:
 @item @code{--letsee-space <arg>} search space: [precut], schedule 
 @item @code{--letsee-walk <arg>} traversal heuristic: [exhaust], random, skip, m1, dh 
 @item @code{--letsee-dry-run} Don't compile and run programs for iterative search [off]
+@item @code{--letsee-bounds} search space bounds [-1,1,-1,1,-1,1]
 @item @code{--letsee-normspace} normalize search space [off] 
-
 @item @code{--letsee-mode-m1 <arg>} scheme for M1 traversal [i+p,i,0] 
 @item @code{--letsee-rtries <arg>} number of random draws [50] 
 @item @code{--letsee-prune-precut} prune precut space 

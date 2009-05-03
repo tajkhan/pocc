@@ -58,6 +58,12 @@ struct s_pocc_options
   int		letsee_prune_precut;
   int		letsee_backtrack_multi;
   int		letsee_rtries;
+  int		letsee_ilb;
+  int		letsee_iUb;
+  int		letsee_plb;
+  int		letsee_pUb;
+  int		letsee_clb;
+  int		letsee_cUb;
 
   // PLuTo Options.
   int		pluto; // Run PLuTo (default: no)

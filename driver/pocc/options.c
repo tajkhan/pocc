@@ -50,6 +50,12 @@ pocc_options_malloc ()
   ret->letsee_prune_precut = 0;
   ret->letsee_backtrack_multi = 0;
   ret->letsee_rtries = 50;
+  ret->letsee_ilb = -1;
+  ret->letsee_iUb = 1;
+  ret->letsee_plb = -1;
+  ret->letsee_pUb = 1;
+  ret->letsee_clb = -1;
+  ret->letsee_cUb = 1;
 
   // Pluto options.
   ret->pluto_parallel = 0;
@@ -63,8 +69,8 @@ pocc_options_malloc ()
   ret->pluto_ufactor = 4;
   ret->pluto_quiet = 0;
   ret->pluto_context = 1;
-  ret->pluto_ft = -1; 
-  ret->pluto_lt = -1; 
+  ret->pluto_ft = -1;
+  ret->pluto_lt = -1;
   ret->pluto_multipipe = 0;
   ret->pluto_l2tile = 0;
   ret->pluto_lastwriter = 0;
@@ -72,7 +78,7 @@ pocc_options_malloc ()
 
   // Cloog options.
   ret->cloog_f = POCC_CLOOG_UNDEF;
-  ret->cloog_l = POCC_CLOOG_UNDEF; 
+  ret->cloog_l = POCC_CLOOG_UNDEF;
 
   // Codegen options.
   ret->codegen = 1;
@@ -105,6 +111,6 @@ pocc_options_free (s_pocc_options_t* options)
     XFREE(options->compile_command);
   if (options->program_exec_result)
     XFREE(options->program_exec_result);
-  
+
   XFREE(options);
 }

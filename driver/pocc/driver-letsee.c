@@ -132,6 +132,12 @@ pocc_driver_letsee (scoplib_scop_p program,
   loptions->backtrack_mode = poptions->letsee_backtrack_multi;
   loptions->prune_oset = poptions->letsee_prune_precut;
   loptions->normalize_space = poptions->letsee_normspace;
+  loptions->lb = poptions->letsee_ilb;
+  loptions->Ub = poptions->letsee_iUb;
+  loptions->plb = poptions->letsee_plb;
+  loptions->pUb = poptions->letsee_pUb;
+  loptions->clb = poptions->letsee_clb;
+  loptions->cUb = poptions->letsee_cUb;
   //loptions->thresold = poptions->letsee_thresold;
   loptions->rtries = poptions->letsee_rtries;
   loptions->verbose = poptions->verbose;

@@ -37,7 +37,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "letsee-walk", 1, "LetSee: traversal heuristic:\n\t\t\t\t[exhaust], random, skip, m1, dh, ga" },
   { '\0', "letsee-dry-run", 0, "Only generate source files [off]" },
   { '\0', "letsee-normspace", 0, "LetSee: normalize search space [off]" },
-
+  { '\0', "letsee-bounds", 1, "LetSee: search space bounds [-1,1,-1,1,-1,1]" },
   { '\0', "letsee-mode-m1", 1, "LetSee: scheme for M1 traversal [i+p,i,0]" },
   { '\0', "letsee-rtries", 1, "LetSee: number of random draws [50]" },
   { '\0', "letsee-prune-precut", 0, "LetSee: prune precut space" },
@@ -234,6 +234,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	options->letsee_traversal = LS_HEURISTIC_M1;
       else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "skip"))
 	options->letsee_traversal = LS_HEURISTIC_SKIP;
+      else if (! strcmp(opt_tab[POCC_OPT_LETSEE_TRAVERSAL], "ga"))
+	pocc_error("GA heuristics implementation are not publicly available\n");
       options->letsee = 1;
     }
   if (opt_tab[POCC_OPT_LETSEE_NORMSPACE])
@@ -331,6 +333,28 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       options->pluto_ft = options->pluto = atoi (opt_tab[POCC_OPT_PLUTO_LT]);
       options->pluto = 1;
     }
+  if (opt_tab[POCC_OPT_LETSEE_BOUNDS])
+    {
+      char buff[16];
+      char* str = opt_tab[POCC_OPT_LETSEE_BOUNDS];
+      int pos = 0;
+      int count = 0;
+#define dirty_parse(val, check)					\
+      count = 0;						\
+      while (str[pos] && str[pos] != ',')			\
+	buff[count++] = str[pos++];				\
+      if (check && ! str[pos])					\
+	pocc_error ("Missing argument in --letsee-bounds\n");	\
+      buff[count] = '\0';					\
+      val = atoi (buff);					\
+      ++pos;
+      dirty_parse(options->letsee_ilb, 1);
+      dirty_parse(options->letsee_iUb, 1);
+      dirty_parse(options->letsee_plb, 1);
+      dirty_parse(options->letsee_pUb, 1);
+      dirty_parse(options->letsee_clb, 1);
+      dirty_parse(options->letsee_cUb, 0);
+    }
 
   // Compile.
   if (options->letsee || opt_tab[POCC_OPT_COMPILE])
@@ -377,8 +401,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       options->output_file = fopen (options->output_file_name, "w");
       if (options->output_file == NULL)
 	pocc_error ("Cannot open output file\n");
-    }      
-  
+    }
+
   free (opt_tab);
   return 0;
 }

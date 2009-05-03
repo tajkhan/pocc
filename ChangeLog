@@ -1,5 +1,15 @@
 2009-05-03  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c,
+	* doc/pocc.texi: Provide option --letsee-bounds, and update
+	documentation accordingly.
+
+2009-05-03  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* driver/pocc-utils/include/pocc-utils/options.h,
 	* driver/pocc-utils/options.c,
 	* driver/pocc/include/pocc/driver-letsee.h,
