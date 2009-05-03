@@ -52,7 +52,7 @@ AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_C_VOLATILE
 
-AC_CHECK_PROGS(DOXYGEN, doxygen)
+AC_CHECK_PROGS(DOXYGEN, doxygen, doxygen)
 AC_CHECK_PROGS(SVN,svn)
 AC_CHECK_PROGS(GIT,git)
 AC_CHECK_PROGS(AUTOCONF,autoconf)
@@ -67,7 +67,7 @@ AC_ARG_ENABLE(devel,
 dnl Check for fm existence.
 AS_IF([test "x$with_devel" != xno],
 [
-if test -z "$DOXYGEN"; then AC_MSG_ERROR(doxygen not found); exit 1; fi;
+#if test -z "$DOXYGEN"; then AC_MSG_ERROR(doxygen not found); exit 1; fi;
 if test -z "$SVN"; then AC_MSG_ERROR(svn not found); exit 1; fi;
 if test -z "$GIT"; then AC_MSG_ERROR(git not found); exit 1; fi;
 if test -z "$AUTOCONF"; then AC_MSG_ERROR(autoconf not found); exit 1; fi;
