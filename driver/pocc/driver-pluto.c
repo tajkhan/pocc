@@ -25,7 +25,7 @@
 
 
 int
-pocc_driver_pluto (scoplib_scop_p program, 
+pocc_driver_pluto (scoplib_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
@@ -52,13 +52,14 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->lastwriter = poptions->pluto_lastwriter;
   ploptions->scalpriv = poptions->pluto_scalpriv;
   ploptions->debug = poptions->verbose;
-  
+
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
   if (pluto_pocc (program, ploptions, puoptions) == PLUTO_EXIT_ERROR)
     return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;
-  
+
 /*   scoplib_scop_print (stdout, program); */
+
   return EXIT_SUCCESS;
 }

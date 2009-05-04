@@ -1,3 +1,18 @@
+2009-05-04  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds polyfeat, the polyhedral feature extractor, in the
+	set of required modules.
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am,
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/stable/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Add systematic compilation and
+	support of polyfeat.
+
 2009-05-03  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/include/pocc/options.h,
