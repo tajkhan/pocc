@@ -1,3 +1,10 @@
+2009-05-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/src/options.c: Minor updates. Force maxfuse when in
+	precut mode.
+
 2009-05-04  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds polyfeat, the polyhedral feature extractor, in the
 	set of required modules.

@@ -79,7 +79,10 @@ pocc_driver_cloog (scoplib_scop_p program,
   int done = 0;
   for (i = 0; i < cp->nb_scattdims; ++i)
     {
-      if (cp->scaldims[i] == 0)
+      /// FIXME: Deactivate this, as pluto may generate OpenMp pragmas
+      /// using some unused variables. We'll let the compiler remove useless
+      /// variables.
+      if (cp->scaldims[i] == 0 || 1)
 	{
 	  if (! done)
 	    {

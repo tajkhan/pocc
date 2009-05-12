@@ -81,13 +81,16 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
 
   // Run PLuTo, if required.
   if (poptions->letsee_space == LS_TYPE_FS)
-    if (pocc_driver_pluto (puoptions->program, poptions, puoptions) ==
-	EXIT_FAILURE)
-      {
-	if (! poptions->quiet)
-	  printf ("[PoCC] Error in performing PLuTo. Optimization aborted\n");
-	return;
-      }
+    {
+      poptions->pluto_fuse = PLUTO_MAXIMAL_FUSE;
+      if (pocc_driver_pluto (puoptions->program, poptions, puoptions) ==
+	  EXIT_FAILURE)
+	{
+	  if (! poptions->quiet)
+	    printf("[PoCC] Error in performing PLuTo. Optimization aborted\n");
+	  return;
+	}
+    }
   if (poptions->letsee_space == LS_TYPE_MULTI)
     pocc_copy_transfo_to_scop (puoptions, puoptions->program);
 

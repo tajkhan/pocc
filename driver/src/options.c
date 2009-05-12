@@ -362,7 +362,7 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   // Compile command.
   if (opt_tab[POCC_OPT_COMPILE_CMD])
     {
-      options->compile_command = strdup (opt_tab[POCC_OPT_COMPILE]);
+      options->compile_command = strdup (opt_tab[POCC_OPT_COMPILE_CMD]);
       options->compile_program = 1;
     }
   else
