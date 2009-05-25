@@ -37,10 +37,12 @@ void init_array()
     }
 }
 
-void print_array()
+void print_array(char** argv)
 {
     int i, j;
-
+#ifndef TEST
+    if (! strcmp (argv[0], ""))
+#endif
     for (i=0; i<N; i++) {
         fprintf(stderr, "%0.2lf ", w[i]);
         if (i%80 == 20) fprintf(stderr, "\n");
@@ -50,9 +52,9 @@ void print_array()
 
 
 
-main()
+int 
+main(int argc, char** argv)
 {
-    double t_start, t_end;
     int i, j;
 
     init_array();
@@ -74,10 +76,7 @@ main()
             w[i] = w[i] +  A[i][j]*x[j];
 #pragma endscop
 
-
-#ifdef TEST
-    print_array();
-#endif
+    print_array(argv);
 
     return 0;
 }
