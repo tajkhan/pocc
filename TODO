@@ -1,0 +1,4 @@
+- bug polylib autoconf (workaround found)
+- config-inherits
+- mode for local archive
+
