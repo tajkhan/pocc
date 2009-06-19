@@ -28,6 +28,8 @@
 
 # define POCC_EXECV_HIDE_OUTPUT 0
 # define POCC_EXECV_SHOW_OUTPUT 1
+# define POCC_EXECV_NOEXIT	2
+
 
 /**
  * Execute a command line (supplied by args) and return a string from
@@ -36,7 +38,7 @@
  */
 static
 char*
-pocc_execprog_ (char** args, int return_result, int show_output)
+pocc_execprog_ (char** args, int return_result, int show_output, int noexit)
 {
   pid_t pid;
   int rv;
@@ -69,8 +71,13 @@ pocc_execprog_ (char** args, int return_result, int show_output)
       wait (&rv);
       if (rv != 0)
 	{
-	  printf ("exit status: %d\n", rv);
-	  exit (rv);
+	  if (! noexit)
+	    {
+	      printf ("exit status: %d\n", rv);
+	      exit (rv);
+	    }
+	  else
+	    return NULL;
 	}
       close (commpipe[0]);
     }
@@ -88,24 +95,32 @@ pocc_execprog_ (char** args, int return_result, int show_output)
     }
 
   if (return_result)
-      return strdup (buf);
+    return strdup (buf);
   return NULL;
 }
+
 
 static
 void
 pocc_execprog (char** args, int show_output)
 {
-  pocc_execprog_ (args, 0, show_output);
+  pocc_execprog_ (args, 0, show_output, 0);
 }
+
 
 static
 char*
 pocc_execprog_string (char** args, int show_output)
 {
-  return pocc_execprog_ (args, 1, show_output);
+  return pocc_execprog_ (args, 1, show_output, 0);
 }
 
+static
+char*
+pocc_execprog_string_noexit (char** args, int show_output)
+{
+  return pocc_execprog_ (args, 1, show_output, 1);
+}
 
 void
 pocc_driver_codegen_post_processing (FILE* body_file,
@@ -133,7 +148,6 @@ pocc_driver_codegen_post_processing (FILE* body_file,
 	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
       args[2] = NULL;
     }
-
   if (poptions->pluto_prevector)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/vloog";
@@ -182,6 +196,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
     }
 
   // Compile the program, if necessary.
+  int compile_success = 0;
   if (poptions->compile_program)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/compile";
@@ -196,11 +211,16 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       // Remove the .c extension.
       args[3][strlen(args[3]) - 2] = '\0';
       args[4] = NULL;
-      pocc_execprog (args, mode);
+      char* res = pocc_execprog_string_noexit (args, mode);
+      if (res != NULL)
+	{
+	  compile_success = 1;
+	  XFREE(res);
+	}
     }
 
   // Run the program, if necessary.
-  if (poptions->compile_program && poptions->execute_program)
+  if (poptions->compile_program && poptions->execute_program && compile_success)
     {
       args[0] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
       strcpy (args[0], "./");
@@ -212,7 +232,6 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       poptions->program_exec_result =
 	pocc_execprog_string (args, POCC_EXECV_HIDE_OUTPUT);
     }
-
 }
 
 

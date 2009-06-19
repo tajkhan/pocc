@@ -1,4 +1,11 @@
 2009-06-19  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/driver-pluto.c: Workaround to keep working when
+	there is a compilation error with the native compiler (skip
+	program execution).
+
+2009-06-19  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	Commit the 06/12/2009 bump to 1.0-beta, and some minor updates.
 
 	* driver/pocc/Makefile.am,
