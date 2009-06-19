@@ -23,7 +23,7 @@ AC_PREREQ([2.60])
 
 #############################################################################
 ## Fill here the @bug email adress.
-AC_INIT([pocc], [0.1.0-pre], [louis-noel.pouchet@inria.fr])
+AC_INIT([pocc], [1.0-beta], [louis-noel.pouchet@inria.fr])
 ## Automatic generation of config.h
 AC_CONFIG_HEADERS([driver/pocc-utils/include/pocc-utils/config.h:driver/pocc-utils/include/pocc-utils/config-h.in])
 ## A common file, which should be included by every source file.

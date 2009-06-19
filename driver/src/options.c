@@ -171,7 +171,10 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     {
       options->input_file = fopen (argv[ret], "r");
       if (options->input_file == NULL)
-	pocc_usage ();
+	{
+	  fprintf ("[PoCC] Error: Unable to open file %s\n", argv[ret]); 
+	  pocc_usage ();
+	}
       options->input_file_name = strdup (argv[ret]);
       if (ret < argc)
 	ret = get_cmdline_opts (&option, ret + 1, argc, argv, opt_tab);

@@ -80,15 +80,15 @@ libpocc_la_SOURCES 	=			\
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
-libpocc_la_LIBADD	=						\
-	$(top_srcdir)/driver/pocc-utils/libpocc-utils.la		\
-	$(top_srcdir)/ir/install-scoplib/lib/libscoplib.la		\
-	$(top_srcdir)/analyzers/install-clan/lib/libclan.la		\
-	$(top_srcdir)/analyzers/install-candl/lib/libcandl.la		\
-	$(top_srcdir)/analyzers/install-polyfeat/lib/libpolyfeat.la	\
-	$(top_srcdir)/math/install-piplib/lib/libpiplib64.la		\
-	$(top_srcdir)/math/install-polylib/lib/libpolylib64.la		\
-	$(top_srcdir)/optimizers/install-letsee/lib/libletsee.la	\
-	$(top_srcdir)/optimizers/install-pluto/lib/libpluto.la		\
-	$(top_srcdir)/generators/install-cloog/lib/libcloog-polylib.la	\
-	$(top_srcdir)/math/install-fm/lib/libfm.la
+libpocc_la_LIBADD	=						 \
+	$(top_builddir)/driver/pocc-utils/libpocc-utils.la		 \
+	$(top_builddir)/ir/install-scoplib/lib/libscoplib.la		 \
+	$(top_builddir)/analyzers/install-clan/lib/libclan.la		 \
+	$(top_builddir)/analyzers/install-candl/lib/libcandl.la		 \
+	$(top_builddir)/analyzers/install-polyfeat/lib/libpolyfeat.la	 \
+	$(top_builddir)/math/install-piplib/lib/libpiplib64.la		 \
+	$(top_builddir)/math/install-polylib/lib/libpolylib64.la	 \
+	$(top_builddir)/optimizers/install-letsee/lib/libletsee.la	 \
+	$(top_builddir)/optimizers/install-pluto/lib/libpluto.la	 \
+	$(top_builddir)/generators/install-cloog/lib/libcloog-polylib.la \
+	$(top_builddir)/math/install-fm/lib/libfm.la

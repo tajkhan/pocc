@@ -4,7 +4,7 @@
 
 PoCC, the POlyhedral Compiler Collection package
 
--*- version 0.1 -*-
+-*- version 1.0-beta -*-
 
 
 * Installation
@@ -28,6 +28,13 @@ dependency, restart the installation from scracth, with a fresh source
 tree.
 
 $> ./install.sh
+
+
+* Documentation
+---------------
+
+See the doc/ directory of the archive, or see the pocc.pdf file on the
+website directly. Note the documentation is still highly preliminary.
 
 
 
