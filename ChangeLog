@@ -14,7 +14,7 @@
 	* driver/src/options.c,
 	* README,
 	* configure.ac,
-	* doc/pocc.texi,
+	* doc/pocc.texi: Minor updates.
 
 2009-05-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 

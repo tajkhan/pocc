@@ -230,7 +230,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       if (! poptions->quiet)
 	printf ("[PoCC] Running program %s\n", args[0]);
       poptions->program_exec_result =
-	pocc_execprog_string (args, POCC_EXECV_HIDE_OUTPUT);
+	pocc_execprog_string_noexit (args, POCC_EXECV_HIDE_OUTPUT);
     }
 }
 
