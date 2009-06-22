@@ -94,6 +94,7 @@ struct s_pocc_options
   int		codegen_timercode;
   int		codegen_timer_asm;
   int		codegen_timer_papi;
+  int		timeout;
 
 };
 typedef struct s_pocc_options s_pocc_options_t;
