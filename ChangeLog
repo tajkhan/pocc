@@ -1,5 +1,10 @@
 2009-06-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* driver/pocc/include/pocc/options.h,
+	* driver/src/options.c: Fix last rushy patch...
+
+2009-06-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* generators/scripts/timeout: New. Watchdog script.
 	* driver/pocc/options.c,
 	* driver/pocc/driver-codegen.c,
