@@ -30,7 +30,7 @@
 # include "getopts.h"
 
 
-# define POCC_NB_OPTS				40
+# define POCC_NB_OPTS				41
 
 
 # define POCC_OPT_HELP				0
@@ -77,6 +77,7 @@
 
 # define POCC_OPT_COMPILE      			38
 # define POCC_OPT_COMPILE_CMD          		39
+# define POCC_OPT_PROGRAM_TIMEOUT        	40
 
 
 BEGIN_C_DECLS

@@ -67,6 +67,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
   { 'c', "compile", 0, "\tCompile program with C compiler [off]" },
   { '\0', "compile-cmd", 1, "Compilation command [gcc -O3 -lm]" }
+  { '\0', "program-timeout", 1, "Timeout for compilation and execution, in s [unlimited]" }
 
 };
 
@@ -172,8 +173,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       options->input_file = fopen (argv[ret], "r");
       if (options->input_file == NULL)
 	{
-	  fprintf (stderr, "[PoCC] Error: Unable to open file %s\n", 
-		   argv[ret]); 
+	  fprintf (stderr, "[PoCC] Error: Unable to open file %s\n",
+		   argv[ret]);
 	  pocc_usage ();
 	}
       options->input_file_name = strdup (argv[ret]);
@@ -377,6 +378,9 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       options->compile_program = 0;
       options->letsee = 1;
     }
+  // Timeout
+  if (opt_tab[POCC_OPT_PROGRAM_TIMEOUT])
+    options->timeout = atoi (opt_tab[POCC_OPT_PROGRAM_TIMEOUT]);
 
   // Codegen/Cloog options.
   if (opt_tab[POCC_OPT_NOCODEGEN])

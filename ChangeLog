@@ -1,3 +1,12 @@
+2009-06-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* generators/scripts/timeout: New. Watchdog script.
+	* driver/pocc/options.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for timeout of compilation and
+	program execution.
+
 2009-06-19  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/driver-pluto.c: Workaround to keep working when

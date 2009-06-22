@@ -199,18 +199,26 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
   int compile_success = 0;
   if (poptions->compile_program)
     {
-      args[0] = STR_POCC_ROOT_DIR "/generators/scripts/compile";
-      args[1] = poptions->output_file_name;
+      int offset = 0;
+      if (poptions->timeout > 0)
+	{
+	  args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timeout";
+	  args[1] = strdup ("-t xxxxxxxxxx");
+	  sprintf (args[1], "-t %d", poptions->timeout);
+	  offset = 2;
+	}
+      args[offset] = STR_POCC_ROOT_DIR "/generators/scripts/compile";
+      args[offset + 1] = poptions->output_file_name;
       char buffer[8192];
       strcpy (buffer, poptions->compile_command);
       strcat (buffer, " -lm");
       if (poptions->codegen_timer_asm || poptions->codegen_timercode)
 	strcat (buffer, " -DTIME");
-      args[2] = buffer;
-      args[3] = strdup (poptions->output_file_name);
+      args[offset + 2] = buffer;
+      args[offset + 3] = strdup (poptions->output_file_name);
       // Remove the .c extension.
-      args[3][strlen(args[3]) - 2] = '\0';
-      args[4] = NULL;
+      args[offset + 3][strlen(args[3]) - 2] = '\0';
+      args[offset + 4] = NULL;
       char* res = pocc_execprog_string_noexit (args, mode);
       if (res != NULL)
 	{
@@ -222,11 +230,19 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
   // Run the program, if necessary.
   if (poptions->compile_program && poptions->execute_program && compile_success)
     {
-      args[0] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
-      strcpy (args[0], "./");
-      strcat (args[0], poptions->output_file_name);
-      args[0][strlen(args[0]) - 2] = '\0';
-      args[1] = NULL;
+      int offset = 0;
+      if (poptions->timeout > 0)
+	{
+	  args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timeout";
+	  args[1] = strdup ("-t xxxxxxxxxx");
+	  sprintf (args[1], "-t %d", poptions->timeout);
+	  offset = 2;
+	}
+      args[offset] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
+      strcpy (args[offset], "./");
+      strcat (args[offset], poptions->output_file_name);
+      args[offset][strlen(args[offset]) - 2] = '\0';
+      args[offset + 1] = NULL;
       if (! poptions->quiet)
 	printf ("[PoCC] Running program %s\n", args[0]);
       poptions->program_exec_result =
