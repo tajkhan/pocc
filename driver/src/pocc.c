@@ -50,8 +50,7 @@ int main(int argc, char** argv)
   scoplib_scop_p scop =
     pocc_driver_clan (poptions->input_file, poptions, puoptions);
   if (! scop || scop->statement == NULL)
-    pocc_error ("Possible parsing error: no statement in SCoP");
-
+    pocc_error ("[PoCC] Possible parsing error: no statement in SCoP");
   // (2) If pass-thru, run candl.
   if (! poptions->letsee || ! poptions->pluto)
     pocc_driver_candl (scop, poptions, puoptions);

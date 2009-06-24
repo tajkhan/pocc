@@ -1,3 +1,16 @@
+2009-06-24  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch moves to the new irregular clan branch, clan-ir, which
+	supports scoplib.
+
+	* driver/pocc/driver-clan.c: Change clan call to
+	clan_scop_extract, to allow pre/post code to be performed along
+	clan_parse.
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Move to new irregular branch
+	clan-ir instead of former, non scoplib-compatible cir branch.
+
+	* driver/src/pocc.c: Minor fix in verbosity.
+
 2009-06-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/include/pocc/options.h,
