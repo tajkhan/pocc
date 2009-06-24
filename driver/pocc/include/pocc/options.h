@@ -43,6 +43,9 @@ struct s_pocc_options
   int		verbose;
   int		quiet;
 
+  // Trash.
+  int		trash;
+
   // Compile command.
   int		compile_program; // Internal field
   char*		compile_command;

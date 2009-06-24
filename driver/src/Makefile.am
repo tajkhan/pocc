@@ -71,6 +71,8 @@ pocc_SOURCES		=			\
 	getopts.c				\
 	options.c
 
+pocc_CFLAGS		= -DPOCC_ROOT_DIR=$(abs_top_srcdir)
+
 pocc_LDADD		= $(top_builddir)/driver/pocc/libpocc.la
 
 #############################################################################

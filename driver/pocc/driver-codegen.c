@@ -22,106 +22,6 @@
 #endif
 
 # include <pocc/driver-codegen.h>
-# define TO_STRING__(x) #x
-# define TO_STRING_(x) TO_STRING__(x)
-# define STR_POCC_ROOT_DIR TO_STRING_(POCC_ROOT_DIR)
-
-# define POCC_EXECV_HIDE_OUTPUT 0
-# define POCC_EXECV_SHOW_OUTPUT 1
-# define POCC_EXECV_NOEXIT	2
-
-
-/**
- * Execute a command line (supplied by args) and return a string from
- * its standard output (supposed to be the metric, eg, cycles).
- *
- */
-static
-char*
-pocc_execprog_ (char** args, int return_result, int show_output, int noexit)
-{
-  pid_t pid;
-  int rv;
-  int commpipe[2];
-  char buf[32000];
-  int i;
-
-  if (pipe (commpipe))
-    {
-      fprintf (stderr, "Pipe error.\n");
-      exit (1);
-    }
-
-  if((pid = fork ()) == -1)
-    {
-      fprintf (stderr, "Fork error.\n");
-      exit (1);
-    }
-
-  if (pid)
-    {
-      // Parent.
-      dup2 (commpipe[0], 0);
-      close (commpipe[1]);
-      for (i = 0; i < 32000; ++i)
-	buf[i] = '\0';
-      while (read (0, buf, 32000))
-	if (show_output)
-	  printf ("%s", buf);
-      wait (&rv);
-      if (rv != 0)
-	{
-	  if (! noexit)
-	    {
-	      printf ("exit status: %d\n", rv);
-	      exit (rv);
-	    }
-	  else
-	    return NULL;
-	}
-      close (commpipe[0]);
-    }
-  else
-    {
-      // Child.
-      dup2 (commpipe[1], 1);
-      close (commpipe[0]);
-      if (execvp (args[0], args) == -1)
-	{
-	  fprintf (stderr, "execv Error.\n");
-	  exit (1);
-	}
-      close (commpipe[1]);
-    }
-
-  if (return_result)
-    return strdup (buf);
-  return NULL;
-}
-
-
-static
-void
-pocc_execprog (char** args, int show_output)
-{
-  pocc_execprog_ (args, 0, show_output, 0);
-}
-
-
-static
-char*
-pocc_execprog_string (char** args, int show_output)
-{
-  return pocc_execprog_ (args, 1, show_output, 0);
-}
-
-
-static
-char*
-pocc_execprog_string_noexit (char** args, int show_output)
-{
-  return pocc_execprog_ (args, 1, show_output, 1);
-}
 
 
 static
@@ -136,9 +36,9 @@ pocc_driver_codegen_post_processing (FILE* body_file,
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
       if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+	pocc_exec (args, POCC_EXECV_HIDE_OUTPUT);
       else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+	pocc_exec (args, POCC_EXECV_SHOW_OUTPUT);
     }
   if (poptions->pluto_unroll)
     {
@@ -146,18 +46,18 @@ pocc_driver_codegen_post_processing (FILE* body_file,
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/plann";
       args[2] = STR_POCC_ROOT_DIR "/generators/scripts/annotations";
       if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+	pocc_exec (args, POCC_EXECV_HIDE_OUTPUT);
       else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+	pocc_exec (args, POCC_EXECV_SHOW_OUTPUT);
       args[2] = NULL;
     }
   if (poptions->pluto_prevector)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/vloog";
       if (poptions->quiet)
-	pocc_execprog (args, POCC_EXECV_HIDE_OUTPUT);
+	pocc_exec (args, POCC_EXECV_HIDE_OUTPUT);
       else
-	pocc_execprog (args, POCC_EXECV_SHOW_OUTPUT);
+	pocc_exec (args, POCC_EXECV_SHOW_OUTPUT);
     }
 }
 
@@ -173,14 +73,14 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
   args[3] = poptions->output_file_name;
   args[4] = args[5] = args[6] = args[7] = args[8] = NULL;
   int mode = poptions->quiet ? POCC_EXECV_HIDE_OUTPUT : POCC_EXECV_SHOW_OUTPUT;
-  pocc_execprog (args, mode);
+  pocc_exec (args, mode);
   if (poptions->codegen_timercode)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timercode";
       args[1] = poptions->output_file_name;
       args[2] = "time";
       args[3] = NULL;
-      pocc_execprog (args, mode);
+      pocc_exec (args, mode);
     }
   else if (poptions->codegen_timer_asm)
     {
@@ -188,7 +88,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[1] = poptions->output_file_name;
       args[2] = "asm";
       args[3] = NULL;
-      pocc_execprog (args, mode);
+      pocc_exec (args, mode);
     }
 
   if (poptions->pluto_parallel)
@@ -196,7 +96,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/omp";
       args[1] = poptions->output_file_name;
       args[2] = NULL;
-      pocc_execprog (args, mode);
+      pocc_exec (args, mode);
     }
 
   // Compile the program, if necessary.
@@ -226,7 +126,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[offset + 3][strlen(args[offset + 3]) - 2] = '\0';
       args[offset + 4] = NULL;
 
-      char* res = pocc_execprog_string_noexit (args, mode);
+      char* res = pocc_exec_string_noexit (args, mode);
       if (res != NULL)
 	{
 	  compile_success = 1;
@@ -264,7 +164,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 		     args[offset], poptions->timeout);
 	}
       poptions->program_exec_result =
-	pocc_execprog_string_noexit (args, POCC_EXECV_HIDE_OUTPUT);
+	pocc_exec_string_noexit (args, POCC_EXECV_HIDE_OUTPUT);
       if (poptions->program_exec_result == NULL)
 	{
 	  if (poptions->timeout == 0)

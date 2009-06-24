@@ -32,6 +32,7 @@ pocc_options_malloc ()
   ret->input_file_name = NULL;
   ret->output_file = NULL;
   ret->output_file_name = NULL;
+  ret->trash = 0;
   ret->verbose = 0;
   ret->quiet = 0;
   ret->compile_command = NULL;

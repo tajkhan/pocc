@@ -62,6 +62,7 @@ pkginclude_HEADERS 	=				\
 		          include/pocc/driver-codegen.h	\
 		          include/pocc/driver-pluto.h	\
 		          include/pocc/error.h		\
+		          include/pocc/exec.h		\
 		          include/pocc/options.h
 
 lib_LTLIBRARIES 	= libpocc.la
@@ -75,6 +76,7 @@ libpocc_la_SOURCES 	=			\
 			  driver-cloog.c	\
 			  driver-codegen.c	\
 			  error.c		\
+			  exec.c		\
 		  	  options.c		\
 			  xmalloc.c
 

@@ -1,0 +1,15 @@
+#!/bin/sh
+## trash for pocc in /Users/pouchet/Desktop
+## 
+## Made by Louis-Noel Pouchet
+## Contact: <louis-noel.pouchet@inria.fr>
+## 
+## Started on  Wed Jun 24 17:57:39 2009 Louis-Noel Pouchet
+## Last update Wed Jun 24 18:25:51 2009 Louis-Noel Pouchet
+##
+
+filename="$1";
+dir=`dirname $1`;
+find $dir -maxdepth 1 -name "$filename.pocc*" | xargs rm -rf
+
+exit 0;

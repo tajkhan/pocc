@@ -1,5 +1,5 @@
 /*
- * driver-codegen.h: this file is part of the PoCC project.
+ * exec.h: this file is part of the PoCC project.
  *
  * PoCC, the Polyhedral Compiler Collection package
  *
@@ -17,8 +17,8 @@
  * Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
  *
  */
-#ifndef POCC_DRIVER_CODEGEN_H
-# define POCC_DRIVER_CODEGEN_H
+#ifndef POCC_UTILS_H
+# define POCC_UTILS_H
 
 # include <stdio.h>
 
@@ -26,31 +26,29 @@
 #  include <pocc-utils/config.h>
 # endif
 
-# include <pocc/common.h>
-# include <pocc-utils/options.h>
-# include <pocc/options.h>
-# include <pocc/driver-cloog.h>
-# include <pocc/exec.h>
+#include <pocc/common.h>
 
-# ifndef SCOPLIB_INT_T_IS_LONGLONG
-#  define SCOPLIB_INT_T_IS_LONGLONG
-# endif
-# include <scoplib/scop.h>
+# define TO_STRING__(x) #x
+# define TO_STRING_(x) TO_STRING__(x)
+# define STR_POCC_ROOT_DIR TO_STRING_(POCC_ROOT_DIR)
+
+# define POCC_EXECV_HIDE_OUTPUT 0
+# define POCC_EXECV_SHOW_OUTPUT 1
+# define POCC_EXECV_NOEXIT	2
 
 
 BEGIN_C_DECLS
 
-extern
-void
-pocc_driver_codegen (scoplib_scop_p program,
-		     s_pocc_options_t* poptions,
-		     s_pocc_utils_options_t* puoptions);
+extern void
+pocc_exec (char** args, int show_output);
 
-extern
-void*
-pocc_codegen (void* program, s_pocc_utils_options_t* puoptions);
+extern char*
+pocc_exec_string (char** args, int show_output);
+
+extern char*
+pocc_exec_string_noexit (char** args, int show_output);
 
 END_C_DECLS
 
 
-#endif // POCC_DRIVER_CODEGEN_H
+#endif // POCC_ERROR_H
