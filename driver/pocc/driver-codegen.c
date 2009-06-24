@@ -115,6 +115,7 @@ pocc_execprog_string (char** args, int show_output)
   return pocc_execprog_ (args, 1, show_output, 0);
 }
 
+
 static
 char*
 pocc_execprog_string_noexit (char** args, int show_output)
@@ -122,6 +123,8 @@ pocc_execprog_string_noexit (char** args, int show_output)
   return pocc_execprog_ (args, 1, show_output, 1);
 }
 
+
+static
 void
 pocc_driver_codegen_post_processing (FILE* body_file,
 				     s_pocc_options_t* poptions)
@@ -159,15 +162,16 @@ pocc_driver_codegen_post_processing (FILE* body_file,
 }
 
 
-void
+static
+int
 pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 {
-  char* args[5];
+  char* args[9];
   args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
   args[1] = poptions->input_file_name;
   args[2] = ".body.c";
   args[3] = poptions->output_file_name;
-  args[4] = NULL;
+  args[4] = args[5] = args[6] = args[7] = args[8] = NULL;
   int mode = poptions->quiet ? POCC_EXECV_HIDE_OUTPUT : POCC_EXECV_SHOW_OUTPUT;
   pocc_execprog (args, mode);
   if (poptions->codegen_timercode)
@@ -200,16 +204,18 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
   if (poptions->compile_program)
     {
       int offset = 0;
+      char buffer[8192];
       if (poptions->timeout > 0)
 	{
-	  args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timeout";
-	  args[1] = strdup ("-t xxxxxxxxxx");
-	  sprintf (args[1], "-t %d", poptions->timeout);
-	  offset = 2;
+	  args[0] = "perl";
+	  args[1] = "-e";
+	  args[2] = "alarm shift @ARGV; exec @ARGV";
+	  sprintf (buffer, "%d", poptions->timeout);
+	  args[3] = strdup (buffer);
+	  offset = 4;
 	}
       args[offset] = STR_POCC_ROOT_DIR "/generators/scripts/compile";
       args[offset + 1] = poptions->output_file_name;
-      char buffer[8192];
       strcpy (buffer, poptions->compile_command);
       strcat (buffer, " -lm");
       if (poptions->codegen_timer_asm || poptions->codegen_timercode)
@@ -217,26 +223,32 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[offset + 2] = buffer;
       args[offset + 3] = strdup (poptions->output_file_name);
       // Remove the .c extension.
-      args[offset + 3][strlen(args[3]) - 2] = '\0';
+      args[offset + 3][strlen(args[offset + 3]) - 2] = '\0';
       args[offset + 4] = NULL;
+
       char* res = pocc_execprog_string_noexit (args, mode);
       if (res != NULL)
 	{
 	  compile_success = 1;
 	  XFREE(res);
 	}
+      else
+	return EXIT_FAILURE;
     }
 
   // Run the program, if necessary.
   if (poptions->compile_program && poptions->execute_program && compile_success)
     {
       int offset = 0;
+      char buffer[8192];
       if (poptions->timeout > 0)
 	{
-	  args[0] = STR_POCC_ROOT_DIR "/generators/scripts/timeout";
-	  args[1] = strdup ("-t xxxxxxxxxx");
-	  sprintf (args[1], "-t %d", poptions->timeout);
-	  offset = 2;
+	  args[0] = "perl";
+	  args[1] = "-e";
+	  args[2] = "alarm shift @ARGV; exec @ARGV";
+	  sprintf (buffer, "%d", poptions->timeout);
+	  args[3] = strdup (buffer);
+	  offset = 4;
 	}
       args[offset] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
       strcpy (args[offset], "./");
@@ -244,10 +256,27 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       args[offset][strlen(args[offset]) - 2] = '\0';
       args[offset + 1] = NULL;
       if (! poptions->quiet)
-	printf ("[PoCC] Running program %s\n", args[0]);
+	{
+	  if (poptions->timeout == 0)
+	    printf ("[PoCC] Running program %s\n", args[offset]);
+	  else
+	    printf ("[PoCC] Running program %s (with timeout of %ds)\n",
+		     args[offset], poptions->timeout);
+	}
       poptions->program_exec_result =
 	pocc_execprog_string_noexit (args, POCC_EXECV_HIDE_OUTPUT);
+      if (poptions->program_exec_result == NULL)
+	{
+	  if (poptions->timeout == 0)
+	    printf ("[PoCC] Program %s aborted\n", args[offset]);
+	  else
+	    printf ("[PoCC] Program %s aborted (timeout of %ds)\n",
+		     args[offset], poptions->timeout);
+	  return EXIT_FAILURE;
+	}
     }
+
+  return EXIT_SUCCESS;
 }
 
 
@@ -271,9 +300,15 @@ pocc_driver_codegen (scoplib_scop_p program,
   // Perform syntactic post-processing.
   pocc_driver_codegen_post_processing (body_file, poptions);
   // Build the final output file.
-  pocc_driver_codegen_program_finalize (poptions);
-  if (! poptions->quiet)
-    printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
+  if (pocc_driver_codegen_program_finalize (poptions) == EXIT_FAILURE)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Fatal error with program %s\n",
+		poptions->output_file_name);
+    }
+  else
+    if (! poptions->quiet)
+      printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
   // Restore the default output file.
   poptions->output_file = out_file;
 }

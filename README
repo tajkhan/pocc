@@ -11,6 +11,7 @@ PoCC, the POlyhedral Compiler Collection package
 --------------
 
 Requirements:
+- perl
 - autoconf > 2.60
 - automake > 1.10
 - libtool > 1.5.22

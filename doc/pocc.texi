@@ -134,15 +134,15 @@ authors diserve most of the credit.
 @chapter PoCC Installation
 
 @*
-PoCC requires @code{bison} and @code{flex} to be installed in order to
-work properly. It also requires a reasonably recent version of
-@code{libtool} (1.5.22 at least), and, of course, a working C compiler.
+PoCC requires @code{perl} to be installed in order to
+work properly. It also requires of course a Shell and a working C compiler.
 @*
 
 @*
 The development version of PoCC (currently the only one being
 distributed) additionally requires the standard GNU development tools:
-@code{autoconf 2.60}, @code{automake 1.10}, @code{doxygen}, and both a
+@code{bison}, @code{flex}, reasonably recent version of
+@code{libtool} (1.5.22 at least), @code{autoconf 2.60} or later, @code{automake 1.10} or later, @code{doxygen}, and both a
 @code{subversion} and @code{git} client.
 @*
 
@@ -293,6 +293,7 @@ These are the available options for PoCC.
 @item @code{--codegen-timer-asm} Codegen: insert ASM timer code [off] 
 @item @code{-c}, @code{--compile} Compile program with C compiler [off]
 @item @code{--compile-cmd <arg>} Compilation command [gcc -O3 -lm]
+@item @code{--prog-timeout} Timeout for compilation and execution of a single version, in second [unliminted]
 @c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off] 
 @end itemize
 

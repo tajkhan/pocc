@@ -67,7 +67,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
   { 'c', "compile", 0, "\tCompile program with C compiler [off]" },
   { '\0', "compile-cmd", 1, "Compilation command [gcc -O3 -lm]" },
-  { '\0', "program-timeout", 1, "Timeout for compilation and execution, in s [unlimited]" }
+  { '\0', "prog-timeout", 1, "Timeout for compilation and execution, in second\n\t\t\t\t[unlimited]" }
 
 };
 

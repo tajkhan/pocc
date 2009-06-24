@@ -52,7 +52,7 @@ void print_array(char** argv)
 
 
 
-int 
+int
 main(int argc, char** argv)
 {
     int i, j;

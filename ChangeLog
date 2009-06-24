@@ -1,4 +1,21 @@
 2009-06-24  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds a timeout option, to stop extra long version /
+	compilations during the iterative process. Problems have been
+	reported on some benchmarks being too long and too difficult to
+	compile for GCC (>1h of compilation).
+
+	* driver/pocc/driver-codegen.c,
+	* driver/pocc/options.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/src/options.c,
+	* driver/src/options.h: Add the --prog-timeout <seconds> option,
+	and use perl to perform the timeout (alarm function of perl).
+
+	* README,
+	* doc/pocc.texi: Update accordingly. Also mention Perl as a
+	required program for PoCC to work.
+
+2009-06-24  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch moves to the new irregular clan branch, clan-ir, which
 	supports scoplib.
 
