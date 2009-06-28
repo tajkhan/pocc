@@ -19,6 +19,7 @@ Requirements:
 - bison
 - doxygen
 - latex
+- texinfo
 - gcc or another working C compiler
 - svn and git client
 
