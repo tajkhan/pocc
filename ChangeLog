@@ -1,3 +1,40 @@
+2009-07-18  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch creates a small test-suite for PoCC, and all the
+	associated mechanism.
+
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilemf.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.plutotileparmf.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparmf.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilemf.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c,
+	* tests/scripts/tester.sh,
+	* tests/scripts/checker_plutotilemf.sh,
+	* tests/scripts/checker_plutotilepar.sh,
+	* tests/scripts/checker_plutotileparmf.sh,
+	* tests/scripts/checker_passthru.sh,
+	* tests/scripts/add-benchmark.sh,
+	* tests/scripts/checker.sh,
+	* tests/scripts/checker_plutotileparunroll.sh,
+	* tests/scripts/checker_plutotile.sh,
+	* tests/Makefile.am: New. Provide a kicker for a
+	test-suite for PoCC.
+
+	* tests/benchmarks/gemver/gemver.c,
+	* tests/benchmarks/dgemm/dgemm.c: Tiny kicker for a benchmark
+	suite.
+
+	* configure.ac,
+	* Makefile.am: Update accordingly.
+
 2009-07-02  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/src/options.c: Change trash option from -t to -d.

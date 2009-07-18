@@ -22,7 +22,8 @@ SUBDIRS 		=			\
 			  doc			\
 			  driver/pocc-utils	\
 			  driver/pocc		\
-			  driver/src
+			  driver/src		\
+			  tests
 
 
 #############################################################################

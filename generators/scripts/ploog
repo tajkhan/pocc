@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # 
 # ploog - inserts OpenMP pragmas into CLooG code (where to insert, what
 # to insert comes from the pluto core through the .pragmas file

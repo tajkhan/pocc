@@ -88,6 +88,7 @@ AC_CONFIG_FILES([
   driver/pocc-utils/Makefile
   driver/pocc/Makefile
   driver/src/Makefile
+  tests/Makefile
   ],
   [test -z "$CONFIG_HEADERS" || echo timestamp > driver/pocc/stamp-h.in; ])
 ## Output the result.
