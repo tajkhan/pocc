@@ -82,7 +82,6 @@ EXTRA_DIST	+=				\
 	$(TEST_SUITE_REF_PLUTOTILEPARUNR)	\
 	$(check_SCRIPTS)
 
-
 TESTS_ENVIRONMENT +=							\
 	CHECKER="$(top_srcdir)/tests/scripts/checker.sh"		\
 	TEST_SUITE="$(TEST_SUITE)"
