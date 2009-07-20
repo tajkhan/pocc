@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Sat Jul 18 16:57:09 2009 Louis-Noel Pouchet
-## Last update Sat Jul 18 18:25:18 2009 Louis-Noel Pouchet
+## Last update Mon Jul 20 17:09:06 2009 Louis-Noel Pouchet
 ##
 
 
@@ -25,7 +25,9 @@ for i in $TEST_FILES; do
 	tilemf) outfile="$filename.plutotilemf"; options="--pluto-tile --pluto-fuse maxfuse";;
 	tileparmf) outfile="$filename.plutotileparmf"; options="--pluto-tile --pluto-parallel  --pluto-fuse maxfuse";;
 	tileparunroll) outfile="$filename.plutotileparunroll"; options="--pluto-tile --pluto-parallel --pluto-unroll";;
+	tileparunrollprev) outfile="$filename.plutotileparunrollprev"; options="--pluto-tile --pluto-parallel --pluto-unroll --pluto-prevector";;
     esac;
+    ## (1) Check that generated files are the same.
     $top_builddir/driver/src/pocc $options $TESTS_PREFIX/$i -o $TESTS_PREFIX/$outfile.test.c 2>/tmp/poccout >/dev/null
     z=`diff --ignore-matching-lines='CLooG' $TESTS_PREFIX/$outfile.test.c $TESTS_PREFIX/$outfile.c 2>&1`
     err=`cat /tmp/poccout | grep -v "\[CLooG\] INFO:"`;
@@ -37,11 +39,31 @@ for i in $TEST_FILES; do
 	echo -e "\033[31m[FAIL] PoCC -> stderr output: $err\033[0m";
 	outtemp=1;
 	output=1;
-    fi
+    fi;
+    if [ "$outtemp" -eq 0 ]; then
+	echo "[INFO] Generated file is conform";
+    fi;
+    ## (2) Check that the generated files do compile
     rm -f /tmp/poccout;
+    z=`gcc $TESTS_PREFIX/$outfile.test.c -o $TESTS_PREFIX/a.out 2>&1`;
+    ret="$?";
+    gcchasnoomp=`echo "$z" | grep "error: omp.h: No such file"`;
+    numlines=`echo "$z" | wc -l`;
+    if [ "$ret" -ne 0 ] && [ "$numlines" -eq 1 ] && ! [ -z "$gcchasnoomp" ]; then
+	echo "[INFO] GCC version used does not support OpenMP";
+	ret=0;
+    fi;
+    if ! [ "$?" -eq 0 ]; then
+	echo -e "\033[31m[FAIL] PoCC -> generated file does not compile\033[0m";
+	outtemp=1;
+	output=1;
+    else
+	echo "[INFO] Generated file does compile correctly";
+    fi;
     if [ "$outtemp" -eq 0 ]; then
 	echo "[PASS] $i";
     fi;
+    rm -f $TESTS_PREFIX/a.out;
 done
 if [ $output = "1" ]; then
     echo -e "\033[31m[FAIL] $1\033[0m";

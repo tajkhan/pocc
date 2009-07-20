@@ -131,7 +131,9 @@ else
 
     # Find the unrollable loop(s)
     params=""
-    for i in `sed -n 1~2p .params`; do params=$i\\\|$params; done
+    while read n; do
+	params=$n\\\|$params; 
+    done < .params;
     params=$params"phony"
 
     num=""
@@ -148,7 +150,7 @@ else
         exit 4
     fi
 
-    echo "[PLann] Found unrollable nest at line $num of $1"
+    echo "[PLann] Found unrollable nest" # at line $num of $1"
     match_closing_brace $1 $num
     annotation_end_line_num=$?
 

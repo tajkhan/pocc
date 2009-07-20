@@ -32,7 +32,8 @@ check_SCRIPTS		=			\
 	scripts/checker_passthru.sh		\
 	scripts/checker_plutotile.sh		\
 	scripts/checker_plutotilepar.sh		\
-	scripts/checker_plutotileparunroll.sh
+	scripts/checker_plutotileparunroll.sh	\
+	scripts/checker_ptpup.sh
 
 BENCH_FILES		= 			\
 	benchmarks/dgemm/dgemm.c		\
@@ -48,6 +49,7 @@ TEST_SUITE_REF_PLUTOTILEPAR    	= $(TEST_SUITE:.c=.plutotilepar.c)
 TEST_SUITE_REF_PLUTOTILE_MF    	= $(TEST_SUITE:.c=.plutotilemf.c)
 TEST_SUITE_REF_PLUTOTILEPAR_MF	= $(TEST_SUITE:.c=.plutotileparmf.c)
 TEST_SUITE_REF_PLUTOTILEPARUNR 	= $(TEST_SUITE:.c=.plutotileparunroll.c)
+TEST_SUITE_REF_PTPUP	 	= $(TEST_SUITE:.c=.plutotileparunrollprev.c)
 
 TEST_SUITE_CLEAN_PASSTHRU    	= $(TEST_SUITE:.c=.passthru.test.c)
 TEST_SUITE_CLEAN_PLUTOTILE    	= $(TEST_SUITE:.c=.plutotile.test.c)
@@ -55,14 +57,16 @@ TEST_SUITE_CLEAN_PLUTOTILEPAR   = $(TEST_SUITE:.c=.plutotilepar.test.c)
 TEST_SUITE_CLEAN_PLUTOTILE_MF   = $(TEST_SUITE:.c=.plutotilemf.test.c)
 TEST_SUITE_CLEAN_PLUTOTILEPAR_MF= $(TEST_SUITE:.c=.plutotileparmf.test.c)
 TEST_SUITE_CLEAN_PLUTOTILEPARUNR= $(TEST_SUITE:.c=.plutotileparunroll.test.c)
+TEST_SUITE_CLEAN_PTPUP		= $(TEST_SUITE:.c=.plutotileparunrollprev.test.c)
 
-TEST_SUITE_CLEAN		= 		\
+TEST_SUITE_CLEAN		=		\
 	$(TEST_SUITE_CLEAN_PASSTHRU)		\
 	$(TEST_SUITE_CLEAN_PLUTOTILE)		\
 	$(TEST_SUITE_CLEAN_PLUTOTILEPAR)	\
 	$(TEST_SUITE_CLEAN_PLUTOTILE_MF)	\
 	$(TEST_SUITE_CLEAN_PLUTOTILEPAR_MF)	\
-	$(TEST_SUITE_CLEAN_PLUTOTILEPARUNR)
+	$(TEST_SUITE_CLEAN_PLUTOTILEPARUNR)	\
+	$(TEST_SUITE_CLEAN_PTPUP)
 
 
 ## Replace by program names when needed
@@ -80,6 +84,7 @@ EXTRA_DIST	+=				\
 	$(TEST_SUITE_REF_PLUTOTILE_MF)		\
 	$(TEST_SUITE_REF_PLUTOTILEPAR_MF)	\
 	$(TEST_SUITE_REF_PLUTOTILEPARUNR)	\
+	$(TEST_SUITE_REF_PTPUP)			\
 	$(check_SCRIPTS)
 
 TESTS_ENVIRONMENT +=							\
