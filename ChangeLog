@@ -1,3 +1,9 @@
+2009-07-21  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* generators/scripts/plann: Attempt to fix the unroll
+	problem. This is a WRONG fix, as it just makes the script stop
+	crashing when the input is incorrect.
+
 2009-07-20  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* generators/scripts/plann: Fix a minor bug in the sed rule.
@@ -13,7 +19,7 @@
 
 2009-07-20  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
-	* driver/src/Makefile.am: Remove linking to pocc-utils. Tentative
+	* driver/pocc/Makefile.am: Remove linking to pocc-utils. Tentative
 	fix for a bug occuring with Solaris 10 about identical symbol
 	being imported (was: libpocc-utils.so).
 
