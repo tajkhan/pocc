@@ -1,4 +1,4 @@
-#include <omp.h>
+
 #include <math.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -74,14 +74,14 @@ main(int argc, char** argv)
 
 
   register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;
-  register int c0, c0t, newlb_c0, newub_c0, c1, c1t, newlb_c1, newub_c1, c2, c2t, newlb_c2, newub_c2, c3, c3t, newlb_c3, newub_c3, c4, c4t, newlb_c4, newub_c4, c5, c5t, newlb_c5, newub_c5;
+  register int c0, c0t, newlb_c0, newub_c0, c1, c1t, newlb_c1, newub_c1, c2, c2t, newlb_c2, newub_c2, c3, c3t, newlb_c3, newub_c3, c4, c4t, newlb_c4, newub_c4, c5, c5t, newlb_c5, newub_c5, c6, c6t, newlb_c6, newub_c6;
 
 /* Generated from PLUTO-produced CLooG file by CLooG 0.14.0-UNKNOWN 64 bits in 0.01s. */
 #pragma scop
 if (N >= 1) {
  lb1=0;
  ub1=floord(N-1,32);
-#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5)
+#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
     for (c2=0;c2<=floord(N-1,32);c2++) {
 /*@ begin Loop(
@@ -118,7 +118,7 @@ transform UnrollJam(ufactor=4)
   }
  lb1=0;
  ub1=floord(N-1,32);
-#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5)
+#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
     for (c3=max(0,32*c1);c3<=min(N-1,32*c1+31);c3++) {
       x[c3]=x[c3]+z[c3];;
@@ -126,7 +126,7 @@ transform UnrollJam(ufactor=4)
   }
  lb1=0;
  ub1=floord(N-1,32);
-#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5)
+#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
     for (c2=0;c2<=floord(N-1,32);c2++) {
       for (c3=max(0,32*c1);c3<=min(N-1,32*c1+31);c3++) {

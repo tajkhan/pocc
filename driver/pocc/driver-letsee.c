@@ -82,7 +82,7 @@ pocc_driver_after_letsee (s_pocc_utils_options_t* puoptions)
   // Run PLuTo, if required.
   if (poptions->letsee_space == LS_TYPE_FS)
     {
-      poptions->pluto_fuse = PLUTO_MAXIMAL_FUSE;
+      poptions->pluto_fuse = MAXIMAL_FUSE;
       if (pocc_driver_pluto (puoptions->program, poptions, puoptions) ==
 	  EXIT_FAILURE)
 	{

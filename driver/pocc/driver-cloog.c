@@ -40,6 +40,7 @@ pocc_driver_cloog (scoplib_scop_p program,
   for (stm = program->statement; stm; stm = stm->next)
     {
       int nb_it = stm->domain->elt->NbColumns - program->context->NbColumns;
+      
       if (stm->nb_iterators != nb_it)
 	{
 	  char** iters = XMALLOC(char*, nb_it);
@@ -84,11 +85,8 @@ pocc_driver_cloog (scoplib_scop_p program,
       /// variables.
       if (cp->scaldims[i] == 0 || 1)
 	{
-	  if (! done)
-	    {
-	      fprintf (body_file, "\t register int ");
-	      done = 1;
-	    }
+	  if (! done++)
+	    fprintf (body_file, "\t register int ");
 	  else
 	    fprintf (body_file, ", ");
 	  fprintf(body_file, "c%d, c%dt, newlb_c%d, newub_c%d", i, i, i, i);

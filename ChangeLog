@@ -1,3 +1,23 @@
+2009-07-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch stabilizes PoCC w.r.t. the newest version of Pluto
+	pushed in yesterday.
+
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.c,
+	* generators/scripts/plann: Various fixes to match the newest
+	update of Pluto. Fix unrolling too.
+
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update the test suite.
+
 2009-07-21  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* generators/scripts/plann: Attempt to fix the unroll

@@ -37,7 +37,7 @@ pocc_options_malloc ()
   ret->quiet = 0;
   ret->compile_command = NULL;
   ret->compile_program = 0;
-  ret->execute_program = NULL;
+  ret->execute_program = 0;
   ret->program_exec_result = NULL;
 
   ret->cloog_options = NULL;
@@ -62,7 +62,7 @@ pocc_options_malloc ()
   ret->pluto_parallel = 0;
   ret->pluto_tile = 0;
   ret->pluto_rar = 0;
-  ret->pluto_fuse = PLUTO_SMART_FUSE;
+  ret->pluto_fuse = SMART_FUSE;
   ret->pluto_unroll = 0;
   ret->pluto_polyunroll = 0;
   ret->pluto_bee = 0;

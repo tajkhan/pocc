@@ -92,9 +92,9 @@ if [ $numloops -ne 1 ]; then
 
     if [ "$num" == "" ]; then
 	### LNP: Put this to 0 instead of 4. Now we do not crash if we
-	### try to unroll a scalar dimension. This fix is WRONG: we
-	### should not generate a .unroll which specifies a scalar
-	### dimension.
+	### try to unroll-and-jam a non-perfectly nested loop. This
+	### fix is WRONG: we should not generate a .unroll which
+	### specifies such an unrolling.
         exit 0
     fi
 
@@ -149,11 +149,7 @@ else
     fi
 
     if [ "$num" == "" ]; then
-	### LNP: Put this to 0 instead of 4. Now we do not crash if we
-	### try to unroll a scalar dimension. This fix is WRONG: we
-	### should not generate a .unroll which specifies a scalar
-	### dimension.
-        exit 0
+        exit 4
     fi
 
     echo "[PLann] Found unrollable nest" # at line $num of $1"

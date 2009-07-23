@@ -302,11 +302,11 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PLUTO_FUSE])
     {
       if (! strcmp(opt_tab[POCC_OPT_PLUTO_FUSE], "maxfuse"))
-	options->pluto_fuse = PLUTO_MAXIMAL_FUSE;
+	options->pluto_fuse = MAXIMAL_FUSE;
       else if (! strcmp(opt_tab[POCC_OPT_PLUTO_FUSE], "smartfuse"))
-	options->pluto_fuse = PLUTO_SMART_FUSE;
+	options->pluto_fuse = SMART_FUSE;
       else if (! strcmp(opt_tab[POCC_OPT_PLUTO_FUSE], "nofuse"))
-	options->pluto_fuse = PLUTO_NO_FUSE;
+	options->pluto_fuse = NO_FUSE;
       options->pluto = 1;
     }
   if (opt_tab[POCC_OPT_PLUTO_UNROLL])

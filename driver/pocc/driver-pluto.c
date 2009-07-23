@@ -55,7 +55,7 @@ pocc_driver_pluto (scoplib_scop_p program,
 
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
-  if (pluto_pocc (program, ploptions, puoptions) == PLUTO_EXIT_ERROR)
+  if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
     return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;
 
