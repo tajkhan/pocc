@@ -1,4 +1,15 @@
 2009-07-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	Bump to pocc-1.0-beta-r2.
+	
+	* install.sh,
+	* driver/src/options.c,
+	* README,
+	* tests/Makefile.am,
+	* configure.ac,
+	* doc/pocc.texi,
+	* Makefile.am: Update documentation, and bump to 1.0-beta-r2.
+
+2009-07-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch (1) allows to use the latest version of cloog-isl, in
 	place of cloog-polylib, (2) provides option --bounded-ctxt to
 	bound the parameters, (3) fixes some remaining bugs in the

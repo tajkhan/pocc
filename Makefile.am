@@ -69,7 +69,8 @@ EXTRA_DIST		=			\
 	generators/scripts/plann		\
 	generators/scripts/ploog		\
 	generators/scripts/timercode		\
-	generators/scripts/vloog
+	generators/scripts/vloog		\
+	math/external/gmp-4.3.1.tar.gz
 
 
 MAINTAINERCLEANFILES 	=					\

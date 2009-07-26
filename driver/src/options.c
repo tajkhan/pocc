@@ -90,7 +90,7 @@ static void     print_version (void)
 	 PACKAGE_VERSION ".\n\n");
   printf ("Written by Louis-Noel Pouchet <" PACKAGE_BUGREPORT ">\n");
   printf ("Major contributions by Cedric Bastoul and Uday Bondhugula.\n\n");
-  printf("PoCC packages several free software:\n");
+  printf("PoCC packages several Free Software:\n");
   printf ("* Clan \t\thttp://www.lri.fr/~bastoul/development/clan\n");
   printf ("* Candl \thttp://www.lri.fr/~bastoul/development/candl\n");
   printf ("* LetSee \thttp://www-rocq.inria.fr/~pouchet/software/letsee\n");

@@ -26,7 +26,7 @@ MAINTAINERCLEANFILES    = Makefile.in
 
 TESTS_ENVIRONMENT       = top_builddir=$(top_builddir)
 
-EXTRA_DIST              = checker.sh
+EXTRA_DIST              = scripts/checker.sh
 #############################################################################
 check_SCRIPTS		=			\
 	scripts/checker_passthru.sh		\

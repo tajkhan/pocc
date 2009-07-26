@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Sun Jul 26 18:15:51 2009 Louis-Noel Pouchet
+## Last update Sun Jul 26 19:26:05 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -59,7 +59,7 @@ fi;
 if ! [ -f "math/external/$GMPVERSION/Makefile" ]; then
     echo "[PoCC] Configure $GMPVERSION...";
     pt_inst=`pwd`/math/external/install;
-    cd math/external/$GMPVERSION && $GMP_ABI_FORCE ./configure --prefix=$pt_inst; cd -;
+    cd math/external/$GMPVERSION && eval $GMP_ABI_FORCE ./configure --prefix=$pt_inst; cd -;
 fi;
 if ! [ -f "math/external/install/include/gmp.h" ]; then
     echo "[PoCC] Build $GMPVERSION...";
