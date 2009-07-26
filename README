@@ -47,6 +47,7 @@ website directly. Note the documentation is still highly preliminary.
 Gives an overview of the options
 
 
+
 * Troubleshoot
 --------------
 For any error please contact the author directly.
@@ -66,6 +67,11 @@ Many thanks to:
 the PolyLib
 = Paul Feautrier for the PIPLib
 
+The author would like to thank also:
+= Sandeep D.N.S for being the main beta-tester of PoCC, and a key
+person in helping the software being more robust.
+
+
 -- 
-Written by: 
+PoCC is written by: 
 Louis-Noel Pouchet <louis-noel.pouchet@inria.fr>

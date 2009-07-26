@@ -23,6 +23,9 @@
 
 # include <pocc/driver-pluto.h>
 
+// Ugly forward declaration to avoid compilation warning. Would have
+// been simpler to create an option.h file in Pluto...
+PlutoOptions* pluto_options_alloc ();
 
 int
 pocc_driver_pluto (scoplib_scop_p program,

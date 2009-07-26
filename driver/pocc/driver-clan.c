@@ -32,7 +32,11 @@ pocc_driver_clan (FILE* program,
   if (! poptions->quiet)
     printf ("[PoCC] Running Clan\n");
   clan_options_p coptions = clan_options_malloc ();
+  coptions->bounded_context = poptions->clan_bounded_context;
+
   scoplib_scop_p scop = clan_scop_extract (program, coptions);
+
+/*   scoplib_scop_print (stdout, scop); */
 
   return scop;
 }

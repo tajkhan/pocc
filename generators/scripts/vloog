@@ -44,7 +44,6 @@ match_closing_brace() {
     return $closing_brace_linenum
 }
 
-
 if [ ! -f .vectorize ]; then
     exit 2
 fi

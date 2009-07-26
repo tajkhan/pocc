@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Thu Jul 23 15:47:53 2009 Louis-Noel Pouchet
+## Last update Sun Jul 26 18:15:51 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -23,6 +23,19 @@
 ##
 POCC_MODE="base";
 
+## **** GMP section ****
+## 
+## For the moment, we embed a working version of GMP. This should not
+## be necessary, and we should require the user to install it
+## himself. Only ISL requires it.
+GMPVERSION="gmp-4.3.1";
+## In case of problem with ISL compilation, set ABI=32 for a 32bit
+## operating system (for ex, Mac OS 10.4), or ABI=64 for a 64bits
+## operating system. Just set to "" by default.
+GMP_ABI_FORCE="ABI=32";
+##
+## *********************
+
 ## (1) Self bootstrap, if needed.
 FORCE="";
 if ! [ -f ./configure ]; then
@@ -35,12 +48,25 @@ if ! [ -f ./configure ]; then
 fi;
 
 ## (2) Extract generators/scripts/annotations.
+echo "[PoCC] Inflate archives...";
 if ! [ -d "generators/scripts/annotations" ]; then
-    echo "[PoCC] Inflate archives...";
     cd generators/scripts && tar xzf annotations.tar.gz; cd -;
 fi;
+## (3) Extract and build GMP.
+if ! [ -d "math/external/$GMPVERSION" ]; then
+    cd math/external && tar xzf $GMPVERSION.tar.gz; cd -;
+fi;
+if ! [ -f "math/external/$GMPVERSION/Makefile" ]; then
+    echo "[PoCC] Configure $GMPVERSION...";
+    pt_inst=`pwd`/math/external/install;
+    cd math/external/$GMPVERSION && $GMP_ABI_FORCE ./configure --prefix=$pt_inst; cd -;
+fi;
+if ! [ -f "math/external/install/include/gmp.h" ]; then
+    echo "[PoCC] Build $GMPVERSION...";
+    cd math/external/$GMPVERSION && make install; cd -;
+fi;
 
-## (3) Configure pocc.
+## (4) Configure pocc.
 echo "[PoCC] Configure...";
 if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
     enable_devel="--enable-devel";
@@ -51,7 +77,7 @@ if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
     if [ $? -ne 0 ]; then echo "[PoCC] configure: fatal error"; exit 1; fi;
 fi;
 
-## (4) Build and install pocc-utils
+## (5) Build and install pocc-utils
 echo "[PoCC] Make pocc-utils...";
 needed_pu=`find driver/pocc-utils -newer driver/install-pocc/include/pocc-utils 2>&1 | grep -v ".svn"`;
 if ! [ -z "$needed_pu" ]; then
@@ -59,12 +85,12 @@ if ! [ -z "$needed_pu" ]; then
     if [ $? -ne 0 ]; then echo "[PoCC] pocc-utils: fatal error"; exit 1; fi;
 fi;
 
-## (5) Checkout all files, and build all modules.
+## (6) Checkout all files, and build all modules.
 echo "[PoCC] Checkout and build for configuration $POCC_MODE...";
 bin/pocc-util alternate $POCC_MODE;
 if [ $? -ne 0 ]; then echo "[PoCC] fatal error"; exit 1; fi;
 
-## (6) Build and install pocc.
+## (7) Build and install pocc.
 echo "[PoCC] Make pocc...";
 needed=`find driver/pocc -newer driver/install-pocc/include/pocc 2>&1 | grep -v ".svn"`;
 if ! [ -z "$needed" ] || ! [ -z "$needed_pu" ]; then

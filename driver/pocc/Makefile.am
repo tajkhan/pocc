@@ -82,18 +82,18 @@ libpocc_la_SOURCES 	=			\
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
-libpocc_la_LIBADD	=						 \
-	$(top_builddir)/ir/install-scoplib/lib/libscoplib.la		 \
-	$(top_builddir)/analyzers/install-clan/lib/libclan.la		 \
-	$(top_builddir)/analyzers/install-candl/lib/libcandl.la		 \
-	$(top_builddir)/analyzers/install-polyfeat/lib/libpolyfeat.la	 \
-	$(top_builddir)/math/install-piplib/lib/libpiplib64.la		 \
-	$(top_builddir)/math/install-polylib/lib/libpolylib64.la	 \
-	$(top_builddir)/optimizers/install-letsee/lib/libletsee.la	 \
-	$(top_builddir)/optimizers/install-pluto/lib/libpluto.la	 \
-	$(top_builddir)/generators/install-cloog/lib/libcloog-polylib.la \
+libpocc_la_LIBADD	=						\
+	$(top_builddir)/ir/install-scoplib/lib/libscoplib.la		\
+	$(top_builddir)/analyzers/install-clan/lib/libclan.la		\
+	$(top_builddir)/analyzers/install-candl/lib/libcandl.la		\
+	$(top_builddir)/analyzers/install-polyfeat/lib/libpolyfeat.la	\
+	$(top_builddir)/math/install-piplib/lib/libpiplib64.la		\
+	$(top_builddir)/math/install-polylib/lib/libpolylib64.la	\
+	$(top_builddir)/optimizers/install-letsee/lib/libletsee.la	\
+	$(top_builddir)/optimizers/install-pluto/lib/libpluto.la	\
+	$(top_builddir)/generators/install-cloog/lib/libcloog-isl.la	\
 	$(top_builddir)/math/install-fm/lib/libfm.la
 
-## FIXME: Removed this due to a potential conflict on Solaris10. We 
-## already include pocc-utils in letsee and pluto.
-#	$(top_builddir)/driver/pocc-utils/libpocc-utils.la		 
+## FIXME: Removed this due to a potential conflict on Solaris10. We
+## already include pocc-utils in letsee, pluto, clan, candl, cloog...
+#	$(top_builddir)/driver/pocc-utils/libpocc-utils.la

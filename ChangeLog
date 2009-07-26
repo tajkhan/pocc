@@ -1,3 +1,50 @@
+2009-07-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch (1) allows to use the latest version of cloog-isl, in
+	place of cloog-polylib, (2) provides option --bounded-ctxt to
+	bound the parameters, (3) fixes some remaining bugs in the
+	unroller and pre-vectorizer.
+
+	* install.sh,
+	* math/external/gmp-4.3.1.tar.gz: Distribute a working version of
+	GMP. This is required for ISL.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-clan.c,
+	* driver/pocc/Makefile.am,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Several updates and fixes, add option
+	--bounded-ctxt from Clan, and use now the latest version of
+	cloog-isl.
+
+	* README: Update.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/irregular/configure.cfg: Update cloog configuration for
+	cloog to become cloog-isl instead of cloog-polylib.
+
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update the test-suite as
+	now we use cloog-isl, which produces a different (yet simpler)
+	code.
+
+	* generators/scripts/ploog,
+	* generators/scripts/vloog,
+	* generators/scripts/inscop: Fix some tiny bugs in the unroller
+	invocation and in the prevectorizer invocation.
+
 2009-07-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch stabilizes PoCC w.r.t. the newest version of Pluto
 	pushed in yesterday.

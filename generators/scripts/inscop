@@ -12,7 +12,6 @@ grep -A $MAXLINES "#pragma[[:space:]]\+endscop" $1 | grep -v "#pragma[[:space:]]
 # Preprocessor doesn't like pragma's in #defines and so it was not put in from pluto
 # when '--bee' was used - instead we will add it here
 gcc -E -P -CC $2 | sed -e 's/_NL_DELIMIT_/\n/' >> __tmp
-
 cat .tail >> __tmp
 
 echo "#define ceild(n,d)  ceil(((double)(n))/((double)(d)))" >> .head

@@ -21,6 +21,7 @@
 # include <pocc-utils/config.h>
 #endif
 
+# define CLOOG_SUPPORTS_SCOPLIB
 # include <cloog/cloog.h>
 # include <pocc/driver-cloog.h>
 
@@ -40,7 +41,7 @@ pocc_driver_cloog (scoplib_scop_p program,
   for (stm = program->statement; stm; stm = stm->next)
     {
       int nb_it = stm->domain->elt->NbColumns - program->context->NbColumns;
-      
+
       if (stm->nb_iterators != nb_it)
 	{
 	  char** iters = XMALLOC(char*, nb_it);
@@ -71,8 +72,13 @@ pocc_driver_cloog (scoplib_scop_p program,
     }
   /* Create a CloogProgram from the .scop. */
   CloogOptions* coptions = poptions->cloog_options;
+  int coptions_created = 0;
   if (coptions == NULL)
-    coptions = cloog_options_malloc ();
+    {
+      CloogState* cstate = cloog_state_malloc ();
+      coptions = cloog_options_malloc (cstate);
+      coptions_created = 1;
+    }
   CloogProgram * cp = cloog_program_scop_to_cloogprogram (program, coptions);
   /* Generate loop counters. */
   fprintf (body_file,
@@ -103,6 +109,14 @@ pocc_driver_cloog (scoplib_scop_p program,
   cp = cloog_program_generate (cp, coptions);
   fprintf (body_file, ";\n\n");
   /* Dump the code. */
+  fprintf (body_file, "#pragma scop\n");
   cloog_program_pprint (body_file, cp, coptions);
+  fprintf (body_file, "#pragma endscop\n");
   cloog_program_free (cp);
+  if (coptions_created == 1)
+    {
+      CloogState* cstate = coptions->state;
+      cloog_options_free (coptions);
+      cloog_state_free (cstate);
+    }
 }

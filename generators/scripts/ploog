@@ -66,4 +66,4 @@ for DIM in $PARDIMS;  do
     fi
 done
 
-rm -f .header .footer .ub .lb .parloop .pragma .pragmas .vectorize
+rm -f .header .footer .ub .lb .parloop .pragma .pragmas

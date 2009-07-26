@@ -46,6 +46,9 @@ struct s_pocc_options
   // Trash.
   int		trash;
 
+  // Parser options.
+  int		clan_bounded_context;
+
   // Compile command.
   int		compile_program; // Internal field
   char*		compile_command;

@@ -39,6 +39,7 @@ pocc_options_malloc ()
   ret->compile_program = 0;
   ret->execute_program = 0;
   ret->program_exec_result = NULL;
+  ret->clan_bounded_context = 0;
 
   ret->cloog_options = NULL;
 
@@ -95,7 +96,8 @@ pocc_options_malloc ()
 void
 pocc_options_init_cloog (s_pocc_options_t* options)
 {
-  options->cloog_options = cloog_options_malloc ();
+  CloogState* cstate = cloog_state_malloc ();
+  options->cloog_options = cloog_options_malloc (cstate);
 /*   options->cloog_codegen = (void*) cloog_program_generate; */
 }
 
@@ -106,7 +108,11 @@ pocc_options_free (s_pocc_options_t* options)
   if (options->output_file_name)
     XFREE(options->output_file_name);
   if (options->cloog_options)
-    cloog_options_free (options->cloog_options);
+    {
+      CloogState* cstate = options->cloog_options->state;
+      cloog_options_free (options->cloog_options);
+      cloog_state_free (cstate);
+    }
   if (options->letsee_scheme_m1)
     XFREE(options->letsee_scheme_m1);
   if (options->compile_command)

@@ -74,8 +74,8 @@ main(int argc, char** argv)
   register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;
   register int c0, c0t, newlb_c0, newub_c0, c1, c1t, newlb_c1, newub_c1, c2, c2t, newlb_c2, newub_c2, c3, c3t, newlb_c3, newub_c3, c4, c4t, newlb_c4, newub_c4;
 
-/* Generated from  by CLooG 0.14.0-UNKNOWN 64 bits in 0.01s. */
 #pragma scop
+/* Generated from  by CLooG 0.14.0-201-g08025b1 gmp bits in 0.00s. */
 if (N >= 1) {
   for (c1=0;c1<=N-1;c1++) {
     for (c3=0;c3<=N-1;c3++) {
