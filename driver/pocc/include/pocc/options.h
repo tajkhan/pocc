@@ -22,6 +22,7 @@
 
 # include <stdio.h>
 # include <pocc/common.h>
+# include <cloog/state.h>
 # include <cloog/options.h>
 # include <pluto/pluto.h>
 # include <letsee/options.h>
