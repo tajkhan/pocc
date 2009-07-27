@@ -32,7 +32,7 @@ GMPVERSION="gmp-4.3.1";
 ## In case of problem with ISL compilation, set ABI=32 for a 32bit
 ## operating system (for ex, Mac OS 10.4), or ABI=64 for a 64bits
 ## operating system. Just set to "" by default.
-GMP_ABI_FORCE="ABI=32";
+GMP_ABI_FORCE="";
 ##
 ## *********************
 
@@ -59,11 +59,11 @@ fi;
 if ! [ -f "math/external/$GMPVERSION/Makefile" ]; then
     echo "[PoCC] Configure $GMPVERSION...";
     pt_inst=`pwd`/math/external/install;
-    cd math/external/$GMPVERSION && eval $GMP_ABI_FORCE ./configure --prefix=$pt_inst; cd -;
+    cd math/external/$GMPVERSION && eval $GMP_ABI_FORCE ./configure --prefix=$pt_inst; if [ $? -ne 0 ]; then echo "[PoCC] configure $GMPVERSION: fatal error"; exit 1; fi;cd -;
 fi;
 if ! [ -f "math/external/install/include/gmp.h" ]; then
-    echo "[PoCC] Build $GMPVERSION...";
-    cd math/external/$GMPVERSION && make install; cd -;
+	echo "[PoCC] Build $GMPVERSION...";
+	cd math/external/$GMPVERSION && make install;if [ $? -ne 0 ]; then echo "[PoCC] build $GMPVERSION: fatal error"; exit 1; fi; cd -;
 fi;
 
 ## (4) Configure pocc.
