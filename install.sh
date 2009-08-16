@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Sun Jul 26 19:26:05 2009 Louis-Noel Pouchet
+## Last update Sun Aug 16 19:37:51 2009 Louis-Noel Pouchet
 ##
 
 ##
@@ -24,14 +24,15 @@
 POCC_MODE="base";
 
 ## **** GMP section ****
-## 
+##
 ## For the moment, we embed a working version of GMP. This should not
 ## be necessary, and we should require the user to install it
 ## himself. Only ISL requires it.
 GMPVERSION="gmp-4.3.1";
 ## In case of problem with ISL compilation, set ABI=32 for a 32bit
-## operating system (for ex, Mac OS 10.4), or ABI=64 for a 64bits
-## operating system. Just set to "" by default.
+## operating system on 64bits machines (for ex, Mac OS 10.4), or
+## ABI=64 for a 64bits operating system. Just set to "" by default.
+## GMP_ABI_FORCE="ABI=32";
 GMP_ABI_FORCE="";
 ##
 ## *********************

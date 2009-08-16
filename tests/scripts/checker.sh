@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Sat Jul 18 16:57:09 2009 Louis-Noel Pouchet
-## Last update Mon Jul 20 17:09:06 2009 Louis-Noel Pouchet
+## Last update Sun Aug 16 19:08:59 2009 Louis-Noel Pouchet
 ##
 
 
@@ -29,7 +29,7 @@ for i in $TEST_FILES; do
     esac;
     ## (1) Check that generated files are the same.
     $top_builddir/driver/src/pocc $options $TESTS_PREFIX/$i -o $TESTS_PREFIX/$outfile.test.c 2>/tmp/poccout >/dev/null
-    z=`diff --ignore-matching-lines='CLooG' $TESTS_PREFIX/$outfile.test.c $TESTS_PREFIX/$outfile.c 2>&1`
+    z=`diff --ignore-matching-lines='CLooG' --ignore-blank-lines $TESTS_PREFIX/$outfile.test.c $TESTS_PREFIX/$outfile.c 2>&1`
     err=`cat /tmp/poccout | grep -v "\[CLooG\] INFO:"`;
     if ! [ -z "$z" ]; then
 	echo -e "\033[31m[FAIL] PoCC -> generated codes are different\033[0m";

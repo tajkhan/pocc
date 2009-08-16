@@ -1,3 +1,19 @@
+2009-08-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch fixes some tiny problems in beta-r2.
+	
+	* install.sh: Make "ABI=32" optional.
+
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c,
+	* tests/scripts/checker.sh: Fix the test suite.
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Fix error in cloog configuration.
+
 2009-07-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	Bump to pocc-1.0-beta-r2.
 	
