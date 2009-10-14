@@ -1,3 +1,9 @@
+2009-10-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* install.sh: Warn that Mac OS 10.5 needs also ABI=32 option.
+	* generators/scripts/ploog: Remove -e option to echo
+	commands. Fixing a problem on Mac OS 10.5
+
 2009-08-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch fixes some tiny problems in beta-r2.
 	

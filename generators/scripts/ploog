@@ -54,11 +54,11 @@ for DIM in $PARDIMS;  do
             sed -n -e ''$(($num+3*$j))'p' $1 > .parloop
 
             # lower and upper bounds
-            echo -e "\tlb$i="`awk '{split($2,t,";"); split(t[1],u,"="); print u[2] }' .parloop`";" > .lb
-            echo -e "\tub$i="`awk '{split($2,t,";"); split(t[2],u,"="); print u[2] }' .parloop`";" > .ub
+            echo "\tlb$i="`awk '{split($2,t,";"); split(t[1],u,"="); print u[2] }' .parloop`";" > .lb
+            echo "\tub$i="`awk '{split($2,t,";"); split(t[2],u,"="); print u[2] }' .parloop`";" > .ub
 
             cat .header .lb .ub .pragma | sed -e "s/$DIM #pragma/#pragma/" > $1
-            echo -e "\tfor ($DIM=lb$i; $DIM<=ub$i; $DIM++) {" >> $1
+            echo "\tfor ($DIM=lb$i; $DIM<=ub$i; $DIM++) {" >> $1
             cat .footer >> $1
             j=$((j+1))
         done
