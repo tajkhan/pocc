@@ -109,7 +109,7 @@ if (N >= 1) {
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
-          C[c4][c6]=C[c4][c6]*alpha;;
+          C[c4][c6]=C[c4][c6]*alpha;
         }
 }
       }
@@ -146,22 +146,22 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
-            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];;
-            C[c4][c6]+=beta*A[c4][(c5 + 1)]*B[(c5 + 1)][c6];;
-            C[c4][c6]+=beta*A[c4][(c5 + 2)]*B[(c5 + 2)][c6];;
-            C[c4][c6]+=beta*A[c4][(c5 + 3)]*B[(c5 + 3)][c6];;
-            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][c5]*B[c5][c6];;
-            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][(c5 + 1)]*B[(c5 + 1)][c6];;
-            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][(c5 + 2)]*B[(c5 + 2)][c6];;
-            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][(c5 + 3)]*B[(c5 + 3)][c6];;
-            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][c5]*B[c5][c6];;
-            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][(c5 + 1)]*B[(c5 + 1)][c6];;
-            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][(c5 + 2)]*B[(c5 + 2)][c6];;
-            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][(c5 + 3)]*B[(c5 + 3)][c6];;
-            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][c5]*B[c5][c6];;
-            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][(c5 + 1)]*B[(c5 + 1)][c6];;
-            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][(c5 + 2)]*B[(c5 + 2)][c6];;
-            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][(c5 + 3)]*B[(c5 + 3)][c6];;
+            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];
+            C[c4][c6]+=beta*A[c4][(c5 + 1)]*B[(c5 + 1)][c6];
+            C[c4][c6]+=beta*A[c4][(c5 + 2)]*B[(c5 + 2)][c6];
+            C[c4][c6]+=beta*A[c4][(c5 + 3)]*B[(c5 + 3)][c6];
+            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][c5]*B[c5][c6];
+            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][(c5 + 1)]*B[(c5 + 1)][c6];
+            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][(c5 + 2)]*B[(c5 + 2)][c6];
+            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][(c5 + 3)]*B[(c5 + 3)][c6];
+            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][c5]*B[c5][c6];
+            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][(c5 + 1)]*B[(c5 + 1)][c6];
+            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][(c5 + 2)]*B[(c5 + 2)][c6];
+            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][(c5 + 3)]*B[(c5 + 3)][c6];
+            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][c5]*B[c5][c6];
+            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][(c5 + 1)]*B[(c5 + 1)][c6];
+            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][(c5 + 2)]*B[(c5 + 2)][c6];
+            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][(c5 + 3)]*B[(c5 + 3)][c6];
           }
 }
 
@@ -171,10 +171,10 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
-            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];;
-            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][c5]*B[c5][c6];;
-            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][c5]*B[c5][c6];;
-            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][c5]*B[c5][c6];;
+            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];
+            C[(c4 + 1)][c6]+=beta*A[(c4 + 1)][c5]*B[c5][c6];
+            C[(c4 + 2)][c6]+=beta*A[(c4 + 2)][c5]*B[c5][c6];
+            C[(c4 + 3)][c6]+=beta*A[(c4 + 3)][c5]*B[c5][c6];
           }
 }
     }
@@ -187,10 +187,10 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
-            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];;
-            C[c4][c6]+=beta*A[c4][(c5 + 1)]*B[(c5 + 1)][c6];;
-            C[c4][c6]+=beta*A[c4][(c5 + 2)]*B[(c5 + 2)][c6];;
-            C[c4][c6]+=beta*A[c4][(c5 + 3)]*B[(c5 + 3)][c6];;
+            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];
+            C[c4][c6]+=beta*A[c4][(c5 + 1)]*B[(c5 + 1)][c6];
+            C[c4][c6]+=beta*A[c4][(c5 + 2)]*B[(c5 + 2)][c6];
+            C[c4][c6]+=beta*A[c4][(c5 + 3)]*B[(c5 + 3)][c6];
           }
 }
 
@@ -200,7 +200,7 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
-            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];;
+            C[c4][c6]+=beta*A[c4][c5]*B[c5][c6];
           }
 }
     }

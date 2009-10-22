@@ -106,14 +106,14 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
-        A[c3][c4]=A[c3][c4]+u1[c3]*v1[c4]+u2[c3]*v2[c4];;
-        x[c4]=x[c4]+A[c3][c4]*y[c3];;
-        A[(c3 + 1)][c4]=A[(c3 + 1)][c4]+u1[(c3 + 1)]*v1[c4]+u2[(c3 + 1)]*v2[c4];;
-        x[c4]=x[c4]+A[(c3 + 1)][c4]*y[(c3 + 1)];;
-        A[(c3 + 2)][c4]=A[(c3 + 2)][c4]+u1[(c3 + 2)]*v1[c4]+u2[(c3 + 2)]*v2[c4];;
-        x[c4]=x[c4]+A[(c3 + 2)][c4]*y[(c3 + 2)];;
-        A[(c3 + 3)][c4]=A[(c3 + 3)][c4]+u1[(c3 + 3)]*v1[c4]+u2[(c3 + 3)]*v2[c4];;
-        x[c4]=x[c4]+A[(c3 + 3)][c4]*y[(c3 + 3)];;
+        A[c3][c4]=A[c3][c4]+u1[c3]*v1[c4]+u2[c3]*v2[c4];
+        x[c4]=x[c4]+A[c3][c4]*y[c3];
+        A[(c3 + 1)][c4]=A[(c3 + 1)][c4]+u1[(c3 + 1)]*v1[c4]+u2[(c3 + 1)]*v2[c4];
+        x[c4]=x[c4]+A[(c3 + 1)][c4]*y[(c3 + 1)];
+        A[(c3 + 2)][c4]=A[(c3 + 2)][c4]+u1[(c3 + 2)]*v1[c4]+u2[(c3 + 2)]*v2[c4];
+        x[c4]=x[c4]+A[(c3 + 2)][c4]*y[(c3 + 2)];
+        A[(c3 + 3)][c4]=A[(c3 + 3)][c4]+u1[(c3 + 3)]*v1[c4]+u2[(c3 + 3)]*v2[c4];
+        x[c4]=x[c4]+A[(c3 + 3)][c4]*y[(c3 + 3)];
       }
 }
 
@@ -123,8 +123,8 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
-        A[c3][c4]=A[c3][c4]+u1[c3]*v1[c4]+u2[c3]*v2[c4];;
-        x[c4]=x[c4]+A[c3][c4]*y[c3];;
+        A[c3][c4]=A[c3][c4]+u1[c3]*v1[c4]+u2[c3]*v2[c4];
+        x[c4]=x[c4]+A[c3][c4]*y[c3];
       }
 }
 }
@@ -140,7 +140,7 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
-      x[c4]=x[c4]+z[c4];;
+      x[c4]=x[c4]+z[c4];
     }
 }
   }
@@ -155,7 +155,7 @@ transform UnrollJam(ufactor=4)
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
-          w[c4]=w[c4]+A[c4][c3]*x[c3];;
+          w[c4]=w[c4]+A[c4][c3]*x[c3];
         }
 }
       }

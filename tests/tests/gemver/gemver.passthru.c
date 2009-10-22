@@ -79,20 +79,20 @@ main(int argc, char** argv)
 if (N >= 1) {
   for (c1=0;c1<=N-1;c1++) {
     for (c3=0;c3<=N-1;c3++) {
-      A[c1][c3]=A[c1][c3]+u1[c1]*v1[c3]+u2[c1]*v2[c3];;
+      A[c1][c3]=A[c1][c3]+u1[c1]*v1[c3]+u2[c1]*v2[c3];
     }
   }
   for (c1=0;c1<=N-1;c1++) {
     for (c3=0;c3<=N-1;c3++) {
-      x[c1]=x[c1]+A[c3][c1]*y[c3];;
+      x[c1]=x[c1]+A[c3][c1]*y[c3];
     }
   }
   for (c1=0;c1<=N-1;c1++) {
-    x[c1]=x[c1]+z[c1];;
+    x[c1]=x[c1]+z[c1];
   }
   for (c1=0;c1<=N-1;c1++) {
     for (c3=0;c3<=N-1;c3++) {
-      w[c1]=w[c1]+A[c1][c3]*x[c3];;
+      w[c1]=w[c1]+A[c1][c3]*x[c3];
     }
   }
 }

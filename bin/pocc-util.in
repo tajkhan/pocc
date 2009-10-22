@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Apr 28 19:44:19 2009 Louis-Noel Pouchet
+## Last update Fri Oct 16 21:18:57 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -24,6 +24,7 @@ sub print_help
     print "<command>: alternate [configuration-name]\n";
     print "<command>: checkout [software-name]\n";
     print "<command>: make [software-name]\n";
+    print "<command>: buildall\n";
     print "<command>: help\n";
 }
 
@@ -65,6 +66,12 @@ sub parse_args
 		else {
 		    make($BASEDIR, "all", "");
 		}
+		$i = $#args;
+	    }
+	    case "buildall" {
+		make($BASEDIR, "all", "");
+		my $ret = system ("cd $BASEDIR && make install");
+		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
 	    }
 	    else { print "Unknown argument: $args[$i]\n"; }

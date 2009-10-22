@@ -1,8 +1,36 @@
+2009-10-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch improves the documentation and polishes the
+	pretty-printing.
+
+	* generators/scripts/ploog: Remove the ';;' at the end of
+	instructions, such that we only have ';' at the end.
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update accordingly.
+
+	* bin/pocc-util.in: Add command pocc-util buildall, to build the
+	compiler project from the current configuration.
+	
+	* bin/pocc-checkout: Fix a bug in checkout-svn method.
+
+	* generators/scripts/inscop: Fix a potential bug in
+	pretty-printing (remaining '\t' not interpreted).
+
+	* doc/pocc.texi: Significantly improve the documentation: first
+	write-up of the "Developing with PoCC" section.
+	
 2009-10-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: Warn that Mac OS 10.5 needs also ABI=32 option.
 	* generators/scripts/ploog: Remove -e option to echo
-	commands. Fixing a problem on Mac OS 10.5
+	commands. Fixing a problem on Mac OS 10.5 BSD shell.
 
 2009-08-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch fixes some tiny problems in beta-r2.
