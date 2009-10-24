@@ -175,10 +175,12 @@ $> export PATH=`pwd`/bin:$PATH
 @*
 In the current development version, we resorted to ship a standard
 version of GMP. This is required by ISL, which is required by CLooG. By
-default, the configuration of GMP is forced to use the 32bits ABI. To
-change this, for instance because PoCC is being installed on a 64bits
-operating system, modify the variable @code{GMP_ABI_FORCE} at the
-beginning of @code{install.sh}.
+default, the configuration of GMP is automatic. To change this, for
+instance because PoCC is being installed on a fake 64bits operating
+system such as Mac OS 10.4, or using a 32-bit compiler on a 64 bit
+architecture such as in Mac OS 10.5, modify the variable
+@code{GMP_ABI_FORCE} at the beginning of @code{install.sh}. For instance
+to force 32bit compilation of GMP set @code{GMP_ABI_FORCE="ABI=32"}.
 @*
 
 
@@ -601,7 +603,7 @@ Second, update build information with the new module, and create a new file for 
 @item Edit @code{driver/pocc/Makefile.am} and update the @code{INCLUDE} variable with the following:
 @cartouche
 @example
-	-I$(top_builddir)/analyzers/install-cudascheduler/include	\
+	-I$(top_builddir)/optimizers/install-cudascheduler/include	\
 	-I$(top_srcdir)/optimizers/install-cudascheduler/include	\
 @end example
 @end cartouche
@@ -609,11 +611,11 @@ Second, update build information with the new module, and create a new file for 
 Also edit the @code{libpocc_la_LIBADD} variable and add
 @cartouche
 @example
-$(top_builddir)/analyzers/install-cudascheduler/lib/libcudascheduler.la	\
+$(top_builddir)/optimizers/install-cudascheduler/lib/libcudascheduler.la \
 @end example
 @end cartouche
 
-@item Create a new file to manage the new pass, for instance @code{driver/pocc/driver-cudascheduler.c}. Do not forget to add this new file in the @code{libpocc_la_SOURCES} variable of @code{driver/pocc/Makefile.am}. You are strongly encouraged to add also a dedicated header file @code{driver/pocc/driver-cudascheduler.c}.
+@item Create a new file to manage the new pass, for instance @code{driver/pocc/driver-cudascheduler.c}. Do not forget to add this new file in the @code{libpocc_la_SOURCES} variable of @code{driver/pocc/Makefile.am}. You are strongly encouraged to add also a dedicated header file @code{driver/pocc/include/pocc/driver-cudascheduler.c}.
 @item Call the module exported function the way you want...
 @end itemize
 @*
@@ -740,6 +742,8 @@ $> automake --version
 $> autoconf --version
 $> flex --version
 $> bison --version
+$> git --version
+$> svn --version
 @end example
 @end cartouche
 

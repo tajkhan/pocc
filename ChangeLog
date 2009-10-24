@@ -1,3 +1,7 @@
+2009-10-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* doc/pocc.texi: Minor update of the documentation.
+
 2009-10-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch improves the documentation and polishes the
 	pretty-printing.
