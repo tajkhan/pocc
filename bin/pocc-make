@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Sun May  3 01:34:33 2009 Louis-Noel Pouchet
+## Last update Mon Oct 26 20:55:10 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -224,7 +224,7 @@ sub make
 	if (! defined($config_data{$soft})) {
 	    die "Unkown software $soft. Please update config/configure.cfg\n";
 	}
-	make_soft($soft, $force, $config_data{$soft});
+	make_soft($soft, $force, %{$config_data{$soft}});
     }
 
      print (colored ("[PoCC-make] Done", "green green"), "\n");

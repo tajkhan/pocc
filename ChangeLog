@@ -1,3 +1,15 @@
+2009-10-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/driver-codegen.c: Add fclose calls where needed, to
+	avoid exhausting the number of available file descriptor.
+
+	* config/base/configure.cfg,
+	* config/devel/configure.cfg,
+	* config/irregular/configure.cfg: Specify --with-gmp-prefix for
+	pluto to avoid missing header error when including cloog
+	headers (which require GMP as now cloog-isl-gmp is the defaut
+	generator.
+
 2009-10-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* doc/pocc.texi: Minor update of the documentation.
@@ -21,7 +33,7 @@
 
 	* bin/pocc-util.in: Add command pocc-util buildall, to build the
 	compiler project from the current configuration.
-	
+
 	* bin/pocc-checkout: Fix a bug in checkout-svn method.
 
 	* generators/scripts/inscop: Fix a potential bug in
@@ -29,7 +41,7 @@
 
 	* doc/pocc.texi: Significantly improve the documentation: first
 	write-up of the "Developing with PoCC" section.
-	
+
 2009-10-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* install.sh: Warn that Mac OS 10.5 needs also ABI=32 option.
@@ -38,7 +50,7 @@
 
 2009-08-16  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch fixes some tiny problems in beta-r2.
-	
+
 	* install.sh: Make "ABI=32" optional.
 
 	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
@@ -54,7 +66,7 @@
 
 2009-07-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	Bump to pocc-1.0-beta-r2.
-	
+
 	* install.sh,
 	* driver/src/options.c,
 	* README,

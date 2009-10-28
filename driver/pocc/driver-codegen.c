@@ -211,4 +211,6 @@ pocc_driver_codegen (scoplib_scop_p program,
       printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
   // Restore the default output file.
   poptions->output_file = out_file;
+  // Close the fd.
+  fclose (body_file);
 }
