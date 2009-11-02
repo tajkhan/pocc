@@ -476,7 +476,7 @@ autoskelet-0.1. Then do the following.
 
 @cartouche
 @example
-$> ./make_project.sh cudascheduler /full/path/to/pocc/optimizers
+$> ./make_project.sh cudascheduler /full/path/to/pocc/optimizers/cudascheduler 
 templates/project_bin_static_shared NOTICE.cuda
 @end example
 @end cartouche
@@ -667,7 +667,8 @@ $> cd optimizers/cudascheduler && make install; cd -
 @*
 
 @*
-You have modified something in @code{optimizers/cudascheduler} and in @code{driver/} only:
+You have modified something in @code{optimizers/cudascheduler} and in
+@code{driver/} only:
 
 @cartouche
 @example
@@ -683,6 +684,20 @@ You have modified some modules and/or the driver, but not the configuration:
 @cartouche
 @example
 $> pocc-util buildall
+@end example
+@end cartouche
+
+@*
+
+@*
+You want to work only on one module (possibly just added in
+@code{mode/configure.cfg}) and use the PoCC tools to checkout and
+compile it:
+
+@cartouche
+@example
+$> pocc-util checkout mymodule
+$> pocc-util make mymodule
 @end example
 @end cartouche
 

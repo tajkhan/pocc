@@ -10,6 +10,8 @@
 	headers (which require GMP as now cloog-isl-gmp is the defaut
 	generator.
 
+	* bin/pocc-make: Fix a bug in the pocc-util make xxx invocation.
+
 2009-10-23  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* doc/pocc.texi: Minor update of the documentation.
