@@ -74,7 +74,9 @@ if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
     if [ "$POCC_VERSION" = "stable" ]; then
 	enable_devel="";
     fi;
-    ./configure --exec-prefix=`pwd` --bindir=`pwd`/bin --libdir=`pwd`/driver/install-pocc/lib --includedir=`pwd`/driver/install-pocc/include --datarootdir=`pwd`  --disable-static --enable-shared $enable_devel;
+    ## Warning: must include gmp.h path for the moment into pocc driver.
+    GMPINCFLAGS="CPPFLAGS='-I `pwd`/math/external/install/include'" 
+    eval $GMPINCFLAGS ./configure --exec-prefix=`pwd` --bindir=`pwd`/bin --libdir=`pwd`/driver/install-pocc/lib --includedir=`pwd`/driver/install-pocc/include --datarootdir=`pwd`  --disable-static --enable-shared $enable_devel;
     if [ $? -ne 0 ]; then echo "[PoCC] configure: fatal error"; exit 1; fi;
 fi;
 
