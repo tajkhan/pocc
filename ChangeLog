@@ -1,6 +1,14 @@
+2009-11-07  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	Bump to pocc-1.0-beta-r3.
+
+	* configure.ac,
+	* doc/pocc.texi: Bump to pocc-1.0-beta-r3.
+
+	* driver/pocc/driver-codegen.c: Remove duplicate fdclose.
+
 2009-11-04  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
-	* install.sh: Pass the path to GMP header to the driver 
+	* install.sh: Pass the path to GMP header to the driver
 	configuration.
 
 2009-10-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>

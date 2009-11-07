@@ -7,8 +7,8 @@
 @settitle PoCC - The Polyhedral Compiler Collection package
 
 @set EDITION 0.1
-@set VERSION 1.0-beta-r2
-@set UPDATED July 26th 2009
+@set VERSION 1.0-beta-r3
+@set UPDATED Novembert 7th 2009
 @setchapternewpage odd
 
 
@@ -142,7 +142,7 @@ work properly. It also requires of course a Shell and a working C compiler.
 The development version of PoCC (currently the only one being
 distributed) additionally requires the standard GNU development tools:
 @code{bison}, @code{flex}, reasonably recent version of
-@code{libtool} (1.5.22 at least), @code{autoconf 2.60} or later, @code{automake 1.10} or later, @code{doxygen}, and both a
+@code{libtool} (1.5.22 at least, beware of the libtool/glibtool issue on Mac OSX), @code{autoconf 2.60} or later, @code{automake 1.10} or later, @code{doxygen}, and both a
 @code{subversion} and @code{git} client.
 @*
 
