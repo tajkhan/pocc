@@ -1,4 +1,22 @@
 2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the 'snapshot' command to pocc-util, to create svn
+	or release snapshots of the system. Also allows to create 'stable'
+	and 'local' releases.
+
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Update with the correct http address
+	for modules.
+
+	* config/local/configure.cfg,
+	* config/local/driver.cfg: New. Configuration for self-contained
+	package
+	* bin/pocc-checkout: Add support for local file extraction.
+
+	* bin/pocc-snapshot: Create snapshot scripts.
+
+	* bin/pocc-util.in: Support 'snapshot' command.
+
+2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the option --run-cmd-arg, to provide arguments to
 	the program being iteratively run.
 

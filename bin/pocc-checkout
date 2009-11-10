@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Thu Oct 22 10:07:26 2009 Louis-Noel Pouchet
+## Last update Tue Nov 10 21:24:59 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -45,6 +45,25 @@ sub checkout_wget
 }
 
 
+## Args: soft name, destination directory, url
+sub checkout_local
+{
+    my ($soft, $dir, $url) = @_;
+    print "[PoCC-checkout] Copying $soft (from $url) in $dir...\n";
+    system("mkdir -p $BDIR_CO/$dir/$soft && cp $url $BDIR_CO/$dir/$soft");
+    my @tmp = split(/\//, $url);
+    my $filename = $tmp[$#tmp];
+    if ($filename =~ /.tar.gz$|.tgz$/) {
+	system("cd $BDIR_CO/$dir/$soft && tar xzf $filename");
+    }
+    else {
+	if ($filename =~ /.zip$/) {
+	    system("cd $BDIR_CO/$dir/$soft && unzip $filename");
+	}
+    }
+}
+
+
 ## Args: soft name, destination directory, url, mode
 sub checkout_svn
 {
@@ -65,6 +84,7 @@ sub checkout_soft
     checkout_svn ($soft, $category, $link, $MODE) if ($method =~ /svn/);
     checkout_git ($soft, $category, $link) if ($method =~ /git/);
     checkout_wget ($soft, $category, $link) if ($method =~ /wget/);
+    checkout_wget ($soft, $category, $link) if ($method =~ /local/);
 }
 
 
