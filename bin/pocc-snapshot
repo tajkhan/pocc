@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Nov 10 21:44:37 2009 Louis-Noel Pouchet
+## Last update Tue Nov 10 22:13:10 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -41,7 +41,7 @@ sub snapshot_release
     my ($basedir, $mode) = @_;
     print (colored ("[PoCC-snapshot] Create release snapshot. This takes a while...", "green green"), "\n");
     my $is_local = 0;
-    if ($mode == "local" || $mode == "stable") {
+    if ($mode eq "local" || $mode eq "stable") {
 	$mode = "base";
 	$is_local = 1;
     }
@@ -51,21 +51,25 @@ sub snapshot_release
     ## Build PoCC.
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    system("chmod a+x $basedir/install.sh");
     system("cd $basedir && ./install.sh");
     ## Delete temporary files.
     system("rm -f $basedir/config/*.cfg");
     system("rm -f $basedir/bin/pocc-util");
     ## Change install.sh mode to 'stable' or 'local'.
     my $lmode = "stable";
-    $lmode = "local" if ($is_local eq 1);
+    $lmode = "local" if ($is_local == 1);
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$lmode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    system("chmod a+x $basedir/install.sh");
     ## Make pocc distribution.
+    print ("[PoCC-snapshot] Create standard distribution of PoCC\n");
     system("cd $basedir && make dist");
     ## Extract archives.
     my $poccversion = `grep AC_INIT $basedir/configure.ac | cut -d ',' -f 2`;
     $poccversion =~ s/ |\[|\]|\n//g;
     $poccversion = "pocc-$poccversion";
+    print ("[PoCC-snapshot] Extract standard distribution of PoCC\n");
     system ("cd $basedir && tar xzf $poccversion.tar.gz");
     ## Create archives/ directory.
     system ("cd $basedir/$poccversion && mkdir -p archives");
@@ -89,7 +93,8 @@ sub snapshot_release
 	my $module = $config_data{$softs[$i]}{"module"};
 	$module =~ s/\s//g;
 	my $path = $basedir . "/" . $category . "/" . $module;
-	print("cd $path && make dist\n");
+	print ("[PoCC-snapshot] Create distribution of $category/$module\n");
+	system("cd $path && make dist");
 	my $id;
 	for ($j = 0; $j <= $#stable_softs; $j++) {
 	    $id = $j if ($stable_softs[$j] =~ /$softs[$i]/);
@@ -136,8 +141,9 @@ sub create_snapshot
     ## Update install.sh script with the mode.
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    system("chmod a+x $basedir/install.sh");
     ## Checkout.
-#    system("$basedir/bin/pocc-util checkout");
+    system("$basedir/bin/pocc-util checkout");
     return ($basedir, $snapdir);
 }
 
