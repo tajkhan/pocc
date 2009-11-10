@@ -49,17 +49,19 @@ EXTRA_DIST		=			\
 	README					\
 	gemver.c				\
 	configure.ac				\
-	bin/pocc-util				\
 	bin/pocc-util.in			\
 	bin/pocc-alternate			\
 	bin/pocc-checkout			\
 	bin/pocc-make				\
+	bin/pocc-checkout			\
 	config/base/configure.cfg		\
 	config/base/driver.cfg			\
 	config/devel/configure.cfg		\
 	config/devel/driver.cfg			\
 	config/irregular/configure.cfg		\
 	config/irregular/driver.cfg		\
+	config/local/configure.cfg		\
+	config/local/driver.cfg			\
 	config/stable/configure.cfg		\
 	config/stable/driver.cfg		\
 	generators/scripts/annotations.tar.gz	\

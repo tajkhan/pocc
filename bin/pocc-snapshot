@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Nov 10 22:13:10 2009 Louis-Noel Pouchet
+## Last update Tue Nov 10 23:04:00 2009 Louis-Noel Pouchet
 ##
 
 use Switch;
@@ -28,11 +28,14 @@ sub snapshot_svn
     my $newbasedirbase = $newbasedir;
     $newbasedir =~ s/\/$snapdir//g;
     system("rm -f $newbasedir/$snapdir.tar.gz");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     system("cd $newbasedir && tar czf $snapdir.tar.gz $snapdir");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     print (colored ("[PoCC-snapshot] Snapshot snapshots/$snapdir.tar.gz created", "green green"), "\n");
     ## Delete temporary files.
     system("rm -f $newbasedirbase/config/*.cfg");
     system("rm -f $newbasedirbase/bin/pocc-util");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
 }
 
 
@@ -50,29 +53,37 @@ sub snapshot_release
     $basedir = $newbasedir;
     ## Build PoCC.
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
     system("chmod a+x $basedir/install.sh");
-    system("cd $basedir && ./install.sh");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+#    system("cd $basedir && ./install.sh");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Delete temporary files.
     system("rm -f $basedir/config/*.cfg");
     system("rm -f $basedir/bin/pocc-util");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Change install.sh mode to 'stable' or 'local'.
     my $lmode = "stable";
     $lmode = "local" if ($is_local == 1);
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$lmode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
     system("chmod a+x $basedir/install.sh");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Make pocc distribution.
     print ("[PoCC-snapshot] Create standard distribution of PoCC\n");
-    system("cd $basedir && make dist");
+#    system("cd $basedir && make dist");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Extract archives.
     my $poccversion = `grep AC_INIT $basedir/configure.ac | cut -d ',' -f 2`;
     $poccversion =~ s/ |\[|\]|\n//g;
     $poccversion = "pocc-$poccversion";
     print ("[PoCC-snapshot] Extract standard distribution of PoCC\n");
     system ("cd $basedir && tar xzf $poccversion.tar.gz");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Create archives/ directory.
     system ("cd $basedir/$poccversion && mkdir -p archives");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Retrieve data to build.
     my %config_data = read_config_file("$basedir/config/$mode/configure.cfg");
     my %config_driver = read_config_file("$basedir/config/$mode/driver.cfg");
@@ -94,27 +105,33 @@ sub snapshot_release
 	$module =~ s/\s//g;
 	my $path = $basedir . "/" . $category . "/" . $module;
 	print ("[PoCC-snapshot] Create distribution of $category/$module\n");
-	system("cd $path && make dist");
+#	system("cd $path && make dist");
+	die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
 	my $id;
 	for ($j = 0; $j <= $#stable_softs; $j++) {
 	    $id = $j if ($stable_softs[$j] =~ /$softs[$i]/);
 	}
 	my $archivename = $stable_softs[$id] . ".tar.gz";
 	system("cp $path/$archivename $basedir/$poccversion/archives");
+	die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     }
     ## Create the final archive.
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     $year += 1900;
     $mon++;
     my $date = $year . $mon . $mday;
-    system("mv $basedir/$poccversion $basedir/$poccversion-$date");
-    system("cd $basedir/ && tar -czf $poccversion-$date.tar.gz $poccversion-$date");
-    system("mv $basedir/$poccversion-$date.tar.gz $base_basedir/snapshots");
+    system("cd $basedir && mv $poccversion $poccversion-$date-full");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    system("cd $basedir && tar -czf $poccversion-$date-full.tar.gz $poccversion-$date-full");
+     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+     system("mv $basedir/$poccversion-$date-full.tar.gz $base_basedir/snapshots");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Clean...
     system("rm -rf $basedir");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
 
     ## All done.
-    print (colored ("[PoCC-snapshot] Release snapshots/$snapdir.tar.gz created", "green green"), "\n");
+    print (colored ("[PoCC-snapshot] Release snapshots/$poccversion-$date-full.tar.gz was created", "green green"), "\n");
 
 }
 
