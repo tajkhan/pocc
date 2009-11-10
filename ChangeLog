@@ -1,5 +1,12 @@
 2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* config/local/configure.cfg: Fix incorrect retrieve method.
+
+	* bin/pocc-snapshot,
+	* bin/pocc-checkout: Fixes.
+
+2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* bin/pocc-snapshot: Update.
 	* Makefile.am: Add missing files.
 
