@@ -37,6 +37,7 @@ pocc_options_malloc ()
   ret->quiet = 0;
   ret->compile_command = NULL;
   ret->compile_program = 0;
+  ret->execute_command_args = NULL;
   ret->execute_program = 0;
   ret->program_exec_result = NULL;
   ret->clan_bounded_context = 0;
@@ -117,6 +118,8 @@ pocc_options_free (s_pocc_options_t* options)
     XFREE(options->letsee_scheme_m1);
   if (options->compile_command)
     XFREE(options->compile_command);
+  if (options->execute_command_args)
+    XFREE(options->execute_command_args);
   if (options->program_exec_result)
     XFREE(options->program_exec_result);
 

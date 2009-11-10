@@ -53,6 +53,7 @@ struct s_pocc_options
   int		compile_program; // Internal field
   char*		compile_command;
   int		execute_program;
+  char*		execute_command_args;
   char*		program_exec_result; // Internal field
 
   // LetSee Options.

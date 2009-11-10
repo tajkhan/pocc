@@ -1,0 +1,4 @@
+#! /bin/sh
+
+# syntax: execute <program and args>
+$@

@@ -66,7 +66,7 @@ static
 int
 pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 {
-  char* args[9];
+  char* args[10];
   args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
   args[1] = poptions->input_file_name;
   args[2] = ".body.c";
@@ -121,9 +121,14 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
       if (poptions->codegen_timer_asm || poptions->codegen_timercode)
 	strcat (buffer, " -DTIME");
       args[offset + 2] = buffer;
-      args[offset + 3] = strdup (poptions->output_file_name);
-      // Remove the .c extension.
-      args[offset + 3][strlen(args[offset + 3]) - 2] = '\0';
+      args[offset + 3] = XMALLOC(char, strlen (poptions->output_file_name) + 2);
+      strcpy (args[offset + 3], poptions->output_file_name);
+      // Remove the .xxx extension, if any.
+      int pos = strlen (args[offset + 3]) - 1;
+      while (args[offset + 3][pos] != '.' && --pos)
+	;
+      if (pos != 0)
+	args[offset + 3][pos] = '\0';
       args[offset + 4] = NULL;
 
       char* res = pocc_exec_string_noexit (args, mode);
@@ -150,10 +155,22 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 	  args[3] = strdup (buffer);
 	  offset = 4;
 	}
-      args[offset] = XMALLOC(char, strlen (poptions->output_file_name) + 3);
+      args[offset] = STR_POCC_ROOT_DIR "/generators/scripts/execute";
+      ++offset;
+      int len = strlen (poptions->output_file_name) + 5;
+      if (poptions->execute_command_args != NULL)
+	len += strlen (poptions->execute_command_args);
+      args[offset] = XMALLOC(char, len);
       strcpy (args[offset], "./");
       strcat (args[offset], poptions->output_file_name);
-      args[offset][strlen(args[offset]) - 2] = '\0';
+      int pos = strlen (args[offset]) - 1;
+      while (args[offset][pos] != '.' && --pos)
+	;
+      if (pos != 0)
+	args[offset][pos] = '\0';
+      strcat (args[offset], " ");
+      if (poptions->execute_command_args != NULL)
+	strcat (args[offset], poptions->execute_command_args);
       args[offset + 1] = NULL;
       if (! poptions->quiet)
 	{

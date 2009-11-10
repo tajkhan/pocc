@@ -319,6 +319,7 @@ These are the available options for PoCC.
 @item @code{--codegen-timer-asm} Codegen: insert ASM timer code [off]
 @item @code{-c}, @code{--compile} Compile program with C compiler [off]
 @item @code{--compile-cmd <arg>} Compilation command [gcc -O3 -lm]
+@item @code{--run-cmd-args <arg>} Program execution arguments []
 @item @code{--prog-timeout} Timeout for compilation and execution of a single version, in second [unliminted]
 @c @item --codegen-timer-papi: Codegen: insert PAPI timer code [off]
 @end itemize
@@ -476,7 +477,7 @@ autoskelet-0.1. Then do the following.
 
 @cartouche
 @example
-$> ./make_project.sh cudascheduler /full/path/to/pocc/optimizers/cudascheduler 
+$> ./make_project.sh cudascheduler /full/path/to/pocc/optimizers/cudascheduler
 templates/project_bin_static_shared NOTICE.cuda
 @end example
 @end cartouche

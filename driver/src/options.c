@@ -69,6 +69,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
   { 'c', "compile", 0, "\tCompile program with C compiler [off]" },
   { '\0', "compile-cmd", 1, "Compilation command [gcc -O3 -lm]" },
+  { '\0', "run-cmd-args", 1, "Program execution arguments []" },
   { '\0', "prog-timeout", 1, "Timeout for compilation and execution, in second\n\t\t\t\t[unlimited]" }
 
 };
@@ -382,6 +383,9 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     }
   else
     options->compile_command = strdup ("gcc -O3 -lm");
+  // Execution command arguments.
+  if (opt_tab[POCC_OPT_RUN_CMD_ARGS])
+    options->execute_command_args = strdup (opt_tab[POCC_OPT_RUN_CMD_ARGS]);
 
   if (opt_tab[POCC_OPT_LETSEE_DRY_RUN])
     {

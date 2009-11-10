@@ -1,4 +1,20 @@
 2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the option --run-cmd-arg, to provide arguments to
+	the program being iteratively run.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Create option --run-cmd-arg.
+	* doc/pocc.texi: Update documentation with the new option.
+
+	* driver/pocc/driver-codegen.c: Optionally provide arguments to
+	the executed program.
+
+	* generators/scripts/execute: New. Dummy script to execute a
+	program.
+
+2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/exec.c: Improve the verbosity in error output.
 
