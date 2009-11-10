@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Sat Jul 18 16:57:09 2009 Louis-Noel Pouchet
-## Last update Sun Aug 16 19:08:59 2009 Louis-Noel Pouchet
+## Last update Tue Nov 10 17:01:38 2009 Louis-Noel Pouchet
 ##
 
 
@@ -32,11 +32,11 @@ for i in $TEST_FILES; do
     z=`diff --ignore-matching-lines='CLooG' --ignore-blank-lines $TESTS_PREFIX/$outfile.test.c $TESTS_PREFIX/$outfile.c 2>&1`
     err=`cat /tmp/poccout | grep -v "\[CLooG\] INFO:"`;
     if ! [ -z "$z" ]; then
-	echo -e "\033[31m[FAIL] PoCC -> generated codes are different\033[0m";
+	echo "\033[31m[FAIL] PoCC -> generated codes are different\033[0m";
 	outtemp=1;
 	output=1;
     elif ! [ -z "$err" ]; then
-	echo -e "\033[31m[FAIL] PoCC -> stderr output: $err\033[0m";
+	echo "\033[31m[FAIL] PoCC -> stderr output: $err\033[0m";
 	outtemp=1;
 	output=1;
     fi;
@@ -54,7 +54,7 @@ for i in $TEST_FILES; do
 	ret=0;
     fi;
     if ! [ "$?" -eq 0 ]; then
-	echo -e "\033[31m[FAIL] PoCC -> generated file does not compile\033[0m";
+	echo  "\033[31m[FAIL] PoCC -> generated file does not compile\033[0m";
 	outtemp=1;
 	output=1;
     else
@@ -65,8 +65,8 @@ for i in $TEST_FILES; do
     fi;
     rm -f $TESTS_PREFIX/a.out;
 done
-if [ $output = "1" ]; then
-    echo -e "\033[31m[FAIL] $1\033[0m";
+if [ "$output" -eq 1 ]; then
+    echo "\033[31m[FAIL] $1\033[0m";
 else
     echo "[PASS] $1";
 fi

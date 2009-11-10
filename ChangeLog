@@ -1,3 +1,12 @@
+2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/exec.c: Improve the verbosity in error output.
+
+	* tests/scripts/checker.sh,
+	* generators/scripts/inscop: Remove trailing -e in output.
+
+	* doc/pocc.texi: Fix typo in doc.
+
 2009-11-07  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	Bump to pocc-1.0-beta-r3.
 

@@ -1,4 +1,4 @@
 - bug polylib autoconf (workaround found)
 - config-inherits
 - mode for local archive
-- --clean opt to remove pocc-generated files.
+- change bin/bash to bin/sh for plann and vloog

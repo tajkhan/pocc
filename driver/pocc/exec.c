@@ -65,11 +65,23 @@ pocc_execprog_ (char** args, int return_result, int show_output, int noexit)
       wait (&rv);
       if (rv != 0)
 	{
+	  char* err_type;
+	  if (noexit)
+	    err_type = "WARNING:";
+	  else
+	    err_type = "FATAL:";
+	  fprintf (stderr, "[PoCC] %s error executing ", err_type);
+	  for (i = 0; args[i]; ++i)
+	    fprintf (stderr, "%s ", args[i]);
+	  fprintf (stderr, "\n");
+	  if (strlen (buf) != 0)
+	    fprintf (stderr, "[PoCC] %s execv output: %s\n", err_type, buf);
+	  else
+	    fprintf (stderr, "[PoCC] %s command is not executable\n",
+		     err_type);
+	  fprintf (stderr, "[PoCC] %s execv exit status: %d\n", err_type, rv);
 	  if (! noexit)
-	    {
-	      printf ("exit status: %d\n", rv);
-	      exit (rv);
-	    }
+	    exit (rv);
 	  else
 	    return NULL;
 	}
@@ -79,10 +91,11 @@ pocc_execprog_ (char** args, int return_result, int show_output, int noexit)
     {
       // Child.
       dup2 (commpipe[1], 1);
+      dup2 (commpipe[1], 2);
       close (commpipe[0]);
       if (execvp (args[0], args) == -1)
 	{
-	  fprintf (stderr, "execv Error.\n");
+	  // fprintf (stderr, "execv Error.\n");
 	  exit (1);
 	}
       close (commpipe[1]);
