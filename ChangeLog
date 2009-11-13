@@ -1,4 +1,10 @@
 2009-11-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	Bump to 1st release candidate of PoCC (pocc-1.0-rc1).
+
+	* configure.ac,
+	* doc/pocc.texi: Bump to pocc-1.0-rc1.
+
+2009-11-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch updates the license of PoCC files to LGPL 2.1+.
 
 	* driver/pocc-utils/include/pocc-utils/options.h,
