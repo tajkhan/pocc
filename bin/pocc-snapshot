@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:17:35 2009 Louis-Noel Pouchet
+## Last update Fri Nov 13 01:30:46 2009 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -81,7 +81,7 @@ sub snapshot_release
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
     system("chmod a+x $basedir/install.sh");
     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-#    system("cd $basedir && ./install.sh");
+    system("cd $basedir && ./install.sh");
     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Delete temporary files.
     system("rm -f $basedir/config/*.cfg");
