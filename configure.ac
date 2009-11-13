@@ -5,13 +5,18 @@ dnl PoCC, the Polyhedral Compiler Collection package
 dnl
 dnl Copyright (C) 2009 Louis-Noel Pouchet
 dnl
-dnl This program is free software; you can redistribute it and/or
-dnl modify it under the terms of the GNU General Public License
-dnl as published by the Free Software Foundation; either version 2
+dnl This library is free software; you can redistribute it and/or
+dnl modify it under the terms of the GNU Lesser General Public License
+dnl as published by the Free Software Foundation; either version 2.1
 dnl of the License, or (at your option) any later version.
+dnl 
+dnl This library is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+dnl Lesser General Public License for more details.
 dnl
 dnl The complete GNU General Public Licence Notice can be found as the
-dnl `COPYING' file in the root directory.
+dnl `COPYING.LESSER' file in the root directory.
 dnl
 dnl Author:
 dnl Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>

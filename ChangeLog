@@ -1,3 +1,49 @@
+2009-11-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch updates the license of PoCC files to LGPL 2.1+.
+
+	* driver/pocc-utils/include/pocc-utils/options.h,
+	* driver/pocc-utils/include/pocc-utils/types.h,
+	* driver/pocc-utils/Makefile.am,
+	* driver/pocc-utils/options.c,
+	* driver/pocc/xmalloc.c,
+	* driver/pocc/include/pocc/error.h,
+	* driver/pocc/include/pocc/driver-candl.h,
+	* driver/pocc/include/pocc/driver-letsee.h,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/include/pocc/driver-cloog.h,
+	* driver/pocc/include/pocc/driver-pluto.h,
+	* driver/pocc/include/pocc/driver-codegen.h,
+	* driver/pocc/include/pocc/exec.h,
+	* driver/pocc/include/pocc/driver-clan.h,
+	* driver/pocc/include/pocc/common.h,
+	* driver/pocc/exec.c,
+	* driver/pocc/driver-clan.c,
+	* driver/pocc/Makefile.am,
+	* driver/pocc/error.c,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/options.h,
+	* driver/src/pocc.c,
+	* driver/src/getopts.c,
+	* driver/src/Makefile.am,
+	* driver/src/getopts.h,
+	* driver/src/options.c,
+	* tests/Makefile.am,
+	* configure.ac,
+	* doc/Makefile.am,
+	* bin/pocc-make,
+	* bin/pocc-alternate,
+	* bin/pocc-snapshot,
+	* bin/pocc-util.in,
+	* bin/pocc-checkout,
+	* Makefile.am: Change / set license to LGPL 2.1+.
+
+	* COPYING.LESSER: New. Copyright for LGPL 2.1.
+
 2009-11-10  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* config/local/configure.cfg: Fix incorrect retrieve method.

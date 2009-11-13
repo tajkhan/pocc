@@ -106,8 +106,8 @@ There is a Doxygen documentation of the API available in
 @code{doc/htmldoc.tar.gz}.
 
 @*
-@b{License}: PoCC is released under the terms of the GNU General
-Public License version 2 and later. The software it uses is released
+@b{License}: PoCC is released under the terms of the GNU Lesser General
+Public License version 2.1 and later. The software it uses is released
 under the terms of the GNU GPL v2 or later, and GNU Lesser GPL v2 or later.
 @*
 
