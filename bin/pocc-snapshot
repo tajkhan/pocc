@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:54:49 2009 Louis-Noel Pouchet
+## Last update Fri Nov 13 01:55:45 2009 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -76,8 +76,6 @@ sub snapshot_release
     my ($newbasedir, $snapdir) = create_snapshot($basedir, $mode, "release");
     $basedir = $newbasedir;
     ## Build PoCC.
-    print "mode: $mode\n";
-    exit 1;
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
