@@ -1,4 +1,9 @@
 2009-11-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* bin/pocc-checkout: Fix.
+	* config/stable/configure.cfg: Fix wrong download path.
+
+2009-11-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	Bump to 1st release candidate of PoCC (pocc-1.0-rc1).
 
 	* configure.ac,

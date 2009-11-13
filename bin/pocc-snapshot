@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:30:46 2009 Louis-Noel Pouchet
+## Last update Fri Nov 13 01:54:49 2009 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -76,6 +76,8 @@ sub snapshot_release
     my ($newbasedir, $snapdir) = create_snapshot($basedir, $mode, "release");
     $basedir = $newbasedir;
     ## Build PoCC.
+    print "mode: $mode\n";
+    exit 1;
     system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
@@ -97,6 +99,11 @@ sub snapshot_release
     ## Make pocc distribution.
     print ("[PoCC-snapshot] Create standard distribution of PoCC\n");
     system("cd $basedir && make dist");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    ## Revert to initial mode.
+    system("sed -e 's/POCC_MODE=\".*\";/POCC_MODE=\"base\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
+    system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    system("chmod a+x $basedir/install.sh");
     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Extract archives.
     my $poccversion = `grep AC_INIT $basedir/configure.ac | cut -d ',' -f 2`;
