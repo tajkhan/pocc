@@ -1,5 +1,5 @@
 /*
- * driver-cloog.h: this file is part of the PoCC project.
+ * driver-clastops.c: this file is part of the PoCC project.
  *
  * PoCC, the Polyhedral Compiler Collection package
  *
@@ -22,35 +22,24 @@
  * Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
  *
  */
-#ifndef POCC_DRIVER_CLOOG_H
-# define POCC_DRIVER_CLOOG_H
+#if HAVE_CONFIG_H
+# include <pocc-utils/config.h>
+#endif
 
-# include <stdio.h>
-
-# if HAVE_CONFIG_H
-#  include <pocc-utils/config.h>
-# endif
-
-# include <pocc/common.h>
-# include <pocc-utils/options.h>
-# include <pocc/options.h>
-
-# ifndef SCOPLIB_INT_T_IS_LONGLONG
-#  define SCOPLIB_INT_T_IS_LONGLONG
-# endif
-# include <scoplib/scop.h>
+# define CLOOG_SUPPORTS_SCOPLIB
+# include <cloog/cloog.h>
+# include <cloog/clast.h>
+# include <pocc/driver-clastops.h>
 
 
-BEGIN_C_DECLS
-
-extern
 void
-pocc_driver_cloog (scoplib_scop_p program,
-		   s_pocc_options_t* poptions,
-		   s_pocc_utils_options_t* puoptions);
-
-
-END_C_DECLS
-
-
-#endif // POCC_DRIVER_CLOOG_H
+pocc_driver_clastops (scoplib_scop_p program,
+		      CloogProgram* cp,
+		      s_pocc_options_t* poptions,
+		      s_pocc_utils_options_t* puoptions)
+{
+  CloogOptions* coptions = poptions->cloog_options;
+  struct clast_stmt* root = cloog_clast_create (cp, coptions);
+  clast_pprint (poptions->output_file, root, 0, coptions);
+  cloog_clast_free (root);
+}

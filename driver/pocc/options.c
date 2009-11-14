@@ -107,6 +107,7 @@ pocc_options_init_cloog (s_pocc_options_t* options)
 /*   options->cloog_codegen = (void*) cloog_program_generate; */
 }
 
+
 void
 pocc_options_free (s_pocc_options_t* options)
 {

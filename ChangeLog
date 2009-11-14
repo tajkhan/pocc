@@ -1,3 +1,24 @@
+2009-11-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch removes the driver-cloog, and explicitely call the
+	polyhedral code generation process from within driver-codegen. It
+	also creates driver-clastops, to separate Clast post-processing
+	operations.
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/driver-clastops.h: New. Driver for the
+	Clast related operations (CloogProgram to Clast conversion, and
+	pretty print). Placeholder for future syntactic Clast
+	transformations modules.
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/include/pocc/driver-cloog.h: Delete. Merged in
+	driver-codegen, and cloog_program_generate is substituted by the
+	clast pprint functions in driver-clastops.
+	* driver/pocc/Makefile.am: Update accordingly.
+
+	* driver/pocc/driver-codegen.c: Update with the new pass, and
+	insert former code from driver-cloog (was indeed codegen related
+	but not cloog specific).
+
 2009-11-13  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* bin/pocc-checkout: Fix.

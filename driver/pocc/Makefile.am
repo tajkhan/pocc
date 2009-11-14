@@ -58,16 +58,16 @@ INCLUDES		=					\
 
 #############################################################################
 
-pkginclude_HEADERS 	=				\
-		          include/pocc/common.h		\
-		          include/pocc/driver-clan.h	\
-		          include/pocc/driver-candl.h	\
-		          include/pocc/driver-letsee.h	\
-		          include/pocc/driver-cloog.h	\
-		          include/pocc/driver-codegen.h	\
-		          include/pocc/driver-pluto.h	\
-		          include/pocc/error.h		\
-		          include/pocc/exec.h		\
+pkginclude_HEADERS 	=					\
+		          include/pocc/common.h			\
+		          include/pocc/driver-clan.h		\
+		          include/pocc/driver-candl.h		\
+		          include/pocc/driver-letsee.h		\
+		          include/pocc/driver-clastops.h	\
+		          include/pocc/driver-codegen.h		\
+		          include/pocc/driver-pluto.h		\
+		          include/pocc/error.h			\
+		          include/pocc/exec.h			\
 		          include/pocc/options.h
 
 lib_LTLIBRARIES 	= libpocc.la
@@ -78,7 +78,7 @@ libpocc_la_SOURCES 	=			\
 			  driver-candl.c	\
 			  driver-letsee.c	\
 			  driver-pluto.c	\
-			  driver-cloog.c	\
+			  driver-clastops.c	\
 			  driver-codegen.c	\
 			  error.c		\
 			  exec.c		\

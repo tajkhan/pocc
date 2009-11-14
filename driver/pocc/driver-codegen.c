@@ -26,6 +26,8 @@
 # include <pocc-utils/config.h>
 #endif
 
+# define CLOOG_SUPPORTS_SCOPLIB
+# include <cloog/cloog.h>
 # include <pocc/driver-codegen.h>
 
 
@@ -202,6 +204,21 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 }
 
 
+/**
+ *  Generate code for transformed scop.
+ *
+ * (1) Create fake tile iterators inside the .scop: polyhedral
+ *     tiling performed by Pluto does not update the iterators list.
+ * (2) Generate statement macros.
+ * (3) Convert the .scop to CloogProgram structure.
+ * (4) Generate declaration for the new iterators.
+ * (5) Generate polyhedral scanning code with CLooG algorithm
+ * (6) Call pocc_driver_clastops, to generate AST-based code and
+ *     pretty-print it.
+ * (7) Final post-processing using PoCC internal scripts (timer
+ *     code, unrolling, etc.) and full code generation.
+ *
+ */
 void
 pocc_driver_codegen (scoplib_scop_p program,
 		     s_pocc_options_t* poptions,
@@ -209,19 +226,102 @@ pocc_driver_codegen (scoplib_scop_p program,
 {
   if (! poptions->quiet)
     printf ("[PoCC] Starting Codegen\n");
-  // Backup the default output file.
+  /* Backup the default output file. */
   FILE* out_file = poptions->output_file;
   FILE* body_file = fopen (".body.c", "w");
   if (body_file == NULL)
     pocc_error ("Cannot create file .body.c\n");
-
-  // Generate kernel code.
   poptions->output_file = body_file;
-  pocc_driver_cloog (program, poptions, puoptions);
+
+  /* (1) Update statement iterators with tile iterators. */
+  scoplib_statement_p stm;
+  int i;
+  for (stm = program->statement; stm; stm = stm->next)
+    {
+      int nb_it = stm->domain->elt->NbColumns - program->context->NbColumns;
+
+      if (stm->nb_iterators != nb_it)
+	{
+	  char** iters = XMALLOC(char*, nb_it);
+	  for (i = 0; i < nb_it - stm->nb_iterators; ++i)
+	    {
+	      iters[i] = XMALLOC(char, 16);
+	      sprintf (iters[i], "fk%d", i);
+	    }
+	  for (; i < nb_it; ++i)
+	    iters[i] = stm->iterators[i - nb_it + stm->nb_iterators];
+	  XFREE(stm->iterators);
+	  stm->iterators = iters;
+	  stm->nb_iterators = nb_it;
+	}
+    }
+
+  /* (2) Generate statements macros. */
+  int st_count = 1;
+  for (stm = program->statement; stm; stm = stm->next)
+    {
+      fprintf (body_file, "#define S%d(", st_count++);
+      for (i = 0; i < stm->nb_iterators; ++i)
+	{
+	  fprintf (body_file, "%s", stm->iterators[i]);
+	  if (i < stm->nb_iterators - 1)
+	    fprintf (body_file, ",");
+	}
+      fprintf (body_file, ") %s\n", stm->body);
+    }
+
+  /* (3) Create a CloogProgram from the .scop. */
+  CloogOptions* coptions = poptions->cloog_options;
+  if (coptions == NULL)
+    {
+      CloogState* cstate = cloog_state_malloc ();
+      poptions->cloog_options = coptions = cloog_options_malloc (cstate);
+    }
+  coptions->language = 'c';
+  CloogProgram* cp = cloog_program_scop_to_cloogprogram (program, coptions);
+
+  /* (4) Generate loop counters. */
+  fprintf (body_file,
+	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
+  int done = 0;
+  for (i = 0; i < cp->nb_scattdims; ++i)
+    {
+      /// FIXME: Deactivate this, as pluto may generate OpenMP pragmas
+      /// using some unused variables. We'll let the compiler remove useless
+      /// variables.
+      if (cp->scaldims[i] == 0 || 1)
+	{
+	  if (! done++)
+	    fprintf (body_file, "\t register int ");
+	  else
+	    fprintf (body_file, ", ");
+	  fprintf(body_file, "c%d, c%dt, newlb_c%d, newub_c%d", i, i, i, i);
+	}
+    }
+  fprintf (body_file, ";\n\n");
+
+  /* (5) Generate polyhedral scanning code with CLooG. */
+  /* Store the .scop corresponding to the input program. */
+  cp->scop = program;
+  if (poptions->cloog_f != POCC_CLOOG_UNDEF)
+    coptions->f = poptions->cloog_f;
+  if (poptions->cloog_l != POCC_CLOOG_UNDEF)
+    coptions->l = poptions->cloog_l;
+  if (! poptions->quiet)
+    printf ("[PoCC] Running CLooG\n");
+  cp = cloog_program_generate (cp, coptions);
+
+  /* (6) Call Clast pretty-print and post-processing. */
+  fprintf (body_file, "#pragma scop\n");
+  pocc_driver_clastops (program, cp, poptions, puoptions);
+  fprintf (body_file, "#pragma endscop\n");
+  /* Clean CLooG specific variables. */
+  cloog_program_free (cp);
   fclose (poptions->output_file);
-  // Perform syntactic post-processing.
+  /* Perform PoCC-specific syntactic post-processing. */
   pocc_driver_codegen_post_processing (body_file, poptions);
-  // Build the final output file.
+
+  /* (7) Build the final output file template. */
   if (pocc_driver_codegen_program_finalize (poptions) == EXIT_FAILURE)
     {
       if (! poptions->quiet)
@@ -231,6 +331,6 @@ pocc_driver_codegen (scoplib_scop_p program,
   else
     if (! poptions->quiet)
       printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
-  // Restore the default output file.
+  /* Restore the default output file. */
   poptions->output_file = out_file;
 }
