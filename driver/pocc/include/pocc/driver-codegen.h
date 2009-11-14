@@ -34,7 +34,6 @@
 # include <pocc/common.h>
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
-# include <pocc/driver-cloog.h>
 # include <pocc/exec.h>
 
 # ifndef SCOPLIB_INT_T_IS_LONGLONG
