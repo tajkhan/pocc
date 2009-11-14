@@ -1,4 +1,9 @@
 2009-11-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/include/pocc/driver-letsee.h,
+	* driver/src/pocc.c: Fixes.
+
+2009-11-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch removes the driver-cloog, and explicitely call the
 	polyhedral code generation process from within driver-codegen. It
 	also creates driver-clastops, to separate Clast post-processing

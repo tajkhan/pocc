@@ -35,7 +35,7 @@
 #include <pocc/driver-letsee.h>
 #include <pocc/driver-pluto.h>
 #include <pocc/driver-codegen.h>
-#include <pocc/driver-cloog.h>
+#include <pocc/driver-clastops.h>
 #include <pocc/exec.h>
 
 
