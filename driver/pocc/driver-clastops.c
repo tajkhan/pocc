@@ -39,6 +39,10 @@ pocc_driver_clastops (scoplib_scop_p program,
 		      s_pocc_utils_options_t* puoptions)
 {
   CloogOptions* coptions = poptions->cloog_options;
+
+  /* The following code can be substituted with:
+   *  cloog_program_pprint (body_file, cp, coptions);
+  */
   struct clast_stmt* root = cloog_clast_create (cp, coptions);
   clast_pprint (poptions->output_file, root, 0, coptions);
   cloog_clast_free (root);
