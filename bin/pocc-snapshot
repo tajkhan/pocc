@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:55:45 2009 Louis-Noel Pouchet
+## Last update Sun Nov 15 05:39:46 2009 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -149,6 +149,8 @@ sub snapshot_release
     $year += 1900;
     $mon++;
     my $date = $year . $mon . $mday;
+    system("if [ -d \"$basedir/$poccversion-$date-full\" ]; then rm -rf $basedir/$poccversion-$date-full; fi");
+    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     system("cd $basedir && mv $poccversion $poccversion-$date-full");
     die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     system("cd $basedir && tar -czf $poccversion-$date-full.tar.gz $poccversion-$date-full");
