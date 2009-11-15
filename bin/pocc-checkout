@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:17:16 2009 Louis-Noel Pouchet
+## Last update Sun Nov 15 05:31:45 2009 Louis-Noel Pouchet
 ##
 #
 # pocc-checkout: this file is part of the PoCC project.
@@ -40,12 +40,13 @@ $CONFIG_DRIVER = "";
 $BDIR_CO = ".";
 $MODE = "";
 
+
 ## Args: soft name, destination directory, url
 sub checkout_git
 {
     my ($soft, $dir, $url) = @_;
-    print "[PoCC-checkout] Git cloning $soft (from $url) in $dir...\n";
-    system("git clone $url $BDIR_CO/$dir/$soft");
+    print "[PoCC-checkout] Git cloning/updating $soft (from $url) in $dir...\n";
+    system("if [ -d \"$BDIR_CO/$dir/$soft/.git\" ]; then cd $BDIR_CO/$dir/$soft && git pull; else git clone $url $BDIR_CO/$dir/$soft; fi");
 }
 
 
@@ -54,15 +55,15 @@ sub checkout_wget
 {
     my ($soft, $dir, $url) = @_;
     print "[PoCC-checkout] Wgetting $soft (from $url) in $dir...\n";
-    system("mkdir -p $BDIR_CO/$dir/$soft && cd $BDIR_CO/$dir/$soft && wget $url");
+    system("mkdir -p $BDIR_CO/$dir && cd $BDIR_CO/$dir && wget $url");
     my @tmp = split(/\//, $url);
     my $filename = $tmp[$#tmp];
     if ($filename =~ /.tar.gz$|.tgz$/) {
-	system("cd $BDIR_CO/$dir/$soft && tar xzf $filename");
+	system("cd $BDIR_CO/$dir && tar xzf $filename");
     }
     else {
 	if ($filename =~ /.zip$/) {
-	    system("cd $BDIR_CO/$dir/$soft && unzip $filename");
+	    system("cd $BDIR_CO/$dir && unzip $filename");
 	}
     }
 }
@@ -98,6 +99,7 @@ sub checkout_svn
     $svn_options = $ENV{'SVN_OPTIONS'} if (defined($ENV{'SVN_OPTIONS'}));
     system("svn co $svnuser $svn_options $url $BDIR_CO/$dir/$soft");
 }
+
 
 ## Args: destination directory (category), soft name, retrieve-method, location
 sub checkout_soft
