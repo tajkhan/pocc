@@ -53,6 +53,7 @@ struct s_pocc_options
 
   // Parser options.
   int		clan_bounded_context;
+  int		inscop_fakepoccarray;
 
   // Compile command.
   int		compile_program; // Internal field

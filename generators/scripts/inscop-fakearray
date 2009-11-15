@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# arguments
+# inscop <original> <transformed_kernel> <output_file>
+
+MAXLINES=`wc -l $1 | awk '{print $1}'`
+
+echo "#include <math.h>" > .head
+grep -B $MAXLINES "#pragma[[:space:]]\+scop" $1 | grep -v "#pragma[[:space:]]\+scop" >> .head
+grep -A $MAXLINES "#pragma[[:space:]]\+endscop" $1 | grep -v "#pragma[[:space:]]\+endscop" > .tail
+
+# Preprocessor doesn't like pragma's in #defines and so it was not put in from pluto
+# when '--bee' was used - instead we will add it here
+gcc -E -P -CC $2 | sed -e 's/_NL_DELIMIT_/\n/' | sed -e 's/;;/;/g' | sed -e "s/FAKEPOCC.*=//g" > __tmp
+cat .tail >> __tmp
+
+echo "#define ceild(n,d)  ceil(((double)(n))/((double)(d)))" >> .head
+echo "#define floord(n,d) floor(((double)(n))/((double)(d)))" >> .head
+echo "#define max(x,y)    ((x) > (y)? (x) : (y))" >> .head
+echo -e "#define min(x,y)    ((x) < (y)? (x) : (y))\n" >> .head
+
+cat .head __tmp > $3
+
+rm -f .head .tail __tmp .opt.cloog .pluto.c .fst .unroll .pragmas .vectorize .body.c

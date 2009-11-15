@@ -1,4 +1,4 @@
 - bug polylib autoconf (workaround found)
 - config-inherits
-- mode for local archive
 - change bin/bash to bin/sh for plann and vloog
+- check that checkout correctly updates for git, and don't overwrite for wget

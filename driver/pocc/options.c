@@ -46,6 +46,7 @@ pocc_options_malloc ()
   ret->execute_program = 0;
   ret->program_exec_result = NULL;
   ret->clan_bounded_context = 0;
+  ret->inscop_fakepoccarray = 0;
 
   ret->cloog_options = NULL;
 

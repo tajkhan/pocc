@@ -1,3 +1,21 @@
+2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the option --inscop-fakearray. When enabled, every
+	statement of the form 'FAKEARRAY[xxx] = yyy' in the generated
+	kernel will be modified to 'yyy'. The FAKEARRAY trick is useful to
+	explicitly declare write dependences for Candl, for instance
+	loop-carried dependences on a function call inside a loop.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add option --inscop-fakearray to
+	optionally call the inscop-fakearray script in place of the
+	standard inscop.
+
+	* generators/scripts/inscop-fakearray: New. Modified inscop to
+	remove the FAKEARRAY[x] = ... from the generated code.
+
 2009-11-14  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/include/pocc/driver-letsee.h,

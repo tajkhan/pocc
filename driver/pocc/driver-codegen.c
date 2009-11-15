@@ -74,7 +74,10 @@ int
 pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 {
   char* args[10];
-  args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
+  if (poptions->inscop_fakepoccarray == 1)
+    args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop-fakearray";
+  else
+    args[0] = STR_POCC_ROOT_DIR "/generators/scripts/inscop";
   args[1] = poptions->input_file_name;
   args[2] = ".body.c";
   args[3] = poptions->output_file_name;
