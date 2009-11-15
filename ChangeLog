@@ -1,4 +1,12 @@
 2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* tests/tests/gemver/gemver.plutotileparunroll.c: Fix test. Now
+	the latest version of PLuTo generates "transform
+	UnrollJam(ufactor=4)" on c3 and "transform Unroll(ufactor=4)" on
+	c4, for S1 and S2. Formerly and in other versions it generates
+	only "transform UnrollJam(ufactor=4)".
+
+2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the option --inscop-fakearray. When enabled, every
 	statement of the form 'FAKEARRAY[xxx] = yyy' in the generated
 	kernel will be modified to 'yyy'. The FAKEARRAY trick is useful to

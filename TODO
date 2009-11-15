@@ -2,3 +2,4 @@
 - config-inherits
 - change bin/bash to bin/sh for plann and vloog
 - check that checkout correctly updates for git, and don't overwrite for wget
+- check gemver plutotileparunroll, with uaj+unroll instead of uaj only.
