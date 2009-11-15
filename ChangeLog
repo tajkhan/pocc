@@ -1,5 +1,9 @@
 2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* bin/pocc-snapshot: Update.
+
+2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* bin/pocc-checkout: Update checkout_git, fix checkout_wget.
 
 2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>

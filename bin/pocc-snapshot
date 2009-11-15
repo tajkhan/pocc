@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Sun Nov 15 05:39:46 2009 Louis-Noel Pouchet
+## Last update Sun Nov 15 05:43:03 2009 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -42,6 +42,13 @@ $DRIVER = "";
 
 $BUILDED_LIST = "";
 
+sub systemdie
+{
+    my ($cmd) = @_;
+    system($cmd);
+    die "[PoCC-snapshot] Fatal error: $cmd" if ($? != 0);
+}
+
 
 sub snapshot_svn
 {
@@ -51,15 +58,12 @@ sub snapshot_svn
     ## Create archive.
     my $newbasedirbase = $newbasedir;
     $newbasedir =~ s/\/$snapdir//g;
-    system("rm -f $newbasedir/$snapdir.tar.gz");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-    system("cd $newbasedir && tar czf $snapdir.tar.gz $snapdir");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("rm -f $newbasedir/$snapdir.tar.gz");
+    systemdie("cd $newbasedir && tar czf $snapdir.tar.gz $snapdir");
     print (colored ("[PoCC-snapshot] Snapshot snapshots/$snapdir.tar.gz created", "green green"), "\n");
     ## Delete temporary files.
-    system("rm -f $newbasedirbase/config/*.cfg");
-    system("rm -f $newbasedirbase/bin/pocc-util");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("rm -f $newbasedirbase/config/*.cfg");
+    systemdie("rm -f $newbasedirbase/bin/pocc-util");
 }
 
 
@@ -76,43 +80,34 @@ sub snapshot_release
     my ($newbasedir, $snapdir) = create_snapshot($basedir, $mode, "release");
     $basedir = $newbasedir;
     ## Build PoCC.
-    system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-    system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
-    system("chmod a+x $basedir/install.sh");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-    system("cd $basedir && ./install.sh");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
+    systemdie("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    systemdie("chmod a+x $basedir/install.sh");
+    systemdie("cd $basedir && ./install.sh");
     ## Delete temporary files.
-    system("rm -f $basedir/config/*.cfg");
-    system("rm -f $basedir/bin/pocc-util");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("rm -f $basedir/config/*.cfg");
+    systemdie("rm -f $basedir/bin/pocc-util");
     ## Change install.sh mode to 'stable' or 'local'.
     my $lmode = "stable";
     $lmode = "local" if ($is_local == 1);
-    system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$lmode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
-    system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
-    system("chmod a+x $basedir/install.sh");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$lmode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
+    systemdie("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    systemdie("chmod a+x $basedir/install.sh");
     ## Make pocc distribution.
     print ("[PoCC-snapshot] Create standard distribution of PoCC\n");
-    system("cd $basedir && make dist");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("cd $basedir && make dist");
     ## Revert to initial mode.
-    system("sed -e 's/POCC_MODE=\".*\";/POCC_MODE=\"base\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
-    system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
-    system("chmod a+x $basedir/install.sh");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("sed -e 's/POCC_MODE=\".*\";/POCC_MODE=\"base\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
+    systemdie("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    systemdie("chmod a+x $basedir/install.sh");
     ## Extract archives.
     my $poccversion = `grep AC_INIT $basedir/configure.ac | cut -d ',' -f 2`;
     $poccversion =~ s/ |\[|\]|\n//g;
     $poccversion = "pocc-$poccversion";
     print ("[PoCC-snapshot] Extract standard distribution of PoCC\n");
     system ("cd $basedir && tar xzf $poccversion.tar.gz");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Create archives/ directory.
     system ("cd $basedir/$poccversion && mkdir -p archives");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
     ## Retrieve data to build.
     my %config_data = read_config_file("$basedir/config/$mode/configure.cfg");
     my %config_driver = read_config_file("$basedir/config/$mode/driver.cfg");
@@ -134,29 +129,23 @@ sub snapshot_release
 	$module =~ s/\s//g;
 	my $path = $basedir . "/" . $category . "/" . $module;
 	print ("[PoCC-snapshot] Create distribution of $category/$module\n");
-	system("cd $path && make dist");
-	die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+	systemdie("cd $path && make dist");
 	my $id;
 	for ($j = 0; $j <= $#stable_softs; $j++) {
 	    $id = $j if ($stable_softs[$j] =~ /$softs[$i]/);
 	}
 	my $archivename = $stable_softs[$id] . ".tar.gz";
-	system("cp $path/$archivename $basedir/$poccversion/archives");
-	die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+	systemdie("cp $path/$archivename $basedir/$poccversion/archives");
     }
     ## Create the final archive.
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     $year += 1900;
     $mon++;
     my $date = $year . $mon . $mday;
-    system("if [ -d \"$basedir/$poccversion-$date-full\" ]; then rm -rf $basedir/$poccversion-$date-full; fi");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-    system("cd $basedir && mv $poccversion $poccversion-$date-full");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-    system("cd $basedir && tar -czf $poccversion-$date-full.tar.gz $poccversion-$date-full");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
-    system("mv $basedir/$poccversion-$date-full.tar.gz $base_basedir/snapshots");
-    die "[PoCC-snapshot] Fatal error" if ( $? != 0 );
+    systemdie("if [ -d \"$basedir/$poccversion-$date-full\" ]; then rm -rf $basedir/$poccversion-$date-full; fi");
+    systemdie("cd $basedir && mv $poccversion $poccversion-$date-full");
+    systemdie("cd $basedir && tar -czf $poccversion-$date-full.tar.gz $poccversion-$date-full");
+    systemdie("mv $basedir/$poccversion-$date-full.tar.gz $base_basedir/snapshots");
 
     ## All done.
     print (colored ("[PoCC-snapshot] Release snapshots/$poccversion-$date-full.tar.gz was created", "green green"), "\n");
@@ -175,19 +164,19 @@ sub create_snapshot
     my $date = $year . $mon . $mday;
     $basedir = $basedir . "/snapshots";
     $snapdir = "pocc-$version-$date-$mode-$type";
-    system("mkdir -p $basedir && cd $basedir && svn co --username lppcc --password lppcc https://alchemy.futurs.inria.fr/svn/users/pouchet/projects/pocc $snapdir\n");
+    systemdie("mkdir -p $basedir && cd $basedir && svn co --username lppcc --password lppcc https://alchemy.futurs.inria.fr/svn/users/pouchet/projects/pocc $snapdir\n");
     $basedir = $basedir . "/" . $snapdir;
     ## Create temporary pocc-util script.
-    system("sed -e \"s!\@abs_top_srcdir\@!$basedir!1\" $basedir/bin/pocc-util.in > $basedir/bin/pocc-util");
-    system("chmod a+x $basedir/bin/pocc-util");
+    systemdie("sed -e \"s!\@abs_top_srcdir\@!$basedir!1\" $basedir/bin/pocc-util.in > $basedir/bin/pocc-util");
+    systemdie("chmod a+x $basedir/bin/pocc-util");
     ## Copy mode scripts.
-    system("cp $basedir/config/$mode/*.cfg $basedir/config");
+    systemdie("cp $basedir/config/$mode/*.cfg $basedir/config");
     ## Update install.sh script with the mode.
-    system("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
-    system("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
-    system("chmod a+x $basedir/install.sh");
+    systemdie("sed -e 's/POCC_MODE=\"base\";/POCC_MODE=\"$mode\";/1' $basedir/install.sh > /tmp/tmp_pocc_install.sh");
+    systemdie("mv -f /tmp/tmp_pocc_install.sh $basedir/install.sh");
+    systemdie("chmod a+x $basedir/install.sh");
     ## Checkout.
-    system("$basedir/bin/pocc-util checkout");
+    systemdie("$basedir/bin/pocc-util checkout");
     return ($basedir, $snapdir);
 }
 
