@@ -17,7 +17,7 @@ cat .tail >> __tmp
 echo "#define ceild(n,d)  ceil(((double)(n))/((double)(d)))" >> .head
 echo "#define floord(n,d) floor(((double)(n))/((double)(d)))" >> .head
 echo "#define max(x,y)    ((x) > (y)? (x) : (y))" >> .head
-echo "#define min(x,y)    ((x) < (y)? (x) : (y))\n" >> .head
+echo "#define min(x,y)    ((x) < (y)? (x) : (y))" >> .head
 
 cat .head __tmp > $3
 

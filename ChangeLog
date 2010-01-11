@@ -1,3 +1,8 @@
+2010-01-11  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* generators/scripts/inscop,
+	* generators/scripts/inscop-fakearray: Remove misplaced '\n'.
+
 2009-11-15  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* bin/pocc-snapshot: Update.
