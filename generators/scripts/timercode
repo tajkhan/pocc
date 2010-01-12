@@ -55,11 +55,11 @@ grep -B $MAXLINES "#pragma endscop" .head > .head2;
 
 if [ $2 = "time" ]; then
     echo "	IF_TIME(TIMER_CODE(pocc_t_end));
-	IF_TIME(printf(\"%0.6lfs\\n\", pocc_t_end - pocc_t_start));" > .tail;
+	IF_TIME(printf(\"%0.6lfs\\\n\", pocc_t_end - pocc_t_start));" > .tail;
 else
     if [ $2 = "asm" ]; then
 	echo "	IF_TIME(TIMER_CODE(pocc_cycle_stop));
-	IF_TIME(printf(\"%llu\\n\", pocc_cycle_stop - pocc_cycle_start));" > .tail;
+	IF_TIME(printf(\"%llu\\\n\", pocc_cycle_stop - pocc_cycle_start));" > .tail;
     fi;
 fi;
 

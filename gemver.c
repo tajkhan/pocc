@@ -43,11 +43,13 @@ void print_array(char** argv)
 #ifndef TEST
     if (! strcmp (argv[0], ""))
 #endif
-    for (i=0; i<N; i++) {
-        fprintf(stderr, "%0.2lf ", w[i]);
-        if (i%80 == 20) fprintf(stderr, "\n");
-    }
-    fprintf(stderr, "\n");
+      {
+	for (i=0; i<N; i++) {
+	  fprintf(stderr, "%0.2lf ", w[i]);
+	  if (i%80 == 20) fprintf(stderr, "\n");
+	}
+	fprintf(stderr, "\n");
+      }
 }
 
 
