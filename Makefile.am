@@ -71,6 +71,7 @@ EXTRA_DIST		=			\
 	config/stable/driver.cfg		\
 	generators/scripts/annotations.tar.gz	\
 	generators/scripts/compile		\
+	generators/scripts/execute		\
 	generators/scripts/inscop		\
 	generators/scripts/omp			\
 	generators/scripts/plann		\

@@ -1,5 +1,10 @@
 2010-01-12  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
+	* Makefile.am: Add missing generators/scripts/execute in
+	EXTRA_DIST.
+
+2010-01-12  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
 	* generators/scripts/timercode: Add missing '\' before '\n'.
 	* gemver.c: Remove trailing '\n'.
 
