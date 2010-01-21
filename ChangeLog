@@ -1,3 +1,34 @@
+2010-01-21  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the support for the 'pragmatize' tool, which
+	operates on the CLAST directly to perform additional syntactic
+	modification for #pragma insertion. Use option --pragmatizer to
+	activate it.
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/driver-codegen.c: Use pragmatize instead of legacy
+	scripts when option --pragmatizer is turned on.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add option --pragmatizer, to use the CLAST
+	pragma insertion library 'pragmatize' instead of PluTo legacy
+	scripts.
+
+	* driver/pocc/Makefile.am: Add linking to the libpragmatize library.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Update configuration files to
+	systematically download and build the 'pragmatize' tool.
+
 2010-01-20  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* bin/pocc-make: Fix a bug in modification detection system.

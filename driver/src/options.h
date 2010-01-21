@@ -35,7 +35,7 @@
 # include "getopts.h"
 
 
-# define POCC_NB_OPTS				45
+# define POCC_NB_OPTS				46
 
 
 # define POCC_OPT_HELP				0
@@ -80,14 +80,15 @@
 # define POCC_OPT_NOCODEGEN			35
 # define POCC_OPT_CLOOG_F			36
 # define POCC_OPT_CLOOG_L			37
-# define POCC_OPT_CODEGEN_TIMERCODE		38
-# define POCC_OPT_CODEGEN_TIMER_ASM		39
-# define POCC_OPT_CODEGEN_TIMER_PAPI		40
+# define POCC_OPT_PRAGMATIZER			38
+# define POCC_OPT_CODEGEN_TIMERCODE		39
+# define POCC_OPT_CODEGEN_TIMER_ASM		40
+# define POCC_OPT_CODEGEN_TIMER_PAPI		41
 
-# define POCC_OPT_COMPILE      			41
-# define POCC_OPT_COMPILE_CMD          		42
-# define POCC_OPT_RUN_CMD_ARGS          	43
-# define POCC_OPT_PROGRAM_TIMEOUT        	44
+# define POCC_OPT_COMPILE      			42
+# define POCC_OPT_COMPILE_CMD          		43
+# define POCC_OPT_RUN_CMD_ARGS          	44
+# define POCC_OPT_PROGRAM_TIMEOUT        	45
 
 
 BEGIN_C_DECLS

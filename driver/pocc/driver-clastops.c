@@ -44,6 +44,19 @@ pocc_driver_clastops (scoplib_scop_p program,
    *  cloog_program_pprint (body_file, cp, coptions);
   */
   struct clast_stmt* root = cloog_clast_create (cp, coptions);
-  clast_pprint (poptions->output_file, root, 0, coptions);
+  
+  // Run the pragmatizer, if required.
+  if (poptions->pragmatizer)
+    {
+      pragmatize (program, root);
+      pragmatize_clast_pprint (poptions->output_file, root, 0, coptions);
+    }
+  else
+    {
+      // Pretty-print the code with CLooG default pretty-printer.
+      clast_pprint (poptions->output_file, root, 0, coptions);
+    }
+  
+  // Delete the clast.
   cloog_clast_free (root);
 }

@@ -97,6 +97,8 @@ pocc_options_malloc ()
   ret->codegen_timer_papi = 0;
   ret->timeout = 0;
 
+  ret->pragmatizer = 0;
+
   return ret;
 }
 

@@ -109,6 +109,8 @@ struct s_pocc_options
   int		codegen_timer_papi;
   int		timeout;
 
+  int		pragmatizer;
+
 };
 typedef struct s_pocc_options s_pocc_options_t;
 
