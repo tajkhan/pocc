@@ -67,6 +67,7 @@ pocc_options_malloc ()
   ret->letsee_cUb = 1;
 
   // Pluto options.
+  ret->pluto = 0;
   ret->pluto_parallel = 0;
   ret->pluto_tile = 0;
   ret->pluto_rar = 0;

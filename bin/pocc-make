@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:18:01 2009 Louis-Noel Pouchet
+## Last update Wed Jan 20 17:51:43 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-make: this file is part of the PoCC project.
@@ -140,8 +140,8 @@ sub make_soft
 	$val = system("cd $dir && ./configure --disable-static --enable-shared --prefix=$prefix $config_args");
 	die "Error in configuration of $soft\n" if ($val != 0);
     }
-    $needed_pu = `find $BDIR_MK/driver/pocc-utils -newer $BDIR_MK/driver/install-pocc/include/pocc-utils 2>&1 | grep -v ".svn"`;
-    $needs_build = `find $dir -newer $prefix/include/$mod 2>&1| grep -v ".svn"`;
+    $needed_pu = `find $BDIR_MK/driver/pocc-utils -newer $BDIR_MK/driver/install-pocc/include/pocc-utils 2>&1 | grep -v "/\.svn/"`;
+    $needs_build = `find $dir -newer $prefix/include/$mod 2>&1| grep -v "/\.svn/"`;
     $needs_build = "yes" if (! ($needed_pu eq ""));
     if ($needs_build eq "") {
 	if (defined($softinfo{"make-depends"})) {
