@@ -1,3 +1,17 @@
+2010-01-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch adds the option --pluto-ext-candl, to prevent Pluto
+	from calling candl internally and use the dependence stored
+	instead between the <dependence-polyhedra></dependence-polyhedra>
+	tags of the scop.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add option --pluto-ext-candl, and code to
+	manage it.
+
 2010-01-21  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the support for the 'pragmatize' tool, which
 	operates on the CLAST directly to perform additional syntactic

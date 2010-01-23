@@ -59,10 +59,28 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->l2tile = poptions->pluto_l2tile;
   ploptions->lastwriter = poptions->pluto_lastwriter;
   ploptions->scalpriv = poptions->pluto_scalpriv;
+  ploptions->external_deps = poptions->pluto_external_candl;
   //ploptions->debug = poptions->verbose;
 
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
+
+  // Ensure Candl has been run, and scop contains dependence
+  // information, if pluto-ext-candl option is set.
+  if (poptions->pluto_external_candl)
+    {
+      char* candldeps =
+	scoplib_scop_tag_content (program, "<dependence-polyhedra>",
+				  "</dependence-polyhedra>");
+      if (candldeps == NULL)
+	{
+	  // Dependence computation with candl was not done.
+	  pocc_driver_candl (program, poptions, puoptions);
+	}
+      else
+	free (candldeps);
+    }
+
   if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
     return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;

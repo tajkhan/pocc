@@ -41,7 +41,10 @@ pocc_driver_candl (scoplib_scop_p program,
   CandlDependence* deps = candl_dependence (cprogram, coptions);
   if (poptions->verbose)
     candl_dependence_pprint (stdout, deps);
-
+  // Embed dependences in the scop, in case we want pluto to read them.
+  if (poptions->pluto_external_candl)
+    candl_dependence_update_scop_with_deps (program, deps);
+  
   candl_dependence_free (deps);
   candl_options_free (coptions);
 }

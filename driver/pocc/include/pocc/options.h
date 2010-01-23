@@ -97,6 +97,7 @@ struct s_pocc_options
   int		pluto_l2tile;
   int		pluto_lastwriter;
   int		pluto_scalpriv;
+  int		pluto_external_candl;
 
 
   // Codegen Options.
