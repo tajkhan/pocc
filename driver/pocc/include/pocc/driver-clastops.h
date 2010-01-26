@@ -34,10 +34,14 @@
 # include <pocc/common.h>
 # include <pocc-utils/options.h>
 # include <pocc/options.h>
+# include <pocc/exec.h>
 
 # ifndef SCOPLIB_INT_T_IS_LONGLONG
 #  define SCOPLIB_INT_T_IS_LONGLONG
 # endif
+# define LINEAR_VALUE_IS_LONGLONG
+# include <clan/clan.h>
+# include <clan/options.h>
 # include <scoplib/scop.h>
 # include <cloog/cloog.h>
 

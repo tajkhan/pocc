@@ -111,6 +111,7 @@ struct s_pocc_options
   int		timeout;
 
   int		pragmatizer;
+  int		vectorizer;
 
 };
 typedef struct s_pocc_options s_pocc_options_t;

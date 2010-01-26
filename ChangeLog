@@ -1,3 +1,45 @@
+2010-01-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch introduces three new modules in PoCC.
+
+	1) generators/pragmatize: activated with option
+	--pragmatizer. This module declares two new clast node
+	types (clast_pragma_omp_for and clast_pragma_vectorize), and
+	insert them in the AST where it is appropriate.
+
+	2) optimizers/vectorizer: activated with option --vectorizer. This
+	module aims at analyzing the CLAST to discover vectorizable loops.
+
+	3) ir/scoptools: not function-activated. This module builds a
+	scoplib representation of an arbitrary CLAST (sub)tree.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.c,
+	* driver/src/options.h: Create the --vectorizer option. Create the
+	--pragmatizer option.
+
+	* driver/pocc/include/pocc/driver-clastops.h,
+	* driver/pocc/driver-clastops.c: Call the vectorizer pass and the
+	pragmatize pass after CLAST generation.
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Update with new modules.
+
+	* driver/pocc/driver-codegen.c: Flush .body.c before
+	pretty-printing the CLAST.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Update the configuration files to
+	build the three new modules.
+
 2010-01-22  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch adds the option --pluto-ext-candl, to prevent Pluto
 	from calling candl internally and use the dependence stored

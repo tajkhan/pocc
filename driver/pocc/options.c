@@ -99,6 +99,7 @@ pocc_options_malloc ()
   ret->timeout = 0;
 
   ret->pragmatizer = 0;
+  ret->vectorizer = 0;
 
   return ret;
 }

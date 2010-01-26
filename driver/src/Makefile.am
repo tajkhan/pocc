@@ -35,8 +35,10 @@ INCLUDES		=					\
 	-I$(top_builddir)/driver/src				\
 	-I$(top_builddir)/optimizers/install-letsee/include	\
 	-I$(top_builddir)/optimizers/install-pluto/include	\
-	-I$(top_builddir)/optimizers/install-polyfeat/include	\
+	-I$(top_builddir)/optimizers/install-vectorizer/include	\
 	-I$(top_builddir)/ir/install-scoplib/include		\
+	-I$(top_builddir)/ir/install-scoptools/include		\
+	-I$(top_builddir)/analyzers/install-polyfeat/include	\
 	-I$(top_builddir)/analyzers/install-clan/include	\
 	-I$(top_builddir)/analyzers/install-candl/include	\
 	-I$(top_builddir)/generators/install-cloog/include	\
@@ -49,7 +51,9 @@ INCLUDES		=					\
 	-I$(top_srcdir)/driver/src				\
 	-I$(top_srcdir)/optimizers/install-letsee/include	\
 	-I$(top_srcdir)/optimizers/install-pluto/include	\
+	-I$(top_srcdir)/optimizers/install-vectorizer/include	\
 	-I$(top_srcdir)/ir/install-scoplib/include		\
+	-I$(top_srcdir)/ir/install-scoptools/include		\
 	-I$(top_srcdir)/analyzers/install-clan/include		\
 	-I$(top_srcdir)/analyzers/install-candl/include		\
 	-I$(top_srcdir)/analyzers/install-polyfeat/include	\

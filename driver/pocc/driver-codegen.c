@@ -315,6 +315,7 @@ pocc_driver_codegen (scoplib_scop_p program,
   cp = cloog_program_generate (cp, coptions);
 
   /* (6) Call Clast pretty-print and post-processing. */
+  fflush (body_file);
   fprintf (body_file, "#pragma scop\n");
   pocc_driver_clastops (program, cp, poptions, puoptions);
   fprintf (body_file, "#pragma endscop\n");

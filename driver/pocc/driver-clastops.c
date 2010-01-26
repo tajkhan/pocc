@@ -29,6 +29,8 @@
 # define CLOOG_SUPPORTS_SCOPLIB
 # include <cloog/cloog.h>
 # include <cloog/clast.h>
+# include <pragmatize/pragmatize.h>
+# include <vectorizer/vectorizer.h>
 # include <pocc/driver-clastops.h>
 
 
@@ -40,23 +42,33 @@ pocc_driver_clastops (scoplib_scop_p program,
 {
   CloogOptions* coptions = poptions->cloog_options;
 
-  /* The following code can be substituted with:
-   *  cloog_program_pprint (body_file, cp, coptions);
-  */
+  // Create the CLAST associated to the CloogProgram.
   struct clast_stmt* root = cloog_clast_create (cp, coptions);
-  
+
+  // Run the vectorizer, if required.
+  if (poptions->vectorizer)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Running vectorizer\n");
+      // Call the vectorizer.
+      vectorizer (program, root);
+    }
+
   // Run the pragmatizer, if required.
   if (poptions->pragmatizer)
     {
+      if (! poptions->quiet)
+	printf ("[PoCC] Running pragmatize\n");
       pragmatize (program, root);
-      pragmatize_clast_pprint (poptions->output_file, root, 0, coptions);
     }
+
+  // Run the extended CLAST pretty-printer
+  if (poptions->pragmatizer || poptions->vectorizer)
+    pragmatize_clast_pprint (poptions->output_file, root, 0, coptions);
   else
-    {
-      // Pretty-print the code with CLooG default pretty-printer.
-      clast_pprint (poptions->output_file, root, 0, coptions);
-    }
-  
+    // Pretty-print the code with CLooG default pretty-printer.
+    clast_pprint (poptions->output_file, root, 0, coptions);
+
   // Delete the clast.
   cloog_clast_free (root);
 }

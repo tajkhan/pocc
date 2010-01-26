@@ -71,7 +71,8 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'n', "no-codegen", 0, "\tDo not generate code [off]" },
   { '\0', "cloog-cloogf", 1, "CLooG: first level to scan [1]" },
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
-  { '\0', "pragmatizer", 0, "Use the CLAST pragmatizer [off]" },
+  { '\0', "pragmatizer", 0, "\tUse the CLAST pragmatizer [off]" },
+  { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
   { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
@@ -430,6 +431,9 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 
   if (opt_tab[POCC_OPT_PRAGMATIZER])
     options->pragmatizer = 1;
+  
+  if (opt_tab[POCC_OPT_VECTORIZER])
+    options->vectorizer = 1;
 
   // Letsee precut mode implies Pluto mode.
   if (options->letsee && options->letsee_space == LS_TYPE_FS)
