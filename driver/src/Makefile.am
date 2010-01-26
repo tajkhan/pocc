@@ -42,6 +42,8 @@ INCLUDES		=					\
 	-I$(top_builddir)/analyzers/install-clan/include	\
 	-I$(top_builddir)/analyzers/install-candl/include	\
 	-I$(top_builddir)/generators/install-cloog/include	\
+	-I$(top_builddir)/generators/install-pragmatize/include	\
+	-I$(top_builddir)/generators/install-clasttools/include	\
 	-I$(top_builddir)/math/install-piplib/include		\
 	-I$(top_builddir)/math/install-polylib/include		\
 	-I$(top_builddir)/math/install-fm/include		\
@@ -58,6 +60,8 @@ INCLUDES		=					\
 	-I$(top_srcdir)/analyzers/install-candl/include		\
 	-I$(top_srcdir)/analyzers/install-polyfeat/include	\
 	-I$(top_srcdir)/generators/install-cloog/include	\
+	-I$(top_srcdir)/generators/install-pragmatize/include	\
+	-I$(top_srcdir)/generators/install-clasttools/include	\
 	-I$(top_srcdir)/math/install-piplib/include		\
 	-I$(top_srcdir)/math/install-polylib/include		\
 	-I$(top_srcdir)/math/install-fm/include

@@ -1,4 +1,33 @@
 2010-01-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch introduces a new module in PoCC.
+
+	generators/clasttools: not function-activated. This module
+	contains CLAST node extensions and functions to pretty-print the
+	extended CLAST. Current extensions include:
+	- clast_pragma_omp_for
+	- clast_pragma_vectorize
+	- clast_parfor
+
+	* driver/pocc/include/pocc/driver-clastops.h,
+	* driver/pocc/driver-clastops.c: Call now extended pretty-printer
+	from the clasttools module instead of the pragmatize module.
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Update with reference to the new module.
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Update the configuration files to
+	build the new module, change the build options for the depending
+	ones.
+
+2010-01-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch introduces three new modules in PoCC.
 
 	1) generators/pragmatize: activated with option

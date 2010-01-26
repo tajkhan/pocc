@@ -40,8 +40,6 @@
 #  define SCOPLIB_INT_T_IS_LONGLONG
 # endif
 # define LINEAR_VALUE_IS_LONGLONG
-# include <clan/clan.h>
-# include <clan/options.h>
 # include <scoplib/scop.h>
 # include <cloog/cloog.h>
 

@@ -31,6 +31,7 @@
 # include <cloog/clast.h>
 # include <pragmatize/pragmatize.h>
 # include <vectorizer/vectorizer.h>
+# include <clasttools/pprint.h>
 # include <pocc/driver-clastops.h>
 
 
@@ -62,9 +63,9 @@ pocc_driver_clastops (scoplib_scop_p program,
       pragmatize (program, root);
     }
 
-  // Run the extended CLAST pretty-printer
+  // Run the extended CLAST pretty-printer, if needed.
   if (poptions->pragmatizer || poptions->vectorizer)
-    pragmatize_clast_pprint (poptions->output_file, root, 0, coptions);
+    clasttols_clast_pprint_extended (poptions->output_file, root, 0, coptions);
   else
     // Pretty-print the code with CLooG default pretty-printer.
     clast_pprint (poptions->output_file, root, 0, coptions);
