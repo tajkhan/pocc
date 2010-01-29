@@ -97,9 +97,14 @@ pocc_options_malloc ()
   ret->codegen_timer_asm = 0;
   ret->codegen_timer_papi = 0;
   ret->timeout = 0;
-
+  
+  // Vectorization options.
   ret->pragmatizer = 0;
   ret->vectorizer = 0;
+  ret->vectorizer_mark_par_loops = 1;
+  ret->vectorizer_mark_vect_loops = 1;
+  ret->vectorizer_vectorize_loops = 1;
+  ret->vectorizer_keep_outer_par_loops = 1;
 
   return ret;
 }

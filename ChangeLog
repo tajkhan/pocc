@@ -1,3 +1,15 @@
+2010-01-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch provides option --no-par-loop, to skip the detection of
+	parallel loops after code generation. It provides also option
+	--no-outer-par-loop, to override the preservation of 1 level of
+	outer parallelism during vectorization.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c,
+	* driver/pocc/driver-clastops.c: Add and support new options.
+
 2010-01-26  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch introduces a new module in PoCC.
 

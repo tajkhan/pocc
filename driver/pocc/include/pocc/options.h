@@ -112,6 +112,10 @@ struct s_pocc_options
 
   int		pragmatizer;
   int		vectorizer;
+  int		vectorizer_mark_par_loops;
+  int		vectorizer_mark_vect_loops;
+  int		vectorizer_vectorize_loops;
+  int		vectorizer_keep_outer_par_loops;
 
 };
 typedef struct s_pocc_options s_pocc_options_t;

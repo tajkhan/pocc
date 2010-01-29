@@ -47,12 +47,17 @@ pocc_driver_clastops (scoplib_scop_p program,
   struct clast_stmt* root = cloog_clast_create (cp, coptions);
 
   // Run the vectorizer, if required.
-  if (poptions->vectorizer)
+  if (poptions->vectorizer || poptions->vectorizer_mark_par_loops)
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Running vectorizer\n");
+      s_vectorizer_options_t* voptions = vectorizer_options_malloc ();
+      voptions->mark_par_loops = poptions->vectorizer_mark_par_loops;
+      voptions->mark_vect_loops = poptions->vectorizer_mark_vect_loops;
+      voptions->vectorize_loops = poptions->vectorizer_vectorize_loops;
+      voptions->keep_outer_parallel = poptions->vectorizer_keep_outer_par_loops;
       // Call the vectorizer.
-      vectorizer (program, root);
+      vectorizer (program, root, voptions);
     }
 
   // Run the pragmatizer, if required.
