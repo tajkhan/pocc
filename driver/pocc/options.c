@@ -86,7 +86,7 @@ pocc_options_malloc ()
   ret->pluto_lastwriter = 0;
   ret->pluto_scalpriv = 0;
   ret->pluto_external_candl = 0;
-  
+
   // Cloog options.
   ret->cloog_f = POCC_CLOOG_UNDEF;
   ret->cloog_l = POCC_CLOOG_UNDEF;
@@ -97,14 +97,18 @@ pocc_options_malloc ()
   ret->codegen_timer_asm = 0;
   ret->codegen_timer_papi = 0;
   ret->timeout = 0;
-  
-  // Vectorization options.
+
   ret->pragmatizer = 0;
+
+  // Vectorization options.
   ret->vectorizer = 0;
   ret->vectorizer_mark_par_loops = 1;
   ret->vectorizer_mark_vect_loops = 1;
   ret->vectorizer_vectorize_loops = 1;
   ret->vectorizer_keep_outer_par_loops = 1;
+
+  // Storage compaction options.
+  ret->storage_compaction = 0;
 
   return ret;
 }

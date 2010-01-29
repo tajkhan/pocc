@@ -46,6 +46,14 @@ pocc_driver_clastops (scoplib_scop_p program,
   // Create the CLAST associated to the CloogProgram.
   struct clast_stmt* root = cloog_clast_create (cp, coptions);
 
+  // Run storage compaction, if required.
+  if (poptions->storage_compaction)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Running storage compaction\n");
+      storcompacter (program, root);
+    }
+
   // Run the vectorizer, if required.
   if (poptions->vectorizer || poptions->vectorizer_mark_par_loops)
     {

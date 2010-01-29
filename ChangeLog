@@ -1,3 +1,30 @@
+2010-01-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch introduces a new module in PoCC.
+
+	optimizers/storcompacter: function-activated. This module performs
+	basic storage compaction, by reducing the number of different
+	array cells touched by the program.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Create and manage new option
+	--storage-compact.
+	* driver/pocc/driver-clastops.c: Call storage compaction.
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Update with the new module references.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/irregular/configure.cfg,
+	* config/irregular/driver.cfg: Build and configure the new module.
+
 2010-01-28  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch provides option --no-par-loop, to skip the detection of
 	parallel loops after code generation. It provides also option

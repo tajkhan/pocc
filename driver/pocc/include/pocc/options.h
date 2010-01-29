@@ -110,12 +110,18 @@ struct s_pocc_options
   int		codegen_timer_papi;
   int		timeout;
 
+  // Pragmatizer.
   int		pragmatizer;
+
+  // Vectorizer.
   int		vectorizer;
   int		vectorizer_mark_par_loops;
   int		vectorizer_mark_vect_loops;
   int		vectorizer_vectorize_loops;
   int		vectorizer_keep_outer_par_loops;
+
+  // Storage compaction.
+  int		storage_compaction;
 
 };
 typedef struct s_pocc_options s_pocc_options_t;
