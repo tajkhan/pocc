@@ -31,6 +31,7 @@
 # include <cloog/clast.h>
 # include <pragmatize/pragmatize.h>
 # include <vectorizer/vectorizer.h>
+# include <storcompacter/storcompacter.h>
 # include <clasttools/pprint.h>
 # include <pocc/driver-clastops.h>
 

@@ -1,3 +1,10 @@
+2010-02-01  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg: Update to use PolyLib-5.22.4
+
 2010-01-29  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch introduces a new module in PoCC.
 
