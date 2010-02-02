@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Wed Oct 14 12:06:43 2009 Louis-Noel Pouchet
+## Last update Mon Feb  1 21:38:31 2010 Louis-Noel Pouchet
 ##
 
 ##
@@ -71,7 +71,7 @@ fi;
 echo "[PoCC] Configure...";
 if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
     enable_devel="--enable-devel";
-    if [ "$POCC_VERSION" = "stable" ]; then
+    if [ "$POCC_MODE" = "stable" ] || [ "$POCC_MODE" = "local" ]; then
 	enable_devel="";
     fi;
     ## Warning: must include gmp.h path for the moment into pocc driver.

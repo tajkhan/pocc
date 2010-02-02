@@ -56,7 +56,7 @@ pocc_driver_clastops (scoplib_scop_p program,
     }
 
   // Run the vectorizer, if required.
-  if (poptions->vectorizer || poptions->vectorizer_mark_par_loops)
+  if (poptions->vectorizer)
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Running vectorizer\n");
