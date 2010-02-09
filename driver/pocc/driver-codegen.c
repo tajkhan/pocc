@@ -259,21 +259,9 @@ pocc_driver_codegen (scoplib_scop_p program,
 	}
     }
 
-  /* (2) Generate statements macros. */
-  int st_count = 1;
-  for (stm = program->statement; stm; stm = stm->next)
-    {
-      fprintf (body_file, "#define S%d(", st_count++);
-      for (i = 0; i < stm->nb_iterators; ++i)
-	{
-	  fprintf (body_file, "%s", stm->iterators[i]);
-	  if (i < stm->nb_iterators - 1)
-	    fprintf (body_file, ",");
-	}
-      fprintf (body_file, ") %s\n", stm->body);
-    }
-
-  /* (3) Create a CloogProgram from the .scop. */
+  /* (2) Create a CloogProgram from the .scop. */
+  if (! poptions->quiet)
+    printf ("[PoCC] Running CLooG\n");
   CloogOptions* coptions = poptions->cloog_options;
   if (coptions == NULL)
     {
@@ -283,49 +271,25 @@ pocc_driver_codegen (scoplib_scop_p program,
   coptions->language = 'c';
   CloogProgram* cp = cloog_program_scop_to_cloogprogram (program, coptions);
 
-  /* (4) Generate loop counters. */
-  fprintf (body_file,
-	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
-  int done = 0;
-  for (i = 0; i < cp->nb_scattdims; ++i)
-    {
-      /// FIXME: Deactivate this, as pluto may generate OpenMP pragmas
-      /// using some unused variables. We'll let the compiler remove useless
-      /// variables.
-      if (cp->scaldims[i] == 0 || 1)
-	{
-	  if (! done++)
-	    fprintf (body_file, "\t register int ");
-	  else
-	    fprintf (body_file, ", ");
-	  fprintf(body_file, "c%d, c%dt, newlb_c%d, newub_c%d", i, i, i, i);
-	}
-    }
-  fprintf (body_file, ";\n\n");
-
-  /* (5) Generate polyhedral scanning code with CLooG. */
+  /* (3) Generate polyhedral scanning code with CLooG. */
   /* Store the .scop corresponding to the input program. */
   cp->scop = program;
   if (poptions->cloog_f != POCC_CLOOG_UNDEF)
     coptions->f = poptions->cloog_f;
   if (poptions->cloog_l != POCC_CLOOG_UNDEF)
     coptions->l = poptions->cloog_l;
-  if (! poptions->quiet)
-    printf ("[PoCC] Running CLooG\n");
   cp = cloog_program_generate (cp, coptions);
 
-  /* (6) Call Clast pretty-print and post-processing. */
-  fflush (body_file);
-  fprintf (body_file, "#pragma scop\n");
+  /* (4) Call Clast pretty-print and post-processing. */
   pocc_driver_clastops (program, cp, poptions, puoptions);
-  fprintf (body_file, "#pragma endscop\n");
+  
   /* Clean CLooG specific variables. */
   cloog_program_free (cp);
   fclose (poptions->output_file);
   /* Perform PoCC-specific syntactic post-processing. */
   pocc_driver_codegen_post_processing (body_file, poptions);
 
-  /* (7) Build the final output file template. */
+  /* (5) Build the final output file template. */
   if (pocc_driver_codegen_program_finalize (poptions) == EXIT_FAILURE)
     {
       if (! poptions->quiet)

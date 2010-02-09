@@ -1,3 +1,24 @@
+2010-02-08  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/driver-codegen.c: Move the code for dumping
+	statement bodies in driver-clastops, as some passes (e.g., array
+	contraction) executed in clastops may change the statement bodies.
+
+2010-02-05  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/options.c: Minor fixes to match the new prototype of
+	the vectorizer and the array compaction.
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg,
+	* config/stable/configure.cfg,
+	* config/local/configure.cfg,
+	* config/irregular/configure.cfg: Add PolyLib in the configuration
+	of the storage compaction module.
+
 2010-02-01  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* config/stable/configure.cfg,

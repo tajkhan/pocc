@@ -102,7 +102,7 @@ pocc_options_malloc ()
 
   // Vectorization options.
   ret->vectorizer = 0;
-  ret->vectorizer_mark_par_loops = 1;
+  ret->vectorizer_mark_par_loops = 0;
   ret->vectorizer_mark_vect_loops = 1;
   ret->vectorizer_vectorize_loops = 1;
   ret->vectorizer_keep_outer_par_loops = 1;

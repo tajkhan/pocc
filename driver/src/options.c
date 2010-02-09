@@ -73,9 +73,9 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
   { '\0', "pragmatizer", 0, "\tUse the CLAST pragmatizer [off]" },
   { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
-  { '\0', "no-par-loops", 0, "\tDon't detect parallel loops in generated\n\t\t\t\tcode [off]" },
+  { '\0', "mark-par-loops", 0, "Detect parallel loops in generated\n\t\t\t\tcode [off]" },
   { '\0', "no-outer-par-loops", 0, "Don't preserve outer parallel loop during\n\t\t\t\tvectorization [off]" },
-  { '\0', "storage-compact", 0, "Perform storage compaction [off]" },
+  { '\0', "array-contraction", 0, "Perform array contraction [off]" },
   { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
@@ -438,9 +438,9 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 
   // Vectorizer options.
   if (opt_tab[POCC_OPT_VECTORIZER])
-    options->vectorizer = 1;
-  if (opt_tab[POCC_OPT_VECT_NO_PAR_LOOPS])
-    options->vectorizer_mark_par_loops = 0;
+    options->vectorizer = options->vectorizer_vectorize_loops = 1;
+  if (opt_tab[POCC_OPT_VECT_MARK_PAR_LOOPS])
+    options->vectorizer_mark_par_loops = 1;
   if (opt_tab[POCC_OPT_VECT_NO_KEEP_OUTER_PAR_LOOPS])
     options->vectorizer_keep_outer_par_loops = 0;
 
