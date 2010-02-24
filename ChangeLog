@@ -1,3 +1,9 @@
+2010-02-24  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* config/base/configure.cfg,
+	* config/devel/configure.cfg: Revert to SVN version of PolyLib,
+	current GIT version does not build anymore.
+
 2010-02-08  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/driver-clastops.c,
