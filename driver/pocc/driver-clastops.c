@@ -34,6 +34,45 @@
 # include <storcompacter/storcompacter.h>
 # include <clasttools/pprint.h>
 # include <pocc/driver-clastops.h>
+# include <clasttools/clastext.h>
+
+
+static
+void
+traverse_print_clast_user_statement_extended_defines (struct clast_stmt* s,
+						      FILE* out)
+{
+  // Traverse the clast.
+  for ( ; s; s = s->next)
+    {
+      if (CLAST_STMT_IS_A(s, stmt_for) ||
+	  CLAST_STMT_IS_A(s, stmt_parfor) ||
+	  CLAST_STMT_IS_A(s, stmt_vectorfor))
+	{
+	  struct clast_stmt* body;
+	  if (CLAST_STMT_IS_A(s, stmt_for))
+	    body = ((struct clast_for*)s)->body;
+	  else if  (CLAST_STMT_IS_A(s, stmt_parfor))
+	    body = ((struct clast_parfor*)s)->body;
+	  else if  (CLAST_STMT_IS_A(s, stmt_vectorfor))
+	    body = ((struct clast_vectorfor*)s)->body;
+	  traverse_print_clast_user_statement_extended_defines (body, out);
+	}
+      else if (CLAST_STMT_IS_A(s, stmt_guard))
+	traverse_print_clast_user_statement_extended_defines
+	  (((struct clast_guard*)s)->then, out);
+      else if (CLAST_STMT_IS_A(s, stmt_block))
+	traverse_print_clast_user_statement_extended_defines
+	  (((struct clast_block*)s)->body, out);
+      else if (CLAST_STMT_IS_A(s, stmt_user_extended))
+	{
+	  struct clast_user_stmt_extended* ue =
+	    (struct clast_user_stmt_extended*) s;
+	  fprintf (out, "%s\n", ue->define_string);
+	}
+    }
+}
+
 
 
 void
@@ -60,7 +99,12 @@ pocc_driver_clastops (scoplib_scop_p program,
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Running storage compaction\n");
-      storcompacter_array_contraction (program, root);
+      s_ac_options_t* acoptions = ac_options_malloc ();
+      s_ac_metrics_t* acm =
+	storcompacter_array_contraction (program, root, acoptions);
+      ac_metrics_print (stdout, acm, program);
+      ac_metrics_free (acm);
+      ac_options_free (acoptions);
     }
 
   /* (4) Run the vectorizer, if required. */
@@ -75,7 +119,9 @@ pocc_driver_clastops (scoplib_scop_p program,
       voptions->vectorize_loops = poptions->vectorizer_vectorize_loops;
       voptions->keep_outer_parallel = poptions->vectorizer_keep_outer_par_loops;
       // Call the vectorizer.
-      vectorizer (program, root, voptions);
+      s_vectorizer_metrics_t* vectm = vectorizer (program, root, voptions);
+      vectorizer_metrics_print (stdout, vectm, program);
+      vectorizer_metrics_free (vectm);
     }
 
   /* (5) Run the pragmatizer, if required. */
@@ -102,6 +148,11 @@ pocc_driver_clastops (scoplib_scop_p program,
 	}
       fprintf (body_file, ") %s\n", stm->body);
     }
+  /* We now can have statement definition overriden by the array
+     contraction. Those are stored in clast_user_statement_extended
+     nodes only, the #define is in the cuse->define_string, they must
+     be collected and pretty-printed here. */
+  traverse_print_clast_user_statement_extended_defines (root, body_file);
 
   /* (7) Generate loop counters. */
   fprintf (body_file,
@@ -129,11 +180,12 @@ pocc_driver_clastops (scoplib_scop_p program,
   /* (8) Run the extended CLAST pretty-printer, if needed. */
   if (poptions->pragmatizer || poptions->vectorizer ||
       poptions->vectorizer_mark_par_loops ||
-      poptions->vectorizer_mark_vect_loops)
-    clasttols_clast_pprint_debug (poptions->output_file, root, 0, coptions);
+      poptions->vectorizer_mark_vect_loops ||
+      poptions->storage_compaction)
+    clasttols_clast_pprint_debug (body_file, root, 0, coptions);
   else
     // Pretty-print the code with CLooG default pretty-printer.
-    clast_pprint (poptions->output_file, root, 0, coptions);
+    clast_pprint (body_file, root, 0, coptions);
 
   fprintf (body_file, "#pragma endscop\n");
 
