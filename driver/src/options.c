@@ -76,6 +76,8 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "mark-par-loops", 0, "Detect parallel loops in generated\n\t\t\t\tcode [off]" },
   { '\0', "no-outer-par-loops", 0, "Don't preserve outer parallel loop during\n\t\t\t\tvectorization [off]" },
   { '\0', "array-contraction", 0, "Perform array contraction [off]" },
+  { '\0', "ac-keep-outer-par", 0, "Array contraction: preserve outer parallel loops\n\t\t\t\t[off]" },
+  { '\0', "ac-keep-vector-par", 0, "Array contraction: preserve inner parallel loops\n\t\t\t\t[off]" },
   { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
@@ -447,6 +449,10 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   // Storage compaction options.
   if (opt_tab[POCC_OPT_STORCOMPACT])
     options->storage_compaction = 1;
+  if (opt_tab[POCC_OPT_AC_KEEP_OUTERPAR])
+    options->array_contraction_keep_outer_par_loops = 1;
+  if (opt_tab[POCC_OPT_AC_KEEP_VECTORIZED])
+    options->array_contraction_keep_vectorized_loops = 1;
 
   // Letsee precut mode implies Pluto mode.
   if (options->letsee && options->letsee_space == LS_TYPE_FS)

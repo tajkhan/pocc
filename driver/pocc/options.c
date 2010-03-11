@@ -109,6 +109,8 @@ pocc_options_malloc ()
 
   // Storage compaction options.
   ret->storage_compaction = 0;
+  ret->array_contraction_keep_outer_par_loops = 0;
+  ret->array_contraction_keep_vectorized_loops = 0;
 
   return ret;
 }

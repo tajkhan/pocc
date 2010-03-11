@@ -1,3 +1,15 @@
+2010-03-11  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+	This patch creates and manages options:
+	--ac-keep-outer-par: array contraction preserves outer parallel loops
+	--ac-keep-vectorized: array contraction preserves inner parallel loops
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Update to support the newest options for
+	array contraction.
+
 2010-03-08  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* driver/pocc/driver-clastops.c: Add support for statements

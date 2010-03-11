@@ -100,6 +100,10 @@ pocc_driver_clastops (scoplib_scop_p program,
       if (! poptions->quiet)
 	printf ("[PoCC] Running storage compaction\n");
       s_ac_options_t* acoptions = ac_options_malloc ();
+      acoptions->keep_outer_par =
+	poptions->array_contraction_keep_outer_par_loops;
+      acoptions->keep_vectorized =
+	poptions->array_contraction_keep_vectorized_loops;
       s_ac_metrics_t* acm =
 	storcompacter_array_contraction (program, root, acoptions);
       ac_metrics_print (stdout, acm, program);
