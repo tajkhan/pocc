@@ -1,3 +1,11 @@
+2010-03-22  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* doc/versions.txt: New. Sample input file for the flag sequence
+	generator.
+
+	* bin/pocc-versionsgenerator: Extend to support tile sizes
+	combination. Only iterates on the 3 first dimensions of tiling.
+
 2010-03-21  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 
 	* bin/pocc-versionsgenerator: New. Script to invoke PoCC with all

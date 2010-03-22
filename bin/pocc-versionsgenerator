@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Mar 22 00:55:53 2010 Louis-Noel Pouchet
+## Last update Mon Mar 22 17:09:45 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -91,6 +91,15 @@ sub dec2bin {
     return $str;
 }
 
+
+sub has_tiling
+{
+    my ($arg) = @_;
+    return 1 if ($arg =~ /--pluto-tile/);
+    return 0;
+}
+
+
 sub generate_versions
 {
     my ($version_file, $file) = @_;
@@ -100,15 +109,25 @@ sub generate_versions
     my %config = read_versions_file($version_file);
 
     ## Retrieve default option(s).
-    my $default_opts;
+    my $default_opts = "";
     if (defined(%{$config{"default"}})) {
 	$default_opts = $config{"default"}{"flags"}[0];
 	## Remove it from the set of configurations.
 	delete($config{"default"});
+	print "[PoCC-generator] Default options: $default_opts\n";
     }
-    print "[PoCC-generator] Default options: $default_opts\n";
 
-    ## FIXME: Deal with tile sizes.
+    ## Deal with tile sizes.
+    my @tile_sizes = (32);
+    if (defined(%{$config{"tile-sizes"}})) {
+	my $tmp = $config{"tile-sizes"}{"sizes"}[0];
+	$tmp =~ s/^\s+//g;
+	$tmp =~ s/\s+/ /g;
+	@tile_sizes = split(/ /, $tmp);
+	## Remove it from the set of configurations.
+	delete($config{"tile-sizes"});
+	print "[PoCC-generator] Tile sizes: @tile_sizes\n";
+    }
 
     ## Loop on all options.
     my $i;
@@ -145,6 +164,7 @@ sub generate_versions
     my $nb_opts = $#flag_array;
 
     ## Generate all combinations.
+    ## FIXME: Only 32 native flags are supported (32 bits).
     my %final_flags;
     for ($k = 0; $k < 2 ** $nb_opts; $k++) {
 	my $val = dec2bin($k);
@@ -184,14 +204,51 @@ sub generate_versions
 	$out_filename =~ s/--//g;
 	$out_filename =~ s/__/_/g;
 	$out_filename = $filename_prefix . $out_filename;
-	my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename.c 2>/dev/null`;
-	print ".";
-	if ($? != 0) {
-	    print "Command failed\n";
-	    system ("rm -f $output_dir/$out_filename.c");
+	if ($#tile_sizes > 1 && has_tiling($flag_seq)) {
+	    my @tile_comb;
+	    for ($n = 0; $n < $#tile_sizes; $n++) {
+		for ($m = 0; $m < $#tile_sizes; $m++) {
+		    for ($l = 0; $l < $#tile_sizes; $l++) {
+			$tile_comb[0] = $tile_sizes[$n];
+			$tile_comb[1] = $tile_sizes[$m];
+			$tile_comb[2] = $tile_sizes[$l];
+			$tile_comb[3] = 32;
+			$tile_comb[4] = 32;
+			$tile_comb[5] = 32;
+			$tile_comb[6] = 32;
+			## Hard-wire there's no more than a 8-d tiling.
+			$tile_comb[7] = 32;
+
+			my $tile_string = "-$tile_sizes[$n]"."x$tile_sizes[$m]"."x$tile_sizes[$l]";
+
+			system("rm -f tile.sizes");
+			for ($i = 0; $i < 7; $i++) {
+			    system("/bin/echo -n \"$tile_comb[$i] \" >> tile.sizes");
+			}
+			system("/bin/echo \"$tile_comb[$i]\" >> tile.sizes");
+			my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename$tile_string.c 2>/dev/null`;
+			if ($? != 0) {
+			    print "Command failed\n";
+			    system ("rm -f $output_dir/$out_filename.c");
+			}
+			else {
+			    print ".";
+			    $version_ok++;
+			}
+		    }
+		}
+	    }
 	}
 	else {
-	    $version_ok++;
+	    my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename.c 2>/dev/null`;
+	    print ".";
+	    if ($? != 0) {
+		print "Command failed\n";
+		system ("rm -f $output_dir/$out_filename.c");
+	    }
+	    else {
+		$version_ok++;
+	    }
 	}
     }
     print "\n";
