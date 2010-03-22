@@ -59,6 +59,7 @@ EXTRA_DIST		=			\
 	bin/pocc-checkout			\
 	bin/pocc-make				\
 	bin/pocc-checkout			\
+	bin/pocc-versionsgenerator		\
 	config/base/configure.cfg		\
 	config/base/driver.cfg			\
 	config/devel/configure.cfg		\

@@ -1,3 +1,13 @@
+2010-03-21  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
+
+	* bin/pocc-versionsgenerator: New. Script to invoke PoCC with all
+	combinations of flag sequences, given a file containing the flags
+	to consider.
+	* Makefile.am: Update accordingly.
+
+	* bin/pocc-util.in: Update to support the 'generate-versions'
+	command.
+
 2010-03-11  Louis-Noel Pouchet  <louis-noel.pouchet@inria.fr>
 	This patch creates and manages options:
 	--ac-keep-outer-par: array contraction preserves outer parallel loops

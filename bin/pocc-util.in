@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Nov 13 01:17:06 2009 Louis-Noel Pouchet
+## Last update Sun Mar 21 17:35:58 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -41,6 +41,7 @@ do "$BASEDIR/bin/pocc-alternate";
 do "$BASEDIR/bin/pocc-checkout";
 do "$BASEDIR/bin/pocc-make";
 do "$BASEDIR/bin/pocc-snapshot";
+do "$BASEDIR/bin/pocc-versionsgenerator";
 
 sub print_help
 {
@@ -50,6 +51,7 @@ sub print_help
     print "<command>: make [software-name]\n";
     print "<command>: snapshot <svn|release> [mode]\n";
     print "<command>: buildall\n";
+    print "<command>: generate-versions <options-file> <filename>\n";
     print "<command>: help\n";
 }
 
@@ -105,6 +107,13 @@ sub parse_args
 		my $mode = "base";
 		$mode = $args[$i + 2] if ($i + 2 == $#args);
 		snapshot($BASEDIR, $type, $mode);
+		$i = $#args;
+	    }
+	    case "generate-versions" {
+		die "[PoCC] Missing argument to snapshot" if ($i == $#args);
+		my $versionfile = $args[$i + 1];
+		my $filename = $args[$i + 2];
+		generate_versions($versionfile, $filename);
 		$i = $#args;
 	    }
 	    else { print "Unknown argument: $args[$i]\n"; }
