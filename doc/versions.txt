@@ -1,0 +1,43 @@
+## Default options for all versions
+[default]
+flags: --verbose --pragmatizer
+
+
+## Tile sizes to test for. All combinations of those (rectangular
+tiling) will be tested.
+[tile-sizes] 
+sizes: 1 16 32 50 80 120
+
+
+## Iterate on all combinations of the following list.
+## Syntax is:
+## [flag]
+## values: <flags> | <flags>
+## options: <flags> | <flags>
+##
+##
+## The 'values' line is optional. If it's there, the 'values' list
+## (separated by |) is a mutually exclusive list of arguments appended to 'flag'
+##
+## The 'options' line is optional. If it's there, the 'options' list
+## (separated by |) is a NON mutually exclusive list of arguments
+## appended to 'flag'
+##
+[--pluto-tile]
+
+[--pluto-parallel]
+
+[--pluto-unroll]
+values: --pluto-ufactor 2 | --pluto-ufactor 4 | --pluto-ufactor 8
+
+[--pluto-fuse]
+values: maxfuse | smartfuse | nofuse
+
+[--pluto-prevector]
+
+[--vectorizer]
+options: --no-outer-par-loops
+
+[--array-contraction]
+options: --ac-keep-outer-par | --ac-keep-vector-par
+
