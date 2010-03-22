@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Sun Mar 21 21:16:29 2010 Louis-Noel Pouchet
+## Last update Mon Mar 22 00:53:33 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -95,9 +95,7 @@ sub generate_versions
 {
     my ($version_file, $file) = @_;
 
-    print "File: $version_file\n";
-    print "C: $file\n";
-
+    print "[PoCC-generator] Generate flag sequences from $version_file for file $file\n"; 
     ## Read default options.
     my %config = read_versions_file($version_file);
 
@@ -108,7 +106,7 @@ sub generate_versions
 	## Remove it from the set of configurations.
 	delete($config{"default"});
     }
-    print "Default options: $default_opts\n";
+    print "[PoCC-generator] Default options: $default_opts\n";
 
     ## FIXME: Deal with tile sizes.
 
@@ -170,7 +168,7 @@ sub generate_versions
 	$final_flags{$opt_str} = 1;
     }
     my $nb_combinations = scalar keys %final_flags;
-    print "Total number of flags: $nb_combinations\n";
+    print "[PoCC-generator] Total (optimistic) number of flags sequences: $nb_combinations\n";
 
     ## Call PoCC for each flag sequence
     $output_dir = $file;
@@ -178,6 +176,8 @@ sub generate_versions
     $filename_prefix = $output_dir;
     $output_dir = $output_dir . "-pocc-flags";
     system("mkdir -p $output_dir");
+    local $| = 1;
+    my $version_ok = 0;
     for $flag_seq (keys %final_flags) {
 	my $out_filename = $flag_seq;
 	$out_filename =~ s/\s/_/g;
@@ -185,12 +185,17 @@ sub generate_versions
 	$out_filename =~ s/__/_/g;
 	$out_filename = $filename_prefix . $out_filename;
 	my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename.c 2>/dev/null`;
+	print ".";
 	if ($? != 0) {
 	    print "Command failed\n";
 	    system ("rm -f $output_dir/$out_filename.c");
 	}
+	else {
+	    $version_ok++;
+	}
     }
-
+    print "\n";
+    print "[Pocc-generator] Total number of versions created: $version_ok\n";
 }
 
 
