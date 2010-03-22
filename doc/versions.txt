@@ -4,7 +4,7 @@ flags: --verbose --pragmatizer
 
 
 ## Tile sizes to test for. All combinations of those (rectangular
-tiling) will be tested.
+## tiling) will be tested.
 [tile-sizes] 
 sizes: 1 16 32 50 80 120
 
