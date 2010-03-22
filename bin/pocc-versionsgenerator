@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Mar 22 00:54:11 2010 Louis-Noel Pouchet
+## Last update Mon Mar 22 00:55:53 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -95,7 +95,7 @@ sub generate_versions
 {
     my ($version_file, $file) = @_;
 
-    print "[PoCC-generator] Generate flag sequences from $version_file for file $file\n"; 
+    print "[PoCC-generator] Generate flag sequences from $version_file for file $file\n";
     ## Read default options.
     my %config = read_versions_file($version_file);
 
@@ -168,7 +168,7 @@ sub generate_versions
 	$final_flags{$opt_str} = 1;
     }
     my $nb_combinations = scalar keys %final_flags;
-    print "[PoCC-generator] Total (optimistic) number of flags sequences: $nb_combinations\n";
+    print "[PoCC-generator] Total number of flags sequences: $nb_combinations\n";
 
     ## Call PoCC for each flag sequence
     $output_dir = $file;
@@ -197,5 +197,3 @@ sub generate_versions
     print "\n";
     print "[PoCC-generator] Total number of versions created: $version_ok\n";
 }
-
-
