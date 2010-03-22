@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Mar 22 00:53:33 2010 Louis-Noel Pouchet
+## Last update Mon Mar 22 00:54:11 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -195,7 +195,7 @@ sub generate_versions
 	}
     }
     print "\n";
-    print "[Pocc-generator] Total number of versions created: $version_ok\n";
+    print "[PoCC-generator] Total number of versions created: $version_ok\n";
 }
 
 
