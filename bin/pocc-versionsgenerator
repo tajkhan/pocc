@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Fri Mar 26 18:57:03 2010 Louis-Noel Pouchet
+## Last update Fri Mar 26 19:06:10 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -254,6 +254,7 @@ sub generate_versions
     my %md5_table;
     my @tile_depth;
     $tile_depth[0] = 1; $tile_depth[1] = 1; $tile_depth[2] = 1;
+    my $timeout = 180;
     for $flag_seq (keys %final_flags) {
 	my $out_filename = $flag_seq;
 	$out_filename =~ s/\s/_/g;
@@ -285,7 +286,7 @@ sub generate_versions
 			    system("/bin/echo -n \"$tile_comb[$i] \" >> tile.sizes");
 			}
 			system("/bin/echo \"$tile_comb[$i]\" >> tile.sizes");
-			my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename$tile_string.c 2>/dev/null`;
+			my $ret = `perl -e 'alarm shift \@ARGV; exec \@ARGV' $timeout "pocc $flag_seq $file -o $output_dir/$out_filename$tile_string.c 2>/dev/null"`;
 			if ($? != 0) {
 			    print "Command failed\n";
 			    system ("rm -f $output_dir/$out_filename.c");
@@ -302,7 +303,7 @@ sub generate_versions
 	    }
 	}
 	else {
-	    my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename.c 2>/dev/null`;
+	    my $ret = `perl -e 'alarm shift \@ARGV; exec \@ARGV' $timeout "pocc $flag_seq $file -o $output_dir/$out_filename.c 2>/dev/null"`;
 	    if ($? != 0) {
 		print "Command failed\n";
 		system ("rm -f $output_dir/$out_filename.c");
