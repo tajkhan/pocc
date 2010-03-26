@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Mar 22 17:09:45 2010 Louis-Noel Pouchet
+## Last update Fri Mar 26 18:57:03 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -33,6 +33,7 @@
 
 use Switch;
 use Term::ANSIColor;
+use Digest::MD5;
 
 
 sub print_versions
@@ -51,6 +52,7 @@ sub print_versions
 	}
     }
 }
+
 
 sub read_versions_file
 {
@@ -85,6 +87,7 @@ sub read_versions_file
     return %versions_data;
 }
 
+
 sub dec2bin {
     my $str = unpack("B32", pack("N", shift));
 #    $str =~ s/^0+(?=\d)//;   # otherwise you'll get leading zeros
@@ -100,9 +103,55 @@ sub has_tiling
 }
 
 
+sub compute_md5
+{
+   my ($file) = @_;
+   open(FILE, $file) or die "Can't open '$file': $!";
+   binmode(FILE);
+   return Digest::MD5->new->addfile(*FILE)->digest;
+}
+
+
+sub version_already_exists
+{
+    my ($filename, $similar_handle, $md5tab) = @_;
+    my $md5_value = compute_md5("$filename");
+    my $code_exists = 0;
+    if (defined($$md5tab{$md5_value})) {
+	my $dif;
+	for $md5val (keys %$md5tab) {
+	    if ($md5val eq $md5_value) {
+		$dif = `diff $filename $$md5tab{$md5val}`;
+		if ($dif eq "") {
+		    $code_exists = 1;
+		    system("rm -f $filename");
+		    print $similar_handle "$$md5tab{$md5val} $filename\n";
+		    last;
+		}
+	    }
+	}
+    }
+    if ($code_exists == 0) {
+	$$md5tab{$md5_value} = $filename;
+    }
+    return $code_exists;
+}
+
+
+sub compute_tiling_depth
+{
+    my ($filename, @tile_depth) = @_;
+
+    ## Check if 1-d tiling is generating a different code.
+
+    ## FIXME: Do that part.
+}
+
+
 sub generate_versions
 {
     my ($version_file, $file) = @_;
+    my $similar_file = $file . "-similar-versions";
 
     print "[PoCC-generator] Generate flag sequences from $version_file for file $file\n";
     ## Read default options.
@@ -190,6 +239,9 @@ sub generate_versions
     my $nb_combinations = scalar keys %final_flags;
     print "[PoCC-generator] Total number of flags sequences: $nb_combinations\n";
 
+    ## Open the file containing similar C files.
+    open SIMILAR, ">", "$similar_file" or die $!;
+
     ## Call PoCC for each flag sequence
     $output_dir = $file;
     $output_dir =~ s/\.c$//g;
@@ -197,18 +249,25 @@ sub generate_versions
     $output_dir = $output_dir . "-pocc-flags";
     system("mkdir -p $output_dir");
     local $| = 1;
-    my $version_ok = 0;
+    my $version_counter = 0;
+    my $file_counter = 0;
+    my %md5_table;
+    my @tile_depth;
+    $tile_depth[0] = 1; $tile_depth[1] = 1; $tile_depth[2] = 1;
     for $flag_seq (keys %final_flags) {
 	my $out_filename = $flag_seq;
 	$out_filename =~ s/\s/_/g;
 	$out_filename =~ s/--//g;
 	$out_filename =~ s/__/_/g;
 	$out_filename = $filename_prefix . $out_filename;
-	if ($#tile_sizes > 1 && has_tiling($flag_seq)) {
+	if ($#tile_sizes >= 1 && has_tiling($flag_seq)) {
+
+	    ## Test the level of tiling required.
+	    compute_tiling_depth("$out_filename", @tile_depth);
 	    my @tile_comb;
-	    for ($n = 0; $n < $#tile_sizes; $n++) {
-		for ($m = 0; $m < $#tile_sizes; $m++) {
-		    for ($l = 0; $l < $#tile_sizes; $l++) {
+	    for ($n = 0; $n <= $tile_depth[0] * $#tile_sizes; $n++) {
+		for ($m = 0; $m <= $tile_depth[1] * $#tile_sizes; $m++) {
+		    for ($l = 0; $l <= $tile_depth[2] * $#tile_sizes; $l++) {
 			$tile_comb[0] = $tile_sizes[$n];
 			$tile_comb[1] = $tile_sizes[$m];
 			$tile_comb[2] = $tile_sizes[$l];
@@ -232,8 +291,11 @@ sub generate_versions
 			    system ("rm -f $output_dir/$out_filename.c");
 			}
 			else {
-			    print ".";
-			    $version_ok++;
+			    print "T";
+			    if (! version_already_exists("$output_dir/$out_filename$tile_string.c", SIMILAR, \%md5_table)) {
+				$file_counter++;
+			    }
+			    $version_counter++;
 			}
 		    }
 		}
@@ -241,16 +303,23 @@ sub generate_versions
 	}
 	else {
 	    my $ret = `pocc $flag_seq $file -o $output_dir/$out_filename.c 2>/dev/null`;
-	    print ".";
 	    if ($? != 0) {
 		print "Command failed\n";
 		system ("rm -f $output_dir/$out_filename.c");
 	    }
 	    else {
-		$version_ok++;
+		print ".";
+		if (! version_already_exists("$output_dir/$out_filename.c", SIMILAR, \%md5_table)) {
+		    $file_counter++;
+		}
+		$version_counter++;
 	    }
 	}
     }
+    close SIMILAR;
+
     print "\n";
-    print "[PoCC-generator] Total number of versions created: $version_ok\n";
+    print "[PoCC-generator] Total number of versions created: $version_counter\n";
+    print "[PoCC-generator] Total number of C files generated: $file_counter\n";
+    print "[PoCC-generator] File containing the similarity pairs: $similar_file\n";
 }

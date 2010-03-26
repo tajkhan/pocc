@@ -1,3 +1,9 @@
+2010-03-26  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* bin/pocc-versionsgenerator: Add support for limiting the
+	generation of the number of C files by removing all files
+	identical to a previously generated one.
+
 2010-03-22  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* doc/versions.txt: New. Sample input file for the flag sequence
