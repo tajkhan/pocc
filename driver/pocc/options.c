@@ -49,8 +49,10 @@ pocc_options_malloc ()
   ret->inscop_fakepoccarray = 0;
   ret->set_default_parameter_values = 0;
   ret->read_input_scop_file = 0;
-
   ret->cloog_options = NULL;
+
+  // Dependence analysis.
+  ret->candl_pass = 1;
 
   // Letsee options.
   ret->letsee = 0; // Run LetSee (default: no)

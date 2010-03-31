@@ -57,6 +57,9 @@ struct s_pocc_options
   int		set_default_parameter_values;
   int		read_input_scop_file;
 
+  // Dependence analysis.
+  int		candl_pass; // Run Candl (default: yes)
+
   // Compile command.
   int		compile_program; // Internal field
   char*		compile_command;

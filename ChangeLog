@@ -1,4 +1,14 @@
 2010-03-30  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch adds a new option to PoCC:
+	--no-candl: don't run candl for dependence analysis.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add and manage options --no-candl.
+
+2010-03-30  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch adds 2 new options to PoCC:
 	--default-ctxt: specify that the program parameters are all >=
 	32. Use at your own risk!
@@ -10,7 +20,6 @@
 	* driver/pocc/options.c,
 	* driver/pocc/driver-codegen.c,
 	* driver/src/options.h,
-
 	* driver/src/options.c: Add and manage options --default-ctxt and
 	--read-scop.
 
