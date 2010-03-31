@@ -34,12 +34,35 @@ pocc_driver_clan (FILE* program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
+  if (poptions->read_input_scop_file)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Reading input scop\n");
+
+      return scoplib_scop_read(poptions->input_file);
+    }
+
   if (! poptions->quiet)
     printf ("[PoCC] Running Clan\n");
   clan_options_p coptions = clan_options_malloc ();
   coptions->bounded_context = poptions->clan_bounded_context;
 
   scoplib_scop_p scop = clan_scop_extract (program, coptions);
+
+  /* Also deal with the context information. */
+  if (poptions->set_default_parameter_values)
+    {
+      int nb_cols = scop->context->NbColumns;
+      scoplib_matrix_free (scop->context);
+      scop->context = scoplib_matrix_malloc (nb_cols - 2, nb_cols);
+      int i;
+      for (i = 0; i < nb_cols - 2; ++i)
+	{
+	  SCOPVAL_set_si(scop->context->p[i][0], 1);
+	  SCOPVAL_set_si(scop->context->p[i][i + 1], 1);
+	  SCOPVAL_set_si(scop->context->p[i][nb_cols - 1], -32);
+	}
+    }
 
 /*   scoplib_scop_print (stdout, scop); */
 

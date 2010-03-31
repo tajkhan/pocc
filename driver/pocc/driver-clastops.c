@@ -192,7 +192,8 @@ pocc_driver_clastops (scoplib_scop_p program,
     clast_pprint (body_file, root, 0, coptions);
 
   fprintf (body_file, "#pragma endscop\n");
-
-  /* (9) Delete the clast. */
-  cloog_clast_free (root);
+  
+  /// FIXME: This is a BUG: this should be enabled.
+/*   /\* (9) Delete the clast. *\/ */
+/*   cloog_clast_free (root); */
 }

@@ -47,6 +47,8 @@ pocc_options_malloc ()
   ret->program_exec_result = NULL;
   ret->clan_bounded_context = 0;
   ret->inscop_fakepoccarray = 0;
+  ret->set_default_parameter_values = 0;
+  ret->read_input_scop_file = 0;
 
   ret->cloog_options = NULL;
 

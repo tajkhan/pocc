@@ -54,6 +54,8 @@ struct s_pocc_options
   // Parser options.
   int		clan_bounded_context;
   int		inscop_fakepoccarray;
+  int		set_default_parameter_values;
+  int		read_input_scop_file;
 
   // Compile command.
   int		compile_program; // Internal field

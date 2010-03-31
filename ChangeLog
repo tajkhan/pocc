@@ -1,3 +1,19 @@
+2010-03-30  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch adds 2 new options to PoCC:
+	--default-ctxt: specify that the program parameters are all >=
+	32. Use at your own risk!
+	--read-scop: read a .scop file instead of a C file as the input.
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-clan.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-codegen.c,
+	* driver/src/options.h,
+
+	* driver/src/options.c: Add and manage options --default-ctxt and
+	--read-scop.
+
 2010-03-26  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* bin/pocc-versionsgenerator: Add support for limiting the
