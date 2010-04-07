@@ -124,6 +124,7 @@ struct s_pocc_options
   int		vectorizer_mark_vect_loops;
   int		vectorizer_vectorize_loops;
   int		vectorizer_keep_outer_par_loops;
+  int		vectorizer_sink_all_candidates;
 
   // Storage compaction.
   int		storage_compaction;

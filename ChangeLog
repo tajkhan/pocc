@@ -1,3 +1,14 @@
+2010-04-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch adds the option --sink-all-loops, to drive the
+	vectorizer to sink all sinkable loops, resulting in potential
+	multi-level inner-parallelism.
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add and manage option --sink-all-loops.
+
 2010-03-30  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch adds a new option to PoCC:
 	--no-candl: don't run candl for dependence analysis.

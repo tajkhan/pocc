@@ -122,6 +122,7 @@ pocc_driver_clastops (scoplib_scop_p program,
       voptions->mark_vect_loops = poptions->vectorizer_mark_vect_loops;
       voptions->vectorize_loops = poptions->vectorizer_vectorize_loops;
       voptions->keep_outer_parallel = poptions->vectorizer_keep_outer_par_loops;
+      voptions->sink_all_candidates = poptions->vectorizer_sink_all_candidates;
       // Call the vectorizer.
       s_vectorizer_metrics_t* vectm = vectorizer (program, root, voptions);
       vectorizer_metrics_print (stdout, vectm, program);
@@ -192,7 +193,7 @@ pocc_driver_clastops (scoplib_scop_p program,
     clast_pprint (body_file, root, 0, coptions);
 
   fprintf (body_file, "#pragma endscop\n");
-  
+
   /// FIXME: This is a BUG: this should be enabled.
 /*   /\* (9) Delete the clast. *\/ */
 /*   cloog_clast_free (root); */

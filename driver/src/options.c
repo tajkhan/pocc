@@ -79,6 +79,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
   { '\0', "mark-par-loops", 0, "Detect parallel loops in generated\n\t\t\t\tcode [off]" },
   { '\0', "no-outer-par-loops", 0, "Don't preserve outer parallel loop during\n\t\t\t\tvectorization [off]" },
+  { '\0', "sink-all-loops", 0, "Sink all candidate vector loops during\n\t\t\t\tvectorization [off]" },
   { '\0', "array-contraction", 0, "Perform array contraction [off]" },
   { '\0', "ac-keep-outer-par", 0, "Array contraction: preserve outer parallel loops\n\t\t\t\t[off]" },
   { '\0', "ac-keep-vector-par", 0, "Array contraction: preserve inner parallel loops\n\t\t\t\t[off]" },
@@ -457,6 +458,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->vectorizer_mark_par_loops = 1;
   if (opt_tab[POCC_OPT_VECT_NO_KEEP_OUTER_PAR_LOOPS])
     options->vectorizer_keep_outer_par_loops = 0;
+  if (opt_tab[POCC_OPT_VECT_SINK_ALL_LOOPS])
+    options->vectorizer_sink_all_candidates = 1;
 
   // Storage compaction options.
   if (opt_tab[POCC_OPT_STORCOMPACT])

@@ -110,6 +110,7 @@ pocc_options_malloc ()
   ret->vectorizer_mark_vect_loops = 1;
   ret->vectorizer_vectorize_loops = 1;
   ret->vectorizer_keep_outer_par_loops = 1;
+  ret->vectorizer_sink_all_candidates = 0;
 
   // Storage compaction options.
   ret->storage_compaction = 0;
