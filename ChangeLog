@@ -1,3 +1,17 @@
+2010-05-03  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch provides the capability to install pocc in a remote
+	directory. For the moment third-party scripts in
+	generators/scripts are not installed correctly.
+
+	Bump the trunk to 1.0-rc2.
+
+	* install.sh,
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am,
+	* configure.ac,
+	* bin/pocc-make,
+	* bin/pocc-util.in: Support non-local installation directory.
+
 2010-04-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch adds the option --sink-all-loops, to drive the
 	vectorizer to sink all sinkable loops, resulting in potential

@@ -30,43 +30,30 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 INCLUDES		=						\
 	-I$(top_builddir)						\
+	-I$(top_builddir)/driver/src					\
 	-I$(top_builddir)/driver/pocc/include				\
 	-I$(top_builddir)/driver/pocc-utils/include			\
-	-I$(top_builddir)/driver/src					\
-	-I$(top_builddir)/optimizers/install-letsee/include		\
-	-I$(top_builddir)/optimizers/install-pluto/include		\
-	-I$(top_builddir)/optimizers/install-storcompacter/include	\
-	-I$(top_builddir)/optimizers/install-vectorizer/include		\
-	-I$(top_builddir)/ir/install-scoplib/include			\
-	-I$(top_builddir)/ir/install-scoptools/include			\
-	-I$(top_builddir)/analyzers/install-polyfeat/include		\
-	-I$(top_builddir)/analyzers/install-clan/include		\
-	-I$(top_builddir)/analyzers/install-candl/include		\
-	-I$(top_builddir)/generators/install-cloog/include		\
-	-I$(top_builddir)/generators/install-pragmatize/include		\
-	-I$(top_builddir)/generators/install-clasttools/include		\
-	-I$(top_builddir)/math/install-piplib/include			\
-	-I$(top_builddir)/math/install-polylib/include			\
-	-I$(top_builddir)/math/install-fm/include			\
 	-I$(top_srcdir)							\
+	-I$(top_srcdir)/driver/src					\
 	-I$(top_srcdir)/driver/pocc/include				\
 	-I$(top_srcdir)/driver/pocc-utils/include			\
-	-I$(top_srcdir)/driver/src					\
-	-I$(top_srcdir)/optimizers/install-letsee/include		\
-	-I$(top_srcdir)/optimizers/install-pluto/include		\
-	-I$(top_srcdir)/optimizers/install-storcompacter/include	\
-	-I$(top_srcdir)/optimizers/install-vectorizer/include		\
-	-I$(top_srcdir)/ir/install-scoplib/include			\
-	-I$(top_srcdir)/ir/install-scoptools/include			\
-	-I$(top_srcdir)/analyzers/install-clan/include			\
-	-I$(top_srcdir)/analyzers/install-candl/include			\
-	-I$(top_srcdir)/analyzers/install-polyfeat/include		\
-	-I$(top_srcdir)/generators/install-cloog/include		\
-	-I$(top_srcdir)/generators/install-pragmatize/include		\
-	-I$(top_srcdir)/generators/install-clasttools/include		\
-	-I$(top_srcdir)/math/install-piplib/include			\
-	-I$(top_srcdir)/math/install-polylib/include			\
-	-I$(top_srcdir)/math/install-fm/include
+	-I$(install_prefix)						\
+	-I$(install_prefix)/optimizers/install-letsee/include		\
+	-I$(install_prefix)/optimizers/install-pluto/include		\
+	-I$(install_prefix)/optimizers/install-storcompacter/include	\
+	-I$(install_prefix)/optimizers/install-vectorizer/include	\
+	-I$(install_prefix)/ir/install-scoplib/include			\
+	-I$(install_prefix)/ir/install-scoptools/include		\
+	-I$(install_prefix)/analyzers/install-clan/include		\
+	-I$(install_prefix)/analyzers/install-candl/include		\
+	-I$(install_prefix)/analyzers/install-polyfeat/include		\
+	-I$(install_prefix)/generators/install-cloog/include		\
+	-I$(install_prefix)/generators/install-pragmatize/include	\
+	-I$(install_prefix)/generators/install-clasttools/include	\
+	-I$(install_prefix)/math/install-piplib/include			\
+	-I$(install_prefix)/math/install-polylib/include		\
+	-I$(install_prefix)/math/install-fm/include			\
+	-I$(install_prefix)/math/external/install/include
 
 #############################################################################
 

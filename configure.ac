@@ -28,7 +28,7 @@ AC_PREREQ([2.60])
 
 #############################################################################
 ## Fill here the @bug email adress.
-AC_INIT([pocc], [1.0-rc1], [louis-noel.pouchet@inria.fr])
+AC_INIT([pocc], [1.0-rc2], [louis-noel.pouchet@inria.fr])
 ## Automatic generation of config.h
 AC_CONFIG_HEADERS([driver/pocc-utils/include/pocc-utils/config.h:driver/pocc-utils/include/pocc-utils/config-h.in])
 ## A common file, which should be included by every source file.
@@ -80,10 +80,14 @@ if test -z "$AUTOMAKE"; then AC_MSG_ERROR(automake not found); exit 1; fi;
 
 #POCC_ARG_LIBS_DEPENDENCIES
 
+dnl Send the install prefix to pocc-util
+install_prefix=$prefix
+
 #############################################################################
 ## Variable substitutions.
 AC_SUBST([ac_aux_dir])
 AC_SUBST([abs_top_srcdir])
+AC_SUBST([install_prefix])
 #############################################################################
 ## Configure Makefiles.
 AC_CONFIG_FILES([bin/pocc-util], [chmod +x bin/pocc-util])

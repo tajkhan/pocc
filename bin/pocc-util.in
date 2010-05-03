@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Sun Mar 21 17:35:58 2010 Louis-Noel Pouchet
+## Last update Mon May  3 15:51:15 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -35,6 +35,7 @@ use Switch;
 
 ## Some global variables.
 $BASEDIR = "@abs_top_srcdir@";
+$INST_PREFIX = "@install_prefix@";
 
 ## Include command scripts.
 do "$BASEDIR/bin/pocc-alternate";
@@ -72,7 +73,7 @@ sub parse_args
 		die "Missing argument\n" if ($i eq $#args);
 		alternate($BASEDIR, $args[$i + 1]);
 		checkout($BASEDIR, "all");
-		make($BASEDIR, "all", "force");
+		make($BASEDIR, $INST_PREFIX, "all", "force");
 		my $ret = system ("cd $BASEDIR && make install");
 		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
@@ -88,15 +89,15 @@ sub parse_args
 	    }
 	    case "make" {
 		if ($i < $#args) {
-		    make($BASEDIR, $args[$i + 1], "");
+		    make($BASEDIR, $INST_PREFIX, $args[$i + 1], "");
 		}
 		else {
-		    make($BASEDIR, "all", "");
+		    make($BASEDIR, $INST_PREFIX, "all", "");
 		}
 		$i = $#args;
 	    }
 	    case "buildall" {
-		make($BASEDIR, "all", "");
+		make($BASEDIR, $INST_PREFIX, "all", "");
 		my $ret = system ("cd $BASEDIR && make install");
 		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;

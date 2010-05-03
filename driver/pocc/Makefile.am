@@ -32,39 +32,26 @@ INCLUDES		=						\
 	-I$(top_builddir)						\
 	-I$(top_builddir)/driver/pocc/include				\
 	-I$(top_builddir)/driver/pocc-utils/include			\
-	-I$(top_builddir)/optimizers/install-letsee/include		\
-	-I$(top_builddir)/optimizers/install-pluto/include		\
-	-I$(top_builddir)/optimizers/install-storcompacter/include	\
-	-I$(top_builddir)/optimizers/install-vectorizer/include		\
-	-I$(top_builddir)/ir/install-scoplib/include			\
-	-I$(top_builddir)/ir/install-scoptools/include			\
-	-I$(top_builddir)/analyzers/install-clan/include		\
-	-I$(top_builddir)/analyzers/install-candl/include		\
-	-I$(top_builddir)/analyzers/install-polyfeat/include		\
-	-I$(top_builddir)/generators/install-cloog/include		\
-	-I$(top_builddir)/generators/install-pragmatize/include		\
-	-I$(top_builddir)/generators/install-clasttools/include		\
-	-I$(top_builddir)/math/install-piplib/include			\
-	-I$(top_builddir)/math/install-polylib/include			\
-	-I$(top_builddir)/math/install-fm/include			\
 	-I$(top_srcdir)							\
 	-I$(top_srcdir)/driver/pocc/include				\
 	-I$(top_srcdir)/driver/pocc-utils/include			\
-	-I$(top_srcdir)/optimizers/install-letsee/include		\
-	-I$(top_srcdir)/optimizers/install-pluto/include		\
-	-I$(top_srcdir)/optimizers/install-vectorizer/include		\
-	-I$(top_srcdir)/optimizers/install-storcompacter/include	\
-	-I$(top_srcdir)/ir/install-scoplib/include			\
-	-I$(top_srcdir)/ir/install-scoptools/include			\
-	-I$(top_srcdir)/analyzers/install-clan/include			\
-	-I$(top_srcdir)/analyzers/install-candl/include			\
-	-I$(top_srcdir)/analyzers/install-polyfeat/include		\
-	-I$(top_srcdir)/generators/install-cloog/include		\
-	-I$(top_srcdir)/generators/install-pragmatize/include		\
-	-I$(top_srcdir)/generators/install-clasttools/include		\
-	-I$(top_srcdir)/math/install-piplib/include			\
-	-I$(top_srcdir)/math/install-polylib/include			\
-	-I$(top_srcdir)/math/install-fm/include
+	-I$(install_prefix)						\
+	-I$(install_prefix)/optimizers/install-letsee/include		\
+	-I$(install_prefix)/optimizers/install-pluto/include		\
+	-I$(install_prefix)/optimizers/install-storcompacter/include	\
+	-I$(install_prefix)/optimizers/install-vectorizer/include	\
+	-I$(install_prefix)/ir/install-scoplib/include			\
+	-I$(install_prefix)/ir/install-scoptools/include		\
+	-I$(install_prefix)/analyzers/install-clan/include		\
+	-I$(install_prefix)/analyzers/install-candl/include		\
+	-I$(install_prefix)/analyzers/install-polyfeat/include		\
+	-I$(install_prefix)/generators/install-cloog/include		\
+	-I$(install_prefix)/generators/install-pragmatize/include	\
+	-I$(install_prefix)/generators/install-clasttools/include	\
+	-I$(install_prefix)/math/install-piplib/include			\
+	-I$(install_prefix)/math/install-polylib/include		\
+	-I$(install_prefix)/math/install-fm/include			\
+	-I$(install_prefix)/math/external/install/include
 
 #############################################################################
 
@@ -97,23 +84,23 @@ libpocc_la_SOURCES 	=			\
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
-libpocc_la_LIBADD	=						      \
-	$(top_builddir)/ir/install-scoplib/lib/libscoplib.la		      \
-	$(top_builddir)/ir/install-scoptools/lib/libscoptools.la	      \
-	$(top_builddir)/analyzers/install-clan/lib/libclan.la		      \
-	$(top_builddir)/analyzers/install-candl/lib/libcandl.la		      \
-	$(top_builddir)/analyzers/install-polyfeat/lib/libpolyfeat.la	      \
-	$(top_builddir)/math/install-piplib/lib/libpiplib64.la		      \
-	$(top_builddir)/math/install-polylib/lib/libpolylib64.la	      \
-	$(top_builddir)/optimizers/install-letsee/lib/libletsee.la	      \
-	$(top_builddir)/optimizers/install-pluto/lib/libpluto.la	      \
-	$(top_builddir)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-	$(top_builddir)/optimizers/install-vectorizer/lib/libvectorizer.la    \
-	$(top_builddir)/generators/install-cloog/lib/libcloog-isl.la	      \
-	$(top_builddir)/generators/install-pragmatize/lib/libpragmatize.la    \
-	$(top_builddir)/generators/install-clasttools/lib/libclasttools.la    \
-	$(top_builddir)/math/install-fm/lib/libfm.la
+libpocc_la_LIBADD	=						     \
+  $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
+  $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
+  $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \
+  $(install_prefix)/analyzers/install-candl/lib/libcandl.la		     \
+  $(install_prefix)/analyzers/install-polyfeat/lib/libpolyfeat.la	     \
+  $(install_prefix)/math/install-piplib/lib/libpiplib64.la		     \
+  $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
+  $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
+  $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
+  $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
+  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
+  $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
+  $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
+  $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
+  $(install_prefix)/math/install-fm/lib/libfm.la
 
 ## FIXME: Removed this due to a potential conflict on Solaris10. We
 ## already include pocc-utils in letsee, pluto, clan, candl, cloog...
-#	$(top_builddir)/driver/pocc-utils/libpocc-utils.la
+#	$(install_prefix)/driver/pocc-utils/libpocc-utils.la
