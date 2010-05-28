@@ -36,7 +36,7 @@ for DIM in $PARDIMS;  do
     # sometimes the scattering dimension may not appear
     grep -q $DIM $1 
 
-    if [ $? -eq 0 ]; then
+    if [ $? == 0 ]; then
 
         # mark all loops of this scattering dimension parallel
 
