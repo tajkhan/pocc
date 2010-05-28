@@ -22,12 +22,12 @@ match_closing_brace() {
     while read -n1 char; do
         #do something with the byte in $char
         #echo $open $clos $char
-        if [ "$char" == "{" ]; then
+        if [ "$char" = "{" ]; then
             open=$(($open+1))
-        elif [ "$char" == "}" ]; then
+        elif [ "$char" = "}" ]; then
             numclose=$(($numclose+1))
             open=$(($open-1))
-            if [ $open == 0 ]; then
+            if [ $open -eq 0 ]; then
                 #echo $numclose
                 break
             fi
@@ -50,7 +50,7 @@ fi
 
 numlines=`wc -l .vectorize | awk '{print $1}'`
 
-if [ $numlines == "0" ]; then
+if [ $numlines = "0" ]; then
     exit 3
 fi
 
