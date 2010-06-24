@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Mon May  3 18:49:44 2010 Louis-Noel Pouchet
+## Last update Thu Jun 24 13:14:14 2010 Louis-Noel Pouchet
 ##
 
 ##
@@ -86,10 +86,10 @@ fi;
 ## (5) Build and install pocc-utils
 echo "[PoCC] Make pocc-utils...";
 needed_pu=`find driver/pocc-utils -newer $POCC_INSTALL_PREFIX/driver/install-pocc/include/pocc-utils 2>&1 | grep -v ".svn"`;
-if ! [ -z "$needed_pu" ]; then
+#if ! [ -z "$needed_pu" ]; then
     cd driver/pocc-utils && make && make install && cd -;
     if [ $? -ne 0 ]; then echo "[PoCC] pocc-utils: fatal error"; exit 1; fi;
-fi;
+#fi;
 
 ## (6) Checkout all files, and build all modules.
 echo "[PoCC] Checkout and build for configuration $POCC_MODE...";
