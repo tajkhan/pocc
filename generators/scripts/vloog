@@ -50,17 +50,17 @@ fi
 
 numlines=`wc -l .vectorize | awk '{print $1}'`
 
-if [ $numlines = "0" ]; then
+if [ "$numlines" = "0" ]; then
     exit 3
 fi
 
 
 # Vectorization pragma for ICC
 VECDIM=`cat .vectorize`
-
 LINE_NUMBERS=`grep -n "for ($VECDIM.*=" $1 | awk '{split($1,t,":"); print t[1]}'`
 
 j=0
+
 for num in $LINE_NUMBERS; do
 
     LOOP=`sed -n -e ''$(($num+5*$j))'p' $1`

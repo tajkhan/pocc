@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Thu Jun 24 13:14:14 2010 Louis-Noel Pouchet
+## Last update Mon May  3 15:35:56 2010 Louis-Noel Pouchet
 ##
 
 ##
@@ -78,7 +78,8 @@ if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
 	enable_devel="";
     fi;
     ## Warning: must include gmp.h path for the moment into pocc driver.
-    GMPINCFLAGS="CPPFLAGS='-I $POCC_INSTALL_PREFIX/math/external/install/include'"
+    GMPINCFLAGS="CPPFLAGS='-I `pwd`/math/external/install/include'" 
+    POCC_INSTALL_PREFIX=`pwd`;
     eval $GMPINCFLAGS ./configure --prefix="$POCC_INSTALL_PREFIX"  --bindir="$POCC_INSTALL_PREFIX/bin" --libdir="$POCC_INSTALL_PREFIX/driver/install-pocc/lib" --includedir="$POCC_INSTALL_PREFIX/driver/install-pocc/include" --datarootdir=`pwd`  --disable-static --enable-shared $enable_devel;
     if [ $? -ne 0 ]; then echo "[PoCC] configure: fatal error"; exit 1; fi;
 fi;
@@ -86,7 +87,7 @@ fi;
 ## (5) Build and install pocc-utils
 echo "[PoCC] Make pocc-utils...";
 needed_pu=`find driver/pocc-utils -newer $POCC_INSTALL_PREFIX/driver/install-pocc/include/pocc-utils 2>&1 | grep -v ".svn"`;
-#if ! [ -z "$needed_pu" ]; then
+if ! [ -z "$needed_pu" ]; then
     cd driver/pocc-utils && make && make install && cd -;
     if [ $? -ne 0 ]; then echo "[PoCC] pocc-utils: fatal error"; exit 1; fi;
 #fi;

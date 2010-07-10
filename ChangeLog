@@ -1,16 +1,19 @@
-2010-05-03  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
-	This patch provides the capability to install pocc in a remote
-	directory. For the moment third-party scripts in
-	generators/scripts are not installed correctly.
-
-	Bump the trunk to 1.0-rc2.
+2010-07-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* install.sh,
-	* driver/pocc/Makefile.am,
-	* driver/src/Makefile.am,
 	* configure.ac,
 	* bin/pocc-make,
-	* bin/pocc-util.in: Support non-local installation directory.
+	* bin/pocc-util.in: Enable installation of pocc to a specific
+	prefix.
+	
+	* generators/scripts/vloog: Minor fix.
+	
+2010-05-27  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* generators/scripts/plann,
+	* generators/scripts/ploog,
+	* generators/scripts/vloog: Use standard tests in shell (fixing a
+	potential incompatibility with some shell versions)
 
 2010-04-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch adds the option --sink-all-loops, to drive the

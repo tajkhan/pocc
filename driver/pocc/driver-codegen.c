@@ -279,6 +279,7 @@ pocc_driver_codegen (scoplib_scop_p program,
     coptions->f = poptions->cloog_f;
   if (poptions->cloog_l != POCC_CLOOG_UNDEF)
     coptions->l = poptions->cloog_l;
+  
   cp = cloog_program_generate (cp, coptions);
 
   /* (4) Call Clast pretty-print and post-processing. */
