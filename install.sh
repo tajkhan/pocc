@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Mon May  3 15:35:56 2010 Louis-Noel Pouchet
+## Last update Sat Jul 10 16:01:01 2010 Louis-Noel Pouchet
 ##
 
 ##
@@ -90,7 +90,7 @@ needed_pu=`find driver/pocc-utils -newer $POCC_INSTALL_PREFIX/driver/install-poc
 if ! [ -z "$needed_pu" ]; then
     cd driver/pocc-utils && make && make install && cd -;
     if [ $? -ne 0 ]; then echo "[PoCC] pocc-utils: fatal error"; exit 1; fi;
-#fi;
+fi;
 
 ## (6) Checkout all files, and build all modules.
 echo "[PoCC] Checkout and build for configuration $POCC_MODE...";

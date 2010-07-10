@@ -1,13 +1,30 @@
 2010-07-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update reference file to
+	match the new CLooG output (now: extra () around iterator
+	expressions).
+
+	* install.sh: Fix typo.
+
+2010-07-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* install.sh,
 	* configure.ac,
 	* bin/pocc-make,
 	* bin/pocc-util.in: Enable installation of pocc to a specific
 	prefix.
-	
+
 	* generators/scripts/vloog: Minor fix.
-	
+
 2010-05-27  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* generators/scripts/plann,
