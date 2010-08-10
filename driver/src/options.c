@@ -65,6 +65,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "pluto-prevector", 0, "PLuTo: perform prevectorization [off]" },
   { '\0', "pluto-multipipe", 0, "PLuTo: multipipe [off]" },
   { '\0', "pluto-rar", 0, "\tPLuTo: consider RAR dependences [off]" },
+  { '\0', "pluto-rar-cf", 0, "\tPLuTo: consider RAR dependences for \n\t\t\t\tcost function only [off]" },
   { '\0', "pluto-lastwriter", 0, "PLuTo: perform lastwriter dep. simp. [off]" },
   { '\0', "pluto-scalpriv", 0, "PLuTo: perform scalar privatization [off]" },
   { '\0', "pluto-bee", 0, "\tPLuTo: use Bee [off]" },
@@ -360,6 +361,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->pluto_multipipe = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_RAR])
     options->pluto_rar = options->pluto = 1;
+  if (opt_tab[POCC_OPT_PLUTO_RAR_CF])
+    options->pluto_rar_cf = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_LASTWRITER])
     options->pluto_lastwriter = options->pluto = 1;
   if (opt_tab[POCC_OPT_PLUTO_SCALPRIV])

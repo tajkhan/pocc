@@ -90,6 +90,7 @@ pocc_options_malloc ()
   ret->pluto_lastwriter = 0;
   ret->pluto_scalpriv = 0;
   ret->pluto_external_candl = 0;
+  ret->pluto_rar_cf = 0;
 
   // Cloog options.
   ret->cloog_f = POCC_CLOOG_UNDEF;

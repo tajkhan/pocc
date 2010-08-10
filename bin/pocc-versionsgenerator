@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Fri Mar 26 19:06:10 2010 Louis-Noel Pouchet
+## Last update Tue Jul 13 17:43:09 2010 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -190,6 +190,7 @@ sub generate_versions
     my $group_id = 1;
     for $flag (keys %config) {
 	$base_flag = $config{$flag}{"flag-name"}[0];
+
 	if (defined($config{$flag}{"values"})) {
 	    my @array = @{$config{$flag}{"values"}};
  	    for ($i = 0; $i <= $#array; $i++) {
@@ -211,26 +212,25 @@ sub generate_versions
 	$group_id++;
     }
     my $nb_opts = $#flag_array;
-
     ## Generate all combinations.
     ## FIXME: Only 32 native flags are supported (32 bits).
     my %final_flags;
-    for ($k = 0; $k < 2 ** $nb_opts; $k++) {
+    for ($k = 1; $k < 2 ** ($nb_opts + 1); $k++) {
 	my $val = dec2bin($k);
 	my $opt_str = $default_opts;
 	for ($l = 0; $l < 32; $l++) {
 	    $mutex_group[$l] = 0;
 	}
 	for ($l = 0; $l < 32; $l++) {
-	    if (substr($val,$l, 1) eq "1") {
-		if ($flag_mutex[31 - $l] != 0) {
-		    if ($mutex_group[$flag_mutex[31 - $l]] == 0) {
-			$opt_str = $opt_str . " " . $flag_array[31 - $l];
-			$mutex_group[$flag_mutex[31 - $l]] = 1;
+	    if (substr($val,31 - $l, 1) eq "1") {
+		if ($flag_mutex[$l] != 0) {
+		    if ($mutex_group[$flag_mutex[$l]] == 0) {
+			$opt_str = $opt_str . " " . $flag_array[$l];
+			$mutex_group[$flag_mutex[$l]] = 1;
 		    }
 		}
 		else {
-		    $opt_str = $opt_str . " " . $flag_array[31 - $l];
+		    $opt_str = $opt_str . " " . $flag_array[$l];
 		}
 	    }
 	}

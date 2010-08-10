@@ -103,6 +103,7 @@ struct s_pocc_options
   int		pluto_lastwriter;
   int		pluto_scalpriv;
   int		pluto_external_candl;
+  int		pluto_rar_cf;
 
 
   // Codegen Options.

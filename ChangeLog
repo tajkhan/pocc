@@ -1,3 +1,15 @@
+2010-08-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch adds the option --pluto-rar-cf, which allow using RAR
+	dependences only for the bounding function in Pluto.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for option --pluto-rar-cf.
+
+	* bin/pocc-versionsgenerator: Minor fix.
+
 2010-07-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* tests/tests/gemver/gemver.plutotileparunrollprev.c,

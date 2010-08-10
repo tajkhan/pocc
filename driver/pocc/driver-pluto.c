@@ -61,6 +61,8 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->scalpriv = poptions->pluto_scalpriv;
   ploptions->external_deps = poptions->pluto_external_candl;
   //ploptions->debug = poptions->verbose;
+  /* Set RAR on cost function only option. */
+  ploptions->rar_cf = poptions->pluto_rar_cf;
 
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
