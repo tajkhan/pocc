@@ -1,5 +1,12 @@
 2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c: Add option clastannotation_pass. Set to 1
+	to enable CLAST annotation/translation (eg, parallel clast_for to
+	clast_parfor).
+
+2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/Makefile.am: Fix a typo in library name.
 
 2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>

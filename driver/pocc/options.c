@@ -119,6 +119,9 @@ pocc_options_malloc ()
   ret->array_contraction_keep_outer_par_loops = 0;
   ret->array_contraction_keep_vectorized_loops = 0;
 
+  // CLAST annotation/translation.
+  ret->clastannotation_pass = 0;
+
   return ret;
 }
 

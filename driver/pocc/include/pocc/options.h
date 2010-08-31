@@ -136,6 +136,9 @@ struct s_pocc_options
   int		array_contraction_keep_outer_par_loops;
   int		array_contraction_keep_vectorized_loops;
 
+  // CLAST annotation/translation.
+  int		clastannotation_pass;
+
 };
 typedef struct s_pocc_options s_pocc_options_t;
 
