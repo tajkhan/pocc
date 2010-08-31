@@ -43,6 +43,10 @@ struct s_pocc_options
   char*		input_file_name;
   FILE*		output_file;
   char*		output_file_name;
+  // Set to 1 if scop fields (eg, iterator and parameter names) are
+  // standard char* strings, set to 0 if it is pointers from random AST
+  // node.
+  int		names_are_strings;
 
   // Verbose.
   int		verbose;

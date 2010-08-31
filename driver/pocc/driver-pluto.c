@@ -63,6 +63,7 @@ pocc_driver_pluto (scoplib_scop_p program,
   //ploptions->debug = poptions->verbose;
   /* Set RAR on cost function only option. */
   ploptions->rar_cf = poptions->pluto_rar_cf;
+  ploptions->names_are_strings = poptions->names_are_strings;
 
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;

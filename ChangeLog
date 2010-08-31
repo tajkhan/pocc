@@ -1,3 +1,12 @@
+2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-pluto.c: add internal option
+	'names_are_strings', to specify to pluto that attributes of
+	ScopLib are standard (ie, strdup-able) strings and not void*
+	pointers.
+
 2010-08-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch adds the option --pluto-rar-cf, which allow using RAR
 	dependences only for the bounding function in Pluto.
