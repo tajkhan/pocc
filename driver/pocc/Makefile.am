@@ -100,7 +100,7 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
-  $(install_prefix)/generators/install-clasttools/lib/libclastannotation.la  \
+  $(install_prefix)/generators/install-clastannotation/lib/libclastannotation.la  \
   $(install_prefix)/math/install-fm/lib/libfm.la
 
 ## FIXME: Removed this due to a potential conflict on Solaris10. We

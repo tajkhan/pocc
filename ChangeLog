@@ -1,5 +1,9 @@
 2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/Makefile.am: Fix a typo in library name.
+
+2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/Makefile.am: Add the new clastannotation module to
 	the list of dependent libraries for PoCC.
 
