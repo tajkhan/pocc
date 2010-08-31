@@ -48,6 +48,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/generators/install-cloog/include		\
 	-I$(install_prefix)/generators/install-pragmatize/include	\
 	-I$(install_prefix)/generators/install-clasttools/include	\
+	-I$(install_prefix)/generators/install-clastannotation/include	\
 	-I$(install_prefix)/math/install-piplib/include			\
 	-I$(install_prefix)/math/install-polylib/include		\
 	-I$(install_prefix)/math/install-fm/include			\
@@ -70,16 +71,16 @@ pkginclude_HEADERS 	=					\
 lib_LTLIBRARIES 	= libpocc.la
 
 
-libpocc_la_SOURCES 	=			\
-			  driver-clan.c		\
-			  driver-candl.c	\
-			  driver-letsee.c	\
-			  driver-pluto.c	\
-			  driver-clastops.c	\
-			  driver-codegen.c	\
-			  error.c		\
-			  exec.c		\
-		  	  options.c		\
+libpocc_la_SOURCES 	=				\
+			  driver-clan.c			\
+			  driver-candl.c		\
+			  driver-letsee.c		\
+			  driver-pluto.c		\
+			  driver-clastops.c		\
+			  driver-codegen.c		\
+			  error.c			\
+			  exec.c			\
+		  	  options.c			\
 			  xmalloc.c
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
@@ -99,6 +100,7 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
+  $(install_prefix)/generators/install-clasttools/lib/libclastannotation.la  \
   $(install_prefix)/math/install-fm/lib/libfm.la
 
 ## FIXME: Removed this due to a potential conflict on Solaris10. We

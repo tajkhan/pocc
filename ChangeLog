@@ -1,5 +1,16 @@
 2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/Makefile.am: Add the new clastannotation module to
+	the list of dependent libraries for PoCC.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg: Configure the clastannotation module by
+	default for these 2 modes.
+
+2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/include/pocc/options.h,
 	* driver/pocc/options.c,
 	* driver/pocc/driver-pluto.c: add internal option
@@ -8,7 +19,7 @@
 	pointers.
 
 2010-08-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
-	This patch adds the option --pluto-rar-cf, which allow using RAR
+	This patch adds the option --pluto-rar-cf, which allows using RAR
 	dependences only for the bounding function in Pluto.
 
 	* driver/pocc/include/pocc/options.h,

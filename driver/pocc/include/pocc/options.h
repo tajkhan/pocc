@@ -135,6 +135,7 @@ struct s_pocc_options
   int		storage_compaction;
   int		array_contraction_keep_outer_par_loops;
   int		array_contraction_keep_vectorized_loops;
+
 };
 typedef struct s_pocc_options s_pocc_options_t;
 
