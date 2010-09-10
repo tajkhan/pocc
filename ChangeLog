@@ -1,3 +1,14 @@
+2010-09-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/Makefile.am,
+	* driver/pocc/driver-candl.c,
+	* driver/src/Makefile.am,
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg: Insert two new modules, dlml and
+	parametrictiling. Not invoked by the driver.
+
 2010-08-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/include/pocc/options.h,

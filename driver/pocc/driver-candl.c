@@ -29,6 +29,9 @@
 # include <pocc/driver-candl.h>
 
 
+# include <dlml/dlml.h>
+
+
 void
 pocc_driver_candl (scoplib_scop_p program,
 		   s_pocc_options_t* poptions,
@@ -50,4 +53,7 @@ pocc_driver_candl (scoplib_scop_p program,
       candl_dependence_free (deps);
       candl_options_free (coptions);
     }
+
+  dlml (program);
+  
 }

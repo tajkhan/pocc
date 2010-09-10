@@ -42,6 +42,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/optimizers/install-pluto/include		\
 	-I$(install_prefix)/optimizers/install-storcompacter/include	\
 	-I$(install_prefix)/optimizers/install-vectorizer/include	\
+	-I$(install_prefix)/optimizers/install-dlml/include		\
 	-I$(install_prefix)/ir/install-scoplib/include			\
 	-I$(install_prefix)/ir/install-scoptools/include		\
 	-I$(install_prefix)/analyzers/install-clan/include		\
@@ -50,6 +51,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/generators/install-cloog/include		\
 	-I$(install_prefix)/generators/install-pragmatize/include	\
 	-I$(install_prefix)/generators/install-clasttools/include	\
+	-I$(install_prefix)/generators/install-clastannotation/include	\
 	-I$(install_prefix)/math/install-piplib/include			\
 	-I$(install_prefix)/math/install-polylib/include		\
 	-I$(install_prefix)/math/install-fm/include			\
