@@ -97,7 +97,6 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
   $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-  $(install_prefix)/optimizers/install-dlml/lib/libdlml.la	             \
   $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
