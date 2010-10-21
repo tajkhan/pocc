@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # VLooG: Vector pragma adder, helper script for pluto
-# 
-# Reads contents of .vectorize and generate ivdep pragmas for those loops 
+#
+# Reads contents of .vectorize and generate ivdep pragmas for those loops
 # after replacing their bounds by scalars. This allows ICC to auto-vectorize
 # those loops. .vectorize is created by the pluto core.
 #
@@ -44,14 +44,16 @@ match_closing_brace() {
     return $closing_brace_linenum
 }
 
+
 if [ ! -f .vectorize ]; then
-    exit 2
+    exit 0
 fi
+
 
 numlines=`wc -l .vectorize | awk '{print $1}'`
 
 if [ "$numlines" = "0" ]; then
-    exit 3
+    exit 0
 fi
 
 
@@ -61,7 +63,9 @@ LINE_NUMBERS=`grep -n "for ($VECDIM.*=" $1 | awk '{split($1,t,":"); print t[1]}'
 
 j=0
 
+
 for num in $LINE_NUMBERS; do
+
 
     LOOP=`sed -n -e ''$(($num+5*$j))'p' $1`
 
@@ -72,11 +76,11 @@ for num in $LINE_NUMBERS; do
         exit 4
     fi
 
-    sed -n -e '1,'$(($num+5*$j-1))'p' $1 > .header 
+    sed -n -e '1,'$(($num+5*$j-1))'p' $1 > .header
     sed -n -e ''$(($closing_brace+1))',$p' $1 > .footer
     sed -n -e ''$(($num+5*$j+1))','$closing_brace'p' $1 > .body
 
-    # everything from tr is a hack for ancc generated code 
+    # everything from tr is a hack for ancc generated code
     sed -n -e ''$(($num+5*$j))'p' $1 | tr -d ' ' | sed -e 's/for/for /' > .vecloop
 
     # lower and upper bounds

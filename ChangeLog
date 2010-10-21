@@ -1,3 +1,11 @@
+2010-10-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg: Add support for the new piplib-gmp,
+	used by default by pluto's solver.
+
+	* generators/scripts/vloog: Update the exit value.
+
 2010-09-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/Makefile.am,
