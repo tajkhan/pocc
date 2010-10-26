@@ -87,8 +87,16 @@ pocc_driver_pluto (scoplib_scop_p program,
   if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
     return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;
-
-/*   scoplib_scop_print (stdout, program); */
+  
+  if (poptions->output_scoplib_file_name)
+    {
+      FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");
+      if (scopf)
+	{
+	  scoplib_scop_print_dot_scop (scopf, program);
+	  fclose (scopf);
+	}
+    }
 
   return EXIT_SUCCESS;
 }

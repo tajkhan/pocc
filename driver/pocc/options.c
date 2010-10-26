@@ -37,6 +37,7 @@ pocc_options_malloc ()
   ret->input_file_name = NULL;
   ret->output_file = NULL;
   ret->output_file_name = NULL;
+  ret->output_scoplib_file_name = NULL;
   ret->names_are_strings = 1;
   ret->trash = 0;
   ret->verbose = 0;
@@ -138,9 +139,12 @@ pocc_options_init_cloog (s_pocc_options_t* options)
 void
 pocc_options_free (s_pocc_options_t* options)
 {
-  XFREE(options->input_file_name);
+  if (options->input_file_name)
+    XFREE(options->input_file_name);
   if (options->output_file_name)
     XFREE(options->output_file_name);
+  if (options->output_scoplib_file_name)
+    XFREE(options->output_scoplib_file_name);
   if (options->cloog_options)
     {
       CloogState* cstate = options->cloog_options->state;

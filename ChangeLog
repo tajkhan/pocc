@@ -1,3 +1,13 @@
+2010-10-26  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	Add option --output-scop, which dumps the scoplib file right after
+	the execution of pluto.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for option --output-scop.
+
 2010-10-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/devel/configure.cfg,

@@ -35,6 +35,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'h', "help", 0, "\t\tPrint this help" },
   { 'v', "version", 0, "\tPrint version information" },
   { 'o', "output", 1, "\tOutput file [filename.pocc.c]" },
+  { '\0', "output-scop", 0, "\tOutput scoplib file to filename.pocc.scop" },
   { '\0', "bounded-ctxt", 0, "\tParser: bound all global parameters >= -1" },
   { '\0', "default-ctxt", 0, "\tParser: bound all global parameters >= 32" },
   { '\0', "inscop-fakearray", 0, "Parser: use FAKEARRAY[i] to explicitly declare\n\t\t\t\twrite dependences" },
@@ -220,6 +221,14 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       buffer[++ii] = '\0';
       strcat (buffer, ".pocc.c");
       options->output_file_name = strdup (buffer);
+    }
+  if (opt_tab[POCC_OPT_OUTFILE_SCOP])
+    {
+      options->output_scoplib_file_name =
+	XMALLOC(char, strlen(options->output_file_name) + 6);
+      strcat (options->output_scoplib_file_name,
+	      options->output_file_name);
+      strcat (options->output_scoplib_file_name, ".scop");
     }
 
   // Help, again.
