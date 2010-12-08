@@ -26,9 +26,13 @@
 # include <pocc-utils/config.h>
 #endif
 
-# define CLOOG_SUPPORTS_SCOPLIB
+# ifndef CLOOG_INT_GMP
+#  define CLOOG_INT_GMP
+# endif
 # include <cloog/cloog.h>
 # include <pocc/driver-codegen.h>
+# include <pocc/driver-cloog.h>
+# include <pocc/driver-clastops.h>
 
 
 static
@@ -236,7 +240,7 @@ pocc_driver_codegen (scoplib_scop_p program,
     pocc_error ("Cannot create file .body.c\n");
   poptions->output_file = body_file;
 
-  /* (1) Update statement iterators with tile iterators. */
+  /* (1) Update statement iterators with tile iterators, if needed. */
   scoplib_statement_p stm;
   int i;
   for (stm = program->statement; stm; stm = stm->next)
@@ -259,7 +263,7 @@ pocc_driver_codegen (scoplib_scop_p program,
 	}
     }
 
-  /* (2) Create a CloogProgram from the .scop. */
+  /* (2) Generate polyhedral scanning code with CLooG. */
   if (! poptions->quiet)
     printf ("[PoCC] Running CLooG\n");
   CloogOptions* coptions = poptions->cloog_options;
@@ -270,28 +274,22 @@ pocc_driver_codegen (scoplib_scop_p program,
     }
   coptions->language = 'c';
 
-  CloogProgram* cp = cloog_program_scop_to_cloogprogram (program, coptions);
-
-  /* (3) Generate polyhedral scanning code with CLooG. */
-  /* Store the .scop corresponding to the input program. */
-  cp->scop = program;
   if (poptions->cloog_f != POCC_CLOOG_UNDEF)
     coptions->f = poptions->cloog_f;
   if (poptions->cloog_l != POCC_CLOOG_UNDEF)
     coptions->l = poptions->cloog_l;
 
-  cp = cloog_program_generate (cp, coptions);
+  struct clast_stmt* root =
+    pocc_driver_cloog (program, coptions, poptions, puoptions);
 
-  /* (4) Call Clast pretty-print and post-processing. */
-  pocc_driver_clastops (program, cp, poptions, puoptions);
+  /* (3) Call Clast pretty-print and post-processing. */
+  pocc_driver_clastops (program, root, poptions, puoptions);
 
-  /* Clean CLooG specific variables. */
-  cloog_program_free (cp);
-  fclose (poptions->output_file);
   /* Perform PoCC-specific syntactic post-processing. */
+  fclose (poptions->output_file);
   pocc_driver_codegen_post_processing (body_file, poptions);
 
-  /* (5) Build the final output file template. */
+  /* (4) Build the final output file template. */
   if (pocc_driver_codegen_program_finalize (poptions) == EXIT_FAILURE)
     {
       if (! poptions->quiet)

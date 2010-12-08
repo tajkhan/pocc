@@ -26,14 +26,14 @@
 # include <pocc-utils/config.h>
 #endif
 
-# define CLOOG_SUPPORTS_SCOPLIB
-# include <cloog/cloog.h>
-# include <cloog/clast.h>
+# include <pocc/driver-clastops.h>
+//# define CLOOG_SUPPORTS_SCOPLIB
+//# include <cloog/cloog.h>
+//# include <cloog/clast.h>
 # include <pragmatize/pragmatize.h>
 # include <vectorizer/vectorizer.h>
 # include <storcompacter/storcompacter.h>
 # include <clasttools/pprint.h>
-# include <pocc/driver-clastops.h>
 # include <clasttools/clastext.h>
 
 
@@ -77,16 +77,13 @@ traverse_print_clast_user_statement_extended_defines (struct clast_stmt* s,
 
 void
 pocc_driver_clastops (scoplib_scop_p program,
-		      CloogProgram* cp,
+		      struct clast_stmt* root,
 		      s_pocc_options_t* poptions,
 		      s_pocc_utils_options_t* puoptions)
 {
   CloogOptions* coptions = poptions->cloog_options;
 
-  /* (1) Create the CLAST associated to the CloogProgram. */
-  struct clast_stmt* root = cloog_clast_create (cp, coptions);
-
-  /* (2) Mark parallel loops, if required. */
+  /* (1) Mark parallel loops, if required. */
   if (poptions->vectorizer_mark_par_loops || poptions->storage_compaction)
     {
       s_vectorizer_options_t* voptions = vectorizer_options_malloc ();
@@ -94,7 +91,7 @@ pocc_driver_clastops (scoplib_scop_p program,
       vectorizer_options_free (voptions);
     }
 
-  /* (3) Run storage compaction, if required. */
+  /* (2) Run storage compaction, if required. */
   if (poptions->storage_compaction)
     {
       if (! poptions->quiet)
@@ -111,7 +108,7 @@ pocc_driver_clastops (scoplib_scop_p program,
       ac_options_free (acoptions);
     }
 
-  /* (4) Run the vectorizer, if required. */
+  /* (3) Run the vectorizer, if required. */
   if (poptions->vectorizer)
     {
       if (! poptions->quiet)
@@ -129,7 +126,7 @@ pocc_driver_clastops (scoplib_scop_p program,
       vectorizer_metrics_free (vectm);
     }
 
-  /* (5) Run the pragmatizer, if required. */
+  /* (4) Run the pragmatizer, if required. */
   if (poptions->pragmatizer)
     {
       if (! poptions->quiet)
@@ -137,11 +134,12 @@ pocc_driver_clastops (scoplib_scop_p program,
       pragmatize (program, root);
     }
 
-  /* (6) Generate statements macros. */
+  /* (5) Generate statements macros. */
   FILE* body_file = poptions->output_file;
   int st_count = 1;
   scoplib_statement_p stm;
   int i;
+  int nb_scatt = 0;
   for (stm = program->statement; stm; stm = stm->next)
     {
       fprintf (body_file, "#define S%d(", st_count++);
@@ -152,6 +150,8 @@ pocc_driver_clastops (scoplib_scop_p program,
 	    fprintf (body_file, ",");
 	}
       fprintf (body_file, ") %s\n", stm->body);
+      nb_scatt = stm->schedule->NbRows > nb_scatt ?
+	stm->schedule->NbRows : nb_scatt;
     }
   /* We now can have statement definition overriden by the array
      contraction. Those are stored in clast_user_statement_extended
@@ -159,16 +159,15 @@ pocc_driver_clastops (scoplib_scop_p program,
      be collected and pretty-printed here. */
   traverse_print_clast_user_statement_extended_defines (root, body_file);
 
-  /* (7) Generate loop counters. */
+  /* (6) Generate loop counters. */
   fprintf (body_file,
 	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
   int done = 0;
-  for (i = 0; i < cp->nb_scattdims; ++i)
+  for (i = 0; i < nb_scatt; ++i)
     {
       /// FIXME: Deactivate this, as pluto may generate OpenMP pragmas
       /// using some unused variables. We'll let the compiler remove useless
       /// variables.
-      if (cp->scaldims[i] == 0 || 1)
 	{
 	  if (! done++)
 	    fprintf (body_file, "\t register int ");
@@ -182,7 +181,7 @@ pocc_driver_clastops (scoplib_scop_p program,
   fflush (body_file);
   fprintf (body_file, "#pragma scop\n");
 
-  /* (8) Run the extended CLAST pretty-printer, if needed. */
+  /* (7) Run the extended CLAST pretty-printer, if needed. */
   if (poptions->pragmatizer || poptions->vectorizer ||
       poptions->vectorizer_mark_par_loops ||
       poptions->vectorizer_mark_vect_loops ||
@@ -191,10 +190,10 @@ pocc_driver_clastops (scoplib_scop_p program,
   else
     // Pretty-print the code with CLooG default pretty-printer.
     clast_pprint (body_file, root, 0, coptions);
-  
+
   fprintf (body_file, "#pragma endscop\n");
 
   /// FIXME: This is a BUG: this should be enabled.
-/*   /\* (9) Delete the clast. *\/ */
+/*   /\* (8) Delete the clast. *\/ */
 /*   cloog_clast_free (root); */
 }

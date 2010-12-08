@@ -65,6 +65,8 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->rar_cf = poptions->pluto_rar_cf;
   ploptions->names_are_strings = poptions->names_are_strings;
 
+  ploptions->tiling_in_scattering = poptions->pluto_tiling_in_scatt;
+
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
 
@@ -87,7 +89,7 @@ pocc_driver_pluto (scoplib_scop_p program,
   if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
     return EXIT_FAILURE;
   poptions->cloog_options = puoptions->cloog_options;
-  
+
   if (poptions->output_scoplib_file_name)
     {
       FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");

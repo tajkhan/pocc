@@ -1,5 +1,5 @@
 /*
- * driver-clastops.h: this file is part of the PoCC project.
+ * driver-cloog.h: this file is part of the PoCC project.
  *
  * PoCC, the Polyhedral Compiler Collection package
  *
@@ -22,8 +22,8 @@
  * Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
  *
  */
-#ifndef POCC_DRIVER_CLASTOPS_H
-# define POCC_DRIVER_CLASTOPS_H
+#ifndef POCC_DRIVER_CLOOG_H
+# define POCC_DRIVER_CLOOG_H
 
 # include <stdio.h>
 
@@ -50,14 +50,14 @@
 BEGIN_C_DECLS
 
 extern
-void
-pocc_driver_clastops (scoplib_scop_p program,
-		      struct clast_stmt*,
-		      s_pocc_options_t* poptions,
-		      s_pocc_utils_options_t* puoptions);
+struct clast_stmt*
+pocc_driver_cloog (scoplib_scop_p program,
+		   CloogOptions* coptions,
+		   s_pocc_options_t* poptions,
+		   s_pocc_utils_options_t* puoptions);
 
 
 END_C_DECLS
 
 
-#endif // POCC_DRIVER_CLASTOPS_H
+#endif // POCC_DRIVER_CLOOG_H

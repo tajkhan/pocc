@@ -73,7 +73,8 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "pluto-quiet", 0, "\tPLuTo: be quiet [off]" },
   { '\0', "pluto-ft", 0, "\tPLuTo: ft [off]" },
   { '\0', "pluto-lt", 0, "\tPLuTo: lt [off]" },
-  { '\0', "pluto-ext-candl", 0, "PLuTo: Read dependences from SCoP [off]\n" },
+  { '\0', "pluto-ext-candl", 0, "PLuTo: Read dependences from SCoP [off]" },
+  { '\0', "pluto-tile-scat", 0, "PLuTo: Perform tiling inside scatterings [off]\n" },
   { 'n', "no-codegen", 0, "\tDo not generate code [off]" },
   { '\0', "cloog-cloogf", 1, "CLooG: first level to scan [1]" },
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
@@ -393,6 +394,11 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PLUTO_EXTERNAL_CANDL])
     {
       options->pluto_external_candl = 1;
+      options->pluto = 1;
+    }
+  if (opt_tab[POCC_OPT_PLUTO_TILING_IN_SCATT])
+    {
+      options->pluto_tiling_in_scatt = 1;
       options->pluto = 1;
     }
   if (opt_tab[POCC_OPT_LETSEE_BOUNDS])

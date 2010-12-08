@@ -64,6 +64,7 @@ pkginclude_HEADERS 	=					\
 		          include/pocc/driver-letsee.h		\
 		          include/pocc/driver-clastops.h	\
 		          include/pocc/driver-codegen.h		\
+		          include/pocc/driver-cloog.h		\
 		          include/pocc/driver-pluto.h		\
 		          include/pocc/error.h			\
 		          include/pocc/exec.h			\
@@ -79,6 +80,7 @@ libpocc_la_SOURCES 	=				\
 			  driver-pluto.c		\
 			  driver-clastops.c		\
 			  driver-codegen.c		\
+			  driver-cloog.c		\
 			  error.c			\
 			  exec.c			\
 		  	  options.c			\

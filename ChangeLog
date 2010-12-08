@@ -1,3 +1,38 @@
+2010-12-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch updates PoCC with:
+
+	1) A new option --pluto-tile-scat, to embed the tiling in the
+	scattering functions and thus leave the iteration domains
+	unchanged.
+
+	2) A new, up-to-date version of CLooG, now the default and only
+	supported version: cloog-git.
+
+	* driver/pocc/include/pocc/driver-cloog.h,
+	* driver/pocc/driver-cloog.c: New. Wrapper for CLooG. Creates
+	internally a CloogInput from the scoplib, and return the generated
+	CLAST after calling CLooG.
+	* driver/pocc/Makefile.am: Update accoringly.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Support option --pluto-tile-scat. If
+	specified, pluto will embed the tiling in the schedule, without
+	modifying the iteration domains.
+
+	* driver/pocc/driver-codegen.c,
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/driver-clastops.h,
+	* driver/pocc/driver-pluto.c: Update to support cloog-git (was:
+	missing definition of CLooG integer type), support tiling in
+	scattering, use new driver-cloog pass.
+
+	* config/devel/configure.cfg,
+
+	* config/base/configure.cfg: Update the definition of CLooG
+	location to git repository.
+
 2010-10-26  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	Add option --output-scop, which dumps the scoplib file right after
 	the execution of pluto.

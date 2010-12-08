@@ -27,6 +27,10 @@
 
 # include <stdio.h>
 # include <pocc/common.h>
+# ifndef CLOOG_INT_GMP
+#  define CLOOG_INT_GMP
+# endif
+# include <cloog/cloog.h>
 # include <cloog/options.h>
 # include <pluto/pluto.h>
 # include <letsee/options.h>
@@ -109,6 +113,7 @@ struct s_pocc_options
   int		pluto_scalpriv;
   int		pluto_external_candl;
   int		pluto_rar_cf;
+  int		pluto_tiling_in_scatt;
 
 
   // Codegen Options.
