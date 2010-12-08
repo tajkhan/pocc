@@ -1,4 +1,9 @@
 2010-12-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Fix cloog-git bootstrap sequence.
+
+2010-12-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch updates PoCC with:
 
 	1) A new option --pluto-tile-scat, to embed the tiling in the
