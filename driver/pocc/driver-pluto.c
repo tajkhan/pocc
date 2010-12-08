@@ -27,6 +27,7 @@
 #endif
 
 # include <pocc/driver-pluto.h>
+# include <pocc/driver-cloog.h>
 
 // Ugly forward declaration to avoid compilation warning. Would have
 // been simpler to create an option.h file in Pluto...
@@ -92,12 +93,16 @@ pocc_driver_pluto (scoplib_scop_p program,
 
   if (poptions->output_scoplib_file_name)
     {
+      scoplib_scop_p tempscop = scoplib_scop_dup (program);
+      if (poptions->cloogify_schedules)
+	pocc_cloogify_scop (tempscop);
       FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");
       if (scopf)
 	{
-	  scoplib_scop_print_dot_scop (scopf, program);
+	  scoplib_scop_print_dot_scop (scopf, tempscop);
 	  fclose (scopf);
 	}
+      scoplib_scop_free (tempscop);
     }
 
   return EXIT_SUCCESS;

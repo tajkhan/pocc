@@ -196,6 +196,44 @@ scoplib_matrix_p cloogify_schedule(scoplib_matrix_p mat,
 
 
 /**
+ * Create a complete, CLooG-compatible scattering from the
+ * Pluto/LetSee generated scatterings.
+ *
+ * This is needed in particular when tiling constraints are to be
+ * embedded in the scatterings.
+ *
+ */
+void pocc_cloogify_scop(scoplib_scop_p program)
+{
+  int i;
+  scoplib_statement_p stm;
+  scoplib_matrix_p mat;
+
+  // Collect the maximal scattering dimensionality.
+  int nb_scatt = 0;
+  for (stm = program->statement; stm; stm = stm->next)
+    {
+      int nb_eq = 0;
+      for (i = 0; i < stm->schedule->NbRows; ++i)
+	if (SCOPVAL_get_si(stm->schedule->p[i][0]) == 0)
+	  ++nb_eq;
+      int cur_scatt = nb_eq + (stm->schedule->NbColumns -
+			       stm->domain->elt->NbColumns);
+      nb_scatt = nb_scatt > cur_scatt ? nb_scatt : cur_scatt;
+    }
+
+  for (stm = program->statement; stm; stm = stm->next)
+    {
+      scoplib_matrix_p newsched =
+	cloogify_schedule ((scoplib_matrix_p) stm->schedule, nb_scatt,
+			   program->nb_parameters);
+      scoplib_matrix_free (stm->schedule);
+      stm->schedule = newsched;
+    }
+}
+
+
+/**
  *
  * Call CLooG, return a CLAST. Supports tiling-in-scattering, from
  * PluTo.

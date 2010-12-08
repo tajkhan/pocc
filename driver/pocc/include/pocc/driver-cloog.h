@@ -50,6 +50,10 @@
 BEGIN_C_DECLS
 
 extern
+void pocc_cloogify_scop (scoplib_scop_p program);
+
+
+extern
 struct clast_stmt*
 pocc_driver_cloog (scoplib_scop_p program,
 		   CloogOptions* coptions,

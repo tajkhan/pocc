@@ -1,3 +1,16 @@
+2010-12-08  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch introduces the option --cloogify-sched. When invoked in
+	conjunction of --ouput-scop, the schedules in the generated scop
+	can be directly given as an input to CLooG.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/include/pocc/driver-cloog.h,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for cloogify-scheds option.
+
 2010-12-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/devel/configure.cfg,

@@ -52,6 +52,7 @@ pocc_options_malloc ()
   ret->set_default_parameter_values = 0;
   ret->read_input_scop_file = 0;
   ret->cloog_options = NULL;
+  ret->cloogify_schedules = 0;
 
   // Dependence analysis.
   ret->candl_pass = 1;
@@ -94,7 +95,7 @@ pocc_options_malloc ()
   ret->pluto_external_candl = 0;
   ret->pluto_rar_cf = 0;
   ret->pluto_tiling_in_scatt = 0;
-  
+
   // Cloog options.
   ret->cloog_f = POCC_CLOOG_UNDEF;
   ret->cloog_l = POCC_CLOOG_UNDEF;

@@ -36,6 +36,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'v', "version", 0, "\tPrint version information" },
   { 'o', "output", 1, "\tOutput file [filename.pocc.c]" },
   { '\0', "output-scop", 0, "\tOutput scoplib file to filename.pocc.scop" },
+  { '\0', "cloogify-scheds", 0, "Create CLooG-compatible schedules in the scop" },
   { '\0', "bounded-ctxt", 0, "\tParser: bound all global parameters >= -1" },
   { '\0', "default-ctxt", 0, "\tParser: bound all global parameters >= 32" },
   { '\0', "inscop-fakearray", 0, "Parser: use FAKEARRAY[i] to explicitly declare\n\t\t\t\twrite dependences" },
@@ -248,6 +249,10 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->inscop_fakepoccarray = 1;
   if (opt_tab[POCC_OPT_READ_SCOP_FILE])
     options->read_input_scop_file = 1;
+
+  if (opt_tab[POCC_OPT_CLOOGIFY_SCHED])
+    options->cloogify_schedules = 1;
+
 
   // Dependence analysis.
   if (opt_tab[POCC_OPT_NO_CANDL])

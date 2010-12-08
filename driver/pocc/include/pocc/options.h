@@ -48,6 +48,7 @@ struct s_pocc_options
   FILE*		output_file;
   char*		output_file_name;
   char*		output_scoplib_file_name;
+  int		cloogify_schedules;
   // Set to 1 if scop fields (eg, iterator and parameter names) are
   // standard char* strings, set to 0 if it is pointers from random AST
   // node.
