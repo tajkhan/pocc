@@ -1,3 +1,10 @@
+2011-01-06  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg,
+	* config/irregular/configure.cfg: Update SVN server to
+	alchemy.saclay.inria.fr.
+
 2010-12-08  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch introduces the option --cloogify-sched. When invoked in
 	conjunction of --ouput-scop, the schedules in the generated scop
