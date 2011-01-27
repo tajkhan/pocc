@@ -75,7 +75,6 @@ scoplib_matrix_p cloogify_schedule(scoplib_matrix_p mat,
   int scaldim_offset = 0;
   int line = 0;
   int last_offset;
-
   for (i = 0; i < mat->NbRows; ++i)
     {
       SCOPVAL_set_si(ret->p[i][0], SCOPVAL_get_si(mat->p[i][0]));
@@ -122,7 +121,7 @@ scoplib_matrix_p cloogify_schedule(scoplib_matrix_p mat,
 
   // Complete the schedule to have unspecified scattering dimensions
   // set to 0.
-  for (; i < mat->NbRows; ++i)
+  for (; i < ret->NbRows; ++i)
     SCOPVAL_set_si(ret->p[i][i + 1 - nb_ineq], -1);
 
   // Associate tloop bounds with tloop schedule. Overwrite the
