@@ -1,5 +1,9 @@
 2011-01-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/devel/configure.cfg: Add missing dependence to pluto.
+
+2011-01-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-cloog.c: Fix automatic naming of scattering
 	iterators.
 
