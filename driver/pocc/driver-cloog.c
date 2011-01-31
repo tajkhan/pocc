@@ -190,6 +190,8 @@ scoplib_matrix_p cloogify_schedule(scoplib_matrix_p mat,
       placed += scaldim_offset + 1;
     }
 
+  //scoplib_matrix_print (stdout, ret);
+
   return ret;
 }
 
@@ -308,6 +310,14 @@ pocc_driver_cloog (scoplib_scop_p program,
 	  ud = cloog_union_domain_add_domain (ud, NULL, dom, scat, NULL);
 	  cloog_matrix_free (cmat);
 	}
+    }
+  // Store the scattering names.
+  for (i = 0; i < nb_scatt; ++i)
+    {
+      char* buffer[16];
+      sprintf (buffer, "c%d", i);
+      ud = cloog_union_domain_set_name (ud, CLOOG_SCAT, i,
+					buffer);
     }
 
   input = cloog_input_alloc (context, ud);

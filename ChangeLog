@@ -1,3 +1,8 @@
+2011-01-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-cloog.c: Fix automatic naming of scattering
+	iterators.
+
 2011-01-26  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-cloog.c: Fix a bug in the completion of
