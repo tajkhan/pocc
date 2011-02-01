@@ -69,6 +69,7 @@ struct s_pocc_options
 
   // Dependence analysis.
   int		candl_pass; // Run Candl (default: yes)
+  int		candl_deps_isl_simplify;
 
   // Compile command.
   int		compile_program; // Internal field

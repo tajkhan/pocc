@@ -94,6 +94,7 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \
   $(install_prefix)/analyzers/install-candl/lib/libcandl.la		     \
   $(install_prefix)/analyzers/install-polyfeat/lib/libpolyfeat.la	     \
+  $(install_prefix)/math/install-isl/lib/libisl.la			     \
   $(install_prefix)/math/install-piplib/lib/libpiplib64.la		     \
   $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \

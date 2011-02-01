@@ -56,6 +56,7 @@ pocc_options_malloc ()
 
   // Dependence analysis.
   ret->candl_pass = 1;
+  ret->candl_deps_isl_simplify = 0;
 
   // Letsee options.
   ret->letsee = 0; // Run LetSee (default: no)

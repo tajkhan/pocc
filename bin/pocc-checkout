@@ -45,8 +45,14 @@ $MODE = "";
 sub checkout_git
 {
     my ($soft, $dir, $url) = @_;
+    my @urls = split(/@/, $url);
+    $url = $urls[0];
+    my $revision = "";
+    if ($#urls >= 1) {
+	$revision = $urls[1];
+    }
     print "[PoCC-checkout] Git cloning/updating $soft (from $url) in $dir...\n";
-    system("if [ -d \"$BDIR_CO/$dir/$soft/.git\" ]; then cd $BDIR_CO/$dir/$soft && git pull; else git clone $url $BDIR_CO/$dir/$soft; fi");
+    system("if [ -d \"$BDIR_CO/$dir/$soft/.git\" ]; then cd $BDIR_CO/$dir/$soft && git pull && if ! [ -z \"$revision\" ]; then git checkout $revision; fi; else git clone $url $BDIR_CO/$dir/$soft; if ! [ -z \"$revision\" ]; then cd $BDIR_CO/$dir/$soft && git checkout $revision; cd -; fi; fi");
 }
 
 

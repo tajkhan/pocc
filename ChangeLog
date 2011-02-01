@@ -1,3 +1,28 @@
+2011-02-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch adds systematic compilation of ISL to all modes
+	of PoCC, and the option --candl-dep-isl-simp.
+	Candl is now compiled with ISL support by default.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Create option --candl-dep-isl-simp
+	to simplify dependence polyhedra using ISL.
+
+	* driver/pocc/Makefile.am: Systematically link with ISL.
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg: Update the modes to support ISL and the
+	latest changes in Candl.
+
+	* bin/pocc-checkout: Update to support specific revisions in git.
+
+	* bin/create_ld_lib_path.sh: New. Convenience script to create
+	LD_LIBRARY_PATH variable.
+
 2011-01-31  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/devel/configure.cfg: Add missing dependence to pluto.
