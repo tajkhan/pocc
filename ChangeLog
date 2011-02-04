@@ -1,5 +1,19 @@
 2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update the test suite to
+	reflect the new CLooG output.
+
+2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/stable/configure.cfg,
 	* config/stable/driver.cfg: Update the configuration files to
 	support ISL and the latest version of Candl.

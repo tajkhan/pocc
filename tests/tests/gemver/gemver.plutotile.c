@@ -75,26 +75,26 @@ main(int argc, char** argv)
 
 #pragma scop
 if (N >= 1) {
-  for (c1=0;c1<=floord(N-1,32);c1++) {
-    for (c2=0;c2<=floord(N-1,32);c2++) {
-      for (c3=32*c1;c3<=min(N-1,32*c1+31);c3++) {
-        for (c4=32*c2;c4<=min(N-1,32*c2+31);c4++) {
-          A[(c4)][(c3)]=A[(c4)][(c3)]+u1[(c4)]*v1[(c3)]+u2[(c4)]*v2[(c3)];
-          x[(c3)]=x[(c3)]+A[(c4)][(c3)]*y[(c4)];
+  for (c1=0;c1<=floord((N-1),32);c1++) {
+    for (c2=0;c2<=floord((N-1),32);c2++) {
+      for (c3=32*c1;c3<=min((N-1),(32*c1+31));c3++) {
+        for (c4=32*c2;c4<=min((N-1),(32*c2+31));c4++) {
+          A[c4][c3]=A[c4][c3]+u1[c4]*v1[c3]+u2[c4]*v2[c3];
+          x[c3]=x[c3]+A[c4][c3]*y[c4];
         }
       }
     }
   }
-  for (c1=0;c1<=floord(N-1,32);c1++) {
-    for (c3=32*c1;c3<=min(N-1,32*c1+31);c3++) {
-      x[(c3)]=x[(c3)]+z[(c3)];
+  for (c1=0;c1<=floord((N-1),32);c1++) {
+    for (c3=32*c1;c3<=min((N-1),(32*c1+31));c3++) {
+      x[c3]=x[c3]+z[c3];
     }
   }
-  for (c1=0;c1<=floord(N-1,32);c1++) {
-    for (c2=0;c2<=floord(N-1,32);c2++) {
-      for (c3=32*c1;c3<=min(N-1,32*c1+31);c3++) {
-        for (c4=32*c2;c4<=min(N-1,32*c2+31);c4++) {
-          w[(c3)]=w[(c3)]+A[(c3)][(c4)]*x[(c4)];
+  for (c1=0;c1<=floord((N-1),32);c1++) {
+    for (c2=0;c2<=floord((N-1),32);c2++) {
+      for (c3=32*c1;c3<=min((N-1),(32*c1+31));c3++) {
+        for (c4=32*c2;c4<=min((N-1),(32*c2+31));c4++) {
+          w[c3]=w[c3]+A[c3][c4]*x[c4];
         }
       }
     }
