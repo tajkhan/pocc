@@ -1,5 +1,14 @@
 2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg: Update the configuration files to
+	support Candl/ISL and the latest version revision of Candl, CLooG
+	and ISL.
+
+2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* configure.ac: Bump to pocc-1.0-rc3.
 
 2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
