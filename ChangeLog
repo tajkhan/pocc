@@ -1,5 +1,9 @@
 2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* configure.ac: Bump to pocc-1.0-rc3.
+
+2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
 	* tests/tests/gemver/gemver.plutotileparunroll.c,
 	* tests/tests/gemver/gemver.plutotile.c,
