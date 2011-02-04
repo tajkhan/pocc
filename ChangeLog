@@ -1,3 +1,9 @@
+2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Update the configuration files to
+	support ISL and the latest version of Candl.
+
 2011-02-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch adds systematic compilation of ISL to all modes
 	of PoCC, and the option --candl-dep-isl-simp.
