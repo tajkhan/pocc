@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Feb  7 16:39:00 2011 Louis-Noel Pouchet
+## Last update Mon Feb  7 16:52:30 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -164,7 +164,7 @@ sub create_snapshot
     my $date = $year . $mon . $mday;
     $basedir = $basedir . "/snapshots";
     $snapdir = "pocc-$version-$date-$mode-$type";
-    systemdie("mkdir -p $basedir && cd $basedir && svn co --username lppcc --password lppcc https://alchemy.futurs.inria.fr/svn/users/pouchet/projects/pocc $snapdir\n");
+    systemdie("mkdir -p $basedir && cd $basedir && svn co --username lppcc --password lppcc https://alchemy.saclay.inria.fr/svn/users/pouchet/projects/pocc $snapdir\n");
     $basedir = $basedir . "/" . $snapdir;
     ## Create temporary pocc-util script.
     systemdie("sed -e \"s!\@abs_top_srcdir\@!$basedir!1\" $basedir/bin/pocc-util.in > $basedir/bin/pocc-util");
