@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Feb  7 15:19:21 2011 Louis-Noel Pouchet
+## Last update Mon Feb  7 16:39:00 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -128,11 +128,11 @@ sub snapshot_release
 	my $module = $config_data{$softs[$i]}{"module"};
 	$module =~ s/\s//g;
 	my $path = $basedir . "/" . $category . "/" . $module;
-	print ("[PoCC-snapshot] Create distribution of $category/$module\n");
+	print ("[PoCC-snapshot] Create distribution of $category/$module ($softs[$i])\n");
 	systemdie("cd $path && make dist");
 	my $id;
 	for ($j = 0; $j <= $#stable_softs; $j++) {
-	    $id = $j if ($stable_softs[$j] =~ /$softs[$i]$/);
+	    $id = $j if ($stable_softs[$j] =~ /$softs[$i]/);
 	}
 	my $archivename = $stable_softs[$id] . ".tar.gz";
 	systemdie("cp $path/$archivename $basedir/$poccversion/archives");
