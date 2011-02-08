@@ -1,3 +1,14 @@
+2011-02-08  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* README,
+	* doc/pocc.texi: Update documentation to pocc-1.0-rc3.
+
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Bump to pluto-0.5.2-pace.
+
+	* driver/src/Makefile.am: Fix a potential link problem with pocc
+	libraries.
+
 2011-02-04  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/stable/configure.cfg,

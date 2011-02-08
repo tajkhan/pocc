@@ -4,24 +4,15 @@
 
 PoCC, the POlyhedral Compiler Collection package
 
--*- version 1.0-beta-r2 -*-
+-*- version 1.0-rc3 -*-
 
 
 * Installation
 --------------
 
 Requirements:
-- perl
-- autoconf > 2.60
-- automake > 1.10
-- libtool > 1.5.22
-- flex
-- bison
-- doxygen
-- latex
-- texinfo
+- perl (any version)
 - gcc or another working C compiler
-- svn and git client
 
 
 Note that the installation will fail if one of the dependency is not
@@ -30,7 +21,7 @@ dependency, restart the installation from scracth, with a fresh source
 tree.
 
 $> ./install.sh
-
+$> export PATH=`pwd`/bin
 
 * Documentation
 ---------------
@@ -43,7 +34,7 @@ website directly. Note the documentation is still highly preliminary.
 * Usage
 -------
 
-#> bin/pocc -h
+#> pocc -h
 Gives an overview of the options
 
 
