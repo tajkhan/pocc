@@ -49,7 +49,10 @@ pocc_driver_candl (scoplib_scop_p program,
       // Embed dependences in the scop, in case we want pluto to read them.
       if (poptions->pluto_external_candl)
 	candl_dependence_update_scop_with_deps (program, deps);
+      
+      candl_depvector_extract_in_loop (cprogram, deps, 0);
 
+      
       candl_dependence_free (deps);
       candl_options_free (coptions);
     }
