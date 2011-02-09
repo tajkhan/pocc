@@ -50,7 +50,7 @@ pocc_driver_candl (scoplib_scop_p program,
       if (poptions->pluto_external_candl)
 	candl_dependence_update_scop_with_deps (program, deps);
       
-      candl_depvector_extract_in_loop (cprogram, deps, 0);
+/*       candl_depvector_extract_in_loop (cprogram, deps, 0); */
 
       
       candl_dependence_free (deps);
