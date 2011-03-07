@@ -1,5 +1,14 @@
 2011-03-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* configure.ac: Bump to rc3.1.
+
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Update the configuration files.
+
+2011-03-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/include/pocc/options.h,
 	* driver/pocc/options.c,
 	* driver/pocc/driver-cloog.c,
