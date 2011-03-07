@@ -116,7 +116,7 @@ struct s_pocc_options
   int		pluto_external_candl;
   int		pluto_rar_cf;
   int		pluto_tiling_in_scatt;
-
+  int		pluto_bound_coefficients;
 
   // Codegen Options.
   int		codegen; // Perform codegen (default: yes)

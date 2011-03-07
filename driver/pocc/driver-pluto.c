@@ -68,7 +68,8 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->names_are_strings = poptions->names_are_strings;
 
   ploptions->tiling_in_scattering = poptions->pluto_tiling_in_scatt;
-
+  ploptions->bound_coefficients = poptions->pluto_bound_coefficients;
+  
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
 

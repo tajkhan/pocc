@@ -1,3 +1,13 @@
+2011-03-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for option --pluto-bounds,
+	which bounds the transformation coefficients in Pluto.
+
 2011-02-08  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* README,

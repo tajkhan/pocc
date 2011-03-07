@@ -314,7 +314,7 @@ pocc_driver_cloog (scoplib_scop_p program,
   // Store the scattering names.
   for (i = 0; i < nb_scatt; ++i)
     {
-      char* buffer[16];
+      char buffer[16];
       sprintf (buffer, "c%d", i);
       ud = cloog_union_domain_set_name (ud, CLOOG_SCAT, i,
 					buffer);
