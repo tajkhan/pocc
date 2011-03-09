@@ -54,6 +54,7 @@ pocc_driver_candl (scoplib_scop_p program,
 
       
       candl_dependence_free (deps);
+      candl_program_free (cprogram);
       candl_options_free (coptions);
     }
 }

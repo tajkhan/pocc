@@ -43,9 +43,10 @@ CloogMatrix* convert_to_cloogmatrix(scoplib_matrix_p mat)
   return ret;
 }
 
+
+
 /**
  * Create a CLooG schedule from a pluto scattering.
- * What a mess for tiling into the scattering!
  *
  */
 static
@@ -66,131 +67,51 @@ scoplib_matrix_p cloogify_schedule(scoplib_matrix_p mat,
 	++nb_eq;
     }
   int nb_tile_loops = nb_ineq / 2;
+  nb_scatt -= nb_tile_loops;
 
   // Allocate new schedule. 'mat' already contains extra columns for
   // the tloop.
   scoplib_matrix_p ret =
-    scoplib_matrix_malloc (nb_scatt + nb_ineq, mat->NbColumns + nb_scatt);
+    scoplib_matrix_malloc (nb_scatt + nb_ineq,
+			   mat->NbColumns + nb_scatt);
 
-  int scaldim_offset = 0;
-  int line = 0;
-  int last_offset;
+  // -I for the scattering.
+  for (i = 0; i < nb_scatt; ++i)
+    SCOPVAL_set_si(ret->p[i][i + 1], -1);
+  int neq = 0;
+  // Copy the RHS of the schedule (that connects to actual iterations).
   for (i = 0; i < mat->NbRows; ++i)
     {
-      SCOPVAL_set_si(ret->p[i][0], SCOPVAL_get_si(mat->p[i][0]));
       if (SCOPVAL_get_si(mat->p[i][0]) == 0)
 	{
-	  // Row in the scheduling matrix is an equality. Copy it.
-	  SCOPVAL_set_si(ret->p[i][i + 1 + nb_tile_loops], -1);
+	  SCOPVAL_set_si(ret->p[i][0], 0);
+	  // Equality defining the schedule.
 	  for (j = 1; j < mat->NbColumns; ++j)
 	    SCOPVAL_set_si(ret->p[i][j + nb_scatt],
 			   SCOPVAL_get_si(mat->p[i][j]));
+	  ++neq;
 	}
       else
 	{
-	  // Row is an inequality for tiling. Recover tloop components.
-
-	  // Compute the scalar offset of this tloop level, ie, how
-	  // many scalar dimension before the tloop_level tloop.
-	  do
+	  // Inequality defining the domain of the scattering.
+	  SCOPVAL_set_si(ret->p[i][0], 1);
+	  for (j = 0; j < neq; ++j)
+	    if (SCOPVAL_get_si(mat->p[j][1 + (i - neq) / 2]) != 0)
+	      break;
+	  if (j < neq)
 	    {
-	      last_offset = scaldim_offset;
-	      for (j = 1; line < mat->NbRows && j < mat->NbColumns - 1 &&
-		     SCOPVAL_get_si(mat->p[line][j]) == 0; ++j)
-		;
-	      if (j == mat->NbColumns - 1)
-		++scaldim_offset;
-	      ++line;
+	      for (j = 1; j < mat->NbColumns; ++j)
+		SCOPVAL_set_si(ret->p[i][j + nb_scatt],
+			       SCOPVAL_get_si(mat->p[i][j]));
 	    }
-	  while (scaldim_offset > last_offset && line < mat->NbRows);
-
-	  // Copy the tloop-related section
-	  for (j = 1; j <= nb_tile_loops; ++j)
-	    SCOPVAL_set_si(ret->p[i][j],
-			   SCOPVAL_get_si(mat->p[i][j]));
-	  // Copy the ploop-related section
-	  for (; j < mat->NbColumns - nb_par - 1; ++j)
-	    SCOPVAL_set_si(ret->p[i][j + nb_tile_loops + scaldim_offset],
-			   SCOPVAL_get_si(mat->p[i][j]));
-	  // Copy the parametric and scalar section
-	  for (; j < mat->NbColumns; ++j)
-	    SCOPVAL_set_si(ret->p[i][j + nb_scatt],
-			   SCOPVAL_get_si(mat->p[i][j]));
-	}
-    }
-
-  // Complete the schedule to have unspecified scattering dimensions
-  // set to 0.
-  for (; i < ret->NbRows; ++i)
-    SCOPVAL_set_si(ret->p[i][i + 1 - nb_ineq], -1);
-
-  // Associate tloop bounds with tloop schedule. Overwrite the
-  // previous completion if necessary.
-  scaldim_offset = 0;
-  line = 0;
-  for (k = 0; k < nb_tile_loops; ++k)
-    {
-      do
-	{
-	  last_offset = scaldim_offset;
-	  for (j = 1; line < mat->NbRows && j < mat->NbColumns - 1 &&
-		 SCOPVAL_get_si(mat->p[line][j]) == 0; ++j)
-	    ;
-	  if (j == mat->NbColumns - 1)
-	    ++scaldim_offset;
-	  ++line;
-	}
-      while (scaldim_offset > last_offset && line < mat->NbRows);
-
-      // Clear the dimension.
-      for (j = 0; j < ret->NbColumns; ++j)
-	SCOPVAL_set_si(ret->p[ret->NbRows - nb_tile_loops + k][j], 0);
-      // Set the tloop bound <-> tloop schedule association.
-      SCOPVAL_set_si(ret->p[ret->NbRows - nb_tile_loops + k][k + 1], -1);
-      SCOPVAL_set_si(ret->p[ret->NbRows - nb_tile_loops + k]
-		     [k + 1 + nb_tile_loops + scaldim_offset],  1);
-    }
-
-  // Re-interleave tloop bounds dimensions with scalar dimensions.
-  int placed = 0;
-  line = 0;
-  for (k = 0; k < nb_tile_loops; ++k)
-    {
-      scaldim_offset = 0;
-      do
-	{
-	  last_offset = scaldim_offset;
-	  for (j = 1; line < mat->NbRows && j < mat->NbColumns - 1 &&
-		 SCOPVAL_get_si(mat->p[line][j]) == 0; ++j)
-	    ;
-	  if (j == mat->NbColumns - 1)
-	    ++scaldim_offset;
-	  ++line;
-	}
-      while (scaldim_offset > last_offset && line < mat->NbRows);
-
-      // Put the scaldim_offset scalar dimensions before the k tloop
-      // bound dimension.
-      for (i = 0; i < scaldim_offset; ++i)
-	{
-	  // First scalar loop is '1 + nb_tile_loops', we are at loop 'i',
-	  // and we already placed 'placed' loops.
-	  for (j = 1 + nb_tile_loops + i + placed - 1;
-	       j >= 1 + k + i + placed; --j)
+	  else
 	    {
-	      // permute_column (ret, j, j + 1);
-	      for (l = 0; l < ret->NbRows; ++l)
-		{
-		  int tmp = SCOPVAL_get_si(ret->p[l][j]);
-		  SCOPVAL_set_si(ret->p[l][j], ret->p[l][j + 1]);
-		  SCOPVAL_set_si(ret->p[l][j + 1], tmp);
-		}
+	      SCOPVAL_set_si(ret->p[i][0], 0);
+	      SCOPVAL_set_si(ret->p[i][1 + (i - neq) / 2 + neq], -1);
+	      ++i;
 	    }
 	}
-      placed += scaldim_offset + 1;
     }
-
-  //scoplib_matrix_print (stdout, ret);
 
   return ret;
 }

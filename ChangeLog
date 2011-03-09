@@ -1,3 +1,12 @@
+2011-03-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch fixes a bug that occured when using --pluto-tile-scat &
+	--cloogify-scheds options together. The bug led to incorrect
+	transformations for some cases of tiled scalar dimensions.
+
+	* driver/pocc/driver-cloog.c: Fix the generation of schedules in
+	CLooG format from Pluto's computed schedule w/
+	tiling-in-scattering option enabled.
+
 2011-03-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* configure.ac: Bump to rc3.1.
