@@ -1,3 +1,23 @@
+2011-03-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* install.sh: Remove the old bypass of PoCC installation directory
+	option.
+
+	* driver/pocc/driver-clastops.c: Do not use the custom
+	pretty-printer by default, use CLooG's instead.
+
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Regenerate the test
+	files accordingly.
+
 2011-03-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch fixes a bug that occured when using --pluto-tile-scat &
 	--cloogify-scheds options together. The bug led to incorrect

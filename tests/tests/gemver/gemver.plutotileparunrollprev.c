@@ -78,16 +78,16 @@ main(int argc, char** argv)
 #pragma scop
 if (N >= 1) {
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
 /*@ begin Loop(
 transform UnrollJam(ufactor=4)
-      for (c3=32*c2;c3<=min((N-1),(32*c2+31));c3++) 
+      for (c3=32*c2;c3<=min(N-1,32*c2+31);c3++) 
 {
 {
-	lbv=32*c1; 	ubv=min((N-1),(32*c1+31));
+	lbv=32*c1; 	ubv=min(N-1,32*c1+31);
 #pragma ivdep
 #pragma vector always
 	for (c4=lbv; c4<=ubv; c4++) {
@@ -98,9 +98,9 @@ transform UnrollJam(ufactor=4)
 }
 ) @*/{
 
-  for (c3 = 32 * c2; c3 <= min((N - 1), (32 * c2 + 31)) - 3; c3 = c3 + 4)
+  for (c3 = 32 * c2; c3 <= min(N - 1, 32 * c2 + 31) - 3; c3 = c3 + 4)
 {
- lbv=32*c1; ubv=min((N-1),(32*c1+31));
+ lbv=32*c1; ubv=min(N-1,32*c1+31);
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
@@ -115,9 +115,9 @@ transform UnrollJam(ufactor=4)
       }
 }
 
-  for (; c3 <= min((N - 1), (32 * c2 + 31)); c3 = c3 + 1)
+  for (; c3 <= min(N - 1, 32 * c2 + 31); c3 = c3 + 1)
 {
- lbv=32*c1; ubv=min((N-1),(32*c1+31));
+ lbv=32*c1; ubv=min(N-1,32*c1+31);
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
@@ -130,11 +130,11 @@ transform UnrollJam(ufactor=4)
     }
   }
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
 {
- lbv=32*c1; ubv=min((N-1),(32*c1+31));
+ lbv=32*c1; ubv=min(N-1,32*c1+31);
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {
@@ -143,13 +143,13 @@ transform UnrollJam(ufactor=4)
 }
   }
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
-      for (c3=32*c2;c3<=min((N-1),(32*c2+31));c3++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
+      for (c3=32*c2;c3<=min(N-1,32*c2+31);c3++) {
 {
- lbv=32*c1; ubv=min((N-1),(32*c1+31));
+ lbv=32*c1; ubv=min(N-1,32*c1+31);
 #pragma ivdep
 #pragma vector always
  for (c4=lbv; c4<=ubv; c4++) {

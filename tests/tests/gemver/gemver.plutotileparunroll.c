@@ -78,24 +78,24 @@ main(int argc, char** argv)
 #pragma scop
 if (N >= 1) {
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
 /*@ begin Loop(
 transform UnrollJam(ufactor=4)
-      for (c3=32*c1;c3<=min((N-1),(32*c1+31));c3++) 
+      for (c3=32*c1;c3<=min(N-1,32*c1+31);c3++) 
 transform Unroll(ufactor=4)
-        for (c4=32*c2;c4<=min((N-1),(32*c2+31));c4++) 
+        for (c4=32*c2;c4<=min(N-1,32*c2+31);c4++) 
 {
           S1(c1,c2,c4,c3);
           S2(c1,c2,c3,c4);
 }
 ) @*/{
 
-  for (c3 = 32 * c1; c3 <= min((N - 1), (32 * c1 + 31)) - 3; c3 = c3 + 4) {
+  for (c3 = 32 * c1; c3 <= min(N - 1, 32 * c1 + 31) - 3; c3 = c3 + 4) {
 
-      for (c4 = 32 * c2; c4 <= min((N - 1), (32 * c2 + 31)) - 3; c4 = c4 + 4) {
+      for (c4 = 32 * c2; c4 <= min(N - 1, 32 * c2 + 31) - 3; c4 = c4 + 4) {
           A[c4][c3]=A[c4][c3]+u1[c4]*v1[c3]+u2[c4]*v2[c3];
           x[c3]=x[c3]+A[c4][c3]*y[c4];
           A[(c4 + 1)][c3]=A[(c4 + 1)][c3]+u1[(c4 + 1)]*v1[c3]+u2[(c4 + 1)]*v2[c3];
@@ -130,7 +130,7 @@ transform Unroll(ufactor=4)
           x[(c3 + 3)]=x[(c3 + 3)]+A[(c4 + 3)][(c3 + 3)]*y[(c4 + 3)];
         }
 
-      for (; c4 <= min((N - 1), (32 * c2 + 31)); c4 = c4 + 1) {
+      for (; c4 <= min(N - 1, 32 * c2 + 31); c4 = c4 + 1) {
           A[c4][c3]=A[c4][c3]+u1[c4]*v1[c3]+u2[c4]*v2[c3];
           x[c3]=x[c3]+A[c4][c3]*y[c4];
           A[c4][(c3 + 1)]=A[c4][(c3 + 1)]+u1[c4]*v1[(c3 + 1)]+u2[c4]*v2[(c3 + 1)];
@@ -142,9 +142,9 @@ transform Unroll(ufactor=4)
         }
     }
 
-  for (; c3 <= min((N - 1), (32 * c1 + 31)); c3 = c3 + 1) {
+  for (; c3 <= min(N - 1, 32 * c1 + 31); c3 = c3 + 1) {
 
-      for (c4 = 32 * c2; c4 <= min((N - 1), (32 * c2 + 31)) - 3; c4 = c4 + 4) {
+      for (c4 = 32 * c2; c4 <= min(N - 1, 32 * c2 + 31) - 3; c4 = c4 + 4) {
           A[c4][c3]=A[c4][c3]+u1[c4]*v1[c3]+u2[c4]*v2[c3];
           x[c3]=x[c3]+A[c4][c3]*y[c4];
           A[(c4 + 1)][c3]=A[(c4 + 1)][c3]+u1[(c4 + 1)]*v1[c3]+u2[(c4 + 1)]*v2[c3];
@@ -155,7 +155,7 @@ transform Unroll(ufactor=4)
           x[c3]=x[c3]+A[(c4 + 3)][c3]*y[(c4 + 3)];
         }
 
-      for (; c4 <= min((N - 1), (32 * c2 + 31)); c4 = c4 + 1) {
+      for (; c4 <= min(N - 1, 32 * c2 + 31); c4 = c4 + 1) {
           A[c4][c3]=A[c4][c3]+u1[c4]*v1[c3]+u2[c4]*v2[c3];
           x[c3]=x[c3]+A[c4][c3]*y[c4];
         }
@@ -165,20 +165,20 @@ transform Unroll(ufactor=4)
     }
   }
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c3=32*c1;c3<=min((N-1),(32*c1+31));c3++) {
+    for (c3=32*c1;c3<=min(N-1,32*c1+31);c3++) {
       x[c3]=x[c3]+z[c3];
     }
   }
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
-      for (c3=32*c1;c3<=min((N-1),(32*c1+31));c3++) {
-        for (c4=32*c2;c4<=min((N-1),(32*c2+31));c4++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
+      for (c3=32*c1;c3<=min(N-1,32*c1+31);c3++) {
+        for (c4=32*c2;c4<=min(N-1,32*c2+31);c4++) {
           w[c3]=w[c3]+A[c3][c4]*x[c4];
         }
       }

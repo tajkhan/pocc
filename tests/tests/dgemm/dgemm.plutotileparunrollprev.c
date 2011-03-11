@@ -97,13 +97,13 @@ int main(int argc, char** argv)
 #pragma scop
 if (N >= 1) {
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
-      for (c4=32*c1;c4<=min((N-1),(32*c1+31));c4++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
+      for (c4=32*c1;c4<=min(N-1,32*c1+31);c4++) {
 {
- lbv=32*c2; ubv=min((N-1),(32*c2+31));
+ lbv=32*c2; ubv=min(N-1,32*c2+31);
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
@@ -114,19 +114,19 @@ if (N >= 1) {
     }
   }
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
-      for (c3=0;c3<=floord((N-1),32);c3++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
+      for (c3=0;c3<=floord(N-1,32);c3++) {
 /*@ begin Loop(
 transform UnrollJam(ufactor=4)
-        for (c4=32*c1;c4<=min((N-1),(32*c1+31));c4++) 
+        for (c4=32*c1;c4<=min(N-1,32*c1+31);c4++) 
 transform UnrollJam(ufactor=4)
-          for (c5=32*c3;c5<=min((N-1),(32*c3+31));c5++) 
+          for (c5=32*c3;c5<=min(N-1,32*c3+31);c5++) 
 {
 {
-	lbv=32*c2; 	ubv=min((N-1),(32*c2+31));
+	lbv=32*c2; 	ubv=min(N-1,32*c2+31);
 #pragma ivdep
 #pragma vector always
 	for (c6=lbv; c6<=ubv; c6++) {
@@ -136,11 +136,11 @@ transform UnrollJam(ufactor=4)
 }
 ) @*/{
 
-  for (c4 = 32 * c1; c4 <= min((N - 1), (32 * c1 + 31)) - 3; c4 = c4 + 4) {
+  for (c4 = 32 * c1; c4 <= min(N - 1, 32 * c1 + 31) - 3; c4 = c4 + 4) {
 
-      for (c5 = 32 * c3; c5 <= min((N - 1), (32 * c3 + 31)) - 3; c5 = c5 + 4)
+      for (c5 = 32 * c3; c5 <= min(N - 1, 32 * c3 + 31) - 3; c5 = c5 + 4)
 {
- lbv=32*c2; ubv=min((N-1),(32*c2+31));
+ lbv=32*c2; ubv=min(N-1,32*c2+31);
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
@@ -163,9 +163,9 @@ transform UnrollJam(ufactor=4)
           }
 }
 
-      for (; c5 <= min((N - 1), (32 * c3 + 31)); c5 = c5 + 1)
+      for (; c5 <= min(N - 1, 32 * c3 + 31); c5 = c5 + 1)
 {
- lbv=32*c2; ubv=min((N-1),(32*c2+31));
+ lbv=32*c2; ubv=min(N-1,32*c2+31);
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
@@ -177,11 +177,11 @@ transform UnrollJam(ufactor=4)
 }
     }
 
-  for (; c4 <= min((N - 1), (32 * c1 + 31)); c4 = c4 + 1) {
+  for (; c4 <= min(N - 1, 32 * c1 + 31); c4 = c4 + 1) {
 
-      for (c5 = 32 * c3; c5 <= min((N - 1), (32 * c3 + 31)) - 3; c5 = c5 + 4)
+      for (c5 = 32 * c3; c5 <= min(N - 1, 32 * c3 + 31) - 3; c5 = c5 + 4)
 {
- lbv=32*c2; ubv=min((N-1),(32*c2+31));
+ lbv=32*c2; ubv=min(N-1,32*c2+31);
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {
@@ -192,9 +192,9 @@ transform UnrollJam(ufactor=4)
           }
 }
 
-      for (; c5 <= min((N - 1), (32 * c3 + 31)); c5 = c5 + 1)
+      for (; c5 <= min(N - 1, 32 * c3 + 31); c5 = c5 + 1)
 {
- lbv=32*c2; ubv=min((N-1),(32*c2+31));
+ lbv=32*c2; ubv=min(N-1,32*c2+31);
 #pragma ivdep
 #pragma vector always
  for (c6=lbv; c6<=ubv; c6++) {

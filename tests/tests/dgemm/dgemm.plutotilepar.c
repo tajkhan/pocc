@@ -96,26 +96,26 @@ int main(int argc, char** argv)
 #pragma scop
 if (N >= 1) {
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
-      for (c4=32*c1;c4<=min((N-1),(32*c1+31));c4++) {
-        for (c5=32*c2;c5<=min((N-1),(32*c2+31));c5++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
+      for (c4=32*c1;c4<=min(N-1,32*c1+31);c4++) {
+        for (c5=32*c2;c5<=min(N-1,32*c2+31);c5++) {
           C[c4][c5]=C[c4][c5]*alpha;
         }
       }
     }
   }
  lb1=0;
- ub1=floord((N-1),32);
+ ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1<=ub1; c1++) {
-    for (c2=0;c2<=floord((N-1),32);c2++) {
-      for (c3=0;c3<=floord((N-1),32);c3++) {
-        for (c4=32*c1;c4<=min((N-1),(32*c1+31));c4++) {
-          for (c5=32*c2;c5<=min((N-1),(32*c2+31));c5++) {
-            for (c6=32*c3;c6<=min((N-1),(32*c3+31));c6++) {
+    for (c2=0;c2<=floord(N-1,32);c2++) {
+      for (c3=0;c3<=floord(N-1,32);c3++) {
+        for (c4=32*c1;c4<=min(N-1,32*c1+31);c4++) {
+          for (c5=32*c2;c5<=min(N-1,32*c2+31);c5++) {
+            for (c6=32*c3;c6<=min(N-1,32*c3+31);c6++) {
               C[c4][c5]+=beta*A[c4][c6]*B[c6][c5];
             }
           }

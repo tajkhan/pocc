@@ -82,7 +82,7 @@ pocc_driver_clastops (scoplib_scop_p program,
 		      s_pocc_utils_options_t* puoptions)
 {
   CloogOptions* coptions = poptions->cloog_options;
-
+  
   /* (1) Mark parallel loops, if required. */
   if (poptions->vectorizer_mark_par_loops || poptions->storage_compaction)
     {
@@ -184,7 +184,7 @@ pocc_driver_clastops (scoplib_scop_p program,
   /* (7) Run the extended CLAST pretty-printer, if needed. */
   if (poptions->pragmatizer || poptions->vectorizer ||
       poptions->vectorizer_mark_par_loops ||
-      poptions->vectorizer_mark_vect_loops ||
+      (poptions->vectorizer && poptions->vectorizer_mark_vect_loops) ||
       poptions->storage_compaction)
     clasttols_clast_pprint_debug (body_file, root, 0, coptions);
   else

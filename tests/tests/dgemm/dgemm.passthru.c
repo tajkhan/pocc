@@ -94,10 +94,10 @@ int main(int argc, char** argv)
 
 #pragma scop
 if (N >= 1) {
-  for (c1=0;c1<=(N-1);c1++) {
-    for (c3=0;c3<=(N-1);c3++) {
+  for (c1=0;c1<=N-1;c1++) {
+    for (c3=0;c3<=N-1;c3++) {
       C[c1][c3]=C[c1][c3]*alpha;
-      for (c5=0;c5<=(N-1);c5++) {
+      for (c5=0;c5<=N-1;c5++) {
         C[c1][c3]+=beta*A[c1][c5]*B[c5][c3];
       }
     }

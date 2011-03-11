@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Tue Aug 10 12:48:04 2010 Louis-Noel Pouchet
+## Last update Thu Mar 10 18:29:13 2011 Louis-Noel Pouchet
 ##
 
 ##
@@ -78,9 +78,8 @@ if ! [ -f "Makefile" ] || ! [ -z "$FORCE" ]; then
 	enable_devel="";
     fi;
     ## Warning: must include gmp.h path for the moment into pocc driver.
-    GMPINCFLAGS="CPPFLAGS='-I `pwd`/math/external/install/include'" 
-    POCC_INSTALL_PREFIX=`pwd`;
-    eval $GMPINCFLAGS ./configure --prefix="$POCC_INSTALL_PREFIX"  --bindir="$POCC_INSTALL_PREFIX/bin" --libdir="$POCC_INSTALL_PREFIX/driver/install-pocc/lib" --includedir="$POCC_INSTALL_PREFIX/driver/install-pocc/include" --datarootdir=`pwd`  --disable-static --enable-shared $enable_devel;
+    GMPINCFLAGS="CPPFLAGS='-I $POCC_INSTALL_PREFIX/math/external/install/include'" 
+    eval $GMPINCFLAGS ./configure --prefix="$POCC_INSTALL_PREFIX"  --bindir="$POCC_INSTALL_PREFIX/bin" --libdir="$POCC_INSTALL_PREFIX/driver/install-pocc/lib" --includedir="$POCC_INSTALL_PREFIX/driver/install-pocc/include" --datarootdir=$POCC_INSTALL_PREFIX  --disable-static --enable-shared $enable_devel;
     if [ $? -ne 0 ]; then echo "[PoCC] configure: fatal error"; exit 1; fi;
 fi;
 
