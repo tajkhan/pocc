@@ -66,6 +66,7 @@ pkginclude_HEADERS 	=					\
 		          include/pocc/driver-codegen.h		\
 		          include/pocc/driver-cloog.h		\
 		          include/pocc/driver-pluto.h		\
+		          include/pocc/driver-polyfeat.h	\
 		          include/pocc/error.h			\
 		          include/pocc/exec.h			\
 		          include/pocc/options.h
@@ -81,6 +82,7 @@ libpocc_la_SOURCES 	=				\
 			  driver-clastops.c		\
 			  driver-codegen.c		\
 			  driver-cloog.c		\
+			  driver-polyfeat.c		\
 			  error.c			\
 			  exec.c			\
 		  	  options.c			\

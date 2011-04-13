@@ -75,6 +75,10 @@ int main(int argc, char** argv)
   if (! poptions->letsee || ! poptions->pluto)
     pocc_driver_candl (scop, poptions, puoptions);
 
+  // (3) Run Polyhedral Feature Extraction.
+  if (poptions->polyfeat)
+    pocc_driver_polyfeat (scop, poptions, puoptions);
+
   // (3) Perform LetSee.
   if (poptions->letsee)
     pocc_driver_letsee (scop, poptions, puoptions);
@@ -84,6 +88,20 @@ int main(int argc, char** argv)
   if (poptions->pluto && ! poptions->letsee)
     if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
       exit (EXIT_FAILURE);
+
+  if (poptions->output_scoplib_file_name)
+    {
+      scoplib_scop_p tempscop = scoplib_scop_dup (scop);
+      if (poptions->cloogify_schedules)
+	pocc_cloogify_scop (tempscop);
+      FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");
+      if (scopf)
+	{
+	  scoplib_scop_print_dot_scop (scopf, tempscop);
+	  fclose (scopf);
+	}
+      scoplib_scop_free (tempscop);
+    }
 
   // (5) Perform codgen.
   // Don't do it if already performed through LetSee.

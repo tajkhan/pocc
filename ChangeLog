@@ -1,3 +1,19 @@
+2011-04-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	Enable option --polyfeat, to automatically extract polyhedral
+	features.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/include/pocc/driver-polyfeat.h,
+	* driver/pocc/Makefile.am,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-polyfeat.c,
+	* driver/src/options.h,
+	* driver/src/pocc.c,
+	* driver/src/options.c,
+	* config/devel/configure.cfg: Add support for PolyFeat in the
+	toolchain.
+
 2011-03-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* install.sh: Remove the old bypass of PoCC installation directory

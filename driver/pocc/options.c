@@ -58,6 +58,9 @@ pocc_options_malloc ()
   ret->candl_pass = 1;
   ret->candl_deps_isl_simplify = 0;
 
+  // Feature extraction.
+  ret->polyfeat = 0;
+
   // Letsee options.
   ret->letsee = 0; // Run LetSee (default: no)
   ret->letsee_space = LS_TYPE_FS;

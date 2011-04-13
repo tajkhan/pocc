@@ -71,6 +71,9 @@ struct s_pocc_options
   int		candl_pass; // Run Candl (default: yes)
   int		candl_deps_isl_simplify;
 
+  // Feature extraction.
+  int		polyfeat; // Run PolyFeat (default:no)
+
   // Compile command.
   int		compile_program; // Internal field
   char*		compile_command;
