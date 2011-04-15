@@ -1,3 +1,7 @@
+2011-04-15  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/base/configure.cfg: Add new polyfeat build option.
+
 2011-04-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	Enable option --polyfeat, to automatically extract polyhedral
 	features.
