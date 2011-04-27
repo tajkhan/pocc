@@ -60,6 +60,7 @@ pocc_options_malloc ()
 
   // Feature extraction.
   ret->polyfeat = 0;
+  ret->polyfeat_rar = 0;
 
   // Letsee options.
   ret->letsee = 0; // Run LetSee (default: no)

@@ -42,7 +42,7 @@ pocc_driver_polyfeat (scoplib_scop_p program,
   FILE* outfile = fopen (buffer, "w");
   if (outfile)
     {
-      polyfeat_depgraph_extract (outfile, program);
+      polyfeat_depgraph_extract (outfile, program, poptions->polyfeat_rar);
       fclose (outfile);
     }
   else

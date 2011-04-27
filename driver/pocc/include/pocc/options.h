@@ -73,6 +73,7 @@ struct s_pocc_options
 
   // Feature extraction.
   int		polyfeat; // Run PolyFeat (default:no)
+  int		polyfeat_rar;
 
   // Compile command.
   int		compile_program; // Internal field
