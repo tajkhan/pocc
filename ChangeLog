@@ -1,5 +1,18 @@
 2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-clastops.c,
+	* driver/src/options.h,
+	* driver/src/options.c,
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am,
+	* bin/pocc-util.in: Conditional compilation of devel modules.
+
+	* configure.ac: Bump to 1.0-rc4, provide --enable-release.
+
+	* install.sh: Provide --enable-release when in local/stable mode.
+
+2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/local/configure.cfg,
 	* config/local/driver.cfg,
 	* config/stable/configure.cfg,

@@ -77,8 +77,10 @@ pocc_SOURCES		=			\
 
 pocc_CFLAGS		= -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
-pocc_LDADD		= \
+
+pocc_LDADD	=							     \
   $(install_prefix)/driver/install-pocc/lib/libpocc.la			     \
+  $(install_prefix)/ir/install-past/lib/libpast.la			     \
   $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
   $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
   $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \
@@ -89,13 +91,17 @@ pocc_LDADD		= \
   $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
-  $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
   $(install_prefix)/generators/install-clastannotation/lib/libclastannotation.la  \
   $(install_prefix)/math/install-fm/lib/libfm.la
+
+if POCC_FULL_MODE
+  pocc_LDADD	+=						     \
+  $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
+  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la
+endif
 
 
 #############################################################################

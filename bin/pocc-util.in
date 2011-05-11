@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon May  3 15:51:15 2010 Louis-Noel Pouchet
+## Last update Wed May 11 19:05:29 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -74,7 +74,13 @@ sub parse_args
 		alternate($BASEDIR, $args[$i + 1]);
 		checkout($BASEDIR, "all");
 		make($BASEDIR, $INST_PREFIX, "all", "force");
-		my $ret = system ("cd $BASEDIR && make install");
+		my $ret;
+		if ($args[$i + 1] == "devel") {
+		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
+		}
+		else {
+		    $ret = system("cd $BASEDIR && make install");
+		}
 		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
 	    }

@@ -31,8 +31,12 @@
 //# include <cloog/cloog.h>
 //# include <cloog/clast.h>
 # include <pragmatize/pragmatize.h>
-# include <vectorizer/vectorizer.h>
-# include <storcompacter/storcompacter.h>
+
+# ifndef POCC_RELEASE_MODE
+#  include <vectorizer/vectorizer.h>
+#  include <storcompacter/storcompacter.h>
+# endif
+
 # include <clasttools/pprint.h>
 # include <clasttools/clastext.h>
 # include <clasttools/clast2past.h>
@@ -85,6 +89,7 @@ pocc_driver_clastops (scoplib_scop_p program,
 {
   CloogOptions* coptions = poptions->cloog_options;
 
+#ifndef POCC_RELEASE_MODE
   /* (1) Mark parallel loops, if required. */
   if (poptions->vectorizer_mark_par_loops || poptions->storage_compaction)
     {
@@ -127,6 +132,7 @@ pocc_driver_clastops (scoplib_scop_p program,
       vectorizer_metrics_print (stdout, vectm, program);
       vectorizer_metrics_free (vectm);
     }
+#endif
 
   /* (4) Run the pragmatizer, if required. */
   if (poptions->pragmatizer)
@@ -186,6 +192,7 @@ pocc_driver_clastops (scoplib_scop_p program,
   /* (7) Run the extended CLAST pretty-printer, if needed. */
   if (! poptions->use_past)
     {
+#ifndef POCC_RELEASE_MODE
       if (poptions->pragmatizer || poptions->vectorizer ||
 	  poptions->vectorizer_mark_par_loops ||
 	  (poptions->vectorizer && poptions->vectorizer_mark_vect_loops) ||
@@ -194,6 +201,13 @@ pocc_driver_clastops (scoplib_scop_p program,
       else
 	// Pretty-print the code with CLooG default pretty-printer.
 	clast_pprint (body_file, root, 0, coptions);
+#else
+      if (poptions->pragmatizer)
+	clasttols_clast_pprint_debug (body_file, root, 0, coptions);
+      else
+	// Pretty-print the code with CLooG default pretty-printer.
+	clast_pprint (body_file, root, 0, coptions);
+#endif
     }
   else
     {

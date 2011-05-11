@@ -103,13 +103,17 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
-  $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
   $(install_prefix)/generators/install-clastannotation/lib/libclastannotation.la  \
   $(install_prefix)/math/install-fm/lib/libfm.la
+
+if POCC_FULL_MODE
+  libpocc_la_LIBADD	+=						     \
+  $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
+  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la
+endif
 
 ## FIXME: Removed this due to a potential conflict on Solaris10. We
 ## already include pocc-utils in letsee, pluto, clan, candl, cloog...
