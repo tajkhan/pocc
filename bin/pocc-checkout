@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Sun Nov 15 05:31:45 2009 Louis-Noel Pouchet
+## Last update Wed May 11 19:53:47 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-checkout: this file is part of the PoCC project.
@@ -61,7 +61,7 @@ sub checkout_wget
 {
     my ($soft, $dir, $url) = @_;
     print "[PoCC-checkout] Wgetting $soft (from $url) in $dir...\n";
-    system("mkdir -p $BDIR_CO/$dir && cd $BDIR_CO/$dir && wget $url");
+    system("mkdir -p $BDIR_CO/$dir && cd $BDIR_CO/$dir && wget -N $url");
     my @tmp = split(/\//, $url);
     my $filename = $tmp[$#tmp];
     if ($filename =~ /.tar.gz$|.tgz$/) {
