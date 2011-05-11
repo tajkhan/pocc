@@ -242,6 +242,7 @@ pocc_driver_cloog (scoplib_scop_p program,
     }
 
   input = cloog_input_alloc (context, ud);
+  //cloog_input_dump_cloog(stderr, input, coptions);
 
   // Generate the clast.
   root = cloog_clast_create_from_input (input, coptions);

@@ -1,5 +1,14 @@
 2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* config/devel/configure.cfg: Update to the latest version of
+	CLooG (0.16.2) and ISL (0.06).
+
+2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/base/configure.cfg,
 	* config/base/driver.cfg,
 	* config/local/configure.cfg,
