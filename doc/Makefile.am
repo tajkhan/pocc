@@ -32,6 +32,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 EXTRA_DIST		=			\
 			pocc.pdf		\
+			versions.txt		\
 			htmldoc.tar.gz
 
 info_TEXINFOS		= pocc.texi

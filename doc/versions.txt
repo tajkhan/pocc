@@ -34,10 +34,3 @@ values: --pluto-ufactor 2 | --pluto-ufactor 4 | --pluto-ufactor 8
 values: maxfuse | smartfuse | nofuse
 
 [--pluto-prevector]
-
-[--vectorizer]
-options: --no-outer-par-loops
-
-[--array-contraction]
-options: --ac-keep-outer-par | --ac-keep-vector-par
-

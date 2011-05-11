@@ -82,6 +82,18 @@ int main(int argc, char** argv)
 
     IF_TIME(t_start = rtclock());
 
+#ifdef ceild
+# undef ceild
+#endif
+#ifdef floord
+# undef ceild
+#endif
+#ifdef max
+# undef ceild
+#endif
+#ifdef min
+# undef ceild
+#endif
 #define ceild(n,d)  ceil(((double)(n))/((double)(d)))
 #define floord(n,d) floor(((double)(n))/((double)(d)))
 #define max(x,y)    ((x) > (y)? (x) : (y))
@@ -99,7 +111,7 @@ if (N >= 1) {
  lb1=0;
  ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
- for (c1=lb1; c1<=ub1; c1++) {
+ for (c1=lb1; c1 <= ub1; c1++) {
     for (c2=0;c2<=floord(N-1,32);c2++) {
       for (c4=32*c1;c4<=min(N-1,32*c1+31);c4++) {
 {
@@ -116,7 +128,7 @@ if (N >= 1) {
  lb1=0;
  ub1=floord(N-1,32);
 #pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
- for (c1=lb1; c1<=ub1; c1++) {
+ for (c1=lb1; c1 <= ub1; c1++) {
     for (c2=0;c2<=floord(N-1,32);c2++) {
       for (c3=0;c3<=floord(N-1,32);c3++) {
 /*@ begin Loop(

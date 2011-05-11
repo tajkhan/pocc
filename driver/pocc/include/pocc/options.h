@@ -135,6 +135,9 @@ struct s_pocc_options
   // Pragmatizer.
   int		pragmatizer;
 
+  // PAST IR.
+  int		use_past;
+
   // Vectorizer.
   int		vectorizer;
   int		vectorizer_mark_par_loops;

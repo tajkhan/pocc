@@ -41,6 +41,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/optimizers/install-storcompacter/include	\
 	-I$(install_prefix)/optimizers/install-vectorizer/include	\
 	-I$(install_prefix)/optimizers/install-dlml/include		\
+	-I$(install_prefix)/ir/install-past/include			\
 	-I$(install_prefix)/ir/install-scoplib/include			\
 	-I$(install_prefix)/ir/install-scoptools/include		\
 	-I$(install_prefix)/analyzers/install-clan/include		\
@@ -91,6 +92,7 @@ libpocc_la_SOURCES 	=				\
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
 libpocc_la_LIBADD	=						     \
+  $(install_prefix)/ir/install-past/lib/libpast.la			     \
   $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
   $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
   $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \

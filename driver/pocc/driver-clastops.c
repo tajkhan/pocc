@@ -35,6 +35,8 @@
 # include <storcompacter/storcompacter.h>
 # include <clasttools/pprint.h>
 # include <clasttools/clastext.h>
+# include <clasttools/clast2past.h>
+# include <past/past.h>
 
 
 static
@@ -82,7 +84,7 @@ pocc_driver_clastops (scoplib_scop_p program,
 		      s_pocc_utils_options_t* puoptions)
 {
   CloogOptions* coptions = poptions->cloog_options;
-  
+
   /* (1) Mark parallel loops, if required. */
   if (poptions->vectorizer_mark_par_loops || poptions->storage_compaction)
     {
@@ -182,14 +184,26 @@ pocc_driver_clastops (scoplib_scop_p program,
   fprintf (body_file, "#pragma scop\n");
 
   /* (7) Run the extended CLAST pretty-printer, if needed. */
-  if (poptions->pragmatizer || poptions->vectorizer ||
-      poptions->vectorizer_mark_par_loops ||
-      (poptions->vectorizer && poptions->vectorizer_mark_vect_loops) ||
-      poptions->storage_compaction)
-    clasttols_clast_pprint_debug (body_file, root, 0, coptions);
+  if (! poptions->use_past)
+    {
+      if (poptions->pragmatizer || poptions->vectorizer ||
+	  poptions->vectorizer_mark_par_loops ||
+	  (poptions->vectorizer && poptions->vectorizer_mark_vect_loops) ||
+	  poptions->storage_compaction)
+	clasttols_clast_pprint_debug (body_file, root, 0, coptions);
+      else
+	// Pretty-print the code with CLooG default pretty-printer.
+	clast_pprint (body_file, root, 0, coptions);
+    }
   else
-    // Pretty-print the code with CLooG default pretty-printer.
-    clast_pprint (body_file, root, 0, coptions);
+    {
+      // Convert to PAST IR.
+      s_past_node_t* pastroot = clast2past (root);
+      // Pretty-print
+      past_pprint (body_file, pastroot);
+      // Be clean.
+      past_deep_free (pastroot);
+    }
 
   fprintf (body_file, "#pragma endscop\n");
 

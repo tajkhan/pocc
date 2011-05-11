@@ -41,7 +41,9 @@ for DIM in $PARDIMS;  do
         # mark all loops of this scattering dimension parallel
 
         LINE_NUMBERS=`grep -n "for ($DIM=" $1 | awk '{split($1,t,":"); print t[1]}'`
-
+	if [ -z "$LINE_NUMBERS" ]; then
+	    LINE_NUMBERS=`grep -n "for ($DIM = " $1 | awk '{split($1,t,":"); print t[1]}'`;
+	fi
         grep "$DIM #pragma" .pragmas > .pragma
 
         j=0
@@ -54,16 +56,22 @@ for DIM in $PARDIMS;  do
             sed -n -e ''$(($num+3*$j))'p' $1 > .parloop
 
             # lower and upper bounds
-            echo "	lb$i="`awk '{split($2,t,";"); split(t[1],u,"="); print u[2] }' .parloop`";" > .lb
-            echo "	ub$i="`awk '{split($2,t,";"); split(t[2],u,"="); print u[2] }' .parloop`";" > .ub
-
+	    lb=`awk '{split($2,t,";"); split(t[1],u,"="); print u[2] }' .parloop`;
+	    if [ -z "$lb" ]; then
+		lb=`cut -d ';' -f 1 .parloop | cut -d '=' -f 2`;
+	    fi;
+            echo "	lb$i=$lb;" > .lb
+	    ub=`awk '{split($2,t,";"); split(t[2],u,"="); print u[2] }' .parloop`;
+	    if [ -z "$ub" ]; then
+		ub=`cut -d ';' -f 2 .parloop | cut -d '=' -f 2`;
+	    fi;
+            echo "	ub$i=$ub;" > .ub
             cat .header .lb .ub .pragma | sed -e "s/$DIM #pragma/#pragma/" > $1
-            echo "	for ($DIM=lb$i; $DIM<=ub$i; $DIM++) {" >> $1
+            echo " for ($DIM=lb$i; $DIM <= ub$i; $DIM++) {" >> $1
             cat .footer >> $1
             j=$((j+1))
         done
         i=$((i+1))
     fi
 done
-
 rm -f .header .footer .ub .lb .parloop .pragma .pragmas

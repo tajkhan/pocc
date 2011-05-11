@@ -1,3 +1,36 @@
+2011-05-10  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/Makefile.am,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Provide option --use-past, optionally use
+	the PAST pretty-printer after CLAST creation (CLAST -> PAST ->
+	pretty-print), link with the PAST IR module.
+
+	* config/devel/driver.cfg,
+	* config/devel/configure.cfg: Systematically compile the module
+	ir/past for the devel mode.
+
+	* generators/scripts/ploog,
+	* generators/scripts/inscop: Update to support new PAST
+	pretty-print indentation.
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update with latest
+	syntactic changes in the pretty-printer.
+
+	* doc/versions.txt,
+	* doc/Makefile.am: Distribute versions.txt.
+
 2011-04-27  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/include/pocc/options.h,

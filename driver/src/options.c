@@ -82,6 +82,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'n', "no-codegen", 0, "\tDo not generate code [off]" },
   { '\0', "cloog-cloogf", 1, "CLooG: first level to scan [1]" },
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
+  { '\0', "use-past", 0, "\tUse the PAST back-end [off]" },
   { '\0', "pragmatizer", 0, "\tUse the CLAST pragmatizer [off]" },
   { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
   { '\0', "mark-par-loops", 0, "Detect parallel loops in generated\n\t\t\t\tcode [off]" },
@@ -486,6 +487,10 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->codegen_timer_asm = 1;
   if (opt_tab[POCC_OPT_CODEGEN_TIMER_PAPI])
     options->codegen_timer_papi = 1;
+
+  // PAST options.
+  if (opt_tab[POCC_OPT_USE_PAST])
+    options->use_past = 1;
 
   // Pragmatizer options.
   if (opt_tab[POCC_OPT_PRAGMATIZER])

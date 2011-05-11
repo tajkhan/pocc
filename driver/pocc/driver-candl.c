@@ -28,7 +28,6 @@
 
 # include <pocc/driver-candl.h>
 
-
 void
 pocc_driver_candl (scoplib_scop_p program,
 		   s_pocc_options_t* poptions,
@@ -49,7 +48,7 @@ pocc_driver_candl (scoplib_scop_p program,
       // Embed dependences in the scop, in case we want pluto to read them.
       if (poptions->pluto_external_candl)
 	candl_dependence_update_scop_with_deps (program, deps);
-      
+
       candl_dependence_free (deps);
       candl_program_free (cprogram);
       candl_options_free (coptions);

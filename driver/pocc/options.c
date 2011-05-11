@@ -114,6 +114,7 @@ pocc_options_malloc ()
   ret->timeout = 0;
 
   ret->pragmatizer = 0;
+  ret->use_past = 0;
 
   // Vectorization options.
   ret->vectorizer = 0;

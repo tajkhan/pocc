@@ -81,6 +81,18 @@ int main(int argc, char** argv)
 
     IF_TIME(t_start = rtclock());
 
+#ifdef ceild
+# undef ceild
+#endif
+#ifdef floord
+# undef ceild
+#endif
+#ifdef max
+# undef ceild
+#endif
+#ifdef min
+# undef ceild
+#endif
 #define ceild(n,d)  ceil(((double)(n))/((double)(d)))
 #define floord(n,d) floor(((double)(n))/((double)(d)))
 #define max(x,y)    ((x) > (y)? (x) : (y))

@@ -14,6 +14,18 @@ grep -A $MAXLINES "#pragma[[:space:]]\+endscop" $1 | grep -v "#pragma[[:space:]]
 gcc -E -P -CC $2 | sed -e 's/_NL_DELIMIT_/\n/' | sed -e 's/;;/;/g' > __tmp
 cat .tail >> __tmp
 
+echo "#ifdef ceild
+# undef ceild
+#endif" >> .head;
+echo "#ifdef floord
+# undef ceild
+#endif" >> .head;
+echo "#ifdef max
+# undef ceild
+#endif" >> .head;
+echo "#ifdef min
+# undef ceild
+#endif" >> .head;
 echo "#define ceild(n,d)  ceil(((double)(n))/((double)(d)))" >> .head
 echo "#define floord(n,d) floor(((double)(n))/((double)(d)))" >> .head
 echo "#define max(x,y)    ((x) > (y)? (x) : (y))" >> .head
