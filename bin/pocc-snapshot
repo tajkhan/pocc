@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Mon Feb  7 19:07:01 2011 Louis-Noel Pouchet
+## Last update Wed May 11 19:41:37 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-snapshot: this file is part of the PoCC project.
@@ -130,12 +130,17 @@ sub snapshot_release
 	my $path = $basedir . "/" . $category . "/" . $module;
 	print ("[PoCC-snapshot] Create distribution of $category/$module ($softs[$i])\n");
 	systemdie("cd $path && make dist");
-	my $id;
+	my $id = -1;
 	for ($j = 0; $j <= $#stable_softs; $j++) {
 	    $id = $j if ($stable_softs[$j] =~ /$softs[$i]-[0-9].*/);
 	}
-	my $archivename = $stable_softs[$id] . ".tar.gz";
-	systemdie("cp $path/$archivename $basedir/$poccversion/archives");
+	if ($id != -1) {
+	    my $archivename = $stable_softs[$id] . ".tar.gz";
+	    systemdie("cp $path/$archivename $basedir/$poccversion/archives");
+	}
+	else {
+	    systemdie("cp -f $path/$softs[$i]-*.tar.gz $basedir/$poccversion/archives");
+	}
     }
     ## Create the final archive.
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
