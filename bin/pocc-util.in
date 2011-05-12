@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Wed May 11 19:05:29 2011 Louis-Noel Pouchet
+## Last update Wed May 11 20:16:56 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -47,6 +47,7 @@ do "$BASEDIR/bin/pocc-versionsgenerator";
 sub print_help
 {
     print "Usage: pocc-util <command>\n";
+    print "<command>: upgrade\n";
     print "<command>: alternate [configuration-name]\n";
     print "<command>: checkout [software-name]\n";
     print "<command>: make [software-name]\n";
@@ -121,6 +122,31 @@ sub parse_args
 		my $versionfile = $args[$i + 1];
 		my $filename = $args[$i + 2];
 		generate_versions($versionfile, $filename);
+		$i = $#args;
+	    }
+	    case "upgrade" {
+		print "[PoCC] Upgrade to the lastest PoCC version...\n"
+		my $CONFIG_DRIVER = "$BASEDIR/config/driver.cfg";
+		my %config_driver = read_config_file($CONFIG_DRIVER);
+		my $curmode = $config_driver{"pocc-driver"}{"configuration"};;
+		if ($curmode == "devel") {
+		    system("cd $BASEDIR && svn up --username lppcc --password lppcc");
+		}
+		else {
+		    system("rsync -az http://www.cse.ohio-state.edu/~pouchet/software/pocc/download/released $BASEDIR");
+		}
+		$curmode = "stable" if ($curmode == "local");
+		alternate($BASEDIR, $curmode);
+		checkout($BASEDIR, "all");
+		make($BASEDIR, $INST_PREFIX, "all", "force");
+		my $ret;
+		if ($curmode == "devel") {
+		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
+		}
+		else {
+		    $ret = system("cd $BASEDIR && make install");
+		}
+		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
 	    }
 	    else { print "Unknown argument: $args[$i]\n"; }

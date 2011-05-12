@@ -1,5 +1,10 @@
 2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* bin/pocc-util.in: Provide "upgrade" command, which updates PoCC
+	automagically.
+
+2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/local/configure.cfg,
 	* config/local/driver.cfg,
 	* config/stable/configure.cfg,
