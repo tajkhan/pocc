@@ -1,3 +1,7 @@
+2011-05-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg: configure parametrictiling with PAST.
+
 2011-05-11  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* bin/pocc-util.in: Provide "upgrade" command, which updates PoCC
