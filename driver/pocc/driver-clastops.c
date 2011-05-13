@@ -212,7 +212,7 @@ pocc_driver_clastops (scoplib_scop_p program,
   else
     {
       // Convert to PAST IR.
-      s_past_node_t* pastroot = clast2past (root);
+      s_past_node_t* pastroot = clast2past (root, 1);
       // Pretty-print
       past_pprint (body_file, pastroot);
       // Be clean.
