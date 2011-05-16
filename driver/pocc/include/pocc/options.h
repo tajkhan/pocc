@@ -137,7 +137,10 @@ struct s_pocc_options
 
   // PAST IR.
   int		use_past;
-
+  
+  // Ptile.
+  int		ptile;
+  
   // Vectorizer.
   int		vectorizer;
   int		vectorizer_mark_par_loops;

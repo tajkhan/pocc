@@ -42,6 +42,9 @@
 # include <clasttools/clast2past.h>
 # include <past/past.h>
 
+# include <parametrictiling/options.h>
+# include <parametrictiling/parametrictiling.hpp>
+
 
 static
 void
@@ -213,6 +216,24 @@ pocc_driver_clastops (scoplib_scop_p program,
     {
       // Convert to PAST IR.
       s_past_node_t* pastroot = clast2past (root, 1);
+
+      if (poptions->ptile)
+	{
+	  printf ("[PoCC][Debug] start parametric tiling\n");
+	  s_parametrictiling_options_t* ptopts =
+	    parametrictiling_options_malloc ();
+
+	  ptopts->RSFME = 1;
+	  ptopts->fullTileSeparation = 0;
+	  ptopts->verbose_level = 4;
+	  s_past_node_t* newpast =
+	    parametricallytile(program, pastroot, ptopts);
+	  printf ("[PoCC][Debug] Print tiled code:\n");
+	  past_pprint (stdout, newpast);
+	  parametrictiling_options_free (ptopts);
+	  printf ("[PoCC][Debug] done parametric tiling\n");
+	}
+
       // Pretty-print
       past_pprint (body_file, pastroot);
       // Be clean.

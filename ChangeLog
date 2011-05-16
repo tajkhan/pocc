@@ -1,3 +1,14 @@
+2011-05-16  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add new option --ptile.
+
+	* driver/pocc/Makefile.am,
+	* config/devel/driver.cfg: Compile ptile by default in devel mode.
+
 2011-05-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/devel/configure.cfg: configure parametrictiling with PAST.
