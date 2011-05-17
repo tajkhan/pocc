@@ -1,5 +1,9 @@
 2011-05-17  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Fix a bug with OTL recomputation.
+
+2011-05-17  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/include/pocc/driver-ptile.h,
 	* driver/pocc/driver-ptile.c: New. Driver for the PTile phase.
 	* driver/pocc/Makefile.am: Update accordingly.

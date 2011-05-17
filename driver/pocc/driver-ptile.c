@@ -301,10 +301,12 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	    {
 	      // All loops in the nest are permutable. Process it.
 	      ret[partid].root = prog_loops[i].fornode;
-	      ret[partid].scop = newscop;
+	      
 	      // Do 'otl' on the loop nest.
 	      create_otl_loops (ret[partid].root);
-
+	      scoplib_scop_free (newscop);
+	      newscop = scoptools_past2scop (root, program);
+	      ret[partid].scop = newscop;
 	      ++partid;
 	    }
 	}
