@@ -172,7 +172,7 @@ pocc_driver_clastops (scoplib_scop_p program,
 
   /* (6) Generate loop counters. */
   fprintf (body_file,
-	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
+	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2, wPTile;\n");
   int done = 0;
   for (i = 0; i < nb_scatt; ++i)
     {
