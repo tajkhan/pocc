@@ -1,3 +1,17 @@
+2011-05-17  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/include/pocc/driver-ptile.h,
+	* driver/pocc/driver-ptile.c: New. Driver for the PTile phase.
+	* driver/pocc/Makefile.am: Update accordingly.
+
+	* driver/pocc/driver-clastops.c: Move the PTile related code to
+	driver-ptile.
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg,
+	* config/local/configure.cfg,
+	* config/stable/configure.cfg: Configure scoptools with PAST.
+
 2011-05-16  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-clastops.c,
