@@ -42,9 +42,6 @@
 # include <clasttools/clast2past.h>
 # include <past/past.h>
 
-# include <parametrictiling/options.h>
-# include <parametrictiling/parametrictiling.hpp>
-
 
 static
 void

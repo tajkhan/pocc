@@ -30,8 +30,8 @@
 
 
 # ifndef POCC_RELEASE_MODE
-#  include <parametrictiling/options.h>
-#  include <parametrictiling/parametrictiling.hpp>
+#  include <ptile/options.h>
+#  include <ptile/PTile.hpp>
 # endif
 
 # include <candl/candl.h>
@@ -366,7 +366,7 @@ pocc_driver_ptile (scoplib_scop_p program,
   s_subscop_t* tileable_comps = pocc_create_tilable_nests (program, root);
 
   // Iterate on all tileable components, parametrically tile them.
-  s_parametrictiling_options_t* ptopts = parametrictiling_options_malloc ();
+  s_ptile_options_t* ptopts = ptile_options_malloc ();
   ptopts->RSFME = 1;
   ptopts->fullTileSeparation = 0;
   ptopts->verbose_level = 1;
@@ -392,7 +392,7 @@ pocc_driver_ptile (scoplib_scop_p program,
   if (tileable_comps[0].root != NULL)
     scoplib_scop_free (tileable_comps[0].scop);
   XFREE(tileable_comps);
-  parametrictiling_options_free (ptopts);
+  ptile_options_free (ptopts);
 
 
 # endif

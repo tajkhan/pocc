@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Wed May 11 20:23:31 2011 Louis-Noel Pouchet
+## Last update Wed May 18 02:26:39 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -76,7 +76,7 @@ sub parse_args
 		checkout($BASEDIR, "all");
 		make($BASEDIR, $INST_PREFIX, "all", "force");
 		my $ret;
-		if ($args[$i + 1] == "devel") {
+		if ($args[$i + 1] =~ "devel") {
 		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
 		}
 		else {
@@ -129,18 +129,18 @@ sub parse_args
 		my $CONFIG_DRIVER = "$BASEDIR/config/driver.cfg";
 		my %config_driver = read_config_file($CONFIG_DRIVER);
 		my $curmode = $config_driver{"pocc-driver"}{"configuration"};;
-		if ($curmode == "devel") {
+		if ($curmode =~ "devel") {
 		    system("cd $BASEDIR && svn up --username lppcc --password lppcc");
 		}
 		else {
 		    system("rsync -az http://www.cse.ohio-state.edu/~pouchet/software/pocc/download/released $BASEDIR");
 		}
-		$curmode = "stable" if ($curmode == "local");
+		$curmode = "stable" if ($curmode =~ "local");
 		alternate($BASEDIR, $curmode);
 		checkout($BASEDIR, "all");
 		make($BASEDIR, $INST_PREFIX, "all", "force");
 		my $ret;
-		if ($curmode == "devel") {
+		if ($curmode =~ "devel") {
 		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
 		}
 		else {

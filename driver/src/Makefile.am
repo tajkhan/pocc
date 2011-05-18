@@ -52,6 +52,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/generators/install-pragmatize/include	\
 	-I$(install_prefix)/generators/install-clasttools/include	\
 	-I$(install_prefix)/generators/install-clastannotation/include	\
+	-I$(install_prefix)/generators/install-ptile/include		\
 	-I$(install_prefix)/math/install-piplib/include			\
 	-I$(install_prefix)/math/install-polylib/include		\
 	-I$(install_prefix)/math/install-fm/include			\
@@ -93,6 +94,7 @@ pocc_LDADD	=							     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
+  $(install_prefix)/generators/install-ptile/lib/libptile.la		     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
   $(install_prefix)/generators/install-clastannotation/lib/libclastannotation.la  \
   $(install_prefix)/math/install-fm/lib/libfm.la

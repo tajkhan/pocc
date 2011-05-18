@@ -1,5 +1,17 @@
 2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c,
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am,
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg: Propagate name change from 'primetile'
+	to 'ptile'.
+
+	* bin/pocc-util.in: Fix a typo in the 'upgrade' command.
+
+2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c: Update to benefit from PAST latest
 	API functionalities.
 
