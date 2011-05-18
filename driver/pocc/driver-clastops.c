@@ -93,20 +93,12 @@ void traverse_collect_iterators (s_past_node_t* node, void* data)
 }
 
 static
-void traverse_count_for (s_past_node_t* node, void* data)
-{
-  if (past_node_is_a (node, past_for))
-    (*((int*)data))++;
-}
-
-static
 char** collect_all_loop_iterators (s_past_node_t* node)
 {
-  int num_fors = 0;
-  past_visitor (node, traverse_count_for, &num_fors, NULL, NULL);
+  int num_fors = past_count_for_loops (node);
   char** iterators = XMALLOC(char*, num_fors + 1);
   int i;
-  for (i = 0; i < num_fors; ++i)
+  for (i = 0; i <= num_fors; ++i)
     iterators[i] = NULL;
 
   past_visitor (node, traverse_collect_iterators, iterators, NULL, NULL);
@@ -272,7 +264,6 @@ pocc_driver_clastops (scoplib_scop_p program,
     }
 
   fprintf (body_file, "#pragma endscop\n");
-
   /// FIXME: This is a BUG: this should be enabled.
 /*   /\* (8) Delete the clast. *\/ */
 /*   cloog_clast_free (root); */

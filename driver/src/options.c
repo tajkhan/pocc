@@ -570,7 +570,10 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   
   // PTile options.
   if (opt_tab[POCC_OPT_PTILE])
-    options->ptile = 1;
+    {
+      options->ptile = 1;
+      options->use_past = 1;
+    }
 
   // Vectorizer options.
   if (opt_tab[POCC_OPT_VECTORIZER])

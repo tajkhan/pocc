@@ -178,91 +178,116 @@ char** compute_iterator_list (s_past_node_t* root)
   return ret;
 }
 
-static
-void visit_create_otl_loops (s_past_node_t* node, void* data)
-{
-  if (past_node_is_a (node, past_cloogstmt))
-    {
-      s_past_node_t* top = ((void**)(data))[0];
-      int maxdepth = *((int*)(((void**)data)[1]));
-      // Count the number of surrounding for loops.
-      s_past_node_t* p;
-      int cur_for = 0;
-      char* iters[maxdepth + 1];
-      // top is a past_for.
-      for (p = node; p && p != top->parent; p = p->parent)
-	{
-	  if (past_node_is_a (p, past_for))
-	    {
-	      PAST_DECLARE_TYPED(for, pf, p);
-	      iters[cur_for++] = pf->iterator->symbol->data;
-	    }
-	}
-      iters[cur_for] = 0;
-      s_past_node_t* curforbody = node;
-      s_past_node_t** target = past_node_get_addr (node);
-      int i, j;
-      char** loop_iters = iters;
-      char** alliters = ((void**)data)[3];
-      char** all_iters = alliters;
-      int pos_iter = 0;
-      for (i = 0; i < maxdepth - cur_for; ++i)
-	{
-	  while (*loop_iters && ! strcmp (*loop_iters, *all_iters))
-	    {
-	      ++loop_iters;
-	      ++all_iters;
-	    }
-	  char* buffer = *all_iters;
-	  s_symbol_t* itersymb = symbol_add_from_char (NULL, buffer);
-	  s_past_node_t* init =
-	    past_node_binary_create (past_assign,
-				     past_node_variable_create (itersymb),
-				     past_node_value_create_from_int (0));
-	  itersymb = symbol_add_from_char (NULL, buffer);
-	  s_past_node_t* test =
-	    past_node_binary_create (past_leq,
-				     past_node_variable_create (itersymb),
-				     past_node_value_create_from_int (0));
-	  itersymb = symbol_add_from_char (NULL, buffer);
-	  s_past_node_t* increment =
-	    past_node_unary_create (past_inc_before,
-				    past_node_variable_create (itersymb));
-	  itersymb = symbol_add_from_char (NULL, buffer);
-	  s_past_variable_t* iter = past_variable_create (itersymb);
 
-	  s_past_node_t* newfor =
-	    past_node_for_create (init, test, iter,
-				  increment, curforbody, NULL);
- 	  newfor->next = curforbody->next;
-	  *target = newfor;
-	  curforbody->next = NULL;
-	  curforbody = newfor;
-	  ((void**)(data))[2] = curforbody;
-	  ++all_iters;
+static
+s_past_node_t*
+create_embedding_loop (s_past_node_t* body, s_past_for_t* refloop,
+		       const char* iter)
+{
+  s_symbol_t* itersymb = symbol_add_from_char (NULL, iter);
+  s_past_node_t* init =
+    past_node_binary_create (past_assign,
+			     past_node_variable_create (itersymb),
+			     past_node_value_create_from_int (0));
+  itersymb = symbol_add_from_char (NULL, iter);
+  s_past_node_t* test =
+    past_node_binary_create (past_leq,
+			     past_node_variable_create (itersymb),
+			     past_node_value_create_from_int (0));
+  itersymb = symbol_add_from_char (NULL, iter);
+  s_past_node_t* increment =
+    past_node_unary_create (past_inc_before,
+			    past_node_variable_create (itersymb));
+  itersymb = symbol_add_from_char (NULL, iter);
+  s_past_variable_t* iterator = past_variable_create (itersymb);
+
+  s_past_node_t* parent = body->parent;
+  s_past_node_t* newfor =
+    past_node_for_create (init, test, iterator,
+			  increment, body, NULL);
+  newfor->parent = parent;
+
+  return newfor;
+}
+
+static
+int
+past_local_loop_depth (s_past_node_t* node, s_past_node_t* top)
+{
+  int depth = 0;
+
+  while (node && node != top)
+    {
+      node = node->parent;
+      if (past_node_is_a (node, past_for))
+	++depth;
+    }
+
+  return depth;
+}
+
+static
+void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_for))
+    {
+      PAST_DECLARE_TYPED(for, pf, node);
+      s_past_node_t* top = ((void**)data)[0];
+      int* maxdepth = ((void**)data)[1];
+      char** iterators = ((void**)data)[2];
+      s_past_node_t* cur;
+      int num_loops = 0;
+      int num_siblings = 0;
+      for (cur = pf->body; cur; cur = cur->next, ++num_siblings)
+	if (past_contain_loop (cur))
+	  ++num_loops;
+      int local_depth = past_local_loop_depth (pf->body, top);
+      if ((num_loops && num_loops != num_siblings) ||
+	  (! num_loops && (local_depth < *maxdepth )))
+	{
+	  for (cur = pf->body; cur; )
+	    {
+	      if (! past_contain_loop (cur))
+		{
+		  s_past_node_t** addr = past_node_get_addr (cur);
+		  if (addr)
+		    {
+		      s_past_node_t* next = cur->next;
+		      s_past_node_t* prev = cur;
+		      while (next && ! past_contain_loop (next))
+			{
+			  prev = next;
+			  next = next->next;
+			}
+		      prev->next = NULL;
+		      s_past_node_t* parent = cur->parent;
+		      char* iter = iterators[*maxdepth - 1 - local_depth];
+		      *addr = create_embedding_loop (cur, pf, iter);
+		      (*addr)->next = next;
+		      cur = next;
+		    }
+		  else
+		    cur = cur->next;
+		}
+	      else
+		cur = cur->next;
+	    }
 	}
     }
 }
 
 static
 void
-create_otl_loops (s_past_node_t* node)
+create_uniform_embedding (s_past_node_t* node)
 {
   // 1- Compute the maximal loop depth.
   void* data[4];
   data[0] = node;
   int max_depth = past_max_loop_depth (node);
   data[1] = &max_depth;
-  data[3] = compute_iterator_list (node);
-
-  // 2- Iterate on all statements
-  do
-    {
-      data[2] = NULL;
-      past_visitor (node, visit_create_otl_loops, (void*)data, NULL, NULL);
-      past_set_parent (node);
-    }
-  while (data[2]);
+  data[2] = compute_iterator_list (node);
+  past_visitor (node, traverse_create_uniform_embedding, (void*)data,
+		NULL, NULL);
 }
 
 static
@@ -299,7 +324,7 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	      ret[partid].root = prog_loops[i].fornode;
 
 	      // Do 'otl' on the loop nest.
-	      create_otl_loops (ret[partid].root);
+	      create_uniform_embedding (ret[partid].root);
 	      scoplib_scop_free (newscop);
 	      newscop = scoptools_past2scop (root, program);
 	      ret[partid].scop = newscop;

@@ -1,5 +1,15 @@
 2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Fix a bug in OTL iterator naming,
+	improve the mechanism.
+
+	* driver/pocc/driver-clastops.c: Fix a bug in the newly created
+	iterator declaration.
+
+	* driver/src/options.c: Activate --use-past when --ptile is on.
+
+2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c,
 	* driver/pocc/driver-clastops.c,
 	* driver/pocc/Makefile.am,
