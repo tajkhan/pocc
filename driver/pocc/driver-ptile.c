@@ -194,6 +194,59 @@ void compute_loop_depth (s_past_node_t* node, void* data)
 
 
 static
+void traverse_get_max_loop_depth (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_cloogstmt))
+    {
+      s_past_node_t* top = ((void**)data)[0];
+      int* maxdepth = ((void**)data)[2];
+      int depth = 0;
+      s_past_node_t* curnode = node;
+      for (; node; node = node->parent)
+	{
+	  if (past_node_is_a (node, past_for))
+	    ++depth;
+	  if (node == top)
+	    break;
+	}
+      if (depth > *maxdepth)
+	{
+	  ((void**)data)[1] = curnode;
+	  *maxdepth = depth;
+	}
+    }
+}
+
+static
+char** compute_iterator_list (s_past_node_t* root)
+{
+  // Compute the max_depth stmt.
+  void* args[3];
+  args[0] = root;
+  args[1] = NULL;
+  int maxdepth = 0;
+  args[2] = &maxdepth;
+  past_visitor (root, traverse_get_max_loop_depth, (void*)args, NULL, NULL);
+
+  s_past_node_t* node;
+  char** ret = XMALLOC(char*, maxdepth + 1);
+  int pos = 0;
+  for (node = args[1]; node; node = node->parent)
+    {
+      if (past_node_is_a(node, past_for))
+	{
+	  PAST_DECLARE_TYPED(for, pf, node);
+	  ret[pos++] = pf->iterator->symbol->data;
+	  if (node == root)
+	    break;
+	}
+    }
+  ret[pos] = NULL;
+
+  return ret;
+}
+
+static
 void visit_create_otl_loops (s_past_node_t* node, void* data)
 {
   if (past_node_is_a (node, past_cloogstmt))
@@ -203,20 +256,32 @@ void visit_create_otl_loops (s_past_node_t* node, void* data)
       // Count the number of surrounding for loops.
       s_past_node_t* p;
       int cur_for = 0;
+      char* iters[maxdepth + 1];
       // top is a past_for.
       for (p = node; p && p != top->parent; p = p->parent)
 	{
 	  if (past_node_is_a (p, past_for))
-	    ++cur_for;
+	    {
+	      PAST_DECLARE_TYPED(for, pf, p);
+	      iters[cur_for++] = pf->iterator->symbol->data;
+	    }
 	}
-
+      iters[cur_for] = 0;
       s_past_node_t* curforbody = node;
       s_past_node_t** target = past_node_get_addr (node);
-      int i;
+      int i, j;
+      char** loop_iters = iters;
+      char** alliters = ((void**)data)[3];
+      char** all_iters = alliters;
+      int pos_iter = 0;
       for (i = 0; i < maxdepth - cur_for; ++i)
 	{
-	  char buffer[32];
-	  sprintf (buffer, "otl_iter%d", i);
+	  while (*loop_iters && ! strcmp (*loop_iters, *all_iters))
+	    {
+	      ++loop_iters;
+	      ++all_iters;
+	    }
+	  char* buffer = *all_iters;
 	  s_symbol_t* itersymb = symbol_add_from_char (NULL, buffer);
 	  s_past_node_t* init =
 	    past_node_binary_create (past_assign,
@@ -242,6 +307,7 @@ void visit_create_otl_loops (s_past_node_t* node, void* data)
 	  curforbody->next = NULL;
 	  curforbody = newfor;
 	  ((void**)(data))[2] = curforbody;
+	  ++all_iters;
 	}
     }
 }
@@ -251,11 +317,12 @@ void
 create_otl_loops (s_past_node_t* node)
 {
   // 1- Compute the maximal loop depth.
-  void* data[3];
+  void* data[4];
   data[0] = node;
   int max_depth = 0;
   data[1] = &max_depth;
   past_visitor (node, compute_loop_depth, (void*)data, NULL, NULL);
+  data[3] = compute_iterator_list (node);
 
   // 2- Iterate on all statements
   do
@@ -266,7 +333,6 @@ create_otl_loops (s_past_node_t* node)
     }
   while (data[2]);
 }
-
 
 s_subscop_t*
 pocc_create_tilable_nests (scoplib_scop_p program,
@@ -301,7 +367,7 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	    {
 	      // All loops in the nest are permutable. Process it.
 	      ret[partid].root = prog_loops[i].fornode;
-	      
+
 	      // Do 'otl' on the loop nest.
 	      create_otl_loops (ret[partid].root);
 	      scoplib_scop_free (newscop);

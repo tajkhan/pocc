@@ -82,6 +82,41 @@ traverse_print_clast_user_statement_extended_defines (struct clast_stmt* s,
     }
 }
 
+static
+void traverse_collect_iterators (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_for))
+    {
+      PAST_DECLARE_TYPED(for, pf, node);
+      char** iters = data;
+      while (*iters && strcmp (*iters, pf->iterator->symbol->data))
+	++iters;
+      *iters = pf->iterator->symbol->data;
+    }
+}
+
+static
+void traverse_count_for (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_for))
+    (*((int*)data))++;
+}
+
+static
+char** collect_all_loop_iterators (s_past_node_t* node)
+{
+  int num_fors = 0;
+  past_visitor (node, traverse_count_for, &num_fors, NULL, NULL);
+  char** iterators = XMALLOC(char*, num_fors + 1);
+  int i;
+  for (i = 0; i < num_fors; ++i)
+    iterators[i] = NULL;
+
+  past_visitor (node, traverse_collect_iterators, iterators, NULL, NULL);
+
+  return iterators;
+}
+
 
 
 void
@@ -172,29 +207,30 @@ pocc_driver_clastops (scoplib_scop_p program,
 
   /* (6) Generate loop counters. */
   fprintf (body_file,
-	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2, wPTile;\n");
-  int done = 0;
-  for (i = 0; i < nb_scatt; ++i)
-    {
-      /// FIXME: Deactivate this, as pluto may generate OpenMP pragmas
-      /// using some unused variables. We'll let the compiler remove useless
-      /// variables.
-	{
-	  if (! done++)
-	    fprintf (body_file, "\t register int ");
-	  else
-	    fprintf (body_file, ", ");
-	  fprintf(body_file, "c%d, c%dt, newlb_c%d, newub_c%d", i, i, i, i);
-	}
-    }
-  fprintf (body_file, ";\n\n");
+	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
 
-  fflush (body_file);
-  fprintf (body_file, "#pragma scop\n");
-
-  /* (7) Run the extended CLAST pretty-printer, if needed. */
   if (! poptions->use_past)
     {
+      int done = 0;
+      for (i = 0; i < nb_scatt; ++i)
+	{
+	  /// FIXME: Deactivate this, as pluto may generate OpenMP pragmas
+	  /// using some unused variables. We'll let the compiler remove useless
+	  /// variables.
+	  {
+	    if (! done++)
+	      fprintf (body_file, "\t register int ");
+	    else
+	      fprintf (body_file, ", ");
+	    fprintf(body_file, "c%d, c%dt, newlb_c%d, newub_c%d", i, i, i, i);
+	  }
+	}
+      fprintf (body_file, ";\n\n");
+
+      fflush (body_file);
+      fprintf (body_file, "#pragma scop\n");
+
+      /* (7) Run the extended CLAST pretty-printer, if needed. */
 #ifndef POCC_RELEASE_MODE
       if (poptions->pragmatizer || poptions->vectorizer ||
 	  poptions->vectorizer_mark_par_loops ||
@@ -220,6 +256,17 @@ pocc_driver_clastops (scoplib_scop_p program,
       // Use PTILE, if asked.
       if (poptions->ptile)
 	pocc_driver_ptile (program, pastroot, poptions, puoptions);
+
+      // Insert iterators declaration.
+      char** iterators = collect_all_loop_iterators (pastroot);
+      int i;
+      if (iterators[0])
+	fprintf (body_file,"\t register int %s", iterators[0]);
+      for (i = 1; iterators[i]; ++i)
+	fprintf (body_file,", %s", iterators[i]);
+      fprintf (body_file, ";\n\n");
+      fflush (body_file);
+      fprintf (body_file, "#pragma scop\n");
 
       // Pretty-print
       past_pprint (body_file, pastroot);

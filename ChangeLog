@@ -1,3 +1,11 @@
+2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-ptile.c: Use existing loop iterator for otl
+	loops.
+
+	* driver/pocc/driver-clastops.c: Automatically compute the
+	declaration of loop iterators;
+
 2011-05-17  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-ptile.c: Fix a bug with OTL recomputation.
