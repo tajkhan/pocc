@@ -37,6 +37,7 @@
 # include <candl/candl.h>
 # include <candl/ddv.h>
 # include <scoptools/past2scop.h>
+# include <past/past_api.h>
 
 
 struct s_subscop
@@ -126,25 +127,6 @@ loops_are_nested (CandlProgram* cprogram, int l1, int l2)
 }
 
 
-static
-int
-is_outer_for_loop (s_past_node_t* node)
-{
-  for (node = node->parent; node; node = node->parent)
-    if (past_node_is_a (node, past_for))
-      return 0;
-
-  return 1;
-}
-
-static
-void
-count_for_loops (s_past_node_t* node, void* data)
-{
-  if (past_node_is_a (node, past_for))
-    (*((int*)data))++;
-}
-
 struct s_process_data
 {
   s_past_node_t*	fornode;
@@ -164,7 +146,7 @@ void traverse_tree_index_for (s_past_node_t* node, void* data)
 	;
       pd[i].fornode = node;
       pd[i].forid = i;
-      pd[i].is_outer = is_outer_for_loop (node);
+      pd[i].is_outer = past_is_outer_for_loop (node);
     }
 }
 
@@ -174,64 +156,14 @@ void traverse_tree_index_for (s_past_node_t* node, void* data)
 #endif
 
 static
-void compute_loop_depth (s_past_node_t* node, void* data)
-{
-  if (past_node_is_a (node, past_for))
-    {
-      void** mydata = (void**)data;
-      int depth = 1;
-      while (node && node != mydata[0])
-	{
-	  if (past_node_is_a (node, past_for))
-	    depth++;
-	  node = node->parent;
-	}
-      int olddepth = *((int*)mydata[1]);
-      int newdepth = max(olddepth, depth);
-      *((int*)mydata[1]) = newdepth;
-    }
-}
-
-
-static
-void traverse_get_max_loop_depth (s_past_node_t* node, void* data)
-{
-  if (past_node_is_a (node, past_cloogstmt))
-    {
-      s_past_node_t* top = ((void**)data)[0];
-      int* maxdepth = ((void**)data)[2];
-      int depth = 0;
-      s_past_node_t* curnode = node;
-      for (; node; node = node->parent)
-	{
-	  if (past_node_is_a (node, past_for))
-	    ++depth;
-	  if (node == top)
-	    break;
-	}
-      if (depth > *maxdepth)
-	{
-	  ((void**)data)[1] = curnode;
-	  *maxdepth = depth;
-	}
-    }
-}
-
-static
 char** compute_iterator_list (s_past_node_t* root)
 {
-  // Compute the max_depth stmt.
-  void* args[3];
-  args[0] = root;
-  args[1] = NULL;
-  int maxdepth = 0;
-  args[2] = &maxdepth;
-  past_visitor (root, traverse_get_max_loop_depth, (void*)args, NULL, NULL);
-
-  s_past_node_t* node;
+  int maxdepth = past_max_loop_depth (root);
+  s_past_node_t* node = past_find_statement_at_depth (root, maxdepth);
   char** ret = XMALLOC(char*, maxdepth + 1);
+
   int pos = 0;
-  for (node = args[1]; node; node = node->parent)
+  for (; node; node = node->parent)
     {
       if (past_node_is_a(node, past_for))
 	{
@@ -312,16 +244,15 @@ void visit_create_otl_loops (s_past_node_t* node, void* data)
     }
 }
 
-
+static
 void
 create_otl_loops (s_past_node_t* node)
 {
   // 1- Compute the maximal loop depth.
   void* data[4];
   data[0] = node;
-  int max_depth = 0;
+  int max_depth = past_max_loop_depth (node);
   data[1] = &max_depth;
-  past_visitor (node, compute_loop_depth, (void*)data, NULL, NULL);
   data[3] = compute_iterator_list (node);
 
   // 2- Iterate on all statements
@@ -334,6 +265,7 @@ create_otl_loops (s_past_node_t* node)
   while (data[2]);
 }
 
+static
 s_subscop_t*
 pocc_create_tilable_nests (scoplib_scop_p program,
 			   s_past_node_t* root)
@@ -344,9 +276,7 @@ pocc_create_tilable_nests (scoplib_scop_p program,
   CandlProgram* cprogram = candl_program_convert_scop (newscop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
 
-  int num_for_loops = 0;
-  past_visitor (root, count_for_loops, (void*)&num_for_loops, NULL, NULL);
-
+  int num_for_loops = past_count_for_loops (root);
   s_subscop_t* ret = XMALLOC(s_subscop_t, num_for_loops);
   s_process_data_t prog_loops[num_for_loops];
   int i, j;

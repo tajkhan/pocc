@@ -1,5 +1,10 @@
 2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Update to benefit from PAST latest
+	API functionalities.
+
+2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c: Use existing loop iterator for otl
 	loops.
 
