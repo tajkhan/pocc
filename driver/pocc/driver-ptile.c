@@ -378,6 +378,7 @@ pocc_driver_ptile (scoplib_scop_p program,
 	parametricallytile (tileable_comps[i].scop,
 			    tileable_comps[i].root, ptopts);
       newpast->next = tileable_comps[i].root->next;
+      tileable_comps[i].root->next = NULL;
       assert (addr);
       *addr = newpast;
       pocc_expand_macro_stmt (newpast);
