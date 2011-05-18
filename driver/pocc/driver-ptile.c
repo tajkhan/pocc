@@ -182,18 +182,48 @@ char** compute_iterator_list (s_past_node_t* root)
 static
 s_past_node_t*
 create_embedding_loop (s_past_node_t* body, s_past_for_t* refloop,
-		       const char* iter)
+		       const char* iter, s_past_node_t* prevfor,
+		       s_past_node_t* nextfor)
 {
   s_symbol_t* itersymb = symbol_add_from_char (NULL, iter);
+  s_past_node_t* bound;
+
+  if (prevfor == NULL && nextfor == NULL)
+    bound = past_node_value_create_from_int (0);
+  else
+    {
+      if (past_node_is_a (nextfor, past_for))
+	{
+	  PAST_DECLARE_TYPED(for, pf, nextfor);
+	  PAST_DECLARE_TYPED(binary, pb, pf->init);
+	  bound = past_clone (pb->rhs);
+	  bound = past_node_binary_create
+	    (past_sub, bound, past_node_value_create_from_int (1));
+	}
+      else if (past_node_is_a (prevfor, past_for))
+	{
+	  PAST_DECLARE_TYPED(for, pf, prevfor);
+	  PAST_DECLARE_TYPED(binary, pb, pf->test);
+	  bound = past_clone (pb->rhs);
+	  bound = past_node_binary_create
+	    (past_add, bound, past_node_value_create_from_int (1));
+	}
+      else
+	{
+	  printf ("[PoCC][WARNING] Unable to get a good OTL bound\n");
+	  bound = past_node_value_create_from_int (0);
+	}
+    }
+
   s_past_node_t* init =
     past_node_binary_create (past_assign,
 			     past_node_variable_create (itersymb),
-			     past_node_value_create_from_int (0));
+			     bound);
   itersymb = symbol_add_from_char (NULL, iter);
   s_past_node_t* test =
     past_node_binary_create (past_leq,
 			     past_node_variable_create (itersymb),
-			     past_node_value_create_from_int (0));
+			     bound);
   itersymb = symbol_add_from_char (NULL, iter);
   s_past_node_t* increment =
     past_node_unary_create (past_inc_before,
@@ -245,6 +275,8 @@ void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
       if ((num_loops && num_loops != num_siblings) ||
 	  (! num_loops && (local_depth < *maxdepth )))
 	{
+	  s_past_node_t* prevfor = NULL;
+	  s_past_node_t* nextfor = NULL;
 	  for (cur = pf->body; cur; )
 	    {
 	      if (! past_contain_loop (cur))
@@ -259,18 +291,27 @@ void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
 			  prev = next;
 			  next = next->next;
 			}
+		      nextfor = next;
 		      prev->next = NULL;
 		      s_past_node_t* parent = cur->parent;
 		      char* iter = iterators[*maxdepth - 1 - local_depth];
-		      *addr = create_embedding_loop (cur, pf, iter);
+		      *addr = create_embedding_loop (cur, pf, iter,
+						     prevfor, nextfor);
 		      (*addr)->next = next;
 		      cur = next;
+		      prevfor = *addr;
 		    }
 		  else
-		    cur = cur->next;
+		    {
+		      prevfor = cur;
+		      cur = cur->next;
+		    }
 		}
 	      else
-		cur = cur->next;
+		{
+		  prevfor = cur;
+		  cur = cur->next;
+		}
 	    }
 	}
     }
@@ -325,7 +366,7 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 
 	      // Do 'otl' on the loop nest.
 	      create_uniform_embedding (ret[partid].root);
-	      scoplib_scop_free (newscop);
+
 	      newscop = scoptools_past2scop (root, program);
 	      ret[partid].scop = newscop;
 	      ++partid;

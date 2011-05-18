@@ -1,5 +1,10 @@
 2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Attempt to compute better OTL
+	loop bounds (still unsafe).
+
+2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c: Fix a bug in OTL iterator naming,
 	improve the mechanism.
 
