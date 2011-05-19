@@ -1,5 +1,15 @@
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Compile PTile by default.
+
+	* driver/pocc/driver-ptile.c: Remove conditional compilation if in
+	release mode.
+
+2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/base/configure.cfg: Update to latest version of ISL and
 	CLooG, add ptile.
 	* config/base/driver.cfg: Configure ptile by default.

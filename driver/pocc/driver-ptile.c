@@ -29,10 +29,8 @@
 # include <pocc/driver-ptile.h>
 
 
-# ifndef POCC_RELEASE_MODE
-#  include <ptile/options.h>
-#  include <ptile/PTile.hpp>
-# endif
+# include <ptile/options.h>
+# include <ptile/PTile.hpp>
 
 # include <candl/candl.h>
 # include <candl/ddv.h>
@@ -398,7 +396,7 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 		if (candl_dependence_is_loop_carried (cprogram, d, i))
 		  break;
 	      ret[partid].is_parallel = (d == NULL);
-		
+
 		// All loops in the nest are permutable. Process it.
 	      ret[partid].root = prog_loops[i].fornode;
 
@@ -491,8 +489,6 @@ pocc_driver_ptile (scoplib_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions)
 {
-# ifndef POCC_RELEASE_MODE
-
   printf ("[PoCC] Use parametric tiling\n");
 
   // Set parent, just in case.
@@ -529,7 +525,5 @@ pocc_driver_ptile (scoplib_scop_p program,
     scoplib_scop_free (tileable_comps[0].scop);
   XFREE(tileable_comps);
   ptile_options_free (ptopts);
-
-# endif
 }
 
