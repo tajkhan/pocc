@@ -257,6 +257,25 @@ past_local_loop_depth (s_past_node_t* node, s_past_node_t* top)
 }
 
 static
+int local_past_count_loops_with_iter (s_past_node_t* node, const char* iter)
+{
+  if (! node)
+    return 0;
+  int num_loops = 0;
+  s_past_node_t** outer_loops = past_outer_loops (node);
+  int i;
+  for (i = 0; outer_loops && outer_loops[i]; ++i)
+    {
+      PAST_DECLARE_TYPED(for, pouf, outer_loops[i]);
+      if (! strcmp (iter, pouf->iterator->symbol->data))
+	++num_loops;
+    }
+  XFREE(outer_loops);
+  
+  return num_loops;
+}
+
+static
 void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
 {
   if (past_node_is_a (node, past_for))
@@ -265,12 +284,19 @@ void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
       s_past_node_t* top = ((void**)data)[0];
       int* maxdepth = ((void**)data)[1];
       char** iterators = ((void**)data)[2];
+      int bodyiter = 0;
+      char* loopiter = pf->iterator->symbol->data;
+      while (*iterators && strcmp (*iterators, loopiter))
+	++iterators;
+      if (*iterators && (iterators != ((void**)data)[2]))
+	--iterators;
+      else
+	return;
       s_past_node_t* cur;
       int num_loops = 0;
       int num_siblings = 0;
       for (cur = pf->body; cur; cur = cur->next, ++num_siblings)
-	if (past_contain_loop (cur))
-	  ++num_loops;
+	num_loops += local_past_count_loops_with_iter (cur, *iterators);
       int local_depth = past_local_loop_depth (pf->body, top);
       if ((num_loops && num_loops != num_siblings) ||
 	  (! num_loops && (local_depth < *maxdepth )))
@@ -279,14 +305,16 @@ void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
 	  s_past_node_t* nextfor = NULL;
 	  for (cur = pf->body; cur; )
 	    {
-	      if (! past_contain_loop (cur))
+	      if (! local_past_count_loops_with_iter (cur, *iterators))
 		{
 		  s_past_node_t** addr = past_node_get_addr (cur);
 		  if (addr)
 		    {
 		      s_past_node_t* next = cur->next;
 		      s_past_node_t* prev = cur;
-		      while (next && ! past_contain_loop (next))
+		      while (next && 
+			     ! local_past_count_loops_with_iter
+			     (next, *iterators))
 			{
 			  prev = next;
 			  next = next->next;
@@ -294,8 +322,7 @@ void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
 		      nextfor = next;
 		      prev->next = NULL;
 		      s_past_node_t* parent = cur->parent;
-		      char* iter = iterators[*maxdepth - 1 - local_depth];
-		      *addr = create_embedding_loop (cur, pf, iter,
+		      *addr = create_embedding_loop (cur, pf, *iterators,
 						     prevfor, nextfor);
 		      (*addr)->next = next;
 		      cur = next;

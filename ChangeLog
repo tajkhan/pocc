@@ -1,3 +1,9 @@
+2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-ptile.c: Finalize OTL computation.
+
+	* bin/pocc-util.in: Fix typo in synchronization website.
+
 2011-05-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-ptile.c: Attempt to compute better OTL
