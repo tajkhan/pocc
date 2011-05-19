@@ -1,7 +1,7 @@
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-ptile.c: Fix a bug in SCoP recomputation
-	after OTL.
+	after OTL, fix the PAST.
 
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 

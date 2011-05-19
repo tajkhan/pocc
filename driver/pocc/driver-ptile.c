@@ -359,6 +359,30 @@ create_uniform_embedding (s_past_node_t* node)
 }
 
 static
+void traverse_rename_statements (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_cloogstmt))
+    {
+      PAST_DECLARE_TYPED(cloogstmt, pc, node);
+      past_deep_free ((s_past_node_t*)pc->stmt_name);
+      int* id = data;
+      char buffer[16];
+      sprintf (buffer, "S%d", ++(*id));
+      s_symbol_t* s = symbol_add_from_char (NULL, buffer);
+      pc->stmt_name = past_variable_create (s);
+      pc->stmt_number = *id;
+    }
+}
+
+static
+void rename_statements (s_past_node_t* root)
+{
+  int id = 0;
+  past_visitor (root, traverse_rename_statements, &id, NULL, NULL);
+}
+
+
+static
 s_subscop_t*
 pocc_create_tilable_nests (scoplib_scop_p program,
 			   s_past_node_t* root)
@@ -399,6 +423,10 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	      // loops (OTL) have been inserted.
 	      ret[partid].scop =
 		scoptools_past2scop (ret[partid].root, program);
+
+	      // Rename statements.
+	      rename_statements (ret[partid].root);
+
 	      ++partid;
 	    }
 	}
@@ -407,7 +435,6 @@ pocc_create_tilable_nests (scoplib_scop_p program,
   if (partid == 0)
     {
       printf ("[PoCC][Warning] There is no fully permutable loop nest in the program\n");
-      scoplib_scop_free (newscop);
     }
   // Be clean.
   candl_dependence_free (cdeps);
