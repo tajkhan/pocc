@@ -44,6 +44,7 @@ struct s_subscop
 {
   s_past_node_t* root;
   scoplib_scop_p scop;
+  int		 is_parallel;
 };
 typedef struct s_subscop s_subscop_t;
 
@@ -132,6 +133,7 @@ struct s_process_data
   s_past_node_t*	fornode;
   int			forid;
   int			is_outer;
+  int			is_parallel;
 };
 typedef struct s_process_data s_process_data_t;
 
@@ -147,6 +149,7 @@ void traverse_tree_index_for (s_past_node_t* node, void* data)
       pd[i].fornode = node;
       pd[i].forid = i;
       pd[i].is_outer = past_is_outer_for_loop (node);
+      pd[i].is_parallel = 0;
     }
 }
 
@@ -389,7 +392,14 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	      break;
 	  if (j == num_for_loops)
 	    {
-	      // All loops in the nest are permutable. Process it.
+	      // Check if the outer loop is parallel.
+	      CandlDependence* d;
+	      for (d = cdeps; d; d = d->next)
+		if (candl_dependence_is_loop_carried (cprogram, d, i))
+		  break;
+	      ret[partid].is_parallel = (d == NULL);
+		
+		// All loops in the nest are permutable. Process it.
 	      ret[partid].root = prog_loops[i].fornode;
 
 	      // Do 'otl' on the loop nest.
@@ -492,7 +502,6 @@ pocc_driver_ptile (scoplib_scop_p program,
 
   // Iterate on all tileable components, parametrically tile them.
   s_ptile_options_t* ptopts = ptile_options_malloc ();
-  ptopts->RSFME = 1;
   ptopts->fullTileSeparation = 0;
   ptopts->verbose_level = 1;
   int i;
@@ -501,6 +510,7 @@ pocc_driver_ptile (scoplib_scop_p program,
       s_past_node_t** addr = past_node_get_addr (tileable_comps[i].root);
       s_past_node_t* next = tileable_comps[i].root->next;
       tileable_comps[i].root->next = NULL;
+      ptopts->RSFME = ! tileable_comps[i].is_parallel;
       s_past_node_t* newpast =
 	parametricallytile (tileable_comps[i].scop,
 			    tileable_comps[i].root, ptopts);
