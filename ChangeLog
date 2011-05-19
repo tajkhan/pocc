@@ -1,5 +1,10 @@
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/devel/configure.cfg: Update to latest version of ISL and
+	CLooG.
+
+2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c: Use RSFME only when the outer loop
 	is sequential.
 
