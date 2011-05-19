@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Wed May 18 03:15:04 2011 Louis-Noel Pouchet
+## Last update Thu May 19 11:22:16 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -128,7 +128,8 @@ sub parse_args
 		print "[PoCC] Upgrade to the lastest PoCC version...\n";
 		my $CONFIG_DRIVER = "$BASEDIR/config/driver.cfg";
 		my %config_driver = read_config_file($CONFIG_DRIVER);
-		my $curmode = $config_driver{"pocc-driver"}{"configuration"};;
+		my $curmode = $config_driver{"pocc-driver"}{"configuration"};
+		$curmode =~ s/\s//g;
 		if ($curmode =~ "devel") {
 		    system("cd $BASEDIR && svn up --username lppcc --password lppcc");
 		}
