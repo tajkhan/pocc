@@ -1,5 +1,11 @@
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/base/configure.cfg: Update to latest version of ISL and
+	CLooG, add ptile.
+	* config/base/driver.cfg: Configure ptile by default.
+
+2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/devel/configure.cfg: Update to latest version of ISL and
 	CLooG.
 
