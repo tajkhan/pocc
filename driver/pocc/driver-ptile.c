@@ -359,30 +359,6 @@ create_uniform_embedding (s_past_node_t* node)
 }
 
 static
-void traverse_rename_statements (s_past_node_t* node, void* data)
-{
-  if (past_node_is_a (node, past_cloogstmt))
-    {
-      PAST_DECLARE_TYPED(cloogstmt, pc, node);
-      past_deep_free ((s_past_node_t*)pc->stmt_name);
-      int* id = data;
-      char buffer[16];
-      sprintf (buffer, "S%d", ++(*id));
-      s_symbol_t* s = symbol_add_from_char (NULL, buffer);
-      pc->stmt_name = past_variable_create (s);
-      pc->stmt_number = *id;
-    }
-}
-
-static
-void rename_statements (s_past_node_t* root)
-{
-  int id = 0;
-  past_visitor (root, traverse_rename_statements, &id, NULL, NULL);
-}
-
-
-static
 s_subscop_t*
 pocc_create_tilable_nests (scoplib_scop_p program,
 			   s_past_node_t* root)
@@ -417,15 +393,41 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	      ret[partid].root = prog_loops[i].fornode;
 
 	      // Do 'otl' on the loop nest.
+	      s_past_node_t* next = ret[partid].root->next;
+	      ret[partid].root->next = NULL;
 	      create_uniform_embedding (ret[partid].root);
 
 	      // Recompute the scoplib representation, in case new
 	      // loops (OTL) have been inserted.
-	      ret[partid].scop =
-		scoptools_past2scop (ret[partid].root, program);
 
-	      // Rename statements.
-	      rename_statements (ret[partid].root);
+	      // 1- Insert the surrounding guards, PTile needs it.
+	      /// FIXME: temporary.
+	      s_past_node_t* parent = ret[partid].root->parent;
+	      s_past_node_t* temproot = ret[partid].root->parent;
+	      s_past_node_t* curnode = ret[partid].root;
+	      while (past_node_is_a (temproot, past_affineguard))
+		{
+		  PAST_DECLARE_TYPED(affineguard, pa, temproot);
+		  s_past_node_t* cond =
+		    past_node_affineguard_create (pa->condition,
+						  curnode);
+		  curnode = cond;
+		  temproot = temproot->parent;
+		}
+	      // 2- Get the new scop
+	      ret[partid].scop =
+		scoptools_past2scop (curnode, program);
+	      // 3- Restore.
+	      if (curnode != ret[partid].root)
+		while (past_node_is_a (curnode, past_affineguard))
+		  {
+		    PAST_DECLARE_TYPED(affineguard, pa, curnode);
+		    s_past_node_t* then_clause = pa->then_clause;
+		    XFREE(pa);
+		    curnode = then_clause;
+		  }
+	      ret[partid].root->next = next;
+	      ret[partid].root->parent = parent;
 
 	      ++partid;
 	    }
@@ -517,7 +519,6 @@ pocc_driver_ptile (scoplib_scop_p program,
     scoplib_scop_free (tileable_comps[0].scop);
   XFREE(tileable_comps);
   ptile_options_free (ptopts);
-
 
 # endif
 }

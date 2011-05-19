@@ -1,5 +1,10 @@
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Use the guards surrounding the loop
+	nest in the scop associated to the OTL tree sent to PTile.
+
+2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c: Fix a bug in SCoP recomputation
 	after OTL, fix the PAST.
 
