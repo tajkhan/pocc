@@ -271,7 +271,7 @@ int local_past_count_loops_with_iter (s_past_node_t* node, const char* iter)
 	++num_loops;
     }
   XFREE(outer_loops);
-  
+
   return num_loops;
 }
 
@@ -312,7 +312,7 @@ void traverse_create_uniform_embedding (s_past_node_t* node, void* data)
 		    {
 		      s_past_node_t* next = cur->next;
 		      s_past_node_t* prev = cur;
-		      while (next && 
+		      while (next &&
 			     ! local_past_count_loops_with_iter
 			     (next, *iterators))
 			{
@@ -368,6 +368,7 @@ pocc_create_tilable_nests (scoplib_scop_p program,
   CandlOptions* coptions = candl_options_malloc ();
   CandlProgram* cprogram = candl_program_convert_scop (newscop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
+  scoplib_scop_free (newscop);
 
   int num_for_loops = past_count_for_loops (root);
   s_subscop_t* ret = XMALLOC(s_subscop_t, num_for_loops);
@@ -394,8 +395,10 @@ pocc_create_tilable_nests (scoplib_scop_p program,
 	      // Do 'otl' on the loop nest.
 	      create_uniform_embedding (ret[partid].root);
 
-	      newscop = scoptools_past2scop (root, program);
-	      ret[partid].scop = newscop;
+	      // Recompute the scoplib representation, in case new
+	      // loops (OTL) have been inserted.
+	      ret[partid].scop =
+		scoptools_past2scop (ret[partid].root, program);
 	      ++partid;
 	    }
 	}
@@ -467,11 +470,12 @@ pocc_driver_ptile (scoplib_scop_p program,
   for (i = 0; tileable_comps[i].root; ++i)
     {
       s_past_node_t** addr = past_node_get_addr (tileable_comps[i].root);
+      s_past_node_t* next = tileable_comps[i].root->next;
+      tileable_comps[i].root->next = NULL;
       s_past_node_t* newpast =
 	parametricallytile (tileable_comps[i].scop,
 			    tileable_comps[i].root, ptopts);
-      newpast->next = tileable_comps[i].root->next;
-      tileable_comps[i].root->next = NULL;
+      newpast->next = next;
       assert (addr);
       *addr = newpast;
       pocc_expand_macro_stmt (newpast);

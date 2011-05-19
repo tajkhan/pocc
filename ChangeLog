@@ -1,5 +1,10 @@
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Fix a bug in SCoP recomputation
+	after OTL.
+
+2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-ptile.c: Finalize OTL computation.
 
 	* bin/pocc-util.in: Fix typo in synchronization website.
