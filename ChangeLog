@@ -1,3 +1,7 @@
+2011-05-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* doc/pocc.texi: Use AC_SEARCH_LIBS instead of AC_CHECK_LIB.
+
 2011-05-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/local/configure.cfg,

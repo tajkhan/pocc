@@ -578,7 +578,7 @@ dnl Offer --with-scoplib.
               [with_scoplib=check])
 dnl Check for scoplib existence.
   AS_IF([test "x$with_scoplib" != xno],
-	[AC_CHECK_LIB([scoplib], [scoplib_scop_read],
+	[AC_SEARCH_LIBS([scoplib_scop_read], [scoplib], 
 	 [LIBS="-lscoplib $LIBS";
 	 DEFINE_HAS_SCOPLIB_LIB="-DCUDASCHED_SUPPORTS_SCOPLIB"
 	 ],
