@@ -106,7 +106,12 @@ char** collect_all_loop_iterators (s_past_node_t* node)
   return iterators;
 }
 
-
+static
+void metainfoprint (s_past_node_t* node, FILE* out)
+{
+  if (node->metainfo)
+    fprintf (out, "%s", node->metainfo);
+}
 
 void
 pocc_driver_clastops (scoplib_scop_p program,
@@ -258,7 +263,7 @@ pocc_driver_clastops (scoplib_scop_p program,
       fprintf (body_file, "#pragma scop\n");
 
       // Pretty-print
-      past_pprint (body_file, pastroot);
+      past_pprint (body_file, pastroot, metainfoprint);
       // Be clean.
       past_deep_free (pastroot);
     }
