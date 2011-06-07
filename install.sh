@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Thu Apr 16 19:39:57 2009 Louis-Noel Pouchet
-## Last update Wed May 11 19:15:37 2011 Louis-Noel Pouchet
+## Last update Tue Jun  7 13:13:42 2011 Louis-Noel Pouchet
 ##
 
 ##
@@ -42,7 +42,6 @@ FORCE="";
 if ! [ -f ./configure ]; then
     echo "[PoCC] Bootstrap...";
     aclocal -I driver/autoconf &&
-    libtoolize --force --copy &&
     autoreconf -vfi;
     if [ $? -ne 0 ]; then echo "[PoCC] bootstrap: fatal error"; exit 1; fi;
     FORCE=y;

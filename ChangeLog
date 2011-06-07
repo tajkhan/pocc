@@ -1,5 +1,11 @@
 2011-06-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg: Upgrade to the latest version of
+	CLooG and ISL, add irconverter module.
+
+2011-06-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* bin/pocc-make: Allow absolute path in bootstrap command.
 
 	* doc/pocc.texi,
