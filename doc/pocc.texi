@@ -528,7 +528,7 @@ category: optimizers
 module: cudascheduler
 location: https://alchemy.futurs.inria.fr/svn/users/....
 retrieve-method: svn
-bootstrap: bootstrap.sh
+bootstrap: ./bootstrap.sh
 configure: --with-scoplib=$poccsrcdir/ir/install-scoplib
 make-depends: scoplib
 @end example

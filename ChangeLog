@@ -1,3 +1,14 @@
+2011-06-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* bin/pocc-make: Allow absolute path in bootstrap command.
+
+	* doc/pocc.texi,
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/local/configure.cfg,
+	* config/stable/configure.cfg: Update accordingly.
+
 2011-05-27  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-clastops.c: Pretty-print meta-info in PAST.
