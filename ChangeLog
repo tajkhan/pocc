@@ -1,5 +1,13 @@
 2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* bin/pocc-util.in,
+	* bin/pocc-make: Improve upgrade mechanism.
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Simplify PolyLib's bootstrap.
+
+2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/devel/configure.cfg,
 	* config/base/configure.cfg,
 	* config/base/driver.cfg,

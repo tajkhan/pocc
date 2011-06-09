@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Thu May 19 11:22:16 2011 Louis-Noel Pouchet
+## Last update Thu Jun  9 14:54:31 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -139,7 +139,7 @@ sub parse_args
 		$curmode = "stable" if ($curmode =~ "local");
 		alternate($BASEDIR, $curmode);
 		checkout($BASEDIR, "all");
-		make($BASEDIR, $INST_PREFIX, "all", "force");
+		make($BASEDIR, $INST_PREFIX, "all", "force-hard");
 		my $ret;
 		if ($curmode =~ "devel") {
 		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
