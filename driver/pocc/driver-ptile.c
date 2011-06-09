@@ -26,11 +26,12 @@
 # include <pocc-utils/config.h>
 #endif
 
-# include <pocc/driver-ptile.h>
+#include <pocc/driver-ptile.h>
 
 
-# include <ptile/options.h>
-# include <ptile/pocc_driver.h>
+#include <ptile/options.h>
+#include <ptile/pocc_driver.h>
+#include <irconverter/past2scop.h>
 
 void
 pocc_driver_ptile (scoplib_scop_p program,
@@ -49,7 +50,7 @@ pocc_driver_ptile (scoplib_scop_p program,
   ptopts->fullTileSeparation = 0;
   ptopts->verbose_level = 1;
   ptopts->data_is_char = 1;
-
+  
   // Invoke PTile main driver. Will parametrically tile all tilable
   // components, by in-place modification of 'root'.
   ptile_pocc_driver (control_scop, root, ptopts);

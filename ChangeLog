@@ -1,5 +1,9 @@
 2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c: Add missing include.
+
+2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/base/configure.cfg: Fix ISL and CLooG git version id.
 
 2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
