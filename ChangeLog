@@ -1,5 +1,12 @@
 2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Upgrade to PolyLib 5.22.5.
+
+2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* bin/pocc-util.in,
 	* bin/pocc-make: Improve upgrade mechanism.
 
@@ -17,7 +24,7 @@
 	* config/stable/driver.cfg,
 	* driver/src/Makefile.am,
 	* driver/pocc/Makefile.am: Add irconverter module as a default
-	compiled module.
+	compiled module, upgrade to scoplib-0.2.1.
 
 	* driver/pocc/driver-ptile.c: Move the core of the driver to the
 	PTile module, where it belongs.
