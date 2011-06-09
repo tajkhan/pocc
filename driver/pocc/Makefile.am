@@ -44,6 +44,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/ir/install-past/include			\
 	-I$(install_prefix)/ir/install-scoplib/include			\
 	-I$(install_prefix)/ir/install-scoptools/include		\
+	-I$(install_prefix)/ir/install-irconverter/include		\
 	-I$(install_prefix)/analyzers/install-clan/include		\
 	-I$(install_prefix)/analyzers/install-candl/include		\
 	-I$(install_prefix)/analyzers/install-polyfeat/include		\
@@ -98,6 +99,7 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/ir/install-past/lib/libpast.la			     \
   $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
   $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
+  $(install_prefix)/ir/install-irconverter/lib/libirconverter.la	     \
   $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \
   $(install_prefix)/analyzers/install-candl/lib/libcandl.la		     \
   $(install_prefix)/analyzers/install-polyfeat/lib/libpolyfeat.la	     \

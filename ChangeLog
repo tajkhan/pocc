@@ -1,3 +1,19 @@
+2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg,
+	* driver/src/Makefile.am,
+	* driver/pocc/Makefile.am: Add irconverter module as a default
+	compiled module.
+
+	* driver/pocc/driver-ptile.c: Move the core of the driver to the
+	PTile module, where it belongs.
+
 2011-06-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/devel/driver.cfg,
