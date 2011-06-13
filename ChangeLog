@@ -1,3 +1,8 @@
+2011-06-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-codegen.c: Bypass Pluto's generated OpenMP
+	clause when using PTile.x
+
 2011-06-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-ptile.c: Add missing include.

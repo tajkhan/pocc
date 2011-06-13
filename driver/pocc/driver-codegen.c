@@ -43,7 +43,7 @@ pocc_driver_codegen_post_processing (FILE* body_file,
   char* args[4];
   args[2] = args[3] = NULL;
   args[1] = ".body.c";
-  if (poptions->pluto_parallel && ! poptions->pragmatizer)
+  if (poptions->pluto_parallel && ! poptions->pragmatizer && ! poptions->ptile)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
       if (poptions->quiet)
