@@ -37,7 +37,7 @@
 # ifndef POCC_RELEASE_MODE
 #  define POCC_NB_OPTS				67
 # else
-#  define POCC_NB_OPTS				59
+#  define POCC_NB_OPTS				60
 # endif
 
 # define POCC_OPT_HELP				0
@@ -118,13 +118,13 @@
 #  define POCC_OPT_RUN_CMD_ARGS          	65
 #  define POCC_OPT_PROGRAM_TIMEOUT        	66
 # else
-#  define POCC_OPT_CODEGEN_TIMERCODE		52
-#  define POCC_OPT_CODEGEN_TIMER_ASM		53
-#  define POCC_OPT_CODEGEN_TIMER_PAPI		54
-#  define POCC_OPT_COMPILE      		55
-#  define POCC_OPT_COMPILE_CMD          	56
-#  define POCC_OPT_RUN_CMD_ARGS          	57
-#  define POCC_OPT_PROGRAM_TIMEOUT        	58
+#  define POCC_OPT_CODEGEN_TIMERCODE		53
+#  define POCC_OPT_CODEGEN_TIMER_ASM		54
+#  define POCC_OPT_CODEGEN_TIMER_PAPI		55
+#  define POCC_OPT_COMPILE      		56
+#  define POCC_OPT_COMPILE_CMD          	57
+#  define POCC_OPT_RUN_CMD_ARGS          	58
+#  define POCC_OPT_PROGRAM_TIMEOUT        	59
 # endif
 
 BEGIN_C_DECLS

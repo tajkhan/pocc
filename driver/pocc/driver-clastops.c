@@ -41,6 +41,7 @@
 # include <clasttools/clastext.h>
 # include <clasttools/clast2past.h>
 # include <past/past.h>
+# include <past/pprint.h>
 
 
 static
@@ -110,7 +111,7 @@ static
 void metainfoprint (s_past_node_t* node, FILE* out)
 {
   if (node->metainfo)
-    fprintf (out, "%s", node->metainfo);
+    fprintf (out, "%s", (char*) node->metainfo);
 }
 
 void
@@ -263,7 +264,8 @@ pocc_driver_clastops (scoplib_scop_p program,
       fprintf (body_file, "#pragma scop\n");
 
       // Pretty-print
-      past_pprint (body_file, pastroot, metainfoprint);
+      past_pprint_metainfo (body_file, pastroot, metainfoprint);
+
       // Be clean.
       past_deep_free (pastroot);
     }

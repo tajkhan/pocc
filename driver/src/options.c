@@ -157,6 +157,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
   { '\0', "use-past", 0, "\tUse the PAST back-end [off]" },
   { '\0', "pragmatizer", 0, "\tUse the CLAST pragmatizer [off]" },
+  { '\0', "ptile", 0, "\tUse PTile for parametric tiling (experimental) [off]" },
   { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
@@ -564,16 +565,15 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   // Pragmatizer options.
   if (opt_tab[POCC_OPT_PRAGMATIZER])
     options->pragmatizer = 1;
-   
-  
-#ifndef POCC_RELEASE_MODE
-  
+
   // PTile options.
   if (opt_tab[POCC_OPT_PTILE])
     {
       options->ptile = 1;
       options->use_past = 1;
     }
+
+#ifndef POCC_RELEASE_MODE
 
   // Vectorizer options.
   if (opt_tab[POCC_OPT_VECTORIZER])
