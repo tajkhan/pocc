@@ -47,6 +47,7 @@ int main(int argc, char** argv)
   s_pocc_utils_options_t* puoptions = pocc_utils_options_malloc ();
   pocc_getopts (poptions, argc, argv);
 
+  pip_init ();
   if (! poptions->quiet)
     printf ("[PoCC] Compiling file: %s\n", poptions->input_file_name);
   if (poptions->trash)
@@ -109,7 +110,7 @@ int main(int argc, char** argv)
     pocc_driver_codegen (scop, poptions, puoptions);
 
   // Be clean.
-  scoplib_scop_free (puoptions->program);
+  scoplib_scop_free (scop);
   pip_close ();
   if (! poptions->quiet)
     printf ("[PoCC] All done.\n");
