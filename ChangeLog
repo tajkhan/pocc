@@ -1,3 +1,9 @@
+2011-06-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/base/configure.cfg,
+	* config/devel/configure.cfg: Update to latest ISL and CLooG git
+	versions.
+
 2011-06-17  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* src/pocc.c: Fix incorrect scop free call.
