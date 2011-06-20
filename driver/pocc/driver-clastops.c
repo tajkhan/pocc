@@ -246,6 +246,8 @@ pocc_driver_clastops (scoplib_scop_p program,
   else
     {
       // Convert to PAST IR.
+      if (! poptions->quiet)
+	printf ("[PAST] Converting CLAST to PoCC AST\n");
       s_past_node_t* pastroot = clast2past (root, 1);
 
       // Use PTILE, if asked.

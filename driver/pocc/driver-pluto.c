@@ -38,7 +38,8 @@ pocc_driver_pluto (scoplib_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
-  printf ("[PoCC] Running Pluto\n");
+  if (! poptions->quiet)
+    printf ("[PoCC] Running Pluto\n");
 
   PlutoOptions* ploptions = pluto_options_alloc ();
   ploptions->parallel = poptions->pluto_parallel;
@@ -50,7 +51,8 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->bee = poptions->pluto_bee;
   ploptions->prevector = poptions->pluto_prevector;
   ploptions->ufactor = poptions->pluto_ufactor; // int
-  ploptions->quiet = poptions->pluto_quiet;
+  ploptions->quiet = poptions->pluto_quiet | poptions->quiet;
+  ploptions->silent = poptions->quiet;
   ploptions->context = poptions->pluto_context; // int
   ploptions->cloogf = poptions->cloog_f; // int
   ploptions->cloogl = poptions->cloog_l; // int

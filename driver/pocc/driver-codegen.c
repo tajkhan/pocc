@@ -198,11 +198,14 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 	pocc_exec_string_noexit (args, POCC_EXECV_HIDE_OUTPUT);
       if (poptions->program_exec_result == NULL)
 	{
-	  if (poptions->timeout == 0)
-	    printf ("[PoCC] Program %s aborted\n", args[offset]);
-	  else
-	    printf ("[PoCC] Program %s aborted (timeout of %ds)\n",
-		     args[offset], poptions->timeout);
+	  if (! poptions->quiet)
+	    {
+	      if (poptions->timeout == 0)
+		printf ("[PoCC] Program %s aborted\n", args[offset]);
+	      else
+		printf ("[PoCC] Program %s aborted (timeout of %ds)\n",
+			args[offset], poptions->timeout);
+	    }
 	  return EXIT_FAILURE;
 	}
     }

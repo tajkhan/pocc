@@ -39,7 +39,8 @@ pocc_driver_ptile (scoplib_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions)
 {
-  printf ("[PoCC] Use parametric tiling\n");
+  if (! poptions->quiet)
+    printf ("[PoCC] Use parametric tiling\n");
 
   // Set parent, just in case.
   past_set_parent (root);
@@ -50,6 +51,9 @@ pocc_driver_ptile (scoplib_scop_p program,
   ptopts->fullTileSeparation = 0;
   ptopts->verbose_level = 1;
   ptopts->data_is_char = 1;
+  ptopts->quiet = poptions->quiet;
+  if (ptopts->quiet)
+    ptopts->verbose_level = 0;
   
   // Invoke PTile main driver. Will parametrically tile all tilable
   // components, by in-place modification of 'root'.

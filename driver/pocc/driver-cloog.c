@@ -240,7 +240,10 @@ pocc_driver_cloog (scoplib_scop_p program,
       ud = cloog_union_domain_set_name (ud, CLOOG_SCAT, i,
 					buffer);
     }
+
+  // Set the options.
   //coptions->strides = 0;
+  coptions->quiet = poptions->quiet;
   input = cloog_input_alloc (context, ud);
   //cloog_input_dump_cloog(stderr, input, coptions);
   

@@ -1,5 +1,13 @@
 2011-06-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-ptile.c,
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/pocc/driver-codegen.c: Improve support of option --quiet.
+
+2011-06-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/base/configure.cfg,
 	* config/devel/configure.cfg: Update to latest ISL and CLooG git
 	versions.
