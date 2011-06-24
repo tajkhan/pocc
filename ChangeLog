@@ -1,3 +1,10 @@
+2011-06-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/local/driver.cfg,
+	* config/stable/driver.cfg,
+	* config/local/configure.cfg,
+	* config/stable/configure.cfg: Update to scoptools-0.2.0.
+
 2011-06-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-ptile.c,
