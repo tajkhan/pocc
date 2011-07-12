@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Thu Jun  9 15:36:52 2011 Louis-Noel Pouchet
+## Last update Fri Jul  8 08:56:16 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -47,7 +47,7 @@ do "$BASEDIR/bin/pocc-versionsgenerator";
 sub print_help
 {
     print "Usage: pocc-util <command>\n";
-    print "<command>: upgrade\n";
+    print "<command>: upgrade [software-name]\n";
     print "<command>: alternate [configuration-name]\n";
     print "<command>: checkout [software-name]\n";
     print "<command>: make [software-name]\n";
@@ -125,35 +125,41 @@ sub parse_args
 		$i = $#args;
 	    }
 	    case "upgrade" {
-		print "[PoCC] Upgrade to the lastest PoCC version...\n";
-		my $CONFIG_DRIVER = "$BASEDIR/config/driver.cfg";
-		my %config_driver = read_config_file($CONFIG_DRIVER);
-		my $curmode = $config_driver{"pocc-driver"}{"configuration"};
-		$curmode =~ s/\s//g;
-		if ($curmode =~ "devel") {
-		    system("cd $BASEDIR && svn up --username lppcc --password lppcc");
+		if ($i < $#args) {
+		    checkout($BASEDIR, $args[$i + 1]);
+		    make($BASEDIR, $args[$i + 1]);
 		}
 		else {
-		    system("rsync -az http://www.cse.ohio-state.edu/~pouchet/software/pocc/download/released/ $BASEDIR/");
+		    print "[PoCC] Upgrade to the lastest PoCC version...\n";
+		    my $CONFIG_DRIVER = "$BASEDIR/config/driver.cfg";
+		    my %config_driver = read_config_file($CONFIG_DRIVER);
+		    my $curmode = $config_driver{"pocc-driver"}{"configuration"};
+		    $curmode =~ s/\s//g;
+		    if ($curmode =~ "devel") {
+			system("cd $BASEDIR && svn up --username lppcc --password lppcc");
+		    }
+		    else {
+			system("rsync -az http://www.cse.ohio-state.edu/~pouchet/software/pocc/download/released/ $BASEDIR/");
+		    }
+		    my $ret;
+		    if ($curmode =~ "devel") {
+			$ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
+		    }
+		    else {
+			$ret = system("cd $BASEDIR && make install");
+		    }
+		    $curmode = "stable" if ($curmode =~ "local");
+		    alternate($BASEDIR, $curmode);
+		    checkout($BASEDIR, "all");
+		    make($BASEDIR, $INST_PREFIX, "all", "force-hard");
+		    if ($curmode =~ "devel") {
+			$ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
+		    }
+		    else {
+			$ret = system("cd $BASEDIR && make install");
+		    }
+		    die "[PoCC] fatal error\n" if ($ret != 0);
 		}
-		my $ret;
-		if ($curmode =~ "devel") {
-		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
-		}
-		else {
-		    $ret = system("cd $BASEDIR && make install");
-		}
-		$curmode = "stable" if ($curmode =~ "local");
-		alternate($BASEDIR, $curmode);
-		checkout($BASEDIR, "all");
-		make($BASEDIR, $INST_PREFIX, "all", "force-hard");
-		if ($curmode =~ "devel") {
-		    $ret = system("cd $BASEDIR && CPPFLAGS=-DHAVE_POCC_DEVEL make install");
-		}
-		else {
-		    $ret = system("cd $BASEDIR && make install");
-		}
-		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
 	    }
 	    else { print "Unknown argument: $args[$i]\n"; }

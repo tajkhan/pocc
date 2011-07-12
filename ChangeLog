@@ -1,3 +1,7 @@
+2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* bin/pocc-util.in: Allow upgrade of a specific module.
+
 2011-06-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/local/driver.cfg,

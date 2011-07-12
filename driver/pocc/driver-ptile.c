@@ -33,6 +33,7 @@
 #include <ptile/pocc_driver.h>
 #include <irconverter/past2scop.h>
 
+
 void
 pocc_driver_ptile (scoplib_scop_p program,
 		   s_past_node_t* root,
@@ -54,7 +55,7 @@ pocc_driver_ptile (scoplib_scop_p program,
   ptopts->quiet = poptions->quiet;
   if (ptopts->quiet)
     ptopts->verbose_level = 0;
-  
+
   // Invoke PTile main driver. Will parametrically tile all tilable
   // components, by in-place modification of 'root'.
   ptile_pocc_driver (control_scop, root, ptopts);
