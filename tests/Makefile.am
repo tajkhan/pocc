@@ -81,6 +81,7 @@ TESTS				= $(check_SCRIPTS)
 CLEANFILES			= $(TEST_SUITE_CLEAN)
 
 EXTRA_DIST	+=				\
+	scripts/checker_correctness.sh		\
 	$(BENCH_FILES)				\
 	$(TEST_SUITE)				\
 	$(TEST_SUITE_REF_PASSTHRU)		\
@@ -95,4 +96,7 @@ EXTRA_DIST	+=				\
 TESTS_ENVIRONMENT +=							\
 	CHECKER="$(top_srcdir)/tests/scripts/checker.sh"		\
 	TEST_SUITE="$(TEST_SUITE)"
+
+correctness-check:
+	(scripts/checker_correctness.sh)
 #############################################################################

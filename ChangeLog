@@ -1,5 +1,14 @@
 2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* tests/scripts/checker_correctness.sh: New. Script to check the
+	correctness of pocc-generated code, against polybench 2.1.
+	* tests/Makefile.am: Update accordingly, add rule 'correctness-check'.
+
+	* bin/pocc-checkout: Fix a problem when checkouting local/stable
+	modes.
+
+2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* bin/pocc-util.in: Add check-diff command.
 	* bin/pocc-checkout: Implement check-diff command, simplify
 	directory naming for archives.
