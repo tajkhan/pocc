@@ -1,5 +1,17 @@
 2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* bin/pocc-util.in: Add check-diff command.
+	* bin/pocc-checkout: Implement check-diff command, simplify
+	directory naming for archives.
+
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Update accordingly. Now modules have
+	consitent directory naming whatever the mode.
+
+2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* bin/pocc-util.in: Allow upgrade of a specific module.
 
 2011-06-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>

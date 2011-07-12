@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Fri Jul  8 08:56:16 2011 Louis-Noel Pouchet
+## Last update Tue Jul 12 14:14:50 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -50,6 +50,7 @@ sub print_help
     print "<command>: upgrade [software-name]\n";
     print "<command>: alternate [configuration-name]\n";
     print "<command>: checkout [software-name]\n";
+    print "<command>: check-diff [software-name]\n";
     print "<command>: make [software-name]\n";
     print "<command>: snapshot <svn|release> [mode]\n";
     print "<command>: buildall\n";
@@ -91,6 +92,15 @@ sub parse_args
 		}
 		else {
 		    checkout($BASEDIR, "all");
+		}
+		$i = $#args;
+	    }
+	    case "check-diff" {
+		if ($i < $#args) {
+		    checkdiff($BASEDIR, $args[$i + 1]);
+		}
+		else {
+		    checkdiff($BASEDIR, "all");
 		}
 		$i = $#args;
 	    }

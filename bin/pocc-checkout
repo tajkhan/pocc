@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Wed May 11 19:53:47 2011 Louis-Noel Pouchet
+## Last update Tue Jul 12 14:21:07 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-checkout: this file is part of the PoCC project.
@@ -55,6 +55,14 @@ sub checkout_git
     system("if [ -d \"$BDIR_CO/$dir/$soft/.git\" ]; then cd $BDIR_CO/$dir/$soft && git pull && if ! [ -z \"$revision\" ]; then git checkout $revision; fi; else git clone $url $BDIR_CO/$dir/$soft; if ! [ -z \"$revision\" ]; then cd $BDIR_CO/$dir/$soft && git checkout $revision; cd -; fi; fi");
 }
 
+## Args: soft name, destination directory, url
+sub checkdiff_git
+{
+    my ($soft, $dir, $url) = @_;
+    print "[PoCC-checkout] Git diff $soft:\n";
+    system("cd $BDIR_CO/$dir/$soft && git diff | grep 'diff --git'");
+}
+
 
 ## Args: soft name, destination directory, url
 sub checkout_wget
@@ -66,12 +74,16 @@ sub checkout_wget
     my $filename = $tmp[$#tmp];
     if ($filename =~ /.tar.gz$|.tgz$/) {
 	system("cd $BDIR_CO/$dir && tar xzf $filename");
+	$filename =~ tr/.tar.gz$//;
+	$filename =~ tr/.tgz$//;
     }
     else {
 	if ($filename =~ /.zip$/) {
 	    system("cd $BDIR_CO/$dir && unzip $filename");
+	    $filename =~ tr/.zip$//;
 	}
     }
+    system("cd $BDIR_CO/$dir && mv $filename $soft");
 }
 
 
@@ -85,12 +97,16 @@ sub checkout_local
     my $filename = $tmp[$#tmp];
     if ($filename =~ /.tar.gz$|.tgz$/) {
 	system("cd $BDIR_CO/$dir && tar xzf $filename");
+	$filename =~ tr/.tar.gz$//;
+	$filename =~ tr/.tgz$//;
     }
     else {
 	if ($filename =~ /.zip$/) {
 	    system("cd $BDIR_CO/$dir && unzip $filename");
+	    $filename =~ tr/.zip$//;
 	}
     }
+    system("cd $BDIR_CO/$dir && mv $filename $soft");
 }
 
 
@@ -106,6 +122,15 @@ sub checkout_svn
     system("svn co $svnuser $svn_options $url $BDIR_CO/$dir/$soft");
 }
 
+sub checkdiff_svn
+{
+    my ($soft, $dir, $url, $mode) = @_;
+    print "[PoCC-checkout] SVN diff $soft:\n";
+    my $svn_options = "";
+    $svn_options = $ENV{'SVN_OPTIONS'} if (defined($ENV{'SVN_OPTIONS'}));
+    system("svn $svn_options diff $BDIR_CO/$dir/$soft | grep Index");
+}
+
 
 ## Args: destination directory (category), soft name, retrieve-method, location
 sub checkout_soft
@@ -119,6 +144,25 @@ sub checkout_soft
 }
 
 
+## Args: destination directory (category), soft name, retrieve-method, location
+sub checkdiff_soft
+{
+    my ($category, $soft, $method, $link) = @_;
+    $category =~ s/\s//g;
+    if ($method =~ /svn/) {
+	checkdiff_svn ($soft, $category, $link, $MODE);
+    }
+    else { 
+	if ($method =~ /git/) {
+	    checkdiff_git ($soft, $category, $link);
+	}
+	else {
+	    print "[PoCC-check-diff] Unsupported software. Only SVN and git repository are handled\n";
+	}
+    }
+}
+
+
 ## Args: checkout method
 sub checkout
 {
@@ -126,7 +170,7 @@ sub checkout
     $BDIR_CO = $basedir;
     $CONFIG_DATA = "$BDIR_CO/config/configure.cfg";
     $CONFIG_DRIVER = "$BDIR_CO/config/driver.cfg";
-    print (colored ("[PoCC-checkout] Full checkout of PoCC. This may take a while...", "green green"), "\n");
+    print (colored ("[PoCC-checkout] Checkout of PoCC. This may take a while...", "green green"), "\n");
     print "[PoCC-checkout] Checkout: $repos\n";
     my %config_data = read_config_file($CONFIG_DATA);
     my %config_driver = read_config_file($CONFIG_DRIVER);
@@ -147,5 +191,35 @@ sub checkout
 		      $config_data{$repos}{"location"});
     }
     print (colored ("[PoCC-checkout] Done", "green green"), "\n");
+}
+
+
+## Args: checkdiff method
+sub checkdiff
+{
+    my ($basedir, $repos) = @_;
+    $BDIR_CO = $basedir;
+    $CONFIG_DATA = "$BDIR_CO/config/configure.cfg";
+    $CONFIG_DRIVER = "$BDIR_CO/config/driver.cfg";
+    print (colored ("[PoCC-check-diff] Check edits of PoCC module(s). This may take a while...", "green green"), "\n");
+    my %config_data = read_config_file($CONFIG_DATA);
+    my %config_driver = read_config_file($CONFIG_DRIVER);
+    $MODE = $config_driver{"pocc-driver"}{"configuration"};;
+    if ($repos eq "all") {
+	for $soft (keys %config_data) {
+	    checkdiff_soft($config_data{$soft}{"category"}, $soft,
+			   $config_data{$soft}{"retrieve-method"},
+			   $config_data{$soft}{"location"});
+	}
+    }
+    else {
+	if (! defined($config_data{$repos})) {
+	    die "Unkown software $soft. Please update config/configure.cfg\n";
+	}
+	checkdiff_soft($config_data{$repos}{"category"}, $repos,
+		      $config_data{$repos}{"retrieve-method"},
+		      $config_data{$repos}{"location"});
+    }
+    print (colored ("[PoCC-check-diff] Done", "green green"), "\n");
 }
 

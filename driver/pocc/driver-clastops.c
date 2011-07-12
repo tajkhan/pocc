@@ -265,6 +265,10 @@ pocc_driver_clastops (scoplib_scop_p program,
       fflush (body_file);
       fprintf (body_file, "#pragma scop\n");
 
+
+      /* // Simplify expressions. */
+      /* past_simplify_expressions (root); */
+
       // Pretty-print
       past_pprint_metainfo (body_file, pastroot, metainfoprint);
 
