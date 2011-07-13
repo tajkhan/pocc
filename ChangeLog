@@ -1,6 +1,11 @@
 2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Update to the latest version of CLooG.
+
+2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg,
 	* config/base/configure.cfg: Fix a typo.
 
 	* config/local/configure.cfg,
