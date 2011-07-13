@@ -1,5 +1,16 @@
 2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/include/pocc/driver-pastops.h,
+	* driver/pocc/driver-pastops.c: New. Unit to control the PAST
+	post-processing and pretty-printing.
+	* driver/Makefile.am: Update accordingly.
+
+	* driver/pocc/driver-codegen.c,
+	* driver/pocc/driver-clastops.c: Update to use the new PAST
+	driver.
+
+2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* tests/scripts/checker_correctness.sh: New. Script to check the
 	correctness of pocc-generated code, against polybench 2.1.
 	* tests/Makefile.am: Update accordingly, add rule 'correctness-check'.

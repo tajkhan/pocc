@@ -204,6 +204,7 @@ pocc_driver_clastops (scoplib_scop_p program,
   fprintf (body_file,
 	   "\t register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;\n");
 
+  // Use the CLAST back-end pretty-printer.
   if (! poptions->use_past)
     {
       int done = 0;
@@ -241,42 +242,10 @@ pocc_driver_clastops (scoplib_scop_p program,
       else
 	// Pretty-print the code with CLooG default pretty-printer.
 	clast_pprint (body_file, root, 0, coptions);
+      fprintf (body_file, "#pragma endscop\n");
 #endif
     }
-  else
-    {
-      // Convert to PAST IR.
-      if (! poptions->quiet)
-	printf ("[PAST] Converting CLAST to PoCC AST\n");
-      s_past_node_t* pastroot = clast2past (root, 1);
 
-      // Use PTILE, if asked.
-      if (poptions->ptile)
-	pocc_driver_ptile (program, pastroot, poptions, puoptions);
-
-      // Insert iterators declaration.
-      char** iterators = collect_all_loop_iterators (pastroot);
-      int i;
-      if (iterators[0])
-	fprintf (body_file,"\t register int %s", iterators[0]);
-      for (i = 1; iterators[i]; ++i)
-	fprintf (body_file,", %s", iterators[i]);
-      fprintf (body_file, ";\n\n");
-      fflush (body_file);
-      fprintf (body_file, "#pragma scop\n");
-
-
-      /* // Simplify expressions. */
-      /* past_simplify_expressions (root); */
-
-      // Pretty-print
-      past_pprint_metainfo (body_file, pastroot, metainfoprint);
-
-      // Be clean.
-      past_deep_free (pastroot);
-    }
-
-  fprintf (body_file, "#pragma endscop\n");
   /// FIXME: This is a BUG: this should be enabled.
 /*   /\* (8) Delete the clast. *\/ */
 /*   cloog_clast_free (root); */

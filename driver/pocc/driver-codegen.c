@@ -33,7 +33,8 @@
 # include <pocc/driver-codegen.h>
 # include <pocc/driver-cloog.h>
 # include <pocc/driver-clastops.h>
-
+# include <pocc/driver-pastops.h>
+# include <clasttools/clast2past.h>
 
 static
 void
@@ -43,7 +44,8 @@ pocc_driver_codegen_post_processing (FILE* body_file,
   char* args[4];
   args[2] = args[3] = NULL;
   args[1] = ".body.c";
-  if (poptions->pluto_parallel && ! poptions->pragmatizer && ! poptions->ptile)
+  if (poptions->pluto_parallel && ! poptions->pragmatizer &&
+      ! poptions->use_past && ! poptions->ptile)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/ploog";
       if (poptions->quiet)
@@ -62,7 +64,8 @@ pocc_driver_codegen_post_processing (FILE* body_file,
 	pocc_exec (args, POCC_EXECV_SHOW_OUTPUT);
       args[2] = NULL;
     }
-  if (poptions->pluto_prevector && ! poptions->pragmatizer)
+  if (poptions->pluto_prevector && ! poptions->pragmatizer &&
+      ! poptions->use_past && ! poptions->ptile)
     {
       args[0] = STR_POCC_ROOT_DIR "/generators/scripts/vloog";
       if (poptions->quiet)
@@ -285,14 +288,24 @@ pocc_driver_codegen (scoplib_scop_p program,
   struct clast_stmt* root =
     pocc_driver_cloog (program, coptions, poptions, puoptions);
 
-  /* (3) Call Clast pretty-print and post-processing. */
+  /* (3) Call Clast modules (and pretty-print if required). */
   pocc_driver_clastops (program, root, poptions, puoptions);
+
+  /* (4) Call PAST modules (and pretty-print if required) */
+  if (poptions->use_past)
+    {
+      // Convert to PAST IR.
+      if (! poptions->quiet)
+	printf ("[PAST] Converting CLAST to PoCC AST\n");
+      s_past_node_t* pastroot = clast2past (root, 1);
+      pocc_driver_pastops (program, pastroot, poptions, puoptions);
+    }
 
   /* Perform PoCC-specific syntactic post-processing. */
   fclose (poptions->output_file);
   pocc_driver_codegen_post_processing (body_file, poptions);
 
-  /* (4) Build the final output file template. */
+  /* (5) Build the final output file template. */
   if (pocc_driver_codegen_program_finalize (poptions) == EXIT_FAILURE)
     {
       if (! poptions->quiet)

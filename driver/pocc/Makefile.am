@@ -68,6 +68,7 @@ pkginclude_HEADERS 	=					\
 		          include/pocc/driver-clastops.h	\
 		          include/pocc/driver-codegen.h		\
 		          include/pocc/driver-cloog.h		\
+		          include/pocc/driver-pastops.h		\
 		          include/pocc/driver-pluto.h		\
 		          include/pocc/driver-polyfeat.h	\
 		          include/pocc/driver-ptile.h		\
@@ -86,6 +87,7 @@ libpocc_la_SOURCES 	=				\
 			  driver-clastops.c		\
 			  driver-codegen.c		\
 			  driver-cloog.c		\
+			  driver-pastops.c		\
 			  driver-polyfeat.c		\
 			  driver-ptile.c		\
 			  error.c			\
