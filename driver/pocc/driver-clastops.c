@@ -167,8 +167,8 @@ pocc_driver_clastops (scoplib_scop_p program,
     }
 #endif
 
-  /* (4) Run the pragmatizer, if required. */
-  if (poptions->pragmatizer)
+  /* (4) Run the CLAST pragmatizer, if required. */
+  if (poptions->pragmatizer && ! poptions->use_past)
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Insert OpenMP and vectorization pragmas\n");

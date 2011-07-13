@@ -172,7 +172,7 @@ pocc_driver_pastops (scoplib_scop_p program,
   if (! poptions->quiet)
     printf ("[PoCC] Using the PAST back-end\n");
   // Translate parallel for loops into parfor loops.
-  if (!poptions->ptile)
+  if (!poptions->ptile && poptions->pragmatizer)
     translate_past_for (program, root, 1);
 
   // Use PTILE, if asked.

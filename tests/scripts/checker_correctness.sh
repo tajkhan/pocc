@@ -5,17 +5,18 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Tue Jul 12 17:54:24 2011 Louis-Noel Pouchet
+## Last update Wed Jul 13 18:13:07 2011 Louis-Noel Pouchet
 ##
 
 
 ################################################################################
 ################################################################################
 BASEPOCC_DIR="../driver/src";
+FAILED_TESTS_DIR="failed-tests";
 POLYBENCH_VERSION="polybench-2.1";
 GCC="gcc -O0 -fopenmp -lm";
 GCC_OTHERS="-DPOLYBENCH_DUMP_ARRAYS -I $POLYBENCH_VERSION/utilities $POLYBENCH_VERSION/utilities/instrument.c";
-POCC_DEFAULT_OPTS="--quiet --use-past";
+POCC_DEFAULT_OPTS="--quiet --use-past --pragmatizer";
 ################################################################################
 ################################################################################
 
@@ -29,7 +30,7 @@ check_error()
 
 checkout_polybench()
 {
-    if ! [ -d "$POLYBENCH_VERSION" ]; then 
+    if ! [ -d "$POLYBENCH_VERSION" ]; then
 	wget -N --quiet http://www.cse.ohio-state.edu/~pouchet/software/polybench/download/$POLYBENCH_VERSION.tar.gz;
 	check_error $? "wget -N --quiet http://www.cse.ohio-state.edu/~pouchet/software/polybench/download/$POLYBENCH_VERSION.tar.gz"
 	tar xzf $POLYBENCH_VERSION.tar.gz;
@@ -47,6 +48,7 @@ correctness_check_file()
     if [ $? -ne 0 ]; then
 	echo "$output";
 	echo "\033[31m[FAIL] $filename ($poccopts)\033[0m";
+	mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
 	echo "$filename | pocc $poccopts" >> failed.tests
 	return;
     fi;
@@ -54,6 +56,7 @@ correctness_check_file()
 	diff=`diff $filename.$poccoptsname.ref.c $filename.$poccoptsname.test.c`;
 	if [ -z "$diff" ]; then
 	    echo "\033[32m[PASS]\033[0m $filename ($poccopts)";
+	    rm -f $FAILED_TESTS_DIR/$filename.$poccoptsname.test.c
 	    RETVAL=0;
 	fi;
     fi;
@@ -69,9 +72,11 @@ correctness_check_file()
 	if [ -z "$diff" ]; then
 	    echo "\033[32m[PASS]\033[0m $filename ($poccopts)";
 	    mv $filename.$poccoptsname.test.c $filename.$poccoptsname.ref.c
+	    rm -f $FAILED_TESTS_DIR/$filename.$poccoptsname.test.c
 	    RETVAL=0;
 	else
 	    echo "\033[31m[FAIL] $filename ($poccopts)\033[0m";
+	    mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
 	    echo "$filename | pocc $poccopts" >> failed.tests
 	fi;
     fi;
@@ -109,6 +114,7 @@ if ! [ -f "$BASEPOCC_DIR/pocc" ]; then
     echo "[PoCC-checker] Cannot find the pocc binary.";
     exit 1;
 fi;
+mkdir -p $FAILED_TESTS_DIR;
 ALLTESTSVAL=0;
 rm -f failed.tests;
 if ! [ -z "$1" ]; then

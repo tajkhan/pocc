@@ -1,5 +1,14 @@
 2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-clastops.c,
+	* driver/pocc/driver-pastops.c: Insert pragma from PAST trees only
+	if option --pragmatizer is on.
+
+	* tests/scripts/checker_correctness.sh: Automatically copy failed
+	tests into specific directory, use --pragmatizer by default.
+
+2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/devel/configure.cfg,
 	* config/base/configure.cfg: Update to the latest version of CLooG.
 
