@@ -89,7 +89,7 @@ translate_past_for (scoplib_scop_p original_scop,
   // 1- Get the scop representation of the tree.
   scoplib_scop_p scop =
     past2scop_control_only (root, original_scop, data_is_char);
-    CandlOptions* coptions = candl_options_malloc ();
+  CandlOptions* coptions = candl_options_malloc ();
   CandlProgram* cprogram = candl_program_convert_scop (scop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
   int num_for_loops = past_count_for_loops (root);

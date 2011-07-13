@@ -1,3 +1,19 @@
+2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch moves every occurence of piplib use to piplib-hybrid, a
+	new piplib version that automatically adapts to MP integer in case
+	of overflow with long long int.
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am,
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/sable/configure.cfg,
+	* config/sable/driver.cfg: Use piplib-hybrid in place of piplib.
+
 2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-pastops.c: Fix a bug in the handling of

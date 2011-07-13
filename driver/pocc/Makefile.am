@@ -53,7 +53,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/generators/install-clasttools/include	\
 	-I$(install_prefix)/generators/install-clastannotation/include	\
 	-I$(install_prefix)/generators/install-ptile/include		\
-	-I$(install_prefix)/math/install-piplib/include			\
+	-I$(install_prefix)/math/install-piplib-hybrid/include		\
 	-I$(install_prefix)/math/install-polylib/include		\
 	-I$(install_prefix)/math/install-fm/include			\
 	-I$(install_prefix)/math/external/install/include
@@ -106,7 +106,8 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/analyzers/install-candl/lib/libcandl.la		     \
   $(install_prefix)/analyzers/install-polyfeat/lib/libpolyfeat.la	     \
   $(install_prefix)/math/install-isl/lib/libisl.la			     \
-  $(install_prefix)/math/install-piplib/lib/libpiplib64.la		     \
+  $(install_prefix)/math/install-piplib-hybrid/lib/libpiplib64.la	     \
+  $(install_prefix)/math/install-piplib-gmp/lib/libpiplib-gmp.la	     \
   $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
