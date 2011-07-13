@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Wed Jul 13 18:13:07 2011 Louis-Noel Pouchet
+## Last update Wed Jul 13 18:34:45 2011 Louis-Noel Pouchet
 ##
 
 
@@ -49,7 +49,7 @@ correctness_check_file()
 	echo "$output";
 	echo "\033[31m[FAIL] $filename ($poccopts)\033[0m";
 	mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-	echo "$filename | pocc $poccopts" >> failed.tests
+	echo "$filename | pocc $POCC_DEFAULT_OPTS $poccopts" >> failed.tests
 	return;
     fi;
     if [ -f $filename.$poccoptsname.ref.c ]; then
@@ -77,7 +77,7 @@ correctness_check_file()
 	else
 	    echo "\033[31m[FAIL] $filename ($poccopts)\033[0m";
 	    mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-	    echo "$filename | pocc $poccopts" >> failed.tests
+	    echo "$filename | pocc $POCC_DEFAULT_OPTS $poccopts" >> failed.tests
 	fi;
     fi;
     rm -f test ref $filename.$poccoptsname.test.c $filename.test.output $filename.output;
