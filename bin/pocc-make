@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Thu Jun  9 14:55:13 2011 Louis-Noel Pouchet
+## Last update Wed Jul 13 19:58:30 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-make: this file is part of the PoCC project.
@@ -183,37 +183,44 @@ sub order_by_deps
     my $mod_i;
     my $mod_j;
 
-    for ($i = 0; $i < $#soft; $i++) {
-	if (defined($config{$soft[$i]}{"make-depends"})) {
-	    $deps_i = $config{$soft[$i]}{"make-depends"};
-	    $deps_i =~ s/\s+/ /g;
-	    $deps_i =~ s/^\s//g;
-	}
-	else {
-	    $deps_i = "";
-	}
-	$mod_i = $config{$soft[$i]}{"module"};
-	$mod_i =~ s/ //g;
-	for ($j = $i + 1; $j <= $#soft; $j++) {
-	    if (defined($config{$soft[$j]}{"make-depends"})) {
-		$deps_j = $config{$soft[$j]}{"make-depends"};
-		$deps_j =~ s/\s+/ /g;
-		$deps_j =~ s/^\s//g;
+    ## I am really lazy...
+    my $converged;
+    do {
+	$converged = 1;
+	for ($i = 0; $i < $#soft; $i++) {
+	    if (defined($config{$soft[$i]}{"make-depends"})) {
+		$deps_i = $config{$soft[$i]}{"make-depends"};
+		$deps_i =~ s/\s+/ /g;
+		$deps_i =~ s/^\s//g;
 	    }
 	    else {
-		$deps_j = "";
+		$deps_i = "";
 	    }
-	    $mod_j = $config{$soft[$j]}{"module"};
-	    $mod_j =~ s/ //g;
-	    if ($deps_i =~ $mod_j) {
-		my $tmp = $soft[$i];
-		$soft[$i] = $soft[$j];
-		$soft[$j] = $tmp;
-		$deps_i = $deps_j;
-		$mod_i = $mod_j;
+	    $mod_i = $config{$soft[$i]}{"module"};
+	    $mod_i =~ s/ //g;
+	    for ($j = $i + 1; $j <= $#soft; $j++) {
+		if (defined($config{$soft[$j]}{"make-depends"})) {
+		    $deps_j = $config{$soft[$j]}{"make-depends"};
+		    $deps_j =~ s/\s+/ /g;
+		    $deps_j =~ s/^\s//g;
+		}
+		else {
+		    $deps_j = "";
+		}
+		$mod_j = $config{$soft[$j]}{"module"};
+		$mod_j =~ s/ //g;
+		if ($deps_i =~ $mod_j) {
+		    my $tmp = $soft[$i];
+		    $soft[$i] = $soft[$j];
+		    $soft[$j] = $tmp;
+		    $deps_i = $deps_j;
+		    $mod_i = $mod_j;
+		    $converged = 0;
+		}
 	    }
 	}
     }
+    until ($converged != 0);
 
     return @soft;
 }
