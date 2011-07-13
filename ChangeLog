@@ -1,4 +1,12 @@
 2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Fix a typo.
+
+	* config/local/configure.cfg,
+	* config/stable/configure.cfg: Upgrade to candl-0.6.0.
+
+2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	This patch moves every occurence of piplib use to piplib-hybrid, a
 	new piplib version that automatically adapts to MP integer in case
 	of overflow with long long int.
