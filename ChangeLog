@@ -1,5 +1,10 @@
 2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-pastops.c: Fix a bug in the handling of
+	statements surrounded by no loop.
+
+2011-07-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/stable/configure.cfg,
 	* config/local/configure.cfg: Update to candl-0.5.1.
 

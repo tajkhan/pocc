@@ -116,11 +116,12 @@ translate_past_for (scoplib_scop_p original_scop,
       for (d = cdeps; d; d = d->next)
 	if (candl_dependence_is_loop_carried (cprogram, d, i))
 	  break;
-      if (d == NULL)
+      if (d == NULL && past_node_is_a (prog_loops[i].fornode, past_for))
 	// The loop is sync-free parallel, translate it to past_parfor.
 	prog_loops[i].fornode->type = past_parfor;
     }
 }
+
 
 
 static
