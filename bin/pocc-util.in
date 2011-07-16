@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Tue Apr 14 17:43:47 2009 Louis-Noel Pouchet
-## Last update Tue Jul 12 14:14:50 2011 Louis-Noel Pouchet
+## Last update Sat Jul 16 19:47:06 2011 Louis-Noel Pouchet
 ##
 #
 # pocc-util.in: this file is part of the PoCC project.
@@ -137,7 +137,7 @@ sub parse_args
 	    case "upgrade" {
 		if ($i < $#args) {
 		    checkout($BASEDIR, $args[$i + 1]);
-		    make($BASEDIR, $args[$i + 1]);
+		    make($BASEDIR, $INST_PREFIX, $args[$i + 1], "");
 		}
 		else {
 		    print "[PoCC] Upgrade to the lastest PoCC version...\n";

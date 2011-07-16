@@ -1,3 +1,10 @@
+2011-07-16  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/local/configure.cfg,
+	* config/stable/configure.cfg: Upgrade to isl-0.07.
+
+	* bin/pocc-util.in: Fix a bug in the 'upgrade' command.
+
 2011-07-13  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* bin/pocc-make: Fix module dependence computation.
