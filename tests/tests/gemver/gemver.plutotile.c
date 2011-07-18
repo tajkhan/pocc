@@ -112,7 +112,6 @@ if (N >= 1) {
     }
   }
 }
-#pragma endscop
 
     print_array(argv);
 
