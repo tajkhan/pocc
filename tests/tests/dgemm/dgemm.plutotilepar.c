@@ -136,6 +136,7 @@ if (N >= 1) {
     }
   }
 }
+#pragma endscop
 
     IF_TIME(t_end = rtclock());
     IF_TIME(printf("%0.6lfs\n", t_end - t_start));

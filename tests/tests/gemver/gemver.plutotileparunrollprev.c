@@ -172,6 +172,7 @@ transform UnrollJam(ufactor=4)
     }
   }
 }
+#pragma endscop
 
     print_array(argv);
 

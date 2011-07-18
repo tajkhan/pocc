@@ -242,8 +242,8 @@ pocc_driver_clastops (scoplib_scop_p program,
       else
 	// Pretty-print the code with CLooG default pretty-printer.
 	clast_pprint (body_file, root, 0, coptions);
-      fprintf (body_file, "#pragma endscop\n");
 #endif
+      fprintf (body_file, "#pragma endscop\n");
     }
 
   /// FIXME: This is a BUG: this should be enabled.

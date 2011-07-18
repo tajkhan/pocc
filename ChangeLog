@@ -1,5 +1,21 @@
 2011-07-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-clastops.c: Fix missing #pragma endscop.
+
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update the reference
+	files.
+
+2011-07-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
 	* tests/tests/gemver/gemver.plutotileparunroll.c,
 	* tests/tests/gemver/gemver.plutotile.c,
