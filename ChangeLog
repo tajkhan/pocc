@@ -1,3 +1,14 @@
+2011-07-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	Add new option --candl-dep-prune.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-candl.c,
+	* driver/pocc/options.c,
+	* driver/pocc/driver-pluto.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for new candl option to prune
+	the dependence graph from (some) transitively covered dependence.
+
 2011-07-16  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/local/configure.cfg,

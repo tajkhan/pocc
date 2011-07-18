@@ -70,6 +70,7 @@ struct s_pocc_options
   // Dependence analysis.
   int		candl_pass; // Run Candl (default: yes)
   int		candl_deps_isl_simplify;
+  int		candl_deps_prune_transcover;
 
   // Feature extraction.
   int		polyfeat; // Run PolyFeat (default:no)

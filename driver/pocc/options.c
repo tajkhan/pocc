@@ -57,6 +57,7 @@ pocc_options_malloc ()
   // Dependence analysis.
   ret->candl_pass = 1;
   ret->candl_deps_isl_simplify = 0;
+  ret->candl_deps_prune_transcover = 0;
 
   // Feature extraction.
   ret->polyfeat = 0;
