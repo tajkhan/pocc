@@ -90,6 +90,8 @@ translate_past_for (scoplib_scop_p original_scop,
   scoplib_scop_p scop =
     past2scop_control_only (root, original_scop, data_is_char);
   CandlOptions* coptions = candl_options_malloc ();
+  coptions->scalar_privatization = 1;
+  coptions->verbose = 1;
   CandlProgram* cprogram = candl_program_convert_scop (scop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
   int num_for_loops = past_count_for_loops (root);
@@ -195,7 +197,7 @@ pocc_driver_pastops (scoplib_scop_p program,
   /* past_simplify_expressions (root); */
 
   // Pretty-print
-  past_pprint_metainfo (body_file, root, metainfoprint);
+  past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
 
   fprintf (body_file, "#pragma endscop\n");
 

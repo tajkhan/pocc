@@ -1,3 +1,8 @@
+2011-07-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-pastops.c: Use the most generic past
+	pretty-printer.
+
 2011-07-18  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-clastops.c: Fix missing #pragma endscop.
