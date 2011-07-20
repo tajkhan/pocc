@@ -38,6 +38,7 @@ INCLUDES		=						\
 	-I$(install_prefix)						\
 	-I$(install_prefix)/optimizers/install-letsee/include		\
 	-I$(install_prefix)/optimizers/install-pluto/include		\
+	-I$(install_prefix)/optimizers/install-pvectorizer/include	\
 	-I$(install_prefix)/optimizers/install-storcompacter/include	\
 	-I$(install_prefix)/optimizers/install-vectorizer/include	\
 	-I$(install_prefix)/optimizers/install-dlml/include		\
@@ -111,6 +112,7 @@ libpocc_la_LIBADD	=						     \
   $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
+  $(install_prefix)/optimizers/install-pvectorizer/lib/libpvectorizer.la     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \

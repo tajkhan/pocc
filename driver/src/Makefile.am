@@ -96,6 +96,7 @@ pocc_LDADD	=							     \
   $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
+  $(install_prefix)/optimizers/install-pvectorizer/lib/libpvectorizer.la     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-ptile/lib/libptile.la		     \

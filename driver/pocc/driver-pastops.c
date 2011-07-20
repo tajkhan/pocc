@@ -32,6 +32,8 @@
 #include <irconverter/past2scop.h>
 #include <candl/candl.h>
 
+#include <pvectorizer/vectorize.h>
+
 
 struct s_process_data
 {
@@ -120,7 +122,7 @@ translate_past_for (scoplib_scop_p original_scop,
 	  break;
       if (d == NULL && past_node_is_a (prog_loops[i].fornode, past_for))
 	// The loop is sync-free parallel, translate it to past_parfor.
-	prog_loops[i].fornode->type = past_parfor;
+	past_for_to_parfor (prog_loops[i].fornode);
     }
 }
 
@@ -195,6 +197,9 @@ pocc_driver_pastops (scoplib_scop_p program,
 
   /* // Simplify expressions. */
   /* past_simplify_expressions (root); */
+
+  if (poptions->vectorizer)
+    pvectorizer_vectorize (program, root);
 
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);

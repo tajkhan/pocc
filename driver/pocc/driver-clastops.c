@@ -148,8 +148,8 @@ pocc_driver_clastops (scoplib_scop_p program,
       ac_options_free (acoptions);
     }
 
-  /* (3) Run the vectorizer, if required. */
-  if (poptions->vectorizer)
+  /* (3) Run the CLAST vectorizer, if required. */
+  if (poptions->vectorizer && !poptions->use_past)
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Running vectorizer\n");

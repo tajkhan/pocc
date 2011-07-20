@@ -1,5 +1,25 @@
 2011-07-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-clastops.c: Use the CLAST vectorizer only
+	with the CLAST back-end.
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Link with the new pvectorizer module.
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Systematically integrate the new
+	pvectorizer module.
+
+	* driver/pocc/driver-pastops.c: Invoke the pvectorizer module when
+	using --vectorizer with the PAST back-end.
+
+2011-07-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-pastops.c: Use the most generic past
 	pretty-printer.
 
