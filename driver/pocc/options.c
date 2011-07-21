@@ -118,6 +118,11 @@ pocc_options_malloc ()
   ret->use_past = 0;
   ret->ptile = 0;
 
+  // PAST unroller
+  ret->punroll = 0;
+  ret->punroll_and_jam = 0;
+  ret->punroll_size = 4;
+
   // Vectorization options.
   ret->vectorizer = 0;
   ret->vectorizer_mark_par_loops = 0;

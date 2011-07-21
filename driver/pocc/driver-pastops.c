@@ -33,6 +33,7 @@
 #include <candl/candl.h>
 
 #include <pvectorizer/vectorize.h>
+#include <punroller/punroll.h>
 
 
 struct s_process_data
@@ -264,18 +265,29 @@ pocc_driver_pastops (scoplib_scop_p program,
   // Translate parallel for loops into parfor loops.
   if (poptions->pragmatizer)
     translate_past_for (program, root, 1);
-  
+
   // Pre-vectorize.
   if (poptions->vectorizer)
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Move vectorizable loop(s) inward\n");
-      pvectorizer_vectorize (program, root);
+      pvectorizer_vectorize (program, root, poptions->ptile);
     }
 
   // Use PTILE, if asked.
   if (poptions->ptile)
-    pocc_driver_ptile (program, root, poptions, puoptions);
+    {
+      pocc_driver_ptile (program, root, poptions, puoptions);
+      // Post-vectorize.
+      if (poptions->vectorizer && 0)
+	{
+	  // Todo: cut all point loops, substitute with fake
+	  // parameters, run analysis.
+	  if (! poptions->quiet)
+	    printf ("[PoCC] Move vectorizable loop(s) inward\n");
+	  pvectorizer_vectorize (program, root, poptions->ptile);
+	}
+    }
 
   // Insert iterators declaration.
   char** iterators = collect_all_loop_iterators (root);
@@ -292,6 +304,22 @@ pocc_driver_pastops (scoplib_scop_p program,
   /* // Simplify expressions. */
   /* past_simplify_expressions (root); */
 
+  // Use Punroller, if asked.
+  if (poptions->punroll && ! poptions->punroll_and_jam)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Perform inner loop unrolling (factor=%d)\n",
+		poptions->punroll_size);
+      punroll (program, root, poptions->punroll_size);
+    }
+  if (poptions->punroll_and_jam)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Perform unroll-and-jam (factor=%d)\n",
+		poptions->punroll_size);
+      punroll_and_jam (program, root, poptions->punroll_size);
+    }  
+  
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
 

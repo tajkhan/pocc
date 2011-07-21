@@ -85,7 +85,10 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
   { '\0', "use-past", 0, "\tUse the PAST back-end [off]" },
   { '\0', "pragmatizer", 0, "\tUse the AST pragmatizer [off]" },
-  { '\0', "ptile", 0, "\tUse PTile for parametric tiling (experimental) [off]" },
+  { '\0', "ptile", 0, "\tUse PTile for parametric tiling [off]" },
+  { '\0', "punroll", 0, "\tUse PAST loop unrolling [off]" },
+  { '\0', "register-tiling", 0, "PAST register tiling [off]" },
+  { '\0', "punroll-size", 0, "\t PAST unrolling size [4]" },
   { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
   { '\0', "mark-par-loops", 0, "Detect parallel loops in generated\n\t\t\t\tcode [off]" },
   { '\0', "no-outer-par-loops", 0, "Don't preserve outer parallel loop during\n\t\t\t\tvectorization [off]" },
@@ -159,7 +162,10 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "cloog-cloogl", 1, "CLooG: last level to scan [-1]" },
   { '\0', "use-past", 0, "\tUse the PAST back-end [off]" },
   { '\0', "pragmatizer", 0, "\tUse the AST pragmatizer [off]" },
-  { '\0', "ptile", 0, "\tUse PTile for parametric tiling (experimental) [off]" },
+  { '\0', "ptile", 0, "\tUse PTile for parametric tiling [off]" },
+  { '\0', "punroll", 0, "\tUse PAST loop unrolling [off]" },
+  { '\0', "register-tiling", 0, "PAST register tiling [off]" },
+  { '\0', "punroll-size", 0, "\tPAST unrolling size [4]" },
   { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
@@ -574,6 +580,25 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PTILE])
     {
       options->ptile = 1;
+      options->use_past = 1;
+    }
+
+  // PUnroller options.
+  if (opt_tab[POCC_OPT_PUNROLL])
+    {
+      options->punroll = 1;
+      options->use_past = 1;
+    }
+  if (opt_tab[POCC_OPT_PUNROLL_AND_JAM])
+    {
+      options->punroll = 1;
+      options->punroll_and_jam = 1;
+      options->use_past = 1;
+    }
+  if (opt_tab[POCC_OPT_PUNROLL_SIZE])
+    {
+      options->punroll = 1;
+      options->punroll_size = atoi (opt_tab[POCC_OPT_PUNROLL_SIZE]);
       options->use_past = 1;
     }
 

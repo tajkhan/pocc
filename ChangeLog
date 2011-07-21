@@ -1,3 +1,30 @@
+2011-07-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	This patch creates the options:
+	--punroll
+	--punroll-size
+	--unroll-and-jam
+	To control the new punroller module, that performs loop unrolling
+	the CLAST.
+	
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c,
+	* driver/src/Makefile.am,
+	* driver/pocc/Makefile.am: Add new unrolling options.
+	
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg,
+	* config/local/configure.cfg,
+	* config/local/driver.cfg,
+	* config/stable/configure.cfg,
+	* config/stable/driver.cfg: Systematically compile the new
+	punroller module.
+
+	* driver/pocc/driver-pastops.c: Invoke the punroller module.
+	
 2011-07-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-pastops.c: Minor fixes.
