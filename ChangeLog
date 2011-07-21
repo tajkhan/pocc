@@ -1,5 +1,9 @@
 2011-07-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-pastops.c: Minor fixes.
+
+2011-07-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-clastops.c: Use the CLAST vectorizer only
 	with the CLAST back-end.
 

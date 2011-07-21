@@ -92,7 +92,7 @@ translate_past_for (scoplib_scop_p original_scop,
   scoplib_scop_p scop =
     past2scop_control_only (root, original_scop, data_is_char);
   CandlOptions* coptions = candl_options_malloc ();
-  coptions->scalar_privatization = 1;
+  //coptions->scalar_privatization = 1;
   coptions->verbose = 1;
   CandlProgram* cprogram = candl_program_convert_scop (scop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
@@ -124,6 +124,11 @@ translate_past_for (scoplib_scop_p original_scop,
 	// The loop is sync-free parallel, translate it to past_parfor.
 	past_for_to_parfor (prog_loops[i].fornode);
     }
+
+  candl_dependence_free (cdeps);
+  candl_program_free (cprogram);
+  candl_options_free (coptions);
+  scoplib_scop_shallow_free (scop);
 }
 
 
@@ -162,6 +167,80 @@ void metainfoprint (s_past_node_t* node, FILE* out)
     fprintf (out, "%s", (char*) node->metainfo);
 }
 
+static
+void traverse_expr_for_tile (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_mul))
+    {
+      PAST_DECLARE_TYPED (binary, pb, node);
+      if (past_node_is_a (pb->lhs, past_value) &&
+	  past_node_is_a (pb->rhs, past_variable))
+	{
+	  PAST_DECLARE_TYPED(variable, pv, pb->rhs);
+	  PAST_DECLARE_TYPED(value, pu, pb->rhs);
+	  void** args = (void**)data;
+	  int i;
+	  s_symbol_t** outer_iters = (s_symbol_t**) args[0];
+	  for (i = 0; outer_iters[i] && outer_iters[i] != pv->symbol; ++i)
+	    ;
+	  if (outer_iters && pu->type == e_past_value_int &&
+	      pu->value.intval > 4)
+	    {
+	      int* ret = (int*) args[1];
+	      *ret = 1;
+	      args[2] = pv->symbol;
+	    }
+	}
+
+    }
+}
+
+
+static
+void traverse_mark_loop_type (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_for))
+    {
+      // If we can find an expression of the form 'x * outer_iterator' in
+      // the loop bound, x > some value (say, 4) then 'outer_iterator'
+      // is a tile loop and the loop is a point loop.
+
+      // a- Collect surrounding loops.
+      int count;
+      s_past_node_t* parent;
+      for (parent = node->parent; parent; parent = parent->parent)
+	if (past_node_is_a (parent, past_for))
+	  ++count;
+      s_symbol_t* outer_iters[count + 1];
+      for (count = 0, parent = node->parent; parent; parent = parent->parent)
+	if (past_node_is_a (parent, past_for))
+	  {
+	    PAST_DECLARE_TYPED(for, pf, parent);
+	    outer_iters[count++] = pf->iterator->symbol;
+	  }
+      outer_iters[count] = NULL;
+      int is_pt_loop = 0;
+      void* data[3];
+      data[0] = outer_iters;
+      data[1] = &is_pt_loop;
+      data[2] = NULL;
+      past_visitor (node, traverse_expr_for_tile, (void*)data,
+		    NULL, NULL);
+      PAST_DECLARE_TYPED(for, pf, node);
+      if (is_pt_loop)
+	{
+	  pf->type = e_past_point_loop;
+	  for (parent = node->parent; parent; parent = parent->parent)
+	    if (past_node_is_a (parent, past_for))
+	      {
+		PAST_DECLARE_TYPED(for, pf2, parent);
+		if (pf2->iterator->symbol == data[3])
+		  pf2->type = e_past_tile_loop;
+	      }
+	}
+    }
+}
+
 
 /**
  * PAST post-processing and pretty-printing.
@@ -175,8 +254,15 @@ pocc_driver_pastops (scoplib_scop_p program,
 {
   if (! poptions->quiet)
     printf ("[PoCC] Using the PAST back-end\n");
+
+  // Set parent, just in case.
+  past_set_parent (root);
+
+  // Mark the loop type.
+  past_visitor (root, traverse_mark_loop_type, NULL, NULL, NULL);
+
   // Translate parallel for loops into parfor loops.
-  if (!poptions->ptile && poptions->pragmatizer)
+  if (poptions->pragmatizer)
     translate_past_for (program, root, 1);
 
   // Use PTILE, if asked.
@@ -199,7 +285,11 @@ pocc_driver_pastops (scoplib_scop_p program,
   /* past_simplify_expressions (root); */
 
   if (poptions->vectorizer)
-    pvectorizer_vectorize (program, root);
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Move vectorizable loop(s) inward\n");
+      pvectorizer_vectorize (program, root);
+    }
 
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
