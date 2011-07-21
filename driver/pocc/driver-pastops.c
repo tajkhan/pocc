@@ -206,7 +206,7 @@ void traverse_mark_loop_type (s_past_node_t* node, void* data)
       // is a tile loop and the loop is a point loop.
 
       // a- Collect surrounding loops.
-      int count;
+      int count = 0;
       s_past_node_t* parent;
       for (parent = node->parent; parent; parent = parent->parent)
 	if (past_node_is_a (parent, past_for))
