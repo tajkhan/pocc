@@ -141,6 +141,7 @@ void traverse_collect_iterators (s_past_node_t* node, void* data)
     {
       PAST_DECLARE_TYPED(for, pf, node);
       char** iters = data;
+      int i = 0;
       while (*iters && strcmp (*iters, pf->iterator->symbol->data))
 	++iters;
       *iters = pf->iterator->symbol->data;
@@ -243,6 +244,16 @@ void traverse_mark_loop_type (s_past_node_t* node, void* data)
 }
 
 
+static
+void collect_point_loop_components (s_past_node_t* node)
+{
+/*   char** iterators = collect_all_loop_iterators (root); */
+
+
+}
+
+
+
 /**
  * PAST post-processing and pretty-printing.
  *
@@ -294,11 +305,13 @@ pocc_driver_pastops (scoplib_scop_p program,
   int i;
   FILE* body_file = poptions->output_file;
   if (iterators[0])
-    fprintf (body_file,"\t register int %s", iterators[0]);
-  for (i = 1; iterators[i]; ++i)
-    fprintf (body_file,", %s", iterators[i]);
-  fprintf (body_file, ";\n\n");
-  fflush (body_file);
+    {
+      fprintf (body_file,"\t register int %s", iterators[0]);
+      for (i = 1; iterators[i]; ++i)
+	fprintf (body_file,", %s", iterators[i]);
+      fprintf (body_file, ";\n\n");
+      fflush (body_file);
+    }
   fprintf (body_file, "#pragma scop\n");
 
   /* // Simplify expressions. */
