@@ -1,5 +1,11 @@
 2011-07-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Update of the PTile svn
+	repository (now located at OSU).
+
+2011-07-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-pastops.c: Fix a bug when processing programs
 	with no loop.
 
