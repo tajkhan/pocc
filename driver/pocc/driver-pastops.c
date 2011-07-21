@@ -264,6 +264,14 @@ pocc_driver_pastops (scoplib_scop_p program,
   // Translate parallel for loops into parfor loops.
   if (poptions->pragmatizer)
     translate_past_for (program, root, 1);
+  
+  // Pre-vectorize.
+  if (poptions->vectorizer)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Move vectorizable loop(s) inward\n");
+      pvectorizer_vectorize (program, root);
+    }
 
   // Use PTILE, if asked.
   if (poptions->ptile)
@@ -283,13 +291,6 @@ pocc_driver_pastops (scoplib_scop_p program,
 
   /* // Simplify expressions. */
   /* past_simplify_expressions (root); */
-
-  if (poptions->vectorizer)
-    {
-      if (! poptions->quiet)
-	printf ("[PoCC] Move vectorizable loop(s) inward\n");
-      pvectorizer_vectorize (program, root);
-    }
 
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
