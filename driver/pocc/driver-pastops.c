@@ -642,6 +642,9 @@ pocc_driver_pastops (scoplib_scop_p program,
       punroll_and_jam (program, root, poptions->punroll_size);
     }
 
+  // Systematically optimize the loop bounds (hoisting).
+  past_optimize_loop_bounds (root);
+
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
 

@@ -1,5 +1,10 @@
 2011-07-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-pastops.c: Invoke the new loop bound hoister
+	from PAST.
+
+2011-07-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/pocc/driver-pastops.c: Provide a post-ptile vectorizer,
 	by separating out point loops and operate only on them, using fake
 	parameters to make the loops affine.
