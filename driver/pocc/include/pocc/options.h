@@ -146,6 +146,7 @@ struct s_pocc_options
   int		punroll;
   int		punroll_and_jam;
   int		punroll_size;
+  int		nb_registers;
 
   // Vectorizer.
   int		vectorizer;

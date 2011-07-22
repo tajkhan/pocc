@@ -607,6 +607,29 @@ pocc_driver_pastops (scoplib_scop_p program,
 	}
     }
 
+  /* // Simplify expressions. */
+  /* past_simplify_expressions (root); */
+
+  // Use Punroller, if asked.
+  if (poptions->punroll && ! poptions->punroll_and_jam)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Perform inner loop unrolling (factor=%d)\n",
+		poptions->punroll_size);
+      punroll (program, root, poptions->punroll_size,
+	       poptions->nb_registers);
+    }
+  if (poptions->punroll_and_jam)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Perform unroll-and-jam (factor=%d)\n",
+		poptions->punroll_size);
+      punroll_and_jam (program, root, poptions->punroll_size);
+    }
+
+  // Systematically optimize the loop bounds (hoisting).
+  past_optimize_loop_bounds (root);
+
   // Insert iterators declaration.
   s_symbol_t** iterators = collect_all_loop_iterators (root);
   int i;
@@ -622,29 +645,7 @@ pocc_driver_pastops (scoplib_scop_p program,
       fflush (body_file);
     }
   fprintf (body_file, "#pragma scop\n");
-
-  /* // Simplify expressions. */
-  /* past_simplify_expressions (root); */
-
-  // Use Punroller, if asked.
-  if (poptions->punroll && ! poptions->punroll_and_jam)
-    {
-      if (! poptions->quiet)
-	printf ("[PoCC] Perform inner loop unrolling (factor=%d)\n",
-		poptions->punroll_size);
-      punroll (program, root, poptions->punroll_size);
-    }
-  if (poptions->punroll_and_jam)
-    {
-      if (! poptions->quiet)
-	printf ("[PoCC] Perform unroll-and-jam (factor=%d)\n",
-		poptions->punroll_size);
-      punroll_and_jam (program, root, poptions->punroll_size);
-    }
-
-  // Systematically optimize the loop bounds (hoisting).
-  past_optimize_loop_bounds (root);
-
+  
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
 

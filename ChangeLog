@@ -1,3 +1,10 @@
+2011-07-22  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c: Add an internal option for the number
+	of machine registers (used for the punroller cost model).
+	* driver/pocc/driver-pastops.c: Call the new loop unroller.
+
 2011-07-21  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-pastops.c: Invoke the new loop bound hoister
