@@ -624,7 +624,7 @@ pocc_driver_pastops (scoplib_scop_p program,
       if (! poptions->quiet)
 	printf ("[PoCC] Perform unroll-and-jam (factor=%d)\n",
 		poptions->punroll_size);
-      punroll_and_jam (program, root, poptions->punroll_size);
+      punroll_and_jam (program, root, NULL, poptions->nb_registers);
     }
 
   // Systematically optimize the loop bounds (hoisting).
