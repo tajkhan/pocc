@@ -103,15 +103,15 @@ TESTS_ENVIRONMENT +=							\
 	TEST_SUITE="$(TEST_SUITE)"
 
 correctness-check-fast:
-	(scripts/checker_perfcorrect.sh "correctness-small")
+	(scripts/checker_perfcorrect.sh "correctness" "scripts/conflist-small.txt")
 correctness-check:
-	(scripts/checker_perfcorrect.sh "correctness")
+	(scripts/checker_perfcorrect.sh "correctness" "scripts/conflist-large.txt")
 performance-check-fast:
-	(scripts/checker_perfcorrect.sh "performance-small")
+	(scripts/checker_perfcorrect.sh "performance-small" "scripts/conflist-small.txt")
 performance-check:
-	(scripts/checker_perfcorrect.sh "performance")
+	(scripts/checker_perfcorrect.sh "performance" "scripts/conflist-large.txt")
 performance-correctness-check-fast:
-	(scripts/checker_perfcorrect.sh "correctness+performance-small")
+	(scripts/checker_perfcorrect.sh "correctness+performance-small" "scripts/conflist-small.txt")
 performance-correctness-check:
-	(scripts/checker_perfcorrect.sh "correctness+performance")
+	(scripts/checker_perfcorrect.sh "correctness+performance" "scripts/conflist-large.txt")
 #############################################################################

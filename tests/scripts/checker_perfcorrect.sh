@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 01:20:26 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 03:51:03 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -14,9 +14,9 @@
 ## Email address of the receiver of the script result.
 EMAIL_MAINTAINER="pouchet@cse.ohio-state.edu";
 ## GCC command line for the performance check.
-GCC_COMPILER_COMMAND="gcc-4.5 -O3 -fopenmp";
+GCC_COMPILER_COMMAND="gcc -O3 -fopenmp";
 ## String to identify GCC version used for performance. No space.
-GCC_STRING_NAME="gcc-4.5";
+GCC_STRING_NAME="gcc-4.3";
 ## ICC command line for the performance check.
 ICC_COMPILER_COMMAND="/opt/intel/Compiler/11.1/072/bin/intel64/icc -fast -parallel -openmp";
 ## String to identify ICC version used for performance. No space.
@@ -35,7 +35,7 @@ TRANSFORMER_COMMAND="../driver/src/pocc";
 ## Default option(s) applied to all programs.
 TRANSFORMER_DEFAULT_OPTS="--quiet";
 ## Regression/improvement thresold. Here, 10%.
-REGRESSION_THRESOLD="0.1";
+REGRESSION_THRESOLD="10";
 
 
 ## Parallel environment setting. Here, 16 h/w threads.
@@ -65,7 +65,6 @@ GCC_COMP_VER="$GCC_STRING_NAME";
 ICC_PERF="$ICC_COMPILER_COMMAND $POLYBENCH_PERF_FLAGS";
 ICC_COMP_VER="$ICC_STRING_NAME";
 COMP_OTHERS=" -I $TESTSUITE_NAME/utilities $TESTSUITE_NAME/utilities/instrument.c";
-POCC_DEFAULT_OPTS="--quiet";
 ################################################################################
 ################################################################################
 
@@ -105,6 +104,16 @@ compute_mean_exec_time()
 }
 
 
+exec_timeout_prog()
+{
+    ret=`perl -e "alarm shift @ARGV; exec @ARGV" $PROG_TIMEOUT $executable`;
+    if [ $? -ne 0 ]; then
+	RETURN_EXEC="error: timeout";
+    else
+	RETURN_EXEC="$ret";
+    fi;
+}
+
 correctness_check_file()
 {
     filename="$1";
@@ -116,13 +125,13 @@ correctness_check_file()
     correctness_only=`echo "$mode" | grep correctness | grep -v performance`;
     performance_only=`echo "$mode" | grep performance | grep -v correctness`;
     RETVAL=1;
-    echo "[CHECK] Testing $1 with $TRANSFORMER_COMMAND $poccopts";
+    echo "[CHECK] Testing $filename with $TRANSFORMER_COMMAND $poccopts";
     output=`$TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts $filename -o $filename.$poccoptsname.test.c`;
     if [ $? -ne 0 ]; then
 	echo "$output";
 	echo "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
 	mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-	echo "$filename | pocc $POCC_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
+	echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 	return;
     fi;
     if [ -z "$performance_only" ]; then
@@ -151,7 +160,7 @@ correctness_check_file()
 	    else
 		echo "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
 		mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-		echo "$filename | pocc $POCC_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
+		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 	    fi;
 	fi;
     fi;
@@ -189,7 +198,7 @@ correctness_check_file()
 		echo "OUTPUT with $comp_ver: $ret";
 		echo "\033[31m[FAIL][Performance] $filename ($poccopts)\033[0m";
 		mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-		echo "$filename | pocc $POCC_DEFAULT_OPTS $poccopts" >> FAILED_TEST_FILE;
+		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> FAILED_TEST_FILE;
 		return;
 	    fi;
 	    compute_mean_exec_time "$filename.$poccoptsname.ref.c.time.$comp_ver";
@@ -207,7 +216,7 @@ correctness_performance_check_opts()
     poccoptions="$1";
     poccoptionsname="$2";
     mode="$3";
-    echo "[PoCC-checker] Testing pocc $poccoptions";
+    echo "[Checker] Testing $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS";
     ALLRETVAL=0;
     RETVAL=0;
     for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities | grep -v ".ref.c" | grep -v ".test.c"`; do
@@ -225,32 +234,154 @@ correctness_performance_check_opts()
     fi;
 }
 
+
+data_to_csv()
+{
+    ## a benchmark always in the test suite.
+    BASEFILE="3mm"
+    PERF_FILE="$1";
+    OUTPUT_CSV="$2";
+
+    grep $BASEFILE $PERF_FILE | cut -d '|' -f 1 | xargs basename | sed -e "s/.*\.c\.\(.*\)/\1/g" > conf.list
+    confs="#";
+    while read nnn; do
+	confs="$confs $nnn";
+    done < conf.list;
+    echo "$confs" > $OUTPUT_CSV;
+    while read nnn; do
+	cat $PERF_FILE | grep "\.$nnn |" > file.list;
+	while read iii; do
+	    filen=`echo "$iii" | cut -d '|' -f 1 | xargs basename | cut -d '.' -f 1`;
+	    etime=`echo "$iii" | cut -d '|' -f 2`;
+	    missing=`echo "$etime" | grep ".c."`;
+	    if ! [ -z "$missing" ]; then
+		etime="-1";
+	    fi;
+	    firstd=`grep "$filen " $OUTPUT_CSV | grep -v "#"`;
+	    if [ -z "$firstd" ]; then
+		echo "$filen $etime" >> $OUTPUT_CSV;
+	    else
+		newcsv=`sed -e "s/\($filen .*\)/\1 $etime/g" $OUTPUT_CSV`;
+		echo "$newcsv" > $OUTPUT_CSV;
+	    fi;
+	done < file.list;
+	rm -f file.list
+    done < conf.list;
+    rm -f conf.list
+}
+
+find_best_time()
+{
+    bench="$1";
+    conf="$2";
+    csvfilelist="$3";
+    output="";
+    best_ver="";
+    best_id="";
+    while read csvfile; do
+	# find col.
+ 	#confs=`head -n 1 "$csvfile" | sed -e "s/#//g" | sed -e "s/[ ]\+/ /g"`;
+ 	confs=`head -n 1 "$csvfile" | cut -d ' ' -f 2`;
+	count2=2;
+	test=`echo "$confs" | cut -d ' ' -f "$count2"`;
+	while [ "$test" != "$conf" ] && ! [ -z "$test" ];  do
+	    count2=$(($count2+1));
+	    test=`echo "$confs" | cut -d ' ' -f "$count2"`;
+	done;
+	count2=$(($count2+1));
+	if ! [ -z "$test" ]; then
+	    output=`head -n 1 | grep "$bench " "$csvfile" | cut -d ' ' -f $count2`;
+	    if [ -z "$best_ver" ]; then
+		best_ver="$output";
+		best_id="$csvfile";
+	    else
+		comp=`echo "$output $best_ver" | awk '{if ($1 < $2) print $1; else print $2}'`;
+		if [ "$comp" = "$output" ]; then
+		    best_id="$csvfile";
+		    best_ver="$comp";
+		fi;
+	    fi;
+	fi;
+    done < $csvfilelist;
+    BEST_TIME="$best_ver";
+    BEST_ID="$best_id";
+}
+
+compute_regressions()
+{
+    input_file="$1";
+    output_file="$2";
+    perf_test_dir="$3";
+    thresold="$4";
+    rm -f $output_file;
+    conflist=`head -n 1 $input_file`;
+    conflist=`echo "$conflist" | sed -e "s/#//g"`;
+    count=3;
+    rm -f regressions.tmp.dat;
+    rm -f improvements.tmp.dat;
+    rm -f $output_file;
+    cat $input_file | grep -v "#" > file.list;
+    find $perf_test_dir -name "*.csv" > csvfile.list
+    for i in $conflist; do
+    ## iterate on all files.
+	while read n; do
+	    bench=`echo "$n" | cut -d ' ' -f 1`;
+	    curtime=`echo "$n" | cut -d ' ' -f $count`;
+	    find_best_time "$bench" "$i" "csvfile.list";
+	    comp=`echo "scale=2;(1-$curtime/$BEST_TIME)*100" | bc`;
+	    compnorm=`echo "$comp" | sed -e "s/-//g"`;
+	    reg=`echo "$compnorm $thresold" | awk '{if ($1 > $2) print "difference"; else print $1}'`;
+	    if [ "$reg" = "difference" ]; then
+		is_dec=`echo "$comp" | grep "-"`;
+		verid=`echo "$BEST_ID" | cut -d '=' -f 2 | cut -d '.' -f 1`;
+		normalized=`echo "$compnorm" | cut -d '.' -f 1`;
+		if [ -z "$normalized" ]; then normalized="0$compnorm"; fi;
+		if ! [ -z "$is_dec" ]; then
+		    echo "$bench w/ $conf: regression (+$normalized%), from Rev. $verid" >> regressions.tmp.dat;
+		else
+		    echo "$bench w/ $conf: improvement (-$normalized%), from Rev. $verid" >> improvements.tmp.dat;
+		fi;
+	    fi;
+	done < file.list;
+	count=$(($count+1));
+    done;
+    if [ -f "regressions.tmp.dat" ]; then
+	echo "** Regressions **" >> $output_file;
+	cat regressions.tmp.dat >> $output_file;
+	echo >> $output_file;
+    fi;
+    if [ -f "improvements.tmp.dat" ]; then
+	echo "** Improvements **" >> $output_file;
+	cat improvements.tmp.dat >> $output_file;
+	echo >> $output_file;
+    fi;
+    rm -f file.list;
+    rm -f csvfile.list;
+    rm -f regressions.tmp.dat;
+    rm -f improvements.tmp.dat;
+}
+
 ################################################################################
 ################################################################################
 
-echo "[PoCC-checker] Correctness+performance checker with $TESTSUITE_NAME";
+echo "[Checker] Correctness+performance checker with $TESTSUITE_NAME";
 
-if [ $# -lt 1 ]; then
-    echo;
-    echo "Usage: checker_perfcorrect.sh [mode] <pocc-options>";
+if [ $# -ne 2 ]; then
+    echo "Usage: performance_checker.sh [mode] [configs]";
     echo;
     echo "[mode] is one of:";
-    echo "      correctness-small: test correctness only on the main configs."
-    echo "      correctness: test correctness only on most configs."
-    echo "      performance-small: test performance only on the main configs."
-    echo "      performance: test performance only on most configs."
-    echo "      correctness+performance-small: test correctness + performance only on the";
-    echo "                                     main configs.";
-    echo "      correctness+performance: test correctness + performance on most configs.";
+    echo "      correctness: test correctness only, on [configs]"
+    echo "      performance: test performance only on most [configs]"
+    echo "      correctness+performance: test correctness + performance on [configs]";
     echo;
-    echo "<pocc-options> (optional) is:";
-    echo "      user-specifed configuration (set of pocc flags)";
+    echo "[configs] is a text file, with one line per configuration to test.";
+    echo;
     exit 1;
 fi;
 
 checkout_polybench;
 if ! [ -f "$TRANSFORMER_COMMAND" ]; then
-    echo "[PoCC-checker] Cannot find the pocc binary.";
+    echo "[Checker] Cannot find the transformer binary.";
     exit 1;
 fi;
 
@@ -270,36 +401,18 @@ $ICC_COMPILER_ENVSCRIPT;
 ulimit -s "unlimited";
 
 MODE="$1";
-userflags="$2";
-small_only=`echo "$MODE" | grep small`;
+CONFLIST="$2";
 correctness_only=`echo "$MODE" | grep correctness | grep -v performance`;
 performance_only=`echo "$MODE" | grep performance | grep -v correctness`;
 
-if ! [ -z "$userflags" ]; then
-    correctness_performance_check_opts "$userflags" "user-specified" "$MODE";
-else
-    if ! [ -z "$small_only" ]; then
-	## Execute the small test suite.
-	while read confline; do
-	    comment=`echo "$confline" | grep "#"`;
-	    if [ -z "$comment" ]; then
-		flags=`echo "$confline" | cut -d '|' -f 1`;
-		label=`echo "$confline" | cut -d '|' -f 2 | sed -e "s/ //g"`;
-		correctness_performance_check_opts "$flags" "label" "$MODE";
-	    fi;
-	done < $CONFLIST_SMALL;
-    else
-	## Execute the full test suite.
-	while read confline; do
-	    comment=`echo "$confline" | grep "#"`;
-	    if [ -z "$comment" ]; then
-		flags=`echo "$confline" | cut -d '|' -f 1`;
-		label=`echo "$confline" | cut -d '|' -f 2 | sed -e "s/ //g"`;
-		correctness_performance_check_opts "$flags" "label" "$MODE";
-	    fi;
-	done < $CONFLIST_LARGE;
+while read confline; do
+    comment=`echo "$confline" | grep "#"`;
+    if [ -z "$comment" ]; then
+	flags=`echo "$confline" | cut -d '|' -f 1`;
+	label=`echo "$confline" | cut -d '|' -f 2 | sed -e "s/ //g"`;
+	correctness_performance_check_opts "$flags" "$label" "$MODE";
     fi;
-fi;
+done < $CONFLIST;
 
 if [ $ALLTESTSVAL -eq 0 ]; then
     echo "\033[32m[PASS] Correctness checker\033[0m";
@@ -321,16 +434,24 @@ if [ -z "$correctness_only" ]; then
     releaseuid=`cd $dirname && svn info | grep Revision | cut -d : -f 2 | cut -d ' ' -f 2`;
     releaseuid="svnrev=$releaseuid";
     ## Prepare the csv data for the performance file.
-    ./scripts/data_to_csv.sh "$PERF_FILE.$ICC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
-    ./scripts/data_to_csv.sh "$PERF_FILE.$ICC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
+    if [ -f $PERF_FILE.$GCC_STRING_NAME ]; then
+	data_to_csv "$PERF_FILE.$GCC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
+    fi;
+    if [ -f $PERF_FILE.$ICC_STRING_NAME ]; then
+	data_to_csv "$PERF_FILE.$ICC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
+    fi;
    ## Compute the regression file.
     rm -f regressions.dat;
-    ./scripts/compute_regressions.sh "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv" "regressions.dat" "$PERF_TESTS_DIR" "$REGRESSION_THRESOLD";
-    ./scripts/compute_regressions.sh "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv" "regressions.dat" "$PERF_TESTS_DIR" "$REGRESSION_THRESOLD";
+    if [ -f "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv" ]; then
+	compute_regressions "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv" "regressions.dat" "$PERF_TESTS_DIR" "$REGRESSION_THRESOLD";
+    fi;
+    if [ -f "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv" ]; then
+	compute_regressions "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv" "regressions.dat" "$PERF_TESTS_DIR" "$REGRESSION_THRESOLD";
+    fi;
 fi;
 
 ## Send email with the results.
-echo "[PoCC] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" > email.out
+echo "[Checker] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" > email.out
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
 echo >> email.out;
@@ -359,18 +480,27 @@ if [ -z "$correctness_only" ]; then
     echo >> email.out;
     echo "* GCC Performance results ($GCC_STRING_NAME):" >> email.out
     echo >> email.out;
-    cat $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv >> email.out;
+    if [ -f "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv" ]; then
+	cat $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv >> email.out;
+    else
+	echo "-- ERROR generating $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv --" >> email.out;
+    fi;
     echo >> email.out;
     echo "------------------------------------------------------------------------------" >> email.out;
     echo >> email.out;
     echo "* ICC Performance results ($ICC_STRING_NAME):" >> email.out
     echo >> email.out;
-    cat $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv >> email.out;
+    if [ -f "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv" ]; then
+	cat $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv >> email.out;
+    else
+	echo "-- ERROR generating $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv --" >> email.out;
+    fi;
     echo >> email.out;
     echo "------------------------------------------------------------------------------" >> email.out;
     echo >> email.out;
 fi;
-cat email.out | mail -s "PoCC experiments finished" "$EMAIL_MAINTAINER";
+cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER";
+cat email.out
 rm -f email.out regressions.dat;
 
 echo "\033[33m[Checker]\033[0m Summary email send to $EMAIL_MAINTAINER";

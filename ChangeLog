@@ -1,5 +1,9 @@
 2011-07-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* tests/scripts/checker_perfcorrect.sh: Update.
+
+2011-07-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* tests/scripts/conflist-small.txt,
 	* tests/scripts/conflist-large.txt: New. Store the flag to be tested.
 	* tests/scripts/checker_perfcorrect.sh: Use the flag files instead
