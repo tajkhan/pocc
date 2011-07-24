@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 04:00:05 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 04:01:55 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -203,7 +203,7 @@ correctness_check_file()
 		echo "OUTPUT with $comp_ver: $ret";
 		echo "\033[31m[FAIL][Performance] $filename ($poccopts)\033[0m";
 		mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> FAILED_TEST_FILE;
+		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 		return;
 	    fi;
 	    compute_mean_exec_time "$filename.$poccoptsname.ref.c.time.$comp_ver";
