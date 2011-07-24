@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 04:01:55 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 04:55:21 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -35,9 +35,13 @@ TRANSFORMER_COMMAND="../driver/src/pocc";
 ## Default option(s) applied to all programs.
 TRANSFORMER_DEFAULT_OPTS="--quiet";
 ## Regression/improvement thresold. Here, 10%.
-REGRESSION_THRESOLD="10";
+REGRESSION_THRESOLD=10;
 ## Timeout for the transformed program. Here, 10 minutes.
-PROGRAM_TIMEOUT=600
+PROGRAM_TIMEOUT=600;
+## Maximal variance accepted between the 3 median runs for performance results.
+## Here 10%
+VARIANCE_ACCEPTED=10;
+
 
 ## Parallel environment setting. Here, 16 h/w threads.
 export OMP_SCHEDULE=static
@@ -95,13 +99,30 @@ compute_mean_exec_time()
     while read n; do
 	expr="$expr+$n";
     done < avg.out;
-    rm -f avg.out;
     time=`echo "scale=8;$expr)/3" | bc`;
-    tmp=`echo "$time" | cut -d . -f 1`;
+    tmp=`echo "$time" | cut -d '.' -f 1`;
     if [ -z "$tmp" ]; then
 	time="0$time";
     fi;
+    val1=`cat avg.out | head -n 1`;
+    val2=`cat avg.out | head -n 2 | tail -n 1`;
+    val3=`cat avg.out | head -n 3 | tail -n 1`;
+    val11=`echo "a=$val1 - $time;if(0>a)a*=-1;a" | bc`;
+    val12=`echo "a=$val2 - $time;if(0>a)a*=-1;a" | bc`;
+    val13=`echo "a=$val3 - $time;if(0>a)a*=-1;a" | bc`;
+    myvar=`echo "$val11 $val12 $val13" | awk '{ if ($1 > $2) { if ($1 > $3) print $1; else print $3; } else { if ($2 > $3) print $2; else print $3; } }'`;
+    variance=`echo "scale=5;($myvar/$time)*100" | bc`;
+    tmp=`echo "$variance" | cut -d '.' -f 1`;
+    if [ -z "$tmp" ]; then
+	variance="0$variance";
+    fi;
+    compvar=`echo "$variance $VARIANCE_ACCEPTED" | awk '{ if ($1 < $2) print "ok"; else print "error"; }'`;
+    if [ "$compvar" = "error" ]; then
+	echo "\033[31m[WARNING]\033[0m Variance is above thresold, unsafe performance measurement";
+	echo "          (variance=$variance%, tolerance=$VARIANCE_ACCEPTED)";
+    fi;
     PROCESSED_TIME="$time";
+    rm -f avg.out;
 }
 
 
