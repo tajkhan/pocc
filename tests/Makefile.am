@@ -84,8 +84,7 @@ EXTRA_DIST	+=				\
 	scripts/checker_perfcorrect.sh		\
 	scripts/conflist-small.txt.sh		\
 	scripts/conflist-large.txt.sh		\
-	scripts/data_to_csv.sh			\
-	scripts/compute_regressions.sh		\
+	scripts/conflist-passthru.txt.sh	\
 	scripts/checker_correctness.sh		\
 	$(BENCH_FILES)				\
 	$(TEST_SUITE)				\
@@ -102,6 +101,8 @@ TESTS_ENVIRONMENT +=							\
 	CHECKER="$(top_srcdir)/tests/scripts/checker.sh"		\
 	TEST_SUITE="$(TEST_SUITE)"
 
+correctness-check-passthru:
+	(scripts/checker_perfcorrect.sh "correctness" "scripts/conflist-passthru.txt")
 correctness-check-fast:
 	(scripts/checker_perfcorrect.sh "correctness" "scripts/conflist-small.txt")
 correctness-check:

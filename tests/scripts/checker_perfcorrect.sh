@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 18:13:51 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 19:32:57 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -30,7 +30,8 @@ TESTSUITE_GET_COMMAND="wget --quiet -N http://www.cse.ohio-state.edu/~pouchet/so
 ## Last-level cache size (in kB), used to flush the cache before performance
 ## measurement.
 LLC_CACHE_SIZE="25000";
-## Program command to generate the transformed programs.
+## Program command to generate the transformed programs. Set to "" to not use
+## a tool to generate the transformed variants (they are already present).
 TRANSFORMER_COMMAND="../driver/src/pocc";
 ## Default option(s) applied to all programs.
 TRANSFORMER_DEFAULT_OPTS="--quiet";
@@ -156,13 +157,20 @@ correctness_check_file()
     RETVAL=1;
     perfretval=1;
     echo "[CHECK] Testing $filename with $TRANSFORMER_COMMAND $poccopts";
-    output=`$TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts $filename -o $filename.$poccoptsname.test.c`;
-    if [ $? -ne 0 ]; then
-	echo "$output";
-	echo "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
-	mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
-	echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
-	return;
+    if [ -z "$TRANSFORMER_COMMAND" ]; then
+	if ! [ test -f "$filename.$poccoptsname.test.c" ]; then
+	    echo "[ERROR] File $filename.$poccoptsname.test.c does not exist";
+	    return;
+	fi;
+    else
+	output=`$TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts $filename -o $filename.$poccoptsname.test.c`;
+	if [ $? -ne 0 ]; then
+	    echo "$output";
+	    echo "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
+	    mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
+	    echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
+	    return;
+	fi;
     fi;
     if [ -z "$performance_only" ]; then
 	if [ -f $filename.$poccoptsname.ref.c ]; then
@@ -251,14 +259,27 @@ correctness_performance_check_opts()
     echo "[Checker] Testing $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS";
     ALLRETVAL=0;
     RETVAL=0;
-    for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities | grep -v ".ref.c" | grep -v ".test.c"`; do
-	correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$GCC_PERF" "$GCC_COMP_VER" "$mode";
-	correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
-	if [ $RETVAL -eq 1 ]; then
-	    ALLRETVAL=1;
-	    ALLTESTSVAL=1;
-	fi;
-    done;
+    if [ -z "$TRANSFORMER_COMMAND" ]; then
+	## Scan all files, as we do not use a transformer to generate the code.
+	for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities`; do
+	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$GCC_PERF" "$GCC_COMP_VER" "$mode";
+	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
+	    if [ $RETVAL -eq 1 ]; then
+		ALLRETVAL=1;
+		ALLTESTSVAL=1;
+	    fi;
+	done;
+    else
+	## Scan only non-generated files.
+	for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities | grep -v ".ref.c" | grep -v ".test.c"`; do
+	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$GCC_PERF" "$GCC_COMP_VER" "$mode";
+	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
+	    if [ $RETVAL -eq 1 ]; then
+		ALLRETVAL=1;
+		ALLTESTSVAL=1;
+	    fi;
+	done;
+    fi;
     if [ $ALLRETVAL -eq 0 ]; then
 	echo "\033[32m[PASS][$mode] pocc $poccopts\033[0m";
     else
@@ -270,17 +291,16 @@ correctness_performance_check_opts()
 data_to_csv()
 {
     ## a benchmark always in the test suite.
-    BASEFILE="3mm"
     PERF_FILE="$1";
     OUTPUT_CSV="$2";
+    CONFIG_LIST_FILE="$3";
 
-    grep $BASEFILE $PERF_FILE | cut -d '|' -f 1 > flist.list;
     rm -f conf.list;
     while read nnn; do
-	c=`basename "$nnn" | sed -e "s/.*\.c\.\(.*\)/\1/g"`;
-	echo "$c" >> conf.list;
-    done < flist.list;
-    rm -f flist.list;
+	conf=`echo "$nnn" | cut -d '|' -f 2 | cut -d ' ' -f 2`;
+	echo "$conf" >> conf.list;
+    done < $CONFIG_LIST_FILE;
+
     confs="#";
     while read nnn; do
 	confs="$confs $nnn";
@@ -305,7 +325,7 @@ data_to_csv()
 	done < file.list;
 	rm -f file.list
     done < conf.list;
-    rm -f conf.list
+    rm -f conf.list;
 }
 
 find_best_time()
@@ -318,7 +338,6 @@ find_best_time()
     best_id="";
     while read csvfile; do
 	# find col.
- 	#confs=`head -n 1 "$csvfile" | sed -e "s/#//g" | sed -e "s/[ ]\+/ /g"`;
  	confs=`head -n 1 "$csvfile" | cut -d ' ' -f 2`;
 	count2=2;
 	test=`echo "$confs" | cut -d ' ' -f "$count2"`;
@@ -361,23 +380,34 @@ compute_regressions()
     cat $input_file | grep -v "#" > file.list;
     find $perf_test_dir -name "*.csv" > csvfile.list
     for i in $conflist; do
-    ## iterate on all files.
+        ## iterate on all files.
 	while read n; do
 	    bench=`echo "$n" | cut -d ' ' -f 1`;
 	    curtime=`echo "$n" | cut -d ' ' -f $count`;
+	    is_numerical=`echo "$curtime" | grep "^[0-9\.]\+$"`;
+	    if [ "$is_numerical" != "$curtime" ]; then
+		curtime="error";
+	    fi;
 	    find_best_time "$bench" "$i" "csvfile.list";
-	    comp=`echo "scale=2;(1-$curtime/$BEST_TIME)*100" | bc`;
-	    compnorm=`echo "$comp" | sed -e "s/-//g"`;
-	    reg=`echo "$compnorm $thresold" | awk '{if ($1 > $2) print "difference"; else print $1}'`;
-	    if [ "$reg" = "difference" ]; then
-		is_dec=`echo "$comp" | grep "-"`;
-		verid=`echo "$BEST_ID" | cut -d '=' -f 2 | cut -d '.' -f 1`;
-		normalized=`echo "$compnorm" | cut -d '.' -f 1`;
-		if [ -z "$normalized" ]; then normalized="0$compnorm"; fi;
-		if ! [ -z "$is_dec" ]; then
-		    echo "$bench w/ $conf: regression (+$normalized%), from Rev. $verid" >> regressions.tmp.dat;
-		else
-		    echo "$bench w/ $conf: improvement (-$normalized%), from Rev. $verid" >> improvements.tmp.dat;
+	    if [ "$curtime" != "error" ] && ! [ -z "$BEST_TIME" ]; then
+		comp=`echo "scale=2;(1-$curtime/$BEST_TIME)*100" | bc`;
+		compnorm=`echo "$comp" | sed -e "s/-//g"`;
+		reg=`echo "$compnorm $thresold" | awk '{if ($1 > $2) print "difference"; else print $1}'`;
+		if [ "$reg" = "difference" ]; then
+		    is_dec=`echo "$comp" | grep "-"`;
+		    verid=`echo "$BEST_ID" | cut -d '=' -f 2 | cut -d '.' -f 1`;
+		    normalized=`echo "$compnorm" | cut -d '.' -f 1`;
+		    if [ -z "$normalized" ]; then normalized="0$compnorm"; fi;
+		    if ! [ -z "$is_dec" ]; then
+			echo "$bench w/ $conf: regression (+$normalized%), from Rev. $verid" >> regressions.tmp.dat;
+		    else
+			echo "$bench w/ $conf: improvement (-$normalized%), from Rev. $verid" >> improvements.tmp.dat;
+		    fi;
+		fi;
+	    else
+		if ! [ -z "$BEST_TIME" ]; then
+		    verid=`echo "$BEST_ID" | cut -d '=' -f 2 | cut -d '.' -f 1`;
+		    echo "$bench w/ $conf: regression (failed execution), from Rev. $verid" >> regressions.tmp.dat;
 		fi;
 	    fi;
 	done < file.list;
@@ -417,7 +447,7 @@ if [ $# -ne 2 ]; then
     exit 1;
 fi;
 
-if ! [ -f "$TRANSFORMER_COMMAND" ]; then
+if ! [ -f "$TRANSFORMER_COMMAND" ] && ! [ -z "$TRANSFORMER_COMMAND" ]; then
     echo "[Checker] Cannot find the transformer binary.";
     exit 1;
 fi;
@@ -446,6 +476,7 @@ CONFLIST="$2";
 correctness_only=`echo "$MODE" | grep correctness | grep -v performance`;
 performance_only=`echo "$MODE" | grep performance | grep -v correctness`;
 
+START_DATE=`date +%s`;
 while read confline; do
     comment=`echo "$confline" | grep "#"`;
     if [ -z "$comment" ]; then
@@ -454,6 +485,8 @@ while read confline; do
 	correctness_performance_check_opts "$flags" "$label" "$MODE";
     fi;
 done < $CONFLIST;
+STOP_DATE=`date +%s`;
+TOTAL_SCRIPT_TIME=`date -v-19H -r $(($STOP_DATE-$START_DATE)) +%T`;
 
 if [ $ALLTESTSVAL -eq 0 ]; then
     echo "\033[32m[PASS] Correctness checker\033[0m";
@@ -478,10 +511,10 @@ if [ -z "$correctness_only" ]; then
     releaseuid="svnrev=$releaseuid";
     ## Prepare the csv data for the performance file.
     if [ -f $PERF_FILE.$GCC_STRING_NAME ]; then
-	data_to_csv "$PERF_FILE.$GCC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
+	data_to_csv "$PERF_FILE.$GCC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv" "$CONFLIST";
     fi;
     if [ -f $PERF_FILE.$ICC_STRING_NAME ]; then
-	data_to_csv "$PERF_FILE.$ICC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
+	data_to_csv "$PERF_FILE.$ICC_STRING_NAME" "$CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv" "$CONFLIST";
     fi;
    ## Compute the regression file.
     rm -f regressions.dat;
@@ -494,7 +527,8 @@ if [ -z "$correctness_only" ]; then
 fi;
 
 ## Send email with the results.
-echo "[Checker] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" > email.out
+echo "[Checker] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" > email.out;
+echo "[Checker] Total testing time: $TOTAL_SCRIPT_TIME" >> email.out;
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
 echo >> email.out;
@@ -503,7 +537,7 @@ echo >> email.out;
 while read n; do
     flags=`echo "$n" | cut -d '|' -f 1`;
     label=`echo "$n" | cut -d '|' -f 2`;
-    echo "Configuration: $label uses $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $flags" >> email.out;
+    echo "Configuration: \"$label \" uses $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $flags" >> email.out;
 done < $CONFLIST;
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
@@ -562,14 +596,20 @@ if [ -z "$correctness_only" ]; then
     echo "------------------------------------------------------------------------------" >> email.out;
     echo >> email.out;
 fi;
-cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER";
-cat email.out;
-rm -f email.out regressions.dat;
 
+## Print email.
+echo "\033[33m[Checker]\033[0m Summary email to be sent to $EMAIL_MAINTAINER:";
+cat email.out;
+
+## Send email.
+cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER";
+rm -f email.out regressions.dat;
 echo "\033[33m[Checker]\033[0m Summary email sent to $EMAIL_MAINTAINER";
+
+## Stdout summary.
 if [ -f $FAILED_TEST_FILE ]; then
     echo "\033[33m[Checker]\033[0m Failed test database updated: $FAILED_TEST_FILE";
-fil
+fi;
 if [ -z "$correctness_only" ]; then
     echo "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
     echo "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
