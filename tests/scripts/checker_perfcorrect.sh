@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 03:51:03 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 03:58:51 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -106,8 +106,11 @@ compute_mean_exec_time()
 
 exec_timeout_prog()
 {
-    ret=`perl -e "alarm shift @ARGV; exec @ARGV" $PROG_TIMEOUT $executable`;
+    executable="$1";
+    progoutputtrace="$2";
+    ret=`perl -e 'alarm shift @ARGV; exec @ARGV' $PROG_TIMEOUT $executable >> $progoutputtrace`;
     if [ $? -ne 0 ]; then
+	echo "error" >> $progoutputtrace;
 	RETURN_EXEC="error: timeout";
     else
 	RETURN_EXEC="$ret";
@@ -187,14 +190,15 @@ correctness_check_file()
 		echo "\033[31m[FAIL][Performance] $filename ($poccopts) with $comp_ver\033[0m";
 		return;
 	    fi;
+	    rm -f $filename.$poccoptsname.ref.c.time.$comp_ver;
 	    # 5 runs.
-	    ./test > $filename.$poccoptsname.ref.c.time.$comp_ver 2>/dev/null;
-	    ./test >> $filename.$poccoptsname.ref.c.time.$comp_ver 2>/dev/null;
-	    ./test >> $filename.$poccoptsname.ref.c.time.$comp_ver 2>/dev/null;
-	    ./test >> $filename.$poccoptsname.ref.c.time.$comp_ver 2>/dev/null;
-	    ./test >> $filename.$poccoptsname.ref.c.time.$comp_ver 2>/dev/null;
-	    ret=$?;
-	    if [ $ret -ne 0 ]; then
+	    exec_timeout_prog "./test" "$filename.$poccoptsname.ref.c.time.$comp_ver";
+	    exec_timeout_prog "./test" "$filename.$poccoptsname.ref.c.time.$comp_ver";
+	    exec_timeout_prog "./test" "$filename.$poccoptsname.ref.c.time.$comp_ver";
+	    exec_timeout_prog "./test" "$filename.$poccoptsname.ref.c.time.$comp_ver";
+	    exec_timeout_prog "./test" "$filename.$poccoptsname.ref.c.time.$comp_ver";
+	    has_error=`grep "error" "$filename.$poccoptsname.ref.c.time.$comp_ver"`;
+	    if ! [ -z "$has_error" ]; then
 		echo "OUTPUT with $comp_ver: $ret";
 		echo "\033[31m[FAIL][Performance] $filename ($poccopts)\033[0m";
 		mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
