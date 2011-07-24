@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 00:20:38 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 01:10:08 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -23,17 +23,18 @@ ICC_COMPILER_COMMAND="/opt/intel/Compiler/11.1/072/bin/intel64/icc -fast -parall
 ICC_STRING_NAME="icc-11.1";
 ## Script to run before using ICC, to set up environment variable, if any.
 ICC_COMPILER_ENVSCRIPT="/opt/intel/Compiler/11.1/072/bin/iccvars.sh intel64";
-## Version of polybench to be used, and how to get it.
-POLYBENCH_VERSION="polybench-2.1";
-POLYBENCH_GET_COMMAND="wget --quiet -N http://www.cse.ohio-state.edu/~pouchet/software/polybench/download/$POLYBENCH_VERSION.tar.gz";
+## Testsuite name of the tarball (.tar.gz) to be used.
+TESTSUITE_NAME="polybench-2.1";
+## Command to retrieve the test suite tarball.
+TESTSUITE_GET_COMMAND="wget --quiet -N http://www.cse.ohio-state.edu/~pouchet/software/polybench/download/$TESTSUITE_NAME.tar.gz";
 ## Last-level cache size (in kB), used to flush the cache before performance
 ## measurement.
-LLC_CACHE_SIZE="12500";
+LLC_CACHE_SIZE="25000";
 ## Program command to generate the transformed programs.
 TRANSFORMER_COMMAND="../driver/src/pocc";
 ## Default option(s) applied to all programs.
 TRANSFORMER_DEFAULT_OPTS="--quiet";
-## Regression thresold. Here, 10%.
+## Regression/improvement thresold. Here, 10%.
 REGRESSION_THRESOLD="0.1";
 
 
@@ -50,6 +51,8 @@ export KMP_NUM_THREADS=16;
 ################################################################################
 ################################################################################
 ## Global variables (script-specific).
+CONFLIST_SMALL="scripts/conflist-small.txt";
+CONFLIST_LARGE="scripts/conflist-large.txt";
 FAILED_TESTS_DIR="failed-tests";
 FAILED_TEST_FILE="failed.tests";
 PERF_TESTS_DIR="perf-tests";
@@ -59,9 +62,9 @@ GCC_CORRECT="gcc -O0 -fopenmp -lm -DPOLYBENCH_DUMP_ARRAYS";
 POLYBENCH_PERF_FLAGS="-lm -DPOLYBENCH_TIME -DPOLYBENCH_CACHE_SIZE_KB=$LLC_CACHE_SIZE";
 GCC_PERF="$GCC_COMPILER_COMMAND $POLYBENCH_PERF_FLAGS";
 GCC_COMP_VER="$GCC_STRING_NAME";
-ICC_PERF="$GCC_COMPILER_COMMAND $POLYBENCH_PERF_FLAGS";
+ICC_PERF="$ICC_COMPILER_COMMAND $POLYBENCH_PERF_FLAGS";
 ICC_COMP_VER="$ICC_STRING_NAME";
-COMP_OTHERS=" -I $POLYBENCH_VERSION/utilities $POLYBENCH_VERSION/utilities/instrument.c";
+COMP_OTHERS=" -I $TESTSUITE_NAME/utilities $TESTSUITE_NAME/utilities/instrument.c";
 POCC_DEFAULT_OPTS="--quiet";
 ################################################################################
 ################################################################################
@@ -77,10 +80,10 @@ check_error()
 
 checkout_polybench()
 {
-    if ! [ -d "$POLYBENCH_VERSION" ]; then
-	$POLYBENCH_GET_COMMAND;
-	check_error $? "$POLYBENCH_GET_COMMAND"
-	tar xzf $POLYBENCH_VERSION.tar.gz;
+    if ! [ -d "$TESTSUITE_NAME" ]; then
+	$TESTSUITE_GET_COMMAND;
+	check_error $? "$TESTSUITE_GET_COMMAND"
+	tar xzf $TESTSUITE_NAME.tar.gz;
     fi;
 }
 
@@ -110,8 +113,8 @@ correctness_check_file()
     comp_perf="$4";
     comp_ver="$5";
     mode="$6";
-    correctness_only=`echo "$mode" | grep performance | grep -v correctness`;
-    performance_only=`echo "$mode" | grep correctness | grep -v performance`;
+    correctness_only=`echo "$mode" | grep correctness | grep -v performance`;
+    performance_only=`echo "$mode" | grep performance | grep -v correctness`;
     RETVAL=1;
     echo "[CHECK] Testing $1 with $TRANSFORMER_COMMAND $poccopts";
     output=`$TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts $filename -o $filename.$poccoptsname.test.c`;
@@ -152,7 +155,7 @@ correctness_check_file()
 	    fi;
 	fi;
     fi;
-    if [ $RETVAL -eq 0 ] || [ -z "$correctness_only" ]; then
+    if [ -z "$correctness_only" ]; then
 	if [ -f $filename.$poccoptsname.ref.c ] &&
 	    [ -f $filename.$poccoptsname.ref.c.time.$comp_ver ]; then
 	    diff=`diff $filename.$poccoptsname.ref.c $filename.$poccoptsname.test.c`;
@@ -207,7 +210,7 @@ correctness_performance_check_opts()
     echo "[PoCC-checker] Testing pocc $poccoptions";
     ALLRETVAL=0;
     RETVAL=0;
-    for i in `find $POLYBENCH_VERSION -name "*.c" | grep -v utilities | grep -v ".ref.c" | grep -v ".test.c"`; do
+    for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities | grep -v ".ref.c" | grep -v ".test.c"`; do
 	correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$GCC_PERF" "$GCC_COMP_VER" "$mode";
 	correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
 	if [ $RETVAL -eq 1 ]; then
@@ -225,7 +228,7 @@ correctness_performance_check_opts()
 ################################################################################
 ################################################################################
 
-echo "[PoCC-checker] Correctness+performance checker with $POLYBENCH_VERSION";
+echo "[PoCC-checker] Correctness+performance checker with $TESTSUITE_NAME";
 
 if [ $# -lt 1 ]; then
     echo;
@@ -269,86 +272,33 @@ ulimit -s "unlimited";
 MODE="$1";
 userflags="$2";
 small_only=`echo "$MODE" | grep small`;
-correctness_only=`echo "$MODE" | grep performance | grep -v correctness`;
-performance_only=`echo "$MODE" | grep correctness | grep -v performance`;
+correctness_only=`echo "$MODE" | grep correctness | grep -v performance`;
+performance_only=`echo "$MODE" | grep performance | grep -v correctness`;
 
 if ! [ -z "$userflags" ]; then
     correctness_performance_check_opts "$userflags" "user-specified" "$MODE";
 else
-    ## Base.
-    correctness_performance_check_opts "" "passthru" "$MODE";
-    correctness_performance_check_opts "--use-past" "past" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--use-past --punroll" "past-unroll" "$MODE";
-	correctness_performance_check_opts "--use-past --vectorizer" "past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--use-past --pragmatizer" "past-pragmatizer" "$MODE";
+    if ! [ -z "$small_only" ]; then
+	## Execute the small test suite.
+	while read confline; do
+	    comment=`echo "$confline" | grep "#"`;
+	    if [ -z "$comment" ]; then
+		flags=`echo "$confline" | cut -d '|' -f 1`;
+		label=`echo "$confline" | cut -d '|' -f 2 | sed -e "s/ //g"`;
+		correctness_performance_check_opts "$flags" "label" "$MODE";
+	    fi;
+	done < $CONFLIST_SMALL;
+    else
+	## Execute the full test suite.
+	while read confline; do
+	    comment=`echo "$confline" | grep "#"`;
+	    if [ -z "$comment" ]; then
+		flags=`echo "$confline" | cut -d '|' -f 1`;
+		label=`echo "$confline" | cut -d '|' -f 2 | sed -e "s/ //g"`;
+		correctness_performance_check_opts "$flags" "label" "$MODE";
+	    fi;
+	done < $CONFLIST_LARGE;
     fi;
-    correctness_performance_check_opts "--use-past --punroll --vectorizer --pragmatizer " "past-punroll-vectorizer-pragmatizer" "$MODE";
-
-    ## Pluto
-    correctness_performance_check_opts "--pluto" "pluto" "$MODE";
-    correctness_performance_check_opts "--pluto --use-past" "pluto-past" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--pluto --use-past --punroll" "pluto-past-punroll" "$MODE";
-	correctness_performance_check_opts "--pluto --use-past --vectorizer" "pluto-past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--pluto --use-past --pragmatizer" "pluto-past-pragmatizer" "$MODE";
-    fi;
-    correctness_performance_check_opts "--pluto --use-past --punroll --vectorizer --pragmatizer" "pluto-past-punroll-vectorizer-pragmatizer" "$MODE";
-
-    ## Pluto-tile
-    correctness_performance_check_opts "--pluto --pluto-tile" "pluto-tile" "$MODE";
-    correctness_performance_check_opts "--pluto --pluto-tile --use-past" "pluto-tile-past" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--pluto --pluto-tile --use-past --punroll" "pluto-tile-past-punroll" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --use-past --vectorizer" "pluto-tile-past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --use-past --pragmatizer" "pluto-tile-past-pragmatizer" "$MODE";
-    fi;
-    correctness_performance_check_opts "--pluto --pluto-tile --use-past --punroll --pragmatizer --vectorizer" "pluto-tile-past-punroll-pragmatizer-vectorizer" "$MODE";
-
-    ## Pluto-tile-prevector
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-prevector" "pluto-tile-prevector" "$MODE";
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-prevector --use-past" "pluto-tile-prevector-past" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-prevector --use-past --punroll" "pluto-tile-prevector-past-punroll" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-prevector --use-past --vectorizer" "pluto-tile-prevector-past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-prevector --use-past --pragmatizer" "pluto-tile-prevector-past-pragmatizer" "$MODE";
-    fi;
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-prevector --use-past --punroll --pragmatizer --vectorizer" "pluto-tile-prevector-past-punroll-pragmatizer-vectorizer" "$MODE";
-
-    ## Pluto-parallel
-    correctness_performance_check_opts "--pluto --pluto-parallel" "pluto-parallel" "$MODE";
-    correctness_performance_check_opts "--pluto --pluto-parallel --use-past" "pluto-parallel-past" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--pluto --pluto-parallel --use-past --punroll" "pluto-parallel-past-punroll" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-parallel --use-past --vectorizer" "pluto-parallel-past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-parallel --use-past --pragmatizer" "pluto-parallel-past-pragmatizer" "$MODE";
-    fi;
-    correctness_performance_check_opts "--pluto --pluto-parallel --use-past --punroll --pragmatizer --vectorizer" "pluto-parallel-past-punroll-pragmatizer-vectorizer" "$MODE";
-
-
-    ## Pluto-tile-parallel
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel" "pluto-tile-parallel" "$MODE";
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pragmatizer" "pluto-tile-parallel-pragmatizer" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --use-past" "pluto-tile-parallel-past" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --use-past --punroll" "pluto-tile-parallel-past-punroll" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --use-past --vectorizer" "pluto-tile-parallel-past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --use-past --pragmatizer" "pluto-tile-parallel-past-pragmatizer" "$MODE";
-    fi;
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --use-past --punroll --pragmatizer --vectorizer" "pluto-tile-parallel-past-punroll-pragmatizer-vectorizer" "$MODE";
-
-
-    ## Pluto-tile-parallel-prevector
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector" "pluto-tile-parallel-prevector" "$MODE";
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector --pragmatizer" "pluto-tile-parallel-prevector-pragmatizer" "$MODE";
-    if [ -z "$small_only" ]; then
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past" "pluto-tile-parallel-prevector-past" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --punroll" "pluto-tile-parallel-prevector-past-punroll" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --vectorizer" "pluto-tile-parallel-prevector-past-vectorizer" "$MODE";
-	correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --pragmatizer" "pluto-tile-parallel-prevector-past-pragmatizer" "$MODE";
-    fi;
-    correctness_performance_check_opts "--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --punroll --pragmatizer --vectorizer" "pluto-tile-parallel-prevector-past-punroll-pragmatizer-vectorizer" "$MODE";
-
 fi;
 
 if [ $ALLTESTSVAL -eq 0 ]; then

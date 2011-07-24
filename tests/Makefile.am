@@ -34,9 +34,6 @@ TESTS_ENVIRONMENT       = top_builddir=$(top_builddir)
 EXTRA_DIST              = scripts/checker.sh
 #############################################################################
 check_SCRIPTS		=			\
-	scripts/checker_perfcorrect.sh		\
-	scripts/data_to_csv.sh			\
-	scripts/compute_regressions.sh		\
 	scripts/checker_passthru.sh		\
 	scripts/checker_plutotile.sh		\
 	scripts/checker_plutotilepar.sh		\
@@ -84,6 +81,11 @@ TESTS				= $(check_SCRIPTS)
 CLEANFILES			= $(TEST_SUITE_CLEAN)
 
 EXTRA_DIST	+=				\
+	scripts/checker_perfcorrect.sh		\
+	scripts/conflist-small.txt.sh		\
+	scripts/conflist-large.txt.sh		\
+	scripts/data_to_csv.sh			\
+	scripts/compute_regressions.sh		\
 	scripts/checker_correctness.sh		\
 	$(BENCH_FILES)				\
 	$(TEST_SUITE)				\
@@ -106,6 +108,8 @@ correctness-check:
 	(scripts/checker_perfcorrect.sh "correctness")
 performance-check-fast:
 	(scripts/checker_perfcorrect.sh "performance-small")
+performance-check:
+	(scripts/checker_perfcorrect.sh "performance")
 performance-correctness-check-fast:
 	(scripts/checker_perfcorrect.sh "correctness+performance-small")
 performance-correctness-check:
