@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 03:58:51 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 04:00:05 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -36,7 +36,8 @@ TRANSFORMER_COMMAND="../driver/src/pocc";
 TRANSFORMER_DEFAULT_OPTS="--quiet";
 ## Regression/improvement thresold. Here, 10%.
 REGRESSION_THRESOLD="10";
-
+## Timeout for the transformed program. Here, 10 minutes.
+PROGRAM_TIMEOUT=600
 
 ## Parallel environment setting. Here, 16 h/w threads.
 export OMP_SCHEDULE=static
@@ -108,7 +109,7 @@ exec_timeout_prog()
 {
     executable="$1";
     progoutputtrace="$2";
-    ret=`perl -e 'alarm shift @ARGV; exec @ARGV' $PROG_TIMEOUT $executable >> $progoutputtrace`;
+    ret=`perl -e 'alarm shift @ARGV; exec @ARGV' $PROGRAM_TIMEOUT $executable >> $progoutputtrace`;
     if [ $? -ne 0 ]; then
 	echo "error" >> $progoutputtrace;
 	RETURN_EXEC="error: timeout";
