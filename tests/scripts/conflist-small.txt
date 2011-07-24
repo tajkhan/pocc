@@ -1,0 +1,8 @@
+--use-past | past
+--use-past --punroll --vectorizer --pragmatizer  | past-punroll-vectorizer-pragmatizer
+--pluto --use-past --punroll --vectorizer --pragmatizer | pluto-past-punroll-vectorizer-pragmatizer
+--pluto --pluto-tile --use-past --punroll --pragmatizer --vectorizer | pluto-tile-past-punroll-pragmatizer-vectorizer
+--pluto --pluto-tile --pluto-prevector --use-past --punroll --pragmatizer --vectorizer | pluto-tile-prevector-past-punroll-pragmatizer-vectorizer
+--pluto --pluto-parallel --use-past --punroll --pragmatizer --vectorizer | pluto-parallel-past-punroll-pragmatizer-vectorizer
+--pluto --pluto-tile --pluto-parallel --use-past --punroll --pragmatizer --vectorizer | pluto-tile-parallel-past-punroll-pragmatizer-vectorizer
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --punroll --pragmatizer --vectorizer | pluto-tile-parallel-prevector-past-punroll-pragmatizer-vectorizer

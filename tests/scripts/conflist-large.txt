@@ -1,0 +1,50 @@
+### Base
+--use-past | past
+--use-past --punroll | past-unroll
+--use-past --vectorizer | past-vectorizer
+--use-past --pragmatizer | past-pragmatizer
+--use-past --punroll --vectorizer --pragmatizer  | past-punroll-vectorizer-pragmatizer
+### Pluto
+--pluto | pluto
+--pluto --use-past | pluto-past
+--pluto --use-past --punroll | pluto-past-punroll
+--pluto --use-past --vectorizer | pluto-past-vectorizer
+--pluto --use-past --pragmatizer | pluto-past-pragmatizer
+--pluto --use-past --punroll --vectorizer --pragmatizer | pluto-past-punroll-vectorizer-pragmatizer
+### Pluto-tile
+--pluto --pluto-tile | pluto-tile
+--pluto --pluto-tile --use-past | pluto-tile-past
+--pluto --pluto-tile --use-past --punroll | pluto-tile-past-punroll
+--pluto --pluto-tile --use-past --vectorizer | pluto-tile-past-vectorizer
+--pluto --pluto-tile --use-past --pragmatizer | pluto-tile-past-pragmatizer
+--pluto --pluto-tile --use-past --punroll --pragmatizer --vectorizer | pluto-tile-past-punroll-pragmatizer-vectorizer
+### Pluto-tile-prevector
+--pluto --pluto-tile --pluto-prevector | pluto-tile-prevector
+--pluto --pluto-tile --pluto-prevector --use-past | pluto-tile-prevector-past
+--pluto --pluto-tile --pluto-prevector --use-past --punroll | pluto-tile-prevector-past-punroll
+--pluto --pluto-tile --pluto-prevector --use-past --vectorizer | pluto-tile-prevector-past-vectorizer
+--pluto --pluto-tile --pluto-prevector --use-past --pragmatizer | pluto-tile-prevector-past-pragmatizer
+--pluto --pluto-tile --pluto-prevector --use-past --punroll --pragmatizer --vectorizer | pluto-tile-prevector-past-punroll-pragmatizer-vectorizer
+### Pluto-parallel
+--pluto --pluto-parallel | pluto-parallel
+--pluto --pluto-parallel --use-past | pluto-parallel-past
+--pluto --pluto-parallel --use-past --punroll | pluto-parallel-past-punroll
+--pluto --pluto-parallel --use-past --vectorizer | pluto-parallel-past-vectorizer
+--pluto --pluto-parallel --use-past --pragmatizer | pluto-parallel-past-pragmatizer
+--pluto --pluto-parallel --use-past --punroll --pragmatizer --vectorizer | pluto-parallel-past-punroll-pragmatizer-vectorizer
+### Pluto-tile-parallel
+--pluto --pluto-tile --pluto-parallel | pluto-tile-parallel
+--pluto --pluto-tile --pluto-parallel --pragmatizer | pluto-tile-parallel-pragmatizer
+--pluto --pluto-tile --pluto-parallel --use-past | pluto-tile-parallel-past
+--pluto --pluto-tile --pluto-parallel --use-past --punroll | pluto-tile-parallel-past-punroll
+--pluto --pluto-tile --pluto-parallel --use-past --vectorizer | pluto-tile-parallel-past-vectorizer
+--pluto --pluto-tile --pluto-parallel --use-past --pragmatizer | pluto-tile-parallel-past-pragmatizer
+--pluto --pluto-tile --pluto-parallel --use-past --punroll --pragmatizer --vectorizer | pluto-tile-parallel-past-punroll-pragmatizer-vectorizer
+### Pluto-tile-parallel-prevector
+--pluto --pluto-tile --pluto-parallel --pluto-prevector | pluto-tile-parallel-prevector
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --pragmatizer | pluto-tile-parallel-prevector-pragmatizer
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past | pluto-tile-parallel-prevector-past
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --punroll | pluto-tile-parallel-prevector-past-punroll
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --vectorizer | pluto-tile-parallel-prevector-past-vectorizer
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --pragmatizer | pluto-tile-parallel-prevector-past-pragmatizer
+--pluto --pluto-tile --pluto-parallel --pluto-prevector --use-past --punroll --pragmatizer --vectorizer | pluto-tile-parallel-prevector-past-punroll-pragmatizer-vectorizer
