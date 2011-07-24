@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 05:57:54 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 18:03:59 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -492,13 +492,25 @@ echo "[Checker] Correctness-performance checker: all finished on `hostname` on `
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
 echo >> email.out;
+echo "* Tested configurations:" >> email.out;
+echo >> email.out;
+while read n; do
+    flags=`echo "$n" | cut -d '|' -f 1`;
+    label=`echo "$n" | cut -d '|' -f 2`;
+    echo "Configuration: $label uses $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $flags" >> email.out;
+done < $CONFLIST;
+echo >> email.out;
+echo "------------------------------------------------------------------------------" >> email.out;
+echo >> email.out;
 if [ -z "$correctness_only" ] && ! [ -z "$WARNING_VARIANCE" ]; then
+    echo "[WARNING] Some performance data exceeded the authorized variance." >> email.out;
+    echo "[WARNING] Performance results cannot be trusted, unsafe environment." >> email.out;
     echo >> email.out;
-    echo "[WARNING] Some performance data exceeded the authorized variance. Results cannot be trusted." >> email.out;
-    echo "Problems observed: " >> email.out;
+    echo "* Problems observed: " >> email.out;
     echo "$WARNING_VARIANCE" >> email.out;
     echo >> email.out;
     echo "------------------------------------------------------------------------------" >> email.out;
+    echo >> email.out;
 fi;
 if [ -z "$performance_only" ]; then
     echo "* Failed tests: " >> email.out;
