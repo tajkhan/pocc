@@ -34,6 +34,9 @@ TESTS_ENVIRONMENT       = top_builddir=$(top_builddir)
 EXTRA_DIST              = scripts/checker.sh
 #############################################################################
 check_SCRIPTS		=			\
+	scripts/checker_perfcorrect.sh		\
+	scripts/data_to_csv.sh			\
+	scripts/compute_regressions.sh		\
 	scripts/checker_passthru.sh		\
 	scripts/checker_plutotile.sh		\
 	scripts/checker_plutotilepar.sh		\
@@ -97,6 +100,14 @@ TESTS_ENVIRONMENT +=							\
 	CHECKER="$(top_srcdir)/tests/scripts/checker.sh"		\
 	TEST_SUITE="$(TEST_SUITE)"
 
+correctness-check-fast:
+	(scripts/checker_perfcorrect.sh "correctness-small")
 correctness-check:
-	(scripts/checker_correctness.sh)
+	(scripts/checker_perfcorrect.sh "correctness")
+performance-check-fast:
+	(scripts/checker_perfcorrect.sh "performance-small")
+performance-correctness-check-fast:
+	(scripts/checker_perfcorrect.sh "correctness+performance-small")
+performance-correctness-check:
+	(scripts/checker_perfcorrect.sh "correctness+performance")
 #############################################################################

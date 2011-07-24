@@ -1,3 +1,15 @@
+2011-07-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* tests/scripts/data_to_csv.sh,
+	* tests/scripts/compute_regressions.sh,
+	* tests/scripts/checker_perfcorrect.sh: New. Add a
+	performance/correctness regression mechanism.
+
+	* tests/Makefile.am: Update accordingly. Add new testing rules:
+	correctness-check-small, correctness-check, performance-check-small,
+	performance-check, performance-correctness-check-small,
+	performance-correctness-check
+
 2011-07-22  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/include/pocc/options.h,

@@ -100,9 +100,9 @@ translate_past_for (scoplib_scop_p original_scop,
   int num_for_loops = past_count_for_loops (root);
   int num_stmts = past_count_statements (root);
   // Oversize the data structure, to deal with fake iterators.
-  s_process_data_t prog_loops[num_for_loops + num_stmts];
+  s_process_data_t prog_loops[num_for_loops + num_stmts + 1];
   int i, j;
-  for (i = 0; i < num_for_loops + num_stmts; ++i)
+  for (i = 0; i < num_for_loops + num_stmts + 1; ++i)
     prog_loops[i].fornode = NULL;
   past_visitor (root, traverse_tree_index_for, (void*)prog_loops, NULL, NULL);
 
@@ -125,11 +125,12 @@ translate_past_for (scoplib_scop_p original_scop,
 	// The loop is sync-free parallel, translate it to past_parfor.
 	past_for_to_parfor (prog_loops[i].fornode);
     }
-
+  
   candl_dependence_free (cdeps);
   candl_program_free (cprogram);
   candl_options_free (coptions);
   scoplib_scop_shallow_free (scop);
+  past_set_parent (root);
 }
 
 
