@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 18:06:07 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 18:11:39 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -274,7 +274,13 @@ data_to_csv()
     PERF_FILE="$1";
     OUTPUT_CSV="$2";
 
-    grep $BASEFILE $PERF_FILE | cut -d '|' -f 1 | xargs basename | sed -e "s/.*\.c\.\(.*\)/\1/g" > conf.list
+    grep $BASEFILE $PERF_FILE | cut -d '|' -f 1 > flist.list;
+    rm -f conf.list;
+    while read nnn; do
+	c=`basename "$nnn" | sed -e "s/.*\.c\.\(.*\)/\1/g"`;
+	echo "$c" >> conf.list;
+    done < flist.list;
+    rm -f flist.list;
     confs="#";
     while read nnn; do
 	confs="$confs $nnn";
