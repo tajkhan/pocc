@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 04:57:40 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 05:46:04 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -59,7 +59,7 @@ export KMP_NUM_THREADS=16;
 CONFLIST_SMALL="scripts/conflist-small.txt";
 CONFLIST_LARGE="scripts/conflist-large.txt";
 FAILED_TESTS_DIR="failed-tests";
-FAILED_TEST_FILE="failed.tests";
+FAILED_TEST_FILE="$FAILED_TESTS_DIR/failed.tests";
 PERF_TESTS_DIR="perf-tests";
 PERF_FILE_TEMPLATE="$PERF_TESTS_DIR/perf.out"
 CSV_PERF_FILE_TEMPLATE="$PERF_TESTS_DIR/perf"
@@ -94,6 +94,7 @@ checkout_polybench()
 compute_mean_exec_time()
 {
     file="$1";
+    benchcomputed="$2";
     cat "$file" | grep "[0-9]\+" | sort -n | head -n 4 | tail -n 3 > avg.out;
     expr="(0";
     while read n; do
@@ -119,7 +120,10 @@ compute_mean_exec_time()
     compvar=`echo "$variance $VARIANCE_ACCEPTED" | awk '{ if ($1 < $2) print "ok"; else print "error"; }'`;
     if [ "$compvar" = "error" ]; then
 	echo "\033[31m[WARNING]\033[0m Variance is above thresold, unsafe performance measurement";
-	echo "          (max deviation=$variance%, tolerance=$VARIANCE_ACCEPTED%)";
+	echo "        => max deviation=$variance%, tolerance=$VARIANCE_ACCEPTED%";
+	WARNING_VARIANCE="$WARNING_VARIANCE\n$benchcomputed: max deviation=$variance%, tolerance=$VARIANCE_ACCEPTED%";
+    else
+	echo "[INFO] Maximal deviation from arithmetic mean of 3 average runs: $variance%";
     fi;
     PROCESSED_TIME="$time";
     rm -f avg.out;
@@ -150,6 +154,7 @@ correctness_check_file()
     correctness_only=`echo "$mode" | grep correctness | grep -v performance`;
     performance_only=`echo "$mode" | grep performance | grep -v correctness`;
     RETVAL=1;
+    perfretval=1;
     echo "[CHECK] Testing $filename with $TRANSFORMER_COMMAND $poccopts";
     output=`$TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts $filename -o $filename.$poccoptsname.test.c`;
     if [ $? -ne 0 ]; then
@@ -199,10 +204,11 @@ correctness_check_file()
 		time=`cat $filename.$poccoptsname.ref.c.time.$comp_ver`;
 		echo "$filename.$poccoptsname | $time" >> $PERF_FILE.$comp_ver;
 		RETVAL=0;
+		perfretval=0;
 	    fi;
-	else
+	fi;
+	if [ $perfretval -eq 1 ]; then
 	    echo "[CHECK] Checking performance of outputs...";
-
 	    if [ -f $filename.$poccoptsname.ref.c ]; then
 		cp $filename.$poccoptsname.ref.c $filename.$poccoptsname.test.c;
 	    fi;
@@ -227,9 +233,9 @@ correctness_check_file()
 		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 		return;
 	    fi;
-	    compute_mean_exec_time "$filename.$poccoptsname.ref.c.time.$comp_ver";
+	    compute_mean_exec_time "$filename.$poccoptsname.ref.c.time.$comp_ver" "$filename ($poccoptsname)";
 	    echo "$filename.$poccoptsname | $PROCESSED_TIME" >> $PERF_FILE.$comp_ver;
-	    echo "$PROCESSED_TIME" > $filename.$poccoptsname.ref.c.time.$comp_ver
+	    echo "$PROCESSED_TIME" > $filename.$poccoptsname.ref.c.time.$comp_ver;
 	    echo "\033[32m[PASS][Performance]\033[0m Time: $PROCESSED_TIME | $filename ($poccopts)";
 	    RETVAL=0;
 	fi;
@@ -419,6 +425,7 @@ curdate=`date "+%y-%m-%d-%T"`;
 FAILED_TEST_FILE="$FAILED_TEST_FILE.$curdate";
 PERF_FILE="$PERF_FILE_TEMPLATE.$curdate";
 CSV_PERF_FILE="$CSV_PERF_FILE_TEMPLATE.$curdate";
+WARNING_VARIANCE="";
 
 # source icc.
 $ICC_COMPILER_ENVSCRIPT;
@@ -443,10 +450,12 @@ done < $CONFLIST;
 if [ $ALLTESTSVAL -eq 0 ]; then
     echo "\033[32m[PASS] Correctness checker\033[0m";
 else
-    echo "\033[31m[FAIL] Failed test(s) summary\033[0m";
-    while read n; do
-	echo "\033[31m[FAIL] $n\033[0m";
-    done < failed.tests;
+    if [ -f "$FAILED_TEST_FILE" ]; then
+	echo "\033[31m[FAIL] Failed test(s) summary\033[0m";
+	while read n; do
+	    echo "\033[31m[FAIL] $n\033[0m";
+	done < $FAILED_TEST_FILE;
+    fi;
     echo "\033[31m[FAIL] Correctness checker\033[0m";
 fi;
 
@@ -481,6 +490,14 @@ echo "[Checker] Correctness-performance checker: all finished on `hostname` on `
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
 echo >> email.out;
+if [ -z "$correctness_only" ] && ! [ -z "$WARNING_VARIANCE" ]; then
+    echo >> email.out;
+    echo "[WARNING] Some performance data exceeded the authorized variance. Results cannot be trusted." >> email.out;
+    echo "Problems observed: " >> email.out;
+    echo "$WARNING_VARIANCE" >> email.out;
+    echo >> email.out;
+    echo "------------------------------------------------------------------------------" >> email.out;
+fi;
 if [ -z "$performance_only" ]; then
     echo "* Failed tests: " >> email.out;
     echo >> email.out;
