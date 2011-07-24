@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 18:03:59 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 18:06:07 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -134,7 +134,7 @@ exec_timeout_prog()
 {
     executable="$1";
     progoutputtrace="$2";
-    ret=`perl -e 'alarm shift @ARGV; exec @ARGV' $PROGRAM_TIMEOUT $executable >> $progoutputtrace`;
+    ret=`perl -e 'alarm shift @ARGV; exec @ARGV' $PROGRAM_TIMEOUT $executable >> $progoutputtrace 2>/dev/null`;
     if [ $? -ne 0 ]; then
 	echo "error" >> $progoutputtrace;
 	RETURN_EXEC="error: timeout";
