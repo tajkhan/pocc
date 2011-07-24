@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 18:11:39 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 18:13:51 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -563,7 +563,7 @@ if [ -z "$correctness_only" ]; then
     echo >> email.out;
 fi;
 cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER";
-cat email.out
+cat email.out;
 rm -f email.out regressions.dat;
 
 echo "\033[33m[Checker]\033[0m Summary email sent to $EMAIL_MAINTAINER";
