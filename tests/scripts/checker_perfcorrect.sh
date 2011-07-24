@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 05:46:04 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 05:57:54 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -411,11 +411,13 @@ if [ $# -ne 2 ]; then
     exit 1;
 fi;
 
-checkout_polybench;
 if ! [ -f "$TRANSFORMER_COMMAND" ]; then
     echo "[Checker] Cannot find the transformer binary.";
     exit 1;
 fi;
+
+## Get the test suite.
+checkout_polybench;
 
 ## Reset test files.
 mkdir -p $FAILED_TESTS_DIR;
@@ -546,8 +548,10 @@ cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAIN
 cat email.out
 rm -f email.out regressions.dat;
 
-echo "\033[33m[Checker]\033[0m Summary email send to $EMAIL_MAINTAINER";
-echo "\033[33m[Checker]\033[0m Failed test database updated: $FAILED_TEST_FILE";
+echo "\033[33m[Checker]\033[0m Summary email sent to $EMAIL_MAINTAINER";
+if [ -f $FAILED_TEST_FILE ]; then
+    echo "\033[33m[Checker]\033[0m Failed test database updated: $FAILED_TEST_FILE";
+fil
 if [ -z "$correctness_only" ]; then
     echo "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
     echo "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
