@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 04:55:21 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 04:57:21 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -119,7 +119,7 @@ compute_mean_exec_time()
     compvar=`echo "$variance $VARIANCE_ACCEPTED" | awk '{ if ($1 < $2) print "ok"; else print "error"; }'`;
     if [ "$compvar" = "error" ]; then
 	echo "\033[31m[WARNING]\033[0m Variance is above thresold, unsafe performance measurement";
-	echo "          (variance=$variance%, tolerance=$VARIANCE_ACCEPTED)";
+	echo "          (variance=$variance%, tolerance=$VARIANCE_ACCEPTED%)";
     fi;
     PROCESSED_TIME="$time";
     rm -f avg.out;
