@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 01:10:08 2011 Louis-Noel Pouchet
+## Last update Sun Jul 24 01:18:55 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -330,7 +330,7 @@ if [ -z "$correctness_only" ]; then
 fi;
 
 ## Send email with the results.
-echo "[PoCC] Correctness-performance checker: all finished on `hostname` at `date`" > email.out
+echo "[PoCC] Correctness-performance checker: all finished on `hostname` on `date`" > email.out
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
 echo >> email.out;
