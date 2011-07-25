@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Sun Jul 24 19:32:57 2011 Louis-Noel Pouchet
+## Last update Mon Jul 25 12:43:52 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -17,6 +17,8 @@ EMAIL_MAINTAINER="pouchet@cse.ohio-state.edu";
 GCC_COMPILER_COMMAND="gcc -O3 -fopenmp";
 ## String to identify GCC version used for performance. No space.
 GCC_STRING_NAME="gcc-4.3";
+## Extra compiler flags for the correctness check, if any.
+GCC_CHECK_EXTRA_FLAGS="";
 ## ICC command line for the performance check.
 ICC_COMPILER_COMMAND="/opt/intel/Compiler/11.1/072/bin/intel64/icc -fast -parallel -openmp";
 ## String to identify ICC version used for performance. No space.
@@ -64,7 +66,7 @@ FAILED_TEST_FILE="$FAILED_TESTS_DIR/failed.tests";
 PERF_TESTS_DIR="perf-tests";
 PERF_FILE_TEMPLATE="$PERF_TESTS_DIR/perf.out"
 CSV_PERF_FILE_TEMPLATE="$PERF_TESTS_DIR/perf"
-GCC_CORRECT="gcc -O0 -fopenmp -lm -DPOLYBENCH_DUMP_ARRAYS";
+GCC_CORRECT="gcc -O0 -fopenmp -lm -DPOLYBENCH_DUMP_ARRAYS $GCC_CHECK_EXTRA_FLAGS";
 POLYBENCH_PERF_FLAGS="-lm -DPOLYBENCH_TIME -DPOLYBENCH_CACHE_SIZE_KB=$LLC_CACHE_SIZE";
 GCC_PERF="$GCC_COMPILER_COMMAND $POLYBENCH_PERF_FLAGS";
 GCC_COMP_VER="$GCC_STRING_NAME";
@@ -256,6 +258,7 @@ correctness_performance_check_opts()
     poccoptions="$1";
     poccoptionsname="$2";
     mode="$3";
+    correctness_only=`echo "$mode" | grep correctness | grep -v performance`;
     echo "[Checker] Testing $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS";
     ALLRETVAL=0;
     RETVAL=0;
@@ -263,7 +266,9 @@ correctness_performance_check_opts()
 	## Scan all files, as we do not use a transformer to generate the code.
 	for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities`; do
 	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$GCC_PERF" "$GCC_COMP_VER" "$mode";
-	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
+	    if [ -z "$correctness_only" ]; then
+		correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
+	    fi;
 	    if [ $RETVAL -eq 1 ]; then
 		ALLRETVAL=1;
 		ALLTESTSVAL=1;
@@ -273,7 +278,9 @@ correctness_performance_check_opts()
 	## Scan only non-generated files.
 	for i in `find $TESTSUITE_NAME -name "*.c" | grep -v utilities | grep -v ".ref.c" | grep -v ".test.c"`; do
 	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$GCC_PERF" "$GCC_COMP_VER" "$mode";
-	    correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
+	    if [ -z "$correctness_only" ]; then
+		correctness_check_file "$i" "$poccoptions" "$poccoptionsname" "$ICC_PERF" "$ICC_COMP_VER" "$mode";
+	    fi;
 	    if [ $RETVAL -eq 1 ]; then
 		ALLRETVAL=1;
 		ALLTESTSVAL=1;
