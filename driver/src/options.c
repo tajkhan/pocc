@@ -88,7 +88,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ptile", 0, "\tUse PTile for parametric tiling [off]" },
   { '\0', "punroll", 0, "\tUse PAST loop unrolling [off]" },
   { '\0', "register-tiling", 0, "PAST register tiling [off]" },
-  { '\0', "punroll-size", 0, "\t PAST unrolling size [4]" },
+  { '\0', "punroll-size", 1, "\t PAST unrolling size [4]" },
   { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
   { '\0', "mark-par-loops", 0, "Detect parallel loops in generated\n\t\t\t\tcode [off]" },
   { '\0', "no-outer-par-loops", 0, "Don't preserve outer parallel loop during\n\t\t\t\tvectorization [off]" },
