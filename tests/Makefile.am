@@ -82,9 +82,9 @@ CLEANFILES			= $(TEST_SUITE_CLEAN)
 
 EXTRA_DIST	+=				\
 	scripts/checker_perfcorrect.sh		\
-	scripts/conflist-small.txt.sh		\
-	scripts/conflist-large.txt.sh		\
-	scripts/conflist-passthru.txt.sh	\
+	scripts/conflist-small.txt		\
+	scripts/conflist-large.txt		\
+	scripts/conflist-passthru.txt		\
 	scripts/checker_correctness.sh		\
 	$(BENCH_FILES)				\
 	$(TEST_SUITE)				\

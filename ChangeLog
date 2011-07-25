@@ -1,11 +1,15 @@
+2011-07-25  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* configure.ac: Bump to pocc 1.0.
+
 2011-07-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* tests/scripts/checker_perfcorrect.sh: Update/Improve.
 	* tests/scripts/conflist-passthru.txt: New. Mini configuration
 	file for passthru testing.
-	* tests/Makefile.am: Update accordingly, provide 
+	* tests/Makefile.am: Update accordingly, provide
 	correctness-check-passthru rule.
-	
+
 2011-07-24  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* tests/scripts/checker_perfcorrect.sh: Update.
