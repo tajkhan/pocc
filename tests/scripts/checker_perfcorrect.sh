@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Mon Jul 25 12:43:52 2011 Louis-Noel Pouchet
+## Last update Tue Jul 26 17:17:27 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -76,11 +76,20 @@ COMP_OTHERS=" -I $TESTSUITE_NAME/utilities $TESTSUITE_NAME/utilities/instrument.
 ################################################################################
 ################################################################################
 
+## Find the echo color command, if any.
+if test -f "/bin/echo"; then ECHO_CMD="/bin/echo"; else ECHO_CMD="echo"; fi;
+test_echo=`$ECHO_CMD -e "toto"`;
+if [ "$test_echo" = "-e toto" ]; then
+    ECHO_CMD="$ECHO_CMD";
+else
+    ECHO_CMD="$ECHO_CMD -e";
+fi;
+
 
 check_error()
 {
     if [ $1 -ne 0 ]; then
-	echo "Error executing $2";
+	$ECHO_CMD "Error executing $2";
 	exit $1;
     fi;
 }
@@ -122,8 +131,8 @@ compute_mean_exec_time()
     fi;
     compvar=`echo "$variance $VARIANCE_ACCEPTED" | awk '{ if ($1 < $2) print "ok"; else print "error"; }'`;
     if [ "$compvar" = "error" ]; then
-	echo "\033[31m[WARNING]\033[0m Variance is above thresold, unsafe performance measurement";
-	echo "        => max deviation=$variance%, tolerance=$VARIANCE_ACCEPTED%";
+	$ECHO_CMD "\033[31m[WARNING]\033[0m Variance is above thresold, unsafe performance measurement";
+	$ECHO_CMD "        => max deviation=$variance%, tolerance=$VARIANCE_ACCEPTED%";
 	WARNING_VARIANCE="$WARNING_VARIANCE\n$benchcomputed: max deviation=$variance%, tolerance=$VARIANCE_ACCEPTED%";
     else
 	echo "[INFO] Maximal deviation from arithmetic mean of 3 average runs: $variance%";
@@ -168,7 +177,7 @@ correctness_check_file()
 	output=`$TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts $filename -o $filename.$poccoptsname.test.c`;
 	if [ $? -ne 0 ]; then
 	    echo "$output";
-	    echo "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
+	    $ECHO_CMD "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
 	    mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
 	    echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 	    return;
@@ -178,7 +187,7 @@ correctness_check_file()
 	if [ -f $filename.$poccoptsname.ref.c ]; then
 	    diff=`diff $filename.$poccoptsname.ref.c $filename.$poccoptsname.test.c`;
 	    if [ -z "$diff" ]; then
-		echo "\033[32m[PASS][Correctness]\033[0m $filename ($poccopts)";
+		$ECHO_CMD "\033[32m[PASS][Correctness]\033[0m $filename ($poccopts)";
 		rm -f $FAILED_TESTS_DIR/$filename.$poccoptsname.test.c
 		RETVAL=0;
 	    fi;
@@ -193,12 +202,12 @@ correctness_check_file()
 	    out=`./test 2> $filename.test.output`;
 	    diff=`diff $filename.test.output $filename.output`;
 	    if [ -z "$diff" ]; then
-		echo "\033[32m[PASS][Correctness]\033[0m $filename ($poccopts)";
+		$ECHO_CMD "\033[32m[PASS][Correctness]\033[0m $filename ($poccopts)";
 		mv $filename.$poccoptsname.test.c $filename.$poccoptsname.ref.c
 		rm -f $FAILED_TESTS_DIR/$filename.$poccoptsname.test.c
 		RETVAL=0;
 	    else
-		echo "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
+		$ECHO_CMD "\033[31m[FAIL][Correctness] $filename ($poccopts)\033[0m";
 		mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
 		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 	    fi;
@@ -209,7 +218,7 @@ correctness_check_file()
 	    [ -f $filename.$poccoptsname.ref.c.time.$comp_ver ]; then
 	    diff=`diff $filename.$poccoptsname.ref.c $filename.$poccoptsname.test.c`;
 	    if [ -z "$diff" ]; then
-		echo "\033[32m[No change]\033[0m $filename ($poccopts)";
+		$ECHO_CMD "\033[32m[No change]\033[0m $filename ($poccopts)";
 		rm -f $FAILED_TESTS_DIR/$filename.$poccoptsname.test.c
 		time=`cat $filename.$poccoptsname.ref.c.time.$comp_ver`;
 		echo "$filename.$poccoptsname | $time" >> $PERF_FILE.$comp_ver;
@@ -225,7 +234,7 @@ correctness_check_file()
 	    rm -f test;
 	    out=`$comp_perf $COMP_OTHERS $filename.$poccoptsname.test.c -o test  >/dev/null 2>/dev/null`;
 	    if [ $? -ne 0 ]; then
-		echo "\033[31m[FAIL][Performance] $filename ($poccopts) with $comp_ver\033[0m";
+		$ECHO_CMD "\033[31m[FAIL][Performance] $filename ($poccopts) with $comp_ver\033[0m";
 		return;
 	    fi;
 	    rm -f $filename.$poccoptsname.ref.c.time.$comp_ver;
@@ -238,7 +247,7 @@ correctness_check_file()
 	    has_error=`grep "error" "$filename.$poccoptsname.ref.c.time.$comp_ver"`;
 	    if ! [ -z "$has_error" ]; then
 		echo "OUTPUT with $comp_ver: $ret";
-		echo "\033[31m[FAIL][Performance] $filename ($poccopts)\033[0m";
+		$ECHO_CMD "\033[31m[FAIL][Performance] $filename ($poccopts)\033[0m";
 		mv $filename.$poccoptsname.test.c $FAILED_TESTS_DIR;
 		echo "$filename | $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS $poccopts" >> $FAILED_TEST_FILE;
 		return;
@@ -246,7 +255,7 @@ correctness_check_file()
 	    compute_mean_exec_time "$filename.$poccoptsname.ref.c.time.$comp_ver" "$filename ($poccoptsname)";
 	    echo "$filename.$poccoptsname | $PROCESSED_TIME" >> $PERF_FILE.$comp_ver;
 	    echo "$PROCESSED_TIME" > $filename.$poccoptsname.ref.c.time.$comp_ver;
-	    echo "\033[32m[PASS][Performance]\033[0m Time: $PROCESSED_TIME | $filename ($poccopts)";
+	    $ECHO_CMD "\033[32m[PASS][Performance]\033[0m Time: $PROCESSED_TIME | $filename ($poccopts)";
 	    RETVAL=0;
 	fi;
     fi;
@@ -259,7 +268,7 @@ correctness_performance_check_opts()
     poccoptionsname="$2";
     mode="$3";
     correctness_only=`echo "$mode" | grep correctness | grep -v performance`;
-    echo "[Checker] Testing $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS";
+    $ECHO_CMD "\033[33m[Checker]\033[0m Testing $TRANSFORMER_COMMAND $TRANSFORMER_DEFAULT_OPTS";
     ALLRETVAL=0;
     RETVAL=0;
     if [ -z "$TRANSFORMER_COMMAND" ]; then
@@ -288,9 +297,9 @@ correctness_performance_check_opts()
 	done;
     fi;
     if [ $ALLRETVAL -eq 0 ]; then
-	echo "\033[32m[PASS][$mode] pocc $poccopts\033[0m";
+	$ECHO_CMD "\033[32m[PASS][$mode] pocc $poccopts\033[0m";
     else
-	echo "\033[31m[FAIL][$mode] pocc $poccopts\033[0m";
+	$ECHO_CMD "\033[31m[FAIL][$mode] pocc $poccopts\033[0m";
     fi;
 }
 
@@ -348,10 +357,13 @@ find_best_time()
  	confs=`head -n 1 "$csvfile" | cut -d ' ' -f 2`;
 	count2=2;
 	test=`echo "$confs" | cut -d ' ' -f "$count2"`;
-	while [ "$test" != "$conf" ] && ! [ -z "$test" ];  do
-	    count2=$(($count2+1));
-	    test=`echo "$confs" | cut -d ' ' -f "$count2"`;
-	done;
+	is_unique=`echo "$confs" | sed -e "s/ //g"`;
+	if [ "$is_unique" != "$test" ]; then
+	    while [ "$test" != "$conf" ] && ! [ -z "$test" ];  do
+		count2=$(($count2+1));
+		test=`echo "$confs" | cut -d ' ' -f "$count2"`;
+	    done;
+	fi;
 	count2=$(($count2+1));
 	if ! [ -z "$test" ]; then
 	    output=`head -n 1 | grep "$bench " "$csvfile" | cut -d ' ' -f $count2`;
@@ -496,18 +508,18 @@ STOP_DATE=`date +%s`;
 TOTAL_SCRIPT_TIME=`date -v-19H -r $(($STOP_DATE-$START_DATE)) +%T`;
 
 if [ $ALLTESTSVAL -eq 0 ]; then
-    echo "\033[32m[PASS] Correctness checker\033[0m";
+    $ECHO_CMD "\033[32m[PASS] Correctness checker\033[0m";
 else
     if [ -f "$FAILED_TEST_FILE" ]; then
-	echo "\033[31m[FAIL] Failed test(s) summary\033[0m";
+	$ECHO_CMD "\033[31m[FAIL] Failed test(s) summary\033[0m";
 	while read n; do
-	    echo "\033[31m[FAIL] $n\033[0m";
+	    $ECHO_CMD "\033[31m[FAIL] $n\033[0m";
 	done < $FAILED_TEST_FILE;
     fi;
-    echo "\033[31m[FAIL] Correctness checker\033[0m";
+    $ECHO_CMD "\033[31m[FAIL] Correctness checker\033[0m";
 fi;
 
-echo "\033[33m[Checker]\033[0m Computing data...";
+$ECHO_CMD "\033[33m[Checker]\033[0m Computing data...";
 
 releaseuid="";
 if [ -z "$correctness_only" ]; then
@@ -605,20 +617,20 @@ if [ -z "$correctness_only" ]; then
 fi;
 
 ## Print email.
-echo "\033[33m[Checker]\033[0m Summary email to be sent to $EMAIL_MAINTAINER:";
+$ECHO_CMD "\033[33m[Checker]\033[0m Summary email to be sent to $EMAIL_MAINTAINER:";
 cat email.out;
 
 ## Send email.
 cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER";
 rm -f email.out regressions.dat;
-echo "\033[33m[Checker]\033[0m Summary email sent to $EMAIL_MAINTAINER";
+$ECHO_CMD "\033[33m[Checker]\033[0m Summary email sent to $EMAIL_MAINTAINER";
 
 ## Stdout summary.
 if [ -f $FAILED_TEST_FILE ]; then
-    echo "\033[33m[Checker]\033[0m Failed test database updated: $FAILED_TEST_FILE";
+    $ECHO_CMD "\033[33m[Checker]\033[0m Failed test database updated: $FAILED_TEST_FILE";
 fi;
 if [ -z "$correctness_only" ]; then
-    echo "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
-    echo "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
+    $ECHO_CMD "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$GCC_STRING_NAME.csv";
+    $ECHO_CMD "\033[33m[Checker]\033[0m Performance test database updated: $CSV_PERF_FILE.$releaseuid.$ICC_STRING_NAME.csv";
 fi;
-echo "\033[33m[Checker]\033[0m All done";
+$ECHO_CMD "\033[33m[Checker]\033[0m All done";
