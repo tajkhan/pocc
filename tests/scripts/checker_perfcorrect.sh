@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Tue Jul 26 17:17:27 2011 Louis-Noel Pouchet
+## Last update Wed Jul 27 13:38:40 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -77,14 +77,14 @@ COMP_OTHERS=" -I $TESTSUITE_NAME/utilities $TESTSUITE_NAME/utilities/instrument.
 ################################################################################
 
 ## Find the echo color command, if any.
-if test -f "/bin/echo"; then ECHO_CMD="/bin/echo"; else ECHO_CMD="echo"; fi;
+#if test -f "/bin/echo"; then ECHO_CMD="/bin/echo"; else ECHO_CMD="echo"; fi;
+ECHO_CMD="echo";
 test_echo=`$ECHO_CMD -e "toto"`;
 if [ "$test_echo" = "-e toto" ]; then
     ECHO_CMD="$ECHO_CMD";
 else
     ECHO_CMD="$ECHO_CMD -e";
 fi;
-
 
 check_error()
 {
@@ -354,7 +354,7 @@ find_best_time()
     best_id="";
     while read csvfile; do
 	# find col.
- 	confs=`head -n 1 "$csvfile" | cut -d ' ' -f 2`;
+ 	confs=`head -n 1 "$csvfile" | cut -d ' ' -f 2 | sed -e "s/ [ ]*/ /g"`;
 	count2=2;
 	test=`echo "$confs" | cut -d ' ' -f "$count2"`;
 	is_unique=`echo "$confs" | sed -e "s/ //g"`;
@@ -366,7 +366,7 @@ find_best_time()
 	fi;
 	count2=$(($count2+1));
 	if ! [ -z "$test" ]; then
-	    output=`head -n 1 | grep "$bench " "$csvfile" | cut -d ' ' -f $count2`;
+	    output=`head -n 1 | grep "$bench " "$csvfile" | sed -e "s/ [ ]*/ /g" | cut -d ' ' -f $count2`;
 	    if [ -z "$best_ver" ]; then
 		best_ver="$output";
 		best_id="$csvfile";
@@ -402,7 +402,7 @@ compute_regressions()
         ## iterate on all files.
 	while read n; do
 	    bench=`echo "$n" | cut -d ' ' -f 1`;
-	    curtime=`echo "$n" | cut -d ' ' -f $count`;
+	    curtime=`echo "$n" | sed -e "s/ [ ]*/ /g" | cut -d ' ' -f $count`;
 	    is_numerical=`echo "$curtime" | grep "^[0-9\.]\+$"`;
 	    if [ "$is_numerical" != "$curtime" ]; then
 		curtime="error";
