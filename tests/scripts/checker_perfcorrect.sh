@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Wed Jul 27 13:38:40 2011 Louis-Noel Pouchet
+## Last update Wed Jul 27 23:05:11 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -354,7 +354,7 @@ find_best_time()
     best_id="";
     while read csvfile; do
 	# find col.
- 	confs=`head -n 1 "$csvfile" | cut -d ' ' -f 2 | sed -e "s/ [ ]*/ /g"`;
+ 	confs=`head -n 1 "$csvfile" | cut -d '#' -f 2 | sed -e "s/ [ ]*/ /g"`;
 	count2=2;
 	test=`echo "$confs" | cut -d ' ' -f "$count2"`;
 	is_unique=`echo "$confs" | sed -e "s/ //g"`;
@@ -364,7 +364,6 @@ find_best_time()
 		test=`echo "$confs" | cut -d ' ' -f "$count2"`;
 	    done;
 	fi;
-	count2=$(($count2+1));
 	if ! [ -z "$test" ]; then
 	    output=`head -n 1 | grep "$bench " "$csvfile" | sed -e "s/ [ ]*/ /g" | cut -d ' ' -f $count2`;
 	    if [ -z "$best_ver" ]; then
