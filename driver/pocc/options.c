@@ -117,6 +117,7 @@ pocc_options_malloc ()
   ret->pragmatizer = 0;
   ret->use_past = 0;
   ret->ptile = 0;
+  ret->ptile_fts = 0;
 
   // PAST unroller
   ret->punroll = 0;

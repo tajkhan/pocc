@@ -141,6 +141,7 @@ struct s_pocc_options
 
   // Ptile.
   int		ptile;
+  int		ptile_fts;
 
   // Punroller.
   int		punroll;

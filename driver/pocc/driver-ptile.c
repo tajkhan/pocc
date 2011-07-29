@@ -49,7 +49,7 @@ pocc_driver_ptile (scoplib_scop_p program,
   // Extract scoplib representation.
   scoplib_scop_p control_scop = past2scop_control_only (root, program, 1);
   s_ptile_options_t* ptopts = ptile_options_malloc ();
-  ptopts->fullTileSeparation = 0;
+  ptopts->fullTileSeparation = poptions->ptile_fts;
   ptopts->verbose_level = 1;
   ptopts->data_is_char = 1;
   ptopts->quiet = poptions->quiet;

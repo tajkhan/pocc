@@ -1,5 +1,14 @@
 2011-07-29  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-ptile.c,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for option --ptile-fts, to
+	activate full-tile separation in PTile.
+
+2011-07-29  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* tests/scripts/checker_perfcorrect.sh: Minor update.
 
 2011-07-27  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
