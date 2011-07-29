@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Fri Jul 29 14:18:48 2011 Louis-Noel Pouchet
+## Last update Fri Jul 29 14:40:34 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -545,7 +545,8 @@ if [ -z "$correctness_only" ]; then
 fi;
 
 ## Send email with the results.
-echo "Subject: $TRANSFORMER_COMMAND correctness+performance status report" > email.out;
+echo "To: polyhedral-automated@cse.ohio-state.edu" > email.out;
+echo "Subject: $TRANSFORMER_COMMAND correctness+performance status report" >> email.out;
 echo "[Checker] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" >> email.out;
 echo "[Checker] Total testing time: $TOTAL_SCRIPT_TIME" >> email.out;
 echo >> email.out;
