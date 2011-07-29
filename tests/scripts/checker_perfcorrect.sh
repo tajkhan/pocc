@@ -5,14 +5,14 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Fri Jul 29 13:00:24 2011 Louis-Noel Pouchet
+## Last update Fri Jul 29 14:18:48 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
 ################################################################################
 ## Global variables (user-defined).
 ## Email address of the receiver of the script result.
-EMAIL_MAINTAINER="pouchet@cse.ohio-state.edu";
+EMAIL_MAINTAINER="polyhedral-automated@cse.ohio-state.edu";
 ## GCC command line for the performance check.
 GCC_COMPILER_COMMAND="gcc -O3 -fopenmp";
 ## String to identify GCC version used for performance. No space.
@@ -545,7 +545,8 @@ if [ -z "$correctness_only" ]; then
 fi;
 
 ## Send email with the results.
-echo "[Checker] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" > email.out;
+echo "Subject: $TRANSFORMER_COMMAND correctness+performance status report" > email.out;
+echo "[Checker] Correctness-performance checker: all finished on `hostname` on `date` $releaseuid" >> email.out;
 echo "[Checker] Total testing time: $TOTAL_SCRIPT_TIME" >> email.out;
 echo >> email.out;
 echo "------------------------------------------------------------------------------" >> email.out;
@@ -620,7 +621,8 @@ $ECHO_CMD "\033[33m[Checker]\033[0m Summary email to be sent to $EMAIL_MAINTAINE
 cat email.out;
 
 ## Send email.
-cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER";
+#cat email.out | mail -s "$TRANSFORMER_COMMAND experiments finished" "$EMAIL_MAINTAINER" -- -r "$EMAIL_MAINTAINER";
+cat email.out | sendmail -f "pouchet@cse.ohio-state.edu" -t "$EMAIL_MAINTAINER"  "$EMAIL_MAINTAINER";
 rm -f email.out regressions.dat;
 $ECHO_CMD "\033[33m[Checker]\033[0m Summary email sent to $EMAIL_MAINTAINER";
 
