@@ -1,3 +1,7 @@
+2011-07-29  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* tests/scripts/checker_perfcorrect.sh: Minor update.
+
 2011-07-27  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* tests/scripts/checker_perfcorrect.sh: Minor update.

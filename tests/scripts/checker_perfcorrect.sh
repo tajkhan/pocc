@@ -5,7 +5,7 @@
 ## Contact: <pouchet@cse.ohio-state.edu>
 ##
 ## Started on  Tue Jul 12 14:34:28 2011 Louis-Noel Pouchet
-## Last update Wed Jul 27 23:05:11 2011 Louis-Noel Pouchet
+## Last update Fri Jul 29 13:00:24 2011 Louis-Noel Pouchet
 ##
 
 ################################################################################
@@ -307,7 +307,7 @@ correctness_performance_check_opts()
 data_to_csv()
 {
     ## a benchmark always in the test suite.
-    PERF_FILE="$1";
+    data_perf_file="$1";
     OUTPUT_CSV="$2";
     CONFIG_LIST_FILE="$3";
 
@@ -323,7 +323,7 @@ data_to_csv()
     done < conf.list;
     echo "$confs" > $OUTPUT_CSV;
     while read nnn; do
-	cat $PERF_FILE | grep "\.$nnn |" > file.list;
+	cat $data_perf_file | grep "\.$nnn |" > file.list;
 	while read iii; do
 	    filen=`echo "$iii" | cut -d '|' -f 1 | xargs basename | cut -d '.' -f 1`;
 	    etime=`echo "$iii" | cut -d '|' -f 2`;
@@ -391,7 +391,7 @@ compute_regressions()
     rm -f $output_file;
     conflist=`head -n 1 $input_file`;
     conflist=`echo "$conflist" | sed -e "s/#//g"`;
-    count=3;
+    count=2;
     rm -f regressions.tmp.dat;
     rm -f improvements.tmp.dat;
     rm -f $output_file;
