@@ -168,6 +168,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "punroll", 0, "\tUse PAST loop unrolling [off]" },
   { '\0', "register-tiling", 0, "PAST register tiling [off]" },
   { '\0', "punroll-size", 0, "\tPAST unrolling size [4]" },
+  { '\0', "vectorizer", 0, "\tPost-transform for vectorization [off]" },
   { '\0', "codegen-timercode", 0, "Codegen: insert timer code [off]" },
   { '\0', "codegen-timer-asm", 0, "Codegen: insert ASM timer code [off]" },
   { '\0', "codegen-timer-papi", 0, "Codegen: insert PAPI timer code [off]\n" },
@@ -302,7 +303,7 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       char buffer[2048];
       strcpy (buffer, options->input_file_name);
       int ii = strlen (buffer) - 1;
-      while (buffer[ii--] != '.')
+      while (ii >= 0 && buffer[ii--] != '.')
 	;
       buffer[++ii] = '\0';
       strcat (buffer, ".pocc.c");
@@ -312,7 +313,7 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     {
       options->output_scoplib_file_name =
 	XMALLOC(char, strlen(options->output_file_name) + 6);
-      strcat (options->output_scoplib_file_name,
+      strcpy (options->output_scoplib_file_name,
 	      options->output_file_name);
       strcat (options->output_scoplib_file_name, ".scop");
     }

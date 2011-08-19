@@ -1,5 +1,14 @@
 2011-08-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/src/options.h,
+	* driver/src/options.c: Support --vectorizer option in stable mode.
+
+2011-08-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/src/options.c: Fix incorrect strcat use.
+
+2011-08-19  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/src/Makefile.am: Add missing explicit link to pocc-utils.
 
 2011-07-29  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>

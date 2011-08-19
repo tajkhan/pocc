@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define N 512
+#include "instrument.h"
+
+#ifndef N
+# define N 512
+#endif
 
 double A[N][N];
 double B[N][N];
