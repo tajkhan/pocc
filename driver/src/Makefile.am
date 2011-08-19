@@ -84,6 +84,7 @@ pocc_CFLAGS		= -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
 pocc_LDADD	=							     \
   $(install_prefix)/driver/install-pocc/lib/libpocc.la			     \
+  $(install_prefix)/driver/install-pocc/lib/libpocc-utils.la		     \
   $(install_prefix)/ir/install-past/lib/libpast.la			     \
   $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
   $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
