@@ -106,6 +106,7 @@ pocc_options_malloc ()
   // Cloog options.
   ret->cloog_f = POCC_CLOOG_UNDEF;
   ret->cloog_l = POCC_CLOOG_UNDEF;
+  ret->print_cloog_file = 0;
 
   // Codegen options.
   ret->codegen = 1;
@@ -124,7 +125,7 @@ pocc_options_malloc ()
   ret->punroll_and_jam = 0;
   ret->punroll_size = 4;
   ret->nb_registers = 32;
-  
+
   // Vectorization options.
   ret->vectorizer = 0;
   ret->vectorizer_mark_par_loops = 0;

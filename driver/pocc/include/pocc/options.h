@@ -128,6 +128,7 @@ struct s_pocc_options
   CloogOptions*	cloog_options;
   int		cloog_f;
   int		cloog_l;
+  int		print_cloog_file;
   int		codegen_timercode;
   int		codegen_timer_asm;
   int		codegen_timer_papi;

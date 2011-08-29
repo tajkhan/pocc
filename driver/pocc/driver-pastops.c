@@ -627,12 +627,13 @@ pocc_driver_pastops (scoplib_scop_p program,
 		poptions->punroll_size);
       punroll_and_jam (program, root, NULL, poptions->nb_registers);
     }
-
+  
   // Systematically optimize the loop bounds (hoisting).
   past_optimize_loop_bounds (root);
 
   // Insert iterators declaration.
   s_symbol_t** iterators = collect_all_loop_iterators (root);
+  
   int i;
   FILE* body_file = poptions->output_file;
   if (iterators[0])
