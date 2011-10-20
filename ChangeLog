@@ -1,3 +1,8 @@
+2011-10-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+        * driver/pocc/driver-pastops.c: Add function to
+	collect_all_full_tiles.
+
 2011-08-29  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/include/pocc/options.h,

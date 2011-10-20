@@ -125,7 +125,7 @@ translate_past_for (scoplib_scop_p original_scop,
 	// The loop is sync-free parallel, translate it to past_parfor.
 	past_for_to_parfor (prog_loops[i].fornode);
     }
-  
+
   candl_dependence_free (cdeps);
   candl_program_free (cprogram);
   candl_options_free (coptions);
@@ -258,7 +258,8 @@ void traverse_mark_loop_type (s_past_node_t* node, void* data)
       PAST_DECLARE_TYPED(for, pf, node);
       if (is_pt_loop)
 	{
-	  pf->type = e_past_point_loop;
+	  if (pf->type != e_past_fulltile_loop)
+	    pf->type = e_past_point_loop;
 	  for (parent = node->parent; parent; parent = parent->parent)
 	    if (past_node_is_a (parent, past_for))
 	      {
@@ -278,6 +279,7 @@ void traverse_collect_ploop (s_past_node_t* node, void* data)
       PAST_DECLARE_TYPED(for, pf, node);
       // Collect both point loop nests and untiled loop nests.
       if (pf->type == e_past_point_loop ||
+	  pf->type == e_past_fulltile_loop ||
 	  pf->type == e_past_unknown_loop)
 	{
 	  int i;
@@ -562,6 +564,51 @@ void post_vectorize (s_past_node_t* root, scoplib_scop_p program,
     }
 }
 
+static
+void
+traverse_get_fulltiles (s_past_node_t* node, void* data)
+{
+  if (past_node_is_a (node, past_for))
+    {
+      PAST_DECLARE_TYPED(for, pf, node);
+      if (pf->type == e_past_fulltile_loop)
+	{
+	  s_past_node_t*** fts = data;
+	  int i = 0;
+	  if (*fts == NULL)
+	    {
+	      *fts = XMALLOC(s_past_node_t*, 64);
+	      int k;
+	      for (k = 0; k < 64; ++k)
+		(*fts)[k] = NULL;
+	    }
+	  else
+	    {
+	      for (; (*fts)[i]; ++i)
+		;
+	      if ((i + 2) % 64 == 0)
+		{
+		  *fts = XREALLOC(s_past_node_t*, *fts, i + 2 + 64);
+		  int k;
+		  for (k = i; k < i + 2 + 64; ++k)
+		    (*fts)[k] = NULL;
+		}
+	    }
+	  (*fts)[i] = node;
+	}
+    }
+}
+
+static
+s_past_node_t**
+collect_all_full_tiles (s_past_node_t* root)
+{
+  s_past_node_t** ret = NULL;
+  past_visitor (root, traverse_get_fulltiles, &ret, NULL, NULL);
+
+  return ret;
+}
+
 
 
 /**
@@ -625,15 +672,16 @@ pocc_driver_pastops (scoplib_scop_p program,
       if (! poptions->quiet)
 	printf ("[PoCC] Perform unroll-and-jam (factor=%d)\n",
 		poptions->punroll_size);
-      punroll_and_jam (program, root, NULL, poptions->nb_registers);
+      int uajfactors[] = {4,3};
+      punroll_and_jam (program, root, uajfactors, poptions->nb_registers);
     }
-  
+
   // Systematically optimize the loop bounds (hoisting).
   past_optimize_loop_bounds (root);
 
   // Insert iterators declaration.
   s_symbol_t** iterators = collect_all_loop_iterators (root);
-  
+
   int i;
   FILE* body_file = poptions->output_file;
   if (iterators[0])
@@ -647,7 +695,7 @@ pocc_driver_pastops (scoplib_scop_p program,
       fflush (body_file);
     }
   fprintf (body_file, "#pragma scop\n");
-  
+
   // Pretty-print
   past_pprint_extended_metainfo (body_file, root, metainfoprint, NULL);
 
