@@ -1,3 +1,7 @@
+2011-12-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* generators/scripts/inscop: Fix a bug in undef of math macros.
+
 2011-10-20  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
         * driver/pocc/driver-pastops.c: Add function to
