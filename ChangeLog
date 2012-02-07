@@ -1,3 +1,11 @@
+2012-02-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* configure.ac,
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Provide --enable-barvinok flag.
+
+	* bin/pocc-make: Allow for 'disabled' configure feature.
+
 2011-12-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* generators/scripts/inscop: Fix a bug in undef of math macros.

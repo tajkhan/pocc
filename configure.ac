@@ -91,6 +91,20 @@ AC_ARG_ENABLE(release,
 AM_CONDITIONAL(POCC_RELEASE_MODE, test x$with_release != xno)
 AM_CONDITIONAL(POCC_FULL_MODE, test x$with_release = xno)
 
+
+dnl Offer --enable-barvinok.
+AC_ARG_ENABLE(barvinok,
+	      AC_HELP_STRING([--enable-barvinok],
+              	             [Uses barvinok (HLS mode only)]),
+              [with_barvinok=$enableval
+	      AC_DEFINE([POCC_HAS_BARVINOK], [1],
+	                [Define if PoCC is compiled with barvinok])
+	      ],
+              [with_barvinok=no])
+AM_CONDITIONAL(POCC_HAS_BARVINOK, test x$with_barvinok != xno)
+
+
+
 #POCC_ARG_LIBS_DEPENDENCIES
 
 dnl Send the install prefix to pocc-util

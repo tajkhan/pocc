@@ -55,6 +55,7 @@ INCLUDES		=						\
 	-I$(install_prefix)/generators/install-clastannotation/include	\
 	-I$(install_prefix)/generators/install-ptile/include		\
 	-I$(install_prefix)/generators/install-punroller/include	\
+	-I$(install_prefix)/math/install-barvinok/include		\
 	-I$(install_prefix)/math/install-piplib-hybrid/include		\
 	-I$(install_prefix)/math/install-polylib/include		\
 	-I$(install_prefix)/math/install-fm/include			\
@@ -126,6 +127,12 @@ if POCC_FULL_MODE
   libpocc_la_LIBADD	+=						     \
   $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
   $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la
+endif
+
+
+if POCC_HAS_BARVINOK
+  libpocc_la_LIBADD	+=						     \
+  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
 endif
 
 ## FIXME: Removed this due to a potential conflict on Solaris10. We

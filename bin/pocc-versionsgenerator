@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Mon Jul 25 13:33:21 2011 Louis-Noel Pouchet
+## Last update Mon Feb  6 19:27:35 2012 Louis-Noel Pouchet
 ##
 #
 # pocc-versionsgenerator: this file is part of the PoCC project.
@@ -159,7 +159,7 @@ sub generate_versions
 
     ## Retrieve default option(s).
     my $default_opts = "";
-    if (defined(%{$config{"default"}})) {
+    if ((%{$config{"default"}})) {
 	$default_opts = $config{"default"}{"flags"}[0];
 	## Remove it from the set of configurations.
 	delete($config{"default"});
@@ -168,7 +168,7 @@ sub generate_versions
 
     ## Deal with tile sizes.
     my @tile_sizes = (32);
-    if (defined(%{$config{"tile-sizes"}})) {
+    if ((%{$config{"tile-sizes"}})) {
 	my $tmp = $config{"tile-sizes"}{"sizes"}[0];
 	$tmp =~ s/^\s+//g;
 	$tmp =~ s/\s+/ /g;

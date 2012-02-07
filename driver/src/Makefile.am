@@ -113,5 +113,10 @@ if POCC_FULL_MODE
   $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la
 endif
 
+if POCC_HAS_BARVINOK
+  pocc_LDADD	+=						     \
+  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
+endif
+
 
 #############################################################################

@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Wed Jul 13 19:58:30 2011 Louis-Noel Pouchet
+## Last update Tue Feb  7 15:20:43 2012 Louis-Noel Pouchet
 ##
 #
 # pocc-make: this file is part of the PoCC project.
@@ -117,6 +117,7 @@ sub make_soft
     my $force_configure = "no";
     if (defined($softinfo{"bootstrap"})) {
 	$softbootstrap = $softinfo{"bootstrap"};
+	$softbootstrap =~ s/\$poccsrcdir/$INST_MK/g;
 	$softbootstrap =~ s/^\s//g;
 	$res = `find $srcdir -maxdepth 1 -name "*configure"`;
 	if (($res eq "") || ($force eq "force-hard")) {
@@ -134,6 +135,9 @@ sub make_soft
     if (defined($softinfo{"configure"})) {
 	$config_args = $softinfo{"configure"};
 	$config_args =~ s/\$poccsrcdir/$INST_MK/g;
+    }
+    if ($config_args =~ /disabled$/) {
+	return;
     }
     $res = `find $srcdir -maxdepth 1 -name "*Makefile"`;
     if ($res eq "" || $force_configure eq "yes") {
