@@ -5,7 +5,7 @@
 ## Contact: <louis-noel.pouchet@inria.fr>
 ##
 ## Started on  Wed Apr 15 18:50:36 2009 Louis-Noel Pouchet
-## Last update Tue Feb  7 15:20:43 2012 Louis-Noel Pouchet
+## Last update Thu Feb 16 16:02:06 2012 Louis-Noel Pouchet
 ##
 #
 # pocc-make: this file is part of the PoCC project.
@@ -115,6 +115,7 @@ sub make_soft
 
     ## Bootstrap.
     my $force_configure = "no";
+    my $val = 0;
     if (defined($softinfo{"bootstrap"})) {
 	$softbootstrap = $softinfo{"bootstrap"};
 	$softbootstrap =~ s/\$poccsrcdir/$INST_MK/g;
@@ -124,7 +125,6 @@ sub make_soft
 	    print "[PoCC] Bootstrapping in $srcdir\n";
 	    $val = system("cd $srcdir && $softbootstrap");
 	    $force_configure = "yes";
-	    die "Error in bootsraping of $soft\n" if ($val != 0);
 	}
     }
     ## Configure.
@@ -139,6 +139,8 @@ sub make_soft
     if ($config_args =~ /disabled$/) {
 	return;
     }
+    die "Error in bootsraping of $soft\n" if ($val != 0);
+
     $res = `find $srcdir -maxdepth 1 -name "*Makefile"`;
     if ($res eq "" || $force_configure eq "yes") {
 	print "[PoCC] Configuring $soft in $srcdir with --disable-static --enable-shared --prefix=$instdir $config_args\n";
