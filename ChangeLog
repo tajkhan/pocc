@@ -1,4 +1,8 @@
 2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/autoconf/ax_boost_base.m4: Macro for BOOST detection.
+
+2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 	Provide --enable-hls mode. When using the HLS mode, this flag has
 	to be turned on. It makes PoCC depend on Rose and BOOST when
 	activated at configure time.

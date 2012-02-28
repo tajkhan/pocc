@@ -34,9 +34,9 @@ AC_CONFIG_HEADERS([driver/pocc-utils/include/pocc-utils/config.h:driver/pocc-uti
 ## A common file, which should be included by every source file.
 AC_CONFIG_SRCDIR([driver/pocc/include/pocc/common.h])
 ## Put as most as possible configuration files to an auxialiry
-## directory.
+## directory.#
 AC_CONFIG_AUX_DIR([driver/autoconf])
-## Initialize automake. Here, a special tar version that enables
+# Initialize automake. Here, a special tar version that enables
 ## (very) long filenames.
 AM_INIT_AUTOMAKE([1.9 tar-ustar no-define foreign dist-bzip2])
 #############################################################################
@@ -148,7 +148,7 @@ AM_CONDITIONAL(POCC_HAS_HLS, test x$with_hls != xno)
 
 
 
-#POCC_ARG_LIBS_DEPENDENCIES
+dnl POCC_ARG_LIBS_DEPENDENCIES
 
 dnl Send the install prefix to pocc-util
 install_prefix=$prefix
