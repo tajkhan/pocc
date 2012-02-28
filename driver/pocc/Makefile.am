@@ -55,11 +55,17 @@ INCLUDES		=						\
 	-I$(install_prefix)/generators/install-clastannotation/include	\
 	-I$(install_prefix)/generators/install-ptile/include		\
 	-I$(install_prefix)/generators/install-punroller/include	\
-	-I$(install_prefix)/math/install-barvinok/include		\
 	-I$(install_prefix)/math/install-piplib-hybrid/include		\
 	-I$(install_prefix)/math/install-polylib/include		\
 	-I$(install_prefix)/math/install-fm/include			\
 	-I$(install_prefix)/math/external/install/include
+
+if POCC_HAS_HLS
+INCLUDES += \
+	$(ROSE_CPPFLAGS) $(BOOST_CPPFLAGS) \
+	-I$(install_prefix)/ir/install-hlsir/include			\
+	-I$(install_prefix)/math/install-barvinok/include		
+endif
 
 #############################################################################
 
@@ -79,6 +85,11 @@ pkginclude_HEADERS 	=					\
 		          include/pocc/exec.h			\
 		          include/pocc/options.h
 
+if POCC_HAS_HLS
+pkginclude_HEADERS += include/pocc/driver-hlsir.h
+endif
+
+
 lib_LTLIBRARIES 	= libpocc.la
 
 
@@ -97,8 +108,12 @@ libpocc_la_SOURCES 	=				\
 			  exec.c			\
 		  	  options.c			\
 			  xmalloc.c
+if POCC_HAS_HLS
+libpocc_la_SOURCES += driver-hlsir.cc
+endif
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
+
 
 libpocc_la_LIBADD	=						     \
   $(install_prefix)/ir/install-past/lib/libpast.la			     \
@@ -132,6 +147,12 @@ endif
 
 if POCC_HAS_BARVINOK
   libpocc_la_LIBADD	+=						     \
+  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
+endif
+
+if POCC_HAS_HLS
+  libpocc_la_LIBADD	+=						     \
+  $(install_prefix)/ir/install-hlsir/lib/libhlsir.la	  		     \
   $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
 endif
 

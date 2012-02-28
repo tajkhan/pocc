@@ -1,3 +1,18 @@
+2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+	Provide --enable-hls mode. When using the HLS mode, this flag has
+	to be turned on. It makes PoCC depend on Rose and BOOST when
+	activated at configure time.
+
+	* driver/pocc/include/pocc/driver-hlsir.h,
+	* driver/pocc/driver-hlsir.cc: New. HLS pass (dummy).
+
+	* configure.ac,
+	* driver/pocc/Makefile.am: Update to support HLS mode.
+
+	* config/hls/configure.cfg,
+	* config/hls/driver.cfg: New. Configuration for HLS. Supports
+	native Barvinok (including NTL) and the hlsir module.
+
 2012-02-07  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* configure.ac,

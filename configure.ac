@@ -43,6 +43,7 @@ AM_INIT_AUTOMAKE([1.9 tar-ustar no-define foreign dist-bzip2])
 
 ## Use C language.
 AC_PROG_CC
+AC_PROG_CXX
 ## Use libtool to generate libraries.
 AC_PROG_LIBTOOL
 
@@ -102,6 +103,48 @@ AC_ARG_ENABLE(barvinok,
 	      ],
               [with_barvinok=no])
 AM_CONDITIONAL(POCC_HAS_BARVINOK, test x$with_barvinok != xno)
+
+dnl Offer --enable-hls.
+AC_ARG_ENABLE(hls,
+	      AC_HELP_STRING([--enable-hls],
+              	             [Uses HLS mode]),
+              [with_hls=$enableval
+	      AC_DEFINE([POCC_HAS_HLS], [1],
+	                [Define if PoCC is compiled with HLS support])
+# Make sure Boost is present and useable.
+AX_BOOST_BASE([1.35.0], [], [AC_MSG_ERROR([
+========================================
+|    ERROR                             |
+========================================
+| Boost 1.35.0 or later is required.   |
+========================================
+])])
+# Make sure Rose is present and useable.
+dnl All of this should go into a separate AX_ROSE macro someday.
+AC_ARG_WITH([rose], [AS_HELP_STRING([--with-rose], [defines the root directory of a local Rose installation.])], [ROSE_ROOT=$withval], [])
+ROSE_CPPFLAGS="-I$ROSE_ROOT/include"
+ROSE_LDFLAGS="-L$ROSE_ROOT/lib -lrose"
+
+dnl Check for rose.h
+CPPFLAGS_BACKUP=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $ROSE_CPPFLAGS $BOOST_CPPFLAGS"
+AC_LANG_PUSH([C++])
+AC_CHECK_HEADERS([rose.h], [], [AC_MSG_ERROR([
+========================================
+|    ERROR                             |
+========================================
+| Rose 0.9.4a is required.             |
+========================================
+])],
+[/* rose.h complains if preceded by certain standard includes */])
+AC_LANG_POP([C++])
+CPPFLAGS=$CPPFLAGS_BACKUP
+AC_SUBST(ROSE_CPPFLAGS)
+AC_SUBST(ROSE_LDFLAGS)],
+              [with_hls=no])
+AM_CONDITIONAL(POCC_HAS_HLS, test x$with_hls != xno)
+
+
 
 
 
