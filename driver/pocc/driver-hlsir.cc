@@ -31,6 +31,9 @@
 # include <pocc/driver-hlsir.h>
 
 
+# include <lotha/lotha_driver.h>
+
+
 
 void
 pocc_driver_hlsir (scoplib_scop_p program,
@@ -45,7 +48,11 @@ pocc_driver_hlsir (scoplib_scop_p program,
 void
 pocc_driver_hlsir_test (s_hlsir_t* prog)
 {
-  std::cout << "asdf" << std::endl;
+
+  std::cout << "start" << std::endl;
   std::cout <<prog->sage->unparseToCompleteString() << std::endl;
+
+  lotha_driver (prog);
+  std::cout << "done" << std::endl;
 
 }

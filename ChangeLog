@@ -1,5 +1,12 @@
 2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/driver-hlsir.cc,
+	* driver/pocc/Makefile.am,
+	* config/hls/configure.cfg: Minor fixes for the HLS mode. Use
+	PolyLib/GMP by default when in HLS mode.
+
+2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* driver/autoconf/ax_boost_base.m4: Macro for BOOST detection.
 
 2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
