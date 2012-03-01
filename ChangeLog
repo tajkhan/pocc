@@ -1,5 +1,9 @@
 2012-03-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* configure.ac: Bump to pocc-1.0.1.
+
+2012-03-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/devel/configure.cfg,
 	* config/base/configure.cfg,
 	* config/local/configure.cfg,
