@@ -1,3 +1,9 @@
+2012-02-29  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/hls/configure.cfg,
+	* config/hls/driver.cfg: Add Lotha module, pluto links with
+	polylib-gmp in HLS mode.
+
 2012-02-28  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-hlsir.cc,
