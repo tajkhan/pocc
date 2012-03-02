@@ -95,7 +95,6 @@ pocc_LDADD	=							     \
   $(install_prefix)/math/install-isl/lib/libisl.la			     \
   $(install_prefix)/math/install-piplib-hybrid/lib/libpiplib64.la	     \
   $(install_prefix)/math/install-piplib-gmp/lib/libpiplib-gmp.la	     \
-  $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     \
   $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
   $(install_prefix)/optimizers/install-pvectorizer/lib/libpvectorizer.la     \
@@ -116,6 +115,19 @@ endif
 if POCC_HAS_BARVINOK
   pocc_LDADD	+=						     \
   $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
+endif
+
+
+if POCC_HAS_HLS
+  pocc_LDADD	+=						     \
+  $(install_prefix)/math/install-polylib/lib/libpolylibgmp.la		     \
+  $(install_prefix)/math/lp_solve/lpsolve55/bin/ux64/liblpsolve55.a	     \
+  $(install_prefix)/hls/install-lotha/lib/liblotha.la	  		     \
+  $(install_prefix)/ir/install-hlsir/lib/libhlsir.la	  		     \
+  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
+else
+  pocc_LDADD	+=						     \
+  $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     
 endif
 
 

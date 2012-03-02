@@ -1,3 +1,10 @@
+2012-03-02  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Add lp_solve as dependence when in HLS mode.
+	* config/hls/configure.cfg,
+	* config/hls/driver.cfg: Update to build lp_solve.
+
 2012-03-01  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* configure.ac: Bump to pocc-1.0.1.

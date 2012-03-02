@@ -153,6 +153,7 @@ endif
 if POCC_HAS_HLS
   libpocc_la_LIBADD	+=						     \
   $(install_prefix)/math/install-polylib/lib/libpolylibgmp.la		     \
+  $(install_prefix)/math/lp_solve/lpsolve55/bin/ux64/liblpsolve55.so	     \
   $(install_prefix)/hls/install-lotha/lib/liblotha.la	  		     \
   $(install_prefix)/ir/install-hlsir/lib/libhlsir.la	  		     \
   $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
