@@ -114,20 +114,21 @@ endif
 
 if POCC_HAS_BARVINOK
   pocc_LDADD	+=						     \
-  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
+  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la
 endif
 
 
 if POCC_HAS_HLS
-  pocc_LDADD	+=						     \
-  $(install_prefix)/math/install-polylib/lib/libpolylibgmp.la		     \
-  $(install_prefix)/math/lp_solve/lpsolve55/bin/ux64/liblpsolve55.a	     \
-  $(install_prefix)/hls/install-lotha/lib/liblotha.la	  		     \
-  $(install_prefix)/ir/install-hlsir/lib/libhlsir.la	  		     \
-  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la		     
+  pocc_LDADD	+=							      \
+  $(install_prefix)/math/install-polylib/lib/libpolylibgmp.la		      \
+  $(install_prefix)/math/lp_solve/lpsolve55/bin/ux64/liblpsolve55.a	      \
+  $(install_prefix)/hls/install-lotha/lib/liblotha.la			      \
+  $(install_prefix)/hls/install-buffergen/lib/libbuffergen.la		      \
+  $(install_prefix)/ir/install-hlsir/lib/libhlsir.la			      \
+  $(install_prefix)/math/install-barvinok/lib/libbarvinok.la
 else
   pocc_LDADD	+=						     \
-  $(install_prefix)/math/install-polylib/lib/libpolylib64.la		     
+  $(install_prefix)/math/install-polylib/lib/libpolylib64.la
 endif
 
 

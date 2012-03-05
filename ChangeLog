@@ -1,3 +1,10 @@
+2012-03-05  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am,
+	* config/hls/configure.cfg,
+	* config/hls/driver.cfg: Add build support for the hls/buffergen module.
+
 2012-03-02  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/Makefile.am,
