@@ -1,3 +1,8 @@
+2012-03-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/pocc/driver-pastops.c: Update the parallel loop detection
+	to support scalar privatization, if asked.
+
 2012-03-05  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/Makefile.am,

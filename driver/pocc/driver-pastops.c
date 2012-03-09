@@ -87,14 +87,15 @@ static
 void
 translate_past_for (scoplib_scop_p original_scop,
 		    s_past_node_t* root,
-		    int data_is_char)
+		    int data_is_char,
+		    s_pocc_options_t* poptions)
 {
   // 1- Get the scop representation of the tree.
   scoplib_scop_p scop =
     past2scop_control_only (root, original_scop, data_is_char);
   CandlOptions* coptions = candl_options_malloc ();
-  //coptions->scalar_privatization = 1;
-  coptions->verbose = 1;
+  coptions->scalar_privatization = poptions->pluto_scalpriv;
+  //coptions->verbose = 1;
   CandlProgram* cprogram = candl_program_convert_scop (scop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
   int num_for_loops = past_count_for_loops (root);
@@ -632,7 +633,7 @@ pocc_driver_pastops (scoplib_scop_p program,
 
   // Translate parallel for loops into parfor loops.
   if (poptions->pragmatizer)
-    translate_past_for (program, root, 1);
+    translate_past_for (program, root, 1, poptions);
 
   // Pre-vectorize.
   if (poptions->vectorizer)
