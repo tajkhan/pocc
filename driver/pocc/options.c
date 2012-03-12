@@ -117,6 +117,7 @@ pocc_options_malloc ()
 
   ret->pragmatizer = 0;
   ret->use_past = 1; // Use past back-end by default.
+  ret->past_optimize_loop_bounds = 0;
   ret->ptile = 0;
   ret->ptile_fts = 0;
 

@@ -35,9 +35,9 @@
 # include "getopts.h"
 
 # ifndef POCC_RELEASE_MODE
-#  define POCC_NB_OPTS				73
+#  define POCC_NB_OPTS				74
 # else
-#  define POCC_NB_OPTS				67
+#  define POCC_NB_OPTS				68
 # endif
 
 # define POCC_OPT_HELP				0
@@ -99,41 +99,42 @@
 # define POCC_OPT_CLOOG_L			50
 # define POCC_OPT_PRINT_CLOOG_FILE		51
 # define POCC_OPT_NO_PAST			52
-# define POCC_OPT_PRAGMATIZER			53
+# define POCC_OPT_PAST_OPTIMIZE_LOOP_BOUND	53
+# define POCC_OPT_PRAGMATIZER			54
 
-# define POCC_OPT_PTILE				54
-# define POCC_OPT_PTILE_FTS    			55
+# define POCC_OPT_PTILE				55
+# define POCC_OPT_PTILE_FTS    			56
 
-# define POCC_OPT_PUNROLL			56
-# define POCC_OPT_PUNROLL_AND_JAM      		57
-# define POCC_OPT_PUNROLL_SIZE      		58
+# define POCC_OPT_PUNROLL			57
+# define POCC_OPT_PUNROLL_AND_JAM      		58
+# define POCC_OPT_PUNROLL_SIZE      		59
 
-# define POCC_OPT_VECTORIZER			59
+# define POCC_OPT_VECTORIZER			60
 
 /* Devel-only options. */
-# define POCC_OPT_VECT_MARK_PAR_LOOPS    	60
-# define POCC_OPT_VECT_NO_KEEP_OUTER_PAR_LOOPS  61
-# define POCC_OPT_VECT_SINK_ALL_LOOPS		62
-# define POCC_OPT_STORCOMPACT			63
-# define POCC_OPT_AC_KEEP_OUTERPAR		64
-# define POCC_OPT_AC_KEEP_VECTORIZED		65
+# define POCC_OPT_VECT_MARK_PAR_LOOPS    	61
+# define POCC_OPT_VECT_NO_KEEP_OUTER_PAR_LOOPS  62
+# define POCC_OPT_VECT_SINK_ALL_LOOPS		63
+# define POCC_OPT_STORCOMPACT			64
+# define POCC_OPT_AC_KEEP_OUTERPAR		65
+# define POCC_OPT_AC_KEEP_VECTORIZED		66
 
 # ifndef POCC_RELEASE_MODE
-#  define POCC_OPT_CODEGEN_TIMERCODE		66
-#  define POCC_OPT_CODEGEN_TIMER_ASM		67
-#  define POCC_OPT_CODEGEN_TIMER_PAPI		68
-#  define POCC_OPT_COMPILE      		69
-#  define POCC_OPT_COMPILE_CMD          	70
-#  define POCC_OPT_RUN_CMD_ARGS          	71
-#  define POCC_OPT_PROGRAM_TIMEOUT        	72
+#  define POCC_OPT_CODEGEN_TIMERCODE		67
+#  define POCC_OPT_CODEGEN_TIMER_ASM		68
+#  define POCC_OPT_CODEGEN_TIMER_PAPI		69
+#  define POCC_OPT_COMPILE      		70
+#  define POCC_OPT_COMPILE_CMD          	71
+#  define POCC_OPT_RUN_CMD_ARGS          	72
+#  define POCC_OPT_PROGRAM_TIMEOUT        	73
 # else
-#  define POCC_OPT_CODEGEN_TIMERCODE		60
-#  define POCC_OPT_CODEGEN_TIMER_ASM		61
-#  define POCC_OPT_CODEGEN_TIMER_PAPI		62
-#  define POCC_OPT_COMPILE      		63
-#  define POCC_OPT_COMPILE_CMD          	64
-#  define POCC_OPT_RUN_CMD_ARGS          	65
-#  define POCC_OPT_PROGRAM_TIMEOUT        	66
+#  define POCC_OPT_CODEGEN_TIMERCODE		61
+#  define POCC_OPT_CODEGEN_TIMER_ASM		62
+#  define POCC_OPT_CODEGEN_TIMER_PAPI		63
+#  define POCC_OPT_COMPILE      		64
+#  define POCC_OPT_COMPILE_CMD          	65
+#  define POCC_OPT_RUN_CMD_ARGS          	66
+#  define POCC_OPT_PROGRAM_TIMEOUT        	67
 # endif
 
 BEGIN_C_DECLS

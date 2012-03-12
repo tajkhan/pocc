@@ -678,7 +678,8 @@ pocc_driver_pastops (scoplib_scop_p program,
     }
 
   // Systematically optimize the loop bounds (hoisting).
-  past_optimize_loop_bounds (root);
+  if (poptions->past_optimize_loop_bounds)
+    past_optimize_loop_bounds (root);
 
   // Insert iterators declaration.
   s_symbol_t** iterators = collect_all_loop_iterators (root);

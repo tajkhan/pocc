@@ -72,20 +72,20 @@ if [ $numloops -ne 1 ]; then
     params=$params"phony"
     num=""
     # don't even bother to ask what this is - the lowest levels I have stooped to
-    for i in `grep -n  "for ($unrolldim1=" $1 | grep -v $params | awk '{split($1,t,":"); print t[1]}'`  ; do grep -n ".*" $1 |  sed -n -e \
-        ''$(($i+1))'p'  | grep "for ($unrolldim2=" | grep -q -v "$params" ; if [ "$?" = "0" ]; then  num="$i"; break; fi 
+    for i in `grep -n  "for ($unrolldim1" $1 | grep -v $params | awk '{split($1,t,":"); print t[1]}'`  ; do grep -n ".*" $1 |  sed -n -e \
+        ''$(($i+1))'p'  | grep "for ($unrolldim2" | grep -q -v "$params" ; if [ "$?" = "0" ]; then  num="$i"; break; fi 
     done
     # if no loops with bounds free of parameters are found, just go for those
     # with params in them
     if [ "$num" = "" ]; then
-        for i in `grep -n  "for ($unrolldim1=" $1 | awk '{split($1,t,":"); print t[1]}'` ; do grep -n ".*" $1 |  sed -n -e \
-            ''$(($i+1))'p'  | grep "for ($unrolldim2=" | grep -q -v "$params" ; if [ "$?" = "0" ]; then  num="$i"; break; fi 
+        for i in `grep -n  "for ($unrolldim1" $1 | awk '{split($1,t,":"); print t[1]}'` ; do grep -n ".*" $1 |  sed -n -e \
+            ''$(($i+1))'p'  | grep "for ($unrolldim2" | grep -q -v "$params" ; if [ "$?" = "0" ]; then  num="$i"; break; fi 
         done
 
         # selling my soul to the devil now
         if [ "$num" = "" ]; then
-            for i in `grep -n  "for ($unrolldim1=" $1 | awk '{split($1,t,":"); print t[1]}'` ; do grep -n ".*" $1 |  sed -n -e \
-                ''$(($i+1))'p'  | grep -q "for ($unrolldim2=" ; if [ "$?" = "0" ]; then  num="$i"; break; fi 
+            for i in `grep -n  "for ($unrolldim1" $1 | awk '{split($1,t,":"); print t[1]}'` ; do grep -n ".*" $1 |  sed -n -e \
+                ''$(($i+1))'p'  | grep -q "for ($unrolldim2" ; if [ "$?" = "0" ]; then  num="$i"; break; fi 
             done
         fi
     fi
@@ -140,12 +140,12 @@ else
 
     num=""
     # don't even bother to ask what this is - the lowest levels I have stooped to
-    num=`grep -n  "for ($unrolldim1=" $1 | grep -v $params | awk '{split($1,t,":"); print t[1]}' | head -n 1`
+    num=`grep -n  "for ($unrolldim1" $1 | grep -v $params | awk '{split($1,t,":"); print t[1]}' | head -n 1`
 
     # if no loops with bounds free of parameters are found, just go for those
     # with params in them
     if [ "$num" = "" ]; then
-        num=`grep -n  "for ($unrolldim1=" $1 | awk '{split($1,t,":"); print t[1]}'  | head -n 1`
+        num=`grep -n  "for ($unrolldim1" $1 | awk '{split($1,t,":"); print t[1]}'  | head -n 1`
     fi
 
     if [ "$num" = "" ]; then

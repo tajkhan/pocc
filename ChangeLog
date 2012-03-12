@@ -1,5 +1,28 @@
 2012-03-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* generators/scripts/plann: Make the script robust to PAST output.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-pastops.c,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Create the option --past-hoist-lb, to
+	activate loop bound hoisting in PAST. Now turned off by default.
+
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c: Update the test suite
+	accordingly.
+
+2012-03-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* configure.ac: Bump to PoCC 1.1.
 
 	* config/devel/configure.cfg,

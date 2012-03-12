@@ -139,6 +139,7 @@ struct s_pocc_options
 
   // PAST IR.
   int		use_past;
+  int		past_optimize_loop_bounds;
 
   // Ptile.
   int		ptile;
