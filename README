@@ -4,7 +4,7 @@
 
 PoCC, the POlyhedral Compiler Collection package
 
--*- version 1.0-rc3 -*-
+-*- version 1.1 -*-
 
 
 * Installation
@@ -34,14 +34,15 @@ website directly. Note the documentation is still highly preliminary.
 * Usage
 -------
 
-#> pocc -h
+$> pocc -h
 Gives an overview of the options
 
 
 
 * Troubleshoot
 --------------
-For any error please contact the author directly.
+For any error please contact directly: 
+Louis-Noel Pouchet <pouchet@cse.ohio-state.edu>
 
 
 
@@ -64,5 +65,5 @@ person in helping the software being more robust.
 
 
 -- 
-PoCC is written by: 
-Louis-Noel Pouchet <louis-noel.pouchet@inria.fr>
+PoCC is developed by: 
+Louis-Noel Pouchet <pouchet@cse.ohio-state.edu>

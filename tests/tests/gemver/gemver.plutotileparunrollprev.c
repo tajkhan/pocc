@@ -65,20 +65,18 @@ main(int argc, char** argv)
 # undef ceild
 #endif
 #ifdef floord
-# undef ceild
+# undef floord
 #endif
 #ifdef max
-# undef ceild
+# undef max
 #endif
 #ifdef min
-# undef ceild
+# undef min
 #endif
 #define ceild(n,d)  ceil(((double)(n))/((double)(d)))
 #define floord(n,d) floor(((double)(n))/((double)(d)))
 #define max(x,y)    ((x) > (y)? (x) : (y))
 #define min(x,y)    ((x) < (y)? (x) : (y))
-
-
 
 
 
@@ -91,7 +89,7 @@ main(int argc, char** argv)
 if (N >= 1) {
  lb1=0;
  ub1=floord(N-1,32);
-#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
+#pragma omp parallel for shared(c0,lb1,ub1) private(ubv,lbv,c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1 <= ub1; c1++) {
     for (c2=0;c2<=floord(N-1,32);c2++) {
 /*@ begin Loop(
@@ -143,7 +141,7 @@ transform UnrollJam(ufactor=4)
   }
  lb1=0;
  ub1=floord(N-1,32);
-#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
+#pragma omp parallel for shared(c0,lb1,ub1) private(ubv,lbv,c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1 <= ub1; c1++) {
 {
  lbv=32*c1; ubv=min(N-1,32*c1+31);
@@ -156,7 +154,7 @@ transform UnrollJam(ufactor=4)
   }
  lb1=0;
  ub1=floord(N-1,32);
-#pragma omp parallel for shared(c0,lb1,ub1) private(c1,c2,c3,c4,c5,c6)
+#pragma omp parallel for shared(c0,lb1,ub1) private(ubv,lbv,c1,c2,c3,c4,c5,c6)
  for (c1=lb1; c1 <= ub1; c1++) {
     for (c2=0;c2<=floord(N-1,32);c2++) {
       for (c3=32*c2;c3<=min(N-1,32*c2+31);c3++) {

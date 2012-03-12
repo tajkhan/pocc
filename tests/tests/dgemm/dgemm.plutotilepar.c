@@ -86,20 +86,18 @@ int main(int argc, char** argv)
 # undef ceild
 #endif
 #ifdef floord
-# undef ceild
+# undef floord
 #endif
 #ifdef max
-# undef ceild
+# undef max
 #endif
 #ifdef min
-# undef ceild
+# undef min
 #endif
 #define ceild(n,d)  ceil(((double)(n))/((double)(d)))
 #define floord(n,d) floor(((double)(n))/((double)(d)))
 #define max(x,y)    ((x) > (y)? (x) : (y))
 #define min(x,y)    ((x) < (y)? (x) : (y))
-
-
 
 
   register int lbv, ubv, lb, ub, lb1, ub1, lb2, ub2;

@@ -1,3 +1,36 @@
+2012-03-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* configure.ac: Bump to PoCC 1.1.
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg,
+	* config/local/configure.cfg,
+	* config/stable/configure.cfg: Update to use the currently
+	validated versions of ISL (0.07 -> 0.09), CLooG (0.16.2 -> 0.17),
+	PLuto (0.5.3 -> 0.5.4), ClastTools (0.2.0 -> 0.2.1) and Candl
+	(0.6.1 -> 0.6.2).
+
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Activate the PAST back-end by default.
+
+	* AUTHORS,
+	* README,
+	* doc/pocc.texi: Minor documentation update.
+
+	* tests/tests/gemver/gemver.plutotileparunrollprev.c,
+	* tests/tests/gemver/gemver.plutotileparunroll.c,
+	* tests/tests/gemver/gemver.plutotile.c,
+	* tests/tests/gemver/gemver.plutotilepar.c,
+	* tests/tests/gemver/gemver.passthru.c,
+	* tests/tests/dgemm/dgemm.passthru.c,
+	* tests/tests/dgemm/dgemm.plutotileparunrollprev.c,
+	* tests/tests/dgemm/dgemm.plutotileparunroll.c,
+	* tests/tests/dgemm/dgemm.plutotile.c,
+	* tests/tests/dgemm/dgemm.plutotilepar.c,
+	* tests/scripts/checker.sh: Update the test suite to comply with
+	new pretty-printer output.
+
 2012-03-09  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/driver-pastops.c: Update the parallel loop detection

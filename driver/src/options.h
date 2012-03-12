@@ -98,7 +98,7 @@
 # define POCC_OPT_CLOOG_F			49
 # define POCC_OPT_CLOOG_L			50
 # define POCC_OPT_PRINT_CLOOG_FILE		51
-# define POCC_OPT_USE_PAST			52
+# define POCC_OPT_NO_PAST			52
 # define POCC_OPT_PRAGMATIZER			53
 
 # define POCC_OPT_PTILE				54
