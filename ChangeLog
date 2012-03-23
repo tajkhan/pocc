@@ -1,3 +1,8 @@
+2012-03-23  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* driver/src/options.c: Add missing code to manage the
+	--past-hoist-lb option.
+
 2012-03-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* generators/scripts/plann: Make the script robust to PAST output.

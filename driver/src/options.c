@@ -580,7 +580,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   // PAST options.
   if (opt_tab[POCC_OPT_NO_PAST])
     options->use_past = 0;
-
+  if (opt_tab[POCC_OPT_PAST_OPTIMIZE_LOOP_BOUND])
+    options->past_optimize_loop_bounds = 1;
   // Pragmatizer options.
   if (opt_tab[POCC_OPT_PRAGMATIZER])
     options->pragmatizer = 1;
