@@ -86,26 +86,27 @@ void traverse_tree_index_for (s_past_node_t* node, void* data)
 static
 void
 translate_past_for (scoplib_scop_p original_scop,
-		    s_past_node_t* root,
+		    s_past_node_t** root,
 		    int data_is_char,
 		    s_pocc_options_t* poptions)
 {
   // 1- Get the scop representation of the tree.
   scoplib_scop_p scop =
-    past2scop_control_only (root, original_scop, data_is_char);
+    past2scop_control_only (*root, original_scop, data_is_char);
   CandlOptions* coptions = candl_options_malloc ();
   coptions->scalar_privatization = poptions->pluto_scalpriv;
   //coptions->verbose = 1;
   CandlProgram* cprogram = candl_program_convert_scop (scop, NULL);
   CandlDependence* cdeps = candl_dependence (cprogram, coptions);
-  int num_for_loops = past_count_for_loops (root);
-  int num_stmts = past_count_statements (root);
+  int num_for_loops = past_count_for_loops (*root);
+  int num_stmts = past_count_statements (*root);
+
   // Oversize the data structure, to deal with fake iterators.
   s_process_data_t prog_loops[num_for_loops + num_stmts + 1];
   int i, j;
   for (i = 0; i < num_for_loops + num_stmts + 1; ++i)
     prog_loops[i].fornode = NULL;
-  past_visitor (root, traverse_tree_index_for, (void*)prog_loops, NULL, NULL);
+  past_visitor (*root, traverse_tree_index_for, (void*)prog_loops, NULL, NULL);
 
   // Recompute the number of actual for loops.
   for (num_for_loops = 0; prog_loops[num_for_loops].fornode; ++num_for_loops)
@@ -123,15 +124,20 @@ translate_past_for (scoplib_scop_p original_scop,
 	if (candl_dependence_is_loop_carried (cprogram, d, i))
 	  break;
       if (d == NULL && past_node_is_a (prog_loops[i].fornode, past_for))
-	// The loop is sync-free parallel, translate it to past_parfor.
-	past_for_to_parfor (prog_loops[i].fornode);
+	{
+	  // The loop is sync-free parallel, translate it to past_parfor.
+	  s_past_node_t* pf = past_for_to_parfor (prog_loops[i].fornode);
+	  if (*root == prog_loops[i].fornode)
+	    *root = pf;
+	  prog_loops[i].fornode = pf;
+	}
     }
 
   candl_dependence_free (cdeps);
   candl_program_free (cprogram);
   candl_options_free (coptions);
   scoplib_scop_shallow_free (scop);
-  past_set_parent (root);
+  past_set_parent (*root);
 }
 
 
@@ -521,7 +527,7 @@ void restore_non_affine_expr (s_past_node_t*** map)
 
 static
 void post_vectorize (s_past_node_t* root, scoplib_scop_p program,
-		     int keep_outer_par)
+		     s_pocc_options_t* poptions)
 {
   // Set parent, just in case.
   past_set_parent (root);
@@ -550,8 +556,13 @@ void post_vectorize (s_past_node_t* root, scoplib_scop_p program,
 
       // Update the scop with the new fake parameters.
       scoplib_scop_p newscop = create_mapped_scop (program, map);
+      // Detect parallel loops and replace nodes in the loop nest.
+      translate_past_for (newscop, &(nests[i]), 1, poptions);
+
       // Vectorize loops.
-      pvectorizer_vectorize (newscop, nests[i], keep_outer_par);
+      pvectorizer_vectorize (newscop, nests[i],
+			     poptions->vectorizer_keep_outer_par_loops,
+			     poptions->verbose);
 
       // Restore non-affine expressions. Destroy the map entries.
       restore_non_affine_expr (map);
@@ -633,14 +644,15 @@ pocc_driver_pastops (scoplib_scop_p program,
 
   // Translate parallel for loops into parfor loops.
   if (poptions->pragmatizer)
-    translate_past_for (program, root, 1, poptions);
+    translate_past_for (program, &root, 1, poptions);
 
   // Pre-vectorize.
   if (poptions->vectorizer)
     {
       if (! poptions->quiet)
 	printf ("[PoCC] Move vectorizable loop(s) inward\n");
-      pvectorizer_vectorize (program, root, poptions->ptile);
+      pvectorizer_vectorize (program, root, poptions->ptile,
+			     (!poptions->ptile && poptions->verbose));
     }
 
   // Use PTILE, if asked.
@@ -652,9 +664,19 @@ pocc_driver_pastops (scoplib_scop_p program,
 	{
 	  if (! poptions->quiet)
 	    printf ("[PoCC] Post-vectorization: move vectorizable loop(s) inward\n");
-	  post_vectorize (root, program, 0);
+	  post_vectorize (root, program, poptions);
 	}
     }
+
+/*   s_past_node_t** n = collect_all_full_tiles (root); */
+/*   int k; */
+/*   for (k = 0; n && n[k]; ++k) */
+/*     { */
+/*       printf ("found full tile\n"); */
+/*       past_pprint (stdout, n[k]); */
+/*       printf ("\n"); */
+/*     } */
+
 
   /* // Simplify expressions. */
   /* past_simplify_expressions (root); */
@@ -673,7 +695,7 @@ pocc_driver_pastops (scoplib_scop_p program,
       if (! poptions->quiet)
 	printf ("[PoCC] Perform unroll-and-jam (factor=%d)\n",
 		poptions->punroll_size);
-      int uajfactors[] = {4,3};
+      int uajfactors[] = {3,1};
       punroll_and_jam (program, root, uajfactors, poptions->nb_registers);
     }
 
