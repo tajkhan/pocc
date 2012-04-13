@@ -65,6 +65,7 @@ INCLUDES += \
 	$(ROSE_CPPFLAGS) $(BOOST_CPPFLAGS) \
 	-I$(install_prefix)/ir/install-hlsir/include			\
 	-I$(install_prefix)/hls/install-lotha/include			\
+	-I$(install_prefix)/hls/install-lmp/include			\
 	-I$(install_prefix)/math/install-barvinok/include
 endif
 
@@ -156,6 +157,7 @@ if POCC_HAS_HLS
   $(install_prefix)/math/lp_solve/lpsolve55/bin/ux64/liblpsolve55.so	     \
   $(install_prefix)/hls/install-lotha/lib/liblotha.la	  		     \
   $(install_prefix)/hls/install-buffergen/lib/libbuffergen.la  		     \
+  $(install_prefix)/hls/install-lmp/lib/liblmp.la	  		     \
   $(install_prefix)/ir/install-hlsir/lib/libhlsir.la	  		     \
   $(install_prefix)/math/install-barvinok/lib/libbarvinok.la
 else

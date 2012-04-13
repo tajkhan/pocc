@@ -1,5 +1,10 @@
 2012-04-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
+	* driver/pocc/Makefile.am,
+	* driver/src/Makefile.am: Add missing reference to the LMP module.
+
+2012-04-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
 	* config/hls/driver.cfg,
 	* config/hls/configure.cfg: Add the LMP (Local Memory Promotion)
 	module.
