@@ -1,3 +1,8 @@
+2012-04-15  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
+
+	* config/hls/driver.cfg,
+	* config/hls/configure.cfg: Update to ISL-current and Barvinok 0.35.
+
 2012-04-12  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* driver/pocc/Makefile.am,
