@@ -112,6 +112,15 @@ sub make_soft
     $category =~ s/\s//g;
     my $prefix = $BDIR_MK . "/" . $category;
     my $srcdir = $prefix . "/" . $soft;
+    ## Get Configure opts.
+    my $mod = $softinfo{"module"};
+    $mod =~ s/\s//g;
+    my $instdir = $INST_MK . "/" . $category . "/install-$mod";
+    my $config_args = "";
+    if (defined($softinfo{"configure"})) {
+	$config_args = $softinfo{"configure"};
+	$config_args =~ s/\$poccsrcdir/$INST_MK/g;
+    }
 
     ## Bootstrap.
     my $force_configure = "no";
@@ -121,21 +130,13 @@ sub make_soft
 	$softbootstrap =~ s/\$poccsrcdir/$INST_MK/g;
 	$softbootstrap =~ s/^\s//g;
 	$res = `find $srcdir -maxdepth 1 -name "*configure"`;
-	if (($res eq "") || ($force eq "force-hard")) {
+	if (($res eq "") || ($force eq "force-hard") || ($config_args =~ /disabled$/)) {
 	    print "[PoCC] Bootstrapping in $srcdir\n";
 	    $val = system("cd $srcdir && $softbootstrap");
 	    $force_configure = "yes";
 	}
     }
-    ## Configure.
-    my $mod = $softinfo{"module"};
-    $mod =~ s/\s//g;
-    my $instdir = $INST_MK . "/" . $category . "/install-$mod";
-    my $config_args = "";
-    if (defined($softinfo{"configure"})) {
-	$config_args = $softinfo{"configure"};
-	$config_args =~ s/\$poccsrcdir/$INST_MK/g;
-    }
+    ## Configure exec.
     if ($config_args =~ /disabled$/) {
 	return;
     }
