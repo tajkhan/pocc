@@ -7,8 +7,8 @@
 @settitle PoCC - The Polyhedral Compiler Collection package
 
 @set EDITION 0.3
-@set VERSION 1.1
-@set UPDATED February 8th 2011
+@set VERSION 1.2
+@set UPDATED February 18th 2013
 @setchapternewpage odd
 
 
@@ -20,7 +20,7 @@
 This manual is dedicated to PoCC version @value{VERSION}, a flexible
 source-to-source compiler in the polyhedral model.
 
-Copyright @copyright{} 2009-2012 Louis-No@"el Pouchet.
+Copyright @copyright{} 2009-2013 Louis-No@"el Pouchet.
 
 @c quotation
 Permission is granted to copy, distribute and/or modify this document under
@@ -115,7 +115,7 @@ under the terms of the GNU GPL v2 or later, and GNU Lesser GPL v2 or later.
 @b{Acknowledgments}
 
 PoCC could not exist without the wonderful software it includes, and its
-authors diserve most of the credit.
+authors deserve most of the credit.
 @itemize
 @item CLooG has been developped by C@'edric Bastoul and Sven Verdoolaege
 @item Clan and Candl have been developped by C@'edric Bastoul and Louis-No@"el Pouchet
@@ -125,6 +125,9 @@ authors diserve most of the credit.
 @item PIPLib has been developped by Paul Feautrier and C@'edric Bastoul
 @item PolyLib has been developped mainly by Doran Wilde, Bart Kienhuis, Vincent Loechner, Tanguy Risset and Sven Verdoolaege
 @item FM has been developped by Louis-No@"el Pouchet
+@item ScopLib has been developped by Louis-No@"el Pouchet and C@'edric Bastoul
+@item PAST has been developped by Louis-No@"el Pouchet
+@item PAST-based Unroller/Pragmatizer/Vectorizer have been developped by Louis-No@"el Pouchet
 @end itemize
 @*
 
@@ -140,8 +143,7 @@ work properly. It also requires of course a Shell and a working C compiler.
 @*
 
 @*
-The development version of PoCC (currently the only one being
-distributed) additionally requires the standard GNU development tools:
+The development version of PoCC additionally requires the standard GNU development tools:
 @code{bison}, @code{flex}, reasonably recent version of
 @code{libtool} (1.5.22 at least, beware of the libtool/glibtool issue on Mac OSX), @code{autoconf 2.60} or later, @code{automake 1.10} or later, @code{doxygen}, and both a
 @code{subversion} and @code{git} client.
@@ -418,7 +420,7 @@ in the search space for @code{gemver.c} type:
 
 @cartouche
 @example
-$> pocc ---letsee --verbose --no-codegen  gemver.c
+$> pocc --letsee --pluto --verbose --no-codegen  gemver.c
 
 [...]
 [LetSee] Generated 0 fusion structures from 8 schedules
@@ -426,18 +428,18 @@ $> pocc ---letsee --verbose --no-codegen  gemver.c
 @end example
 @end cartouche
 
-@*
-To perform 5 random tests in the space of legal fusion structures for
-@code{gemver.c}, together with tiling and parallelization activated,
-type:
-@*
+@c @*
+@c To perform 5 random tests in the space of legal fusion structures for
+@c @code{gemver.c}, together with tiling and parallelization activated,
+@c type:
+@c @*
 
-@cartouche
-@example
-$> pocc --compile-cmd "gcc -O3 -fopenmp" --letsee-walk random \
---letsee-rtries 5 --pluto-tile --pluto-parallel --codegen-timercode gemver.c
-@end example
-@end cartouche
+@c @cartouche
+@c @example
+@c $> pocc --compile-cmd "gcc -O3 -fopenmp" --letsee-walk random \
+@c --letsee-rtries 5 --pluto-tile --pluto-parallel --codegen-timercode gemver.c
+@c @end example
+@c @end cartouche
 
 
 
@@ -490,7 +492,7 @@ schedule. Hence it is categorized as an optimizer.
 @*
 To comply with standard GNU application template, we recommend to use
 @code{autoskelet-0.1} (can be downloaded from
-@uref{http://www-rocq.inria.fr/~pouchet, L.N. Pouchet
+@uref{http://www.cs.ucla.edu/~pouchet, L.N. Pouchet
 website}). Download and extract the archive, and go to the directory
 autoskelet-0.1. Then do the following.
 
@@ -578,7 +580,7 @@ dnl Offer --with-scoplib.
               [with_scoplib=check])
 dnl Check for scoplib existence.
   AS_IF([test "x$with_scoplib" != xno],
-	[AC_SEARCH_LIBS([scoplib_scop_read], [scoplib], 
+	[AC_SEARCH_LIBS([scoplib_scop_read], [scoplib],
 	 [LIBS="-lscoplib $LIBS";
 	 DEFINE_HAS_SCOPLIB_LIB="-DCUDASCHED_SUPPORTS_SCOPLIB"
 	 ],
@@ -757,7 +759,7 @@ It has also been reported once a problem of a missing include
 to copy @code{math/external/install/include/gmp.h} into
 @code{generators/install-cloog/include}. Please also report the problem
 to the author
-@uref{mailto:louis-noel.pouchet@@inria.fr,louis-noel.pouchet@@inria.fr}.
+@uref{mailto:pouchet@@cs.ucla.edu,pouchet@@cs.ucla.edu}.
 @*
 
 @section Other problems
@@ -768,7 +770,7 @@ The most usual problem comes from software dependences not met, in particular so
 
 @*
 Simply contact the author for the moment:
-@uref{mailto:louis-noel.pouchet@@inria.fr,louis-noel.pouchet@@inria.fr}
+@uref{mailto:pouchet@@cs.ucla.edu,pouchet@@cs.ucla.edu}
 
 Please provide the output of the following commands:
 
@@ -824,7 +826,21 @@ polyhedral model: Part II, multidimensional time. In @emph{ACM SIGPLAN
 Conference on Programming Language Design and Implementation
 (PLDI'08)}, pp 90--100, ACM Press, Tucson, Arizona, June 2008.
 
-@item @anchor{wilde.00.jpaa}@b{[5]}
+@item @anchor{pouchet.10.sc}@b{[5]}
+Louis-No@"el Pouchet, Uday Bondhugula, C@'edric
+Bastoul, Albert Cohen, J. Ramanujam, P. Sadayappan and Nicolas Vasilache.
+Loop Transformations: Convexity, Pruning and Optimization.
+In @emph{38th ACM SIGACT-SIGPLAN Symposium on Principles of Programming Languages (POPL'11)}, pp 549--562, Austin, TX, January 201.
+
+
+@item @anchor{pouchet.11.popl}@b{[6]}
+Louis-No@"el Pouchet, Uday Bondhugula, C@'edric
+Bastoul, Albert Cohen, J. Ramanujam and P. Sadayappan.
+Combined Iterative and Model-driven Optimization in an Automatic Parallelization Framework.
+In @emph{IEEE Conference on Supercomputing (SC'2010)}, New Orleans, LA, November 2010.
+
+
+@item @anchor{wilde.00.jpaa}@b{[7]}
 Doran Wilde. A library for doing polyhedral operations. In @emph{Journal
 of Parallel Algorithms and Applications}, Vol 15, pp 137--166, 2000.
 

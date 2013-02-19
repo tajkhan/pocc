@@ -1,4 +1,11 @@
 2013-02-18  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+	Ready-to-release patch.
+
+	* doc/pocc.texi: Update the documentation.
+	* config/stable/configure.cfg,
+	* config/local/configure.cfg: Update to latest module id.
+
+2013-02-18  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
 	* configure.ac: Bump to pocc 1.2.
 	* driver/src/getopts.h,
