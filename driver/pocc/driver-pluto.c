@@ -60,6 +60,10 @@ pocc_driver_pluto (scoplib_scop_p program,
   ploptions->cloogl = poptions->cloog_l; // int
   ploptions->ft = poptions->pluto_ft; // int
   ploptions->lt = poptions->pluto_lt; // int
+/*   ploptions->ft = poptions->cloog_f; // int */
+/*   ploptions->lt = poptions->cloog_l; // int */
+  
+  
   ploptions->multipipe = poptions->pluto_multipipe;
   ploptions->l2tile = poptions->pluto_l2tile;
   ploptions->lastwriter = poptions->pluto_lastwriter;

@@ -1,3 +1,10 @@
+2013-02-18  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* configure.ac: Bump to pocc 1.2.
+	* driver/src/getopts.h,
+	* driver/src/options.c: Improve the option help.
+	* config/local/configure.cfg: Update to latest versions of modules.
+
 2012-04-15  Louis-Noel Pouchet  <pouchet@cse.ohio-state.edu>
 
 	* config/hls/driver.cfg,

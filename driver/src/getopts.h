@@ -41,6 +41,7 @@ struct			s_opt
   char			*long_opt;
   int			expect_arg;
   char			*description;
+  char			*status;
 };
 
 struct			s_option
