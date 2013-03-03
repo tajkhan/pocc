@@ -79,6 +79,19 @@ pocc_options_malloc ()
   ret->letsee_clb = -1;
   ret->letsee_cUb = 1;
 
+  // Ponos options.
+  ret->ponos = 0;
+  ret->ponos_solver_type = 1;
+  ret->ponos_coef_are_pos = 0;
+  ret->ponos_quiet = 0;
+  ret->ponos_debug = 0;
+  ret->ponos_build_2d_plus_one = 0;
+  ret->ponos_maxscale_solver = 0;
+  ret->ponos_noredundancy_solver = 0;
+  ret->ponos_legality_constant_K = 10;
+  ret->ponos_schedule_bound = 10;
+  ret->schedule_dim = 1;
+
   // Pluto options.
   ret->pluto = 0;
   ret->pluto_parallel = 0;
@@ -118,6 +131,7 @@ pocc_options_malloc ()
   ret->pragmatizer = 0;
   ret->use_past = 1; // Use past back-end by default.
   ret->past_optimize_loop_bounds = 0;
+  ret->past_super_optimize_loop_bounds = 0;
   ret->ptile = 0;
   ret->ptile_fts = 0;
 

@@ -69,6 +69,12 @@ INCLUDES += \
 	-I$(install_prefix)/math/install-barvinok/include
 endif
 
+if POCC_FULL_MODE
+INCLUDES += \
+	-I$(install_prefix)/optimizers/install-ponos/include		
+endif
+
+
 #############################################################################
 
 pkginclude_HEADERS 	=					\
@@ -89,6 +95,10 @@ pkginclude_HEADERS 	=					\
 
 if POCC_HAS_HLS
 pkginclude_HEADERS += include/pocc/driver-hlsir.h
+endif
+
+if POCC_FULL_MODE
+pkginclude_HEADERS += include/pocc/driver-ponos.h
 endif
 
 
@@ -113,6 +123,13 @@ libpocc_la_SOURCES 	=				\
 if POCC_HAS_HLS
 libpocc_la_SOURCES += driver-hlsir.cc
 endif
+
+
+if POCC_FULL_MODE
+libpocc_la_SOURCES += driver-ponos.c
+endif
+
+
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
@@ -142,7 +159,8 @@ libpocc_la_LIBADD	=						     \
 if POCC_FULL_MODE
   libpocc_la_LIBADD	+=						     \
   $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la
+  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
+  $(install_prefix)/optimizers/install-ponos/lib/libponos.la
 endif
 
 

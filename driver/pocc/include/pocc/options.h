@@ -99,6 +99,19 @@ struct s_pocc_options
   int		letsee_clb;
   int		letsee_cUb;
 
+  // Ponos options.
+  int		ponos;
+  int		ponos_quiet;
+  int		ponos_debug;
+  int		ponos_solver_type;
+  int		ponos_coef_are_pos;
+  int		ponos_build_2d_plus_one;
+  int		ponos_maxscale_solver;
+  int		ponos_noredundancy_solver;
+  int		ponos_legality_constant_K;
+  int		ponos_schedule_bound;
+  int		schedule_dim;
+
   // PLuTo Options.
   int		pluto; // Run PLuTo (default: no)
   int		pluto_unroll;
@@ -140,6 +153,7 @@ struct s_pocc_options
   // PAST IR.
   int		use_past;
   int		past_optimize_loop_bounds;
+  int		past_super_optimize_loop_bounds;
 
   // Ptile.
   int		ptile;

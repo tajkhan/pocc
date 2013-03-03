@@ -63,7 +63,7 @@ int main(int argc, char** argv)
       pocc_exec (args, POCC_EXECV_HIDE_OUTPUT);
       XFREE(args[1]);
     }
-  if (poptions->letsee == 0 && poptions->pluto == 0)
+  if (poptions->letsee == 0 && poptions->pluto == 0 && poptions->ponos == 0)
     if (! poptions->quiet)
       printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
 
@@ -90,6 +90,14 @@ int main(int argc, char** argv)
     if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
       exit (EXIT_FAILURE);
 
+  // (5) Perform Ponos.
+#ifndef POCC_RELEASE_MODE
+  if (poptions->ponos)
+    if (pocc_driver_ponos (scop, poptions, puoptions) == EXIT_FAILURE)
+      exit (EXIT_FAILURE);
+#endif
+
+  
   if (poptions->output_scoplib_file_name)
     {
       scoplib_scop_p tempscop = scoplib_scop_dup (scop);

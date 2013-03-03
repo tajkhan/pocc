@@ -106,7 +106,20 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { 'c', "compile", 0, "Compile program with C compiler" , "\t(S)" },
   { '\0', "compile-cmd", 1, "Compilation command [gcc -O3 -lm]" , "(S)" },
   { '\0', "run-cmd-args", 1, "Program execution arguments []" , "(S)" },
-  { '\0', "prog-timeout", 1, "Timeout for compilation and execution,\n\t\t\t\t\tin second", "(E)" }
+  { '\0', "prog-timeout", 1, "Timeout for compilation and execution,\n\t\t\t\t\tin second\n", "(E)" },
+
+  { 's', "ponos", 0, "Optimize with Ponos" , "\t(E)" },
+  { '\0', "ponos-quiet", 0, "Ponos: be quiet" , "\t(E)" },
+  { '\0', "ponos-debug", 0, "Ponos: debug mode" , "\t(E)" },
+  { '\0', "ponos-sched-sz", 1, "Ponos: schedule dimensionality [1]" , "(E)" },
+  { '\0', "ponos-coef-pos", 0, "Ponos: schedule coefficients are >= 0" , "(E)" },
+  { '\0', "ponos-build-2dp1", 0, "Ponos: build 2d+1 schedule" , "(E)" },
+  { '\0', "ponos-solver", 1, "Ponos: solver: [pip]" , "(E)" },
+  { '\0', "ponos-farkas-max", 0, "Ponos: maxscale FM solver" , "(E)" },
+  { '\0', "ponos-farkas-nored", 0, "Ponos: remove redundancy with FM" , "(E)" },
+  { '\0', "ponos-K", 1, "Ponos: value for the K constant [10]" , "(E)" },
+  { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]\n" , "(E)" },
+  { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" }
 
 };
 
@@ -238,7 +251,7 @@ static void     print_help (void)
   printf("(B) -> broken option, will likely not work\n\n");
   printf("\n");
   printf("short\t\tlong\t\tstatus\t\tdescription\n\n");
-  
+
   for (i = 0; i < POCC_NB_OPTS; ++i)
     if (opts[i].short_opt != '\0')
       {
@@ -458,6 +471,38 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       options->letsee_rtries = atoi (opt_tab[POCC_OPT_LETSEE_RTRIES]);
       options->letsee = 1;
     }
+
+  // Ponos options.
+  if (opt_tab[POCC_OPT_PONOS])
+    options->ponos = 1;
+  if (opt_tab[POCC_OPT_PONOS_QUIET])
+    options->ponos_quiet = 1;
+  if (opt_tab[POCC_OPT_PONOS_DEBUG])
+    options->ponos_debug = 1;
+  if (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION])
+    options->schedule_dim = atoi (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION]);
+  if (opt_tab[POCC_OPT_PONOS_COEF_ARE_POS])
+    options->ponos_coef_are_pos = 1;
+  if (opt_tab[POCC_OPT_PONOS_BUILD_2DP1])
+    options->ponos_build_2d_plus_one = 1;
+  if (opt_tab[POCC_OPT_PONOS_SOLVER_TYPE])
+    {
+      if (! strcmp(opt_tab[POCC_OPT_PONOS_SOLVER_TYPE], "pip"))
+	// hardwire '1', until ponos gets in stable pocc mode.
+	options->ponos_solver_type = 1;
+    }
+  if (opt_tab[POCC_OPT_PONOS_MAXSCALE_SOLVER])
+    options->ponos_maxscale_solver = 1;
+  if (opt_tab[POCC_OPT_PONOS_NOREDUNDANCY_SOLVER])
+    options->ponos_noredundancy_solver = 1;
+  if (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K])
+    options->ponos_legality_constant_K =
+      atoi (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K]);
+  if (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND])
+    options->ponos_schedule_bound =
+      atoi (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND]);
+
+
   // Pluto options.
   if (opt_tab[POCC_OPT_PLUTO])
     options->pluto = 1;
@@ -584,7 +629,7 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_CLOOG_F])
     options->cloog_f = atoi (opt_tab[POCC_OPT_CLOOG_F]);
   if (opt_tab[POCC_OPT_CLOOG_L])
-    options->cloog_f = atoi (opt_tab[POCC_OPT_CLOOG_L]);
+    options->cloog_l = atoi (opt_tab[POCC_OPT_CLOOG_L]);
   if (opt_tab[POCC_OPT_CODEGEN_TIMERCODE])
     options->codegen_timercode = 1;
   if (opt_tab[POCC_OPT_CODEGEN_TIMER_ASM])

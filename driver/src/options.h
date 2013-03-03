@@ -35,7 +35,7 @@
 # include "getopts.h"
 
 # ifndef POCC_RELEASE_MODE
-#  define POCC_NB_OPTS				74
+#  define POCC_NB_OPTS				86
 # else
 #  define POCC_NB_OPTS				68
 # endif
@@ -127,6 +127,22 @@
 #  define POCC_OPT_COMPILE_CMD          	71
 #  define POCC_OPT_RUN_CMD_ARGS          	72
 #  define POCC_OPT_PROGRAM_TIMEOUT        	73
+
+#  define POCC_OPT_PONOS	        	74
+#  define POCC_OPT_PONOS_QUIET	        	75
+#  define POCC_OPT_PONOS_DEBUG	        	76
+#  define POCC_OPT_PONOS_SCHED_DIMENSION	77
+#  define POCC_OPT_PONOS_COEF_ARE_POS	        78
+#  define POCC_OPT_PONOS_BUILD_2DP1	        79
+#  define POCC_OPT_PONOS_SOLVER_TYPE	        80
+#  define POCC_OPT_PONOS_MAXSCALE_SOLVER	81
+#  define POCC_OPT_PONOS_NOREDUNDANCY_SOLVER	82
+#  define POCC_OPT_PONOS_LEGALITY_CONSTANT_K	83
+#  define POCC_OPT_PONOS_SCHED_COEF_BOUND	84
+
+#  define POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND	85
+
+
 # else
 #  define POCC_OPT_CODEGEN_TIMERCODE		61
 #  define POCC_OPT_CODEGEN_TIMER_ASM		62

@@ -1,3 +1,24 @@
+2013-03-03  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+	This patch add support for Ponos in the devel mode of PoCC.
+
+	* configure.ac: Bump to pocc 1.3-pre.
+
+	* generators/scripts/inscop: Avoid double operations in codegen.
+
+	* driver/pocc/driver-ponos.c,
+	* driver/pocc/include/pocc/driver-ponos.h: New. Unit to control
+	the Ponos scheduler.
+	* driver/src/pocc.c,
+	* driver/src/Makefile.am,
+	* driver/pocc/Makefile.am: Update accordingly.
+
+	* driver/pocc/driver-pastops.c: Add support for --past-super-hoist.
+
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add the Ponos-related options.
+
 2013-02-18  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 	Ready-to-release patch.
 

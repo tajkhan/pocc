@@ -61,6 +61,13 @@ INCLUDES		=						\
 	-I$(install_prefix)/math/install-fm/include			\
 	-I$(install_prefix)/math/external/install/include
 
+
+if POCC_FULL_MODE
+  INCLUDES	+=						\
+	-I$(install_prefix)/optimizers/install-ponos/include
+endif
+
+
 #############################################################################
 
 EXTRA_DIST		 =
@@ -107,9 +114,10 @@ pocc_LDADD	=							     \
   $(install_prefix)/math/install-fm/lib/libfm.la
 
 if POCC_FULL_MODE
-  pocc_LDADD	+=						     \
+  pocc_LDADD	+=							     \
   $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la
+  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
+  $(install_prefix)/optimizers/install-ponos/lib/libponos.la
 endif
 
 if POCC_HAS_BARVINOK

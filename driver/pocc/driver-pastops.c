@@ -644,7 +644,11 @@ pocc_driver_pastops (scoplib_scop_p program,
 
   // Translate parallel for loops into parfor loops.
   if (poptions->pragmatizer)
-    translate_past_for (program, &root, 1, poptions);
+    {
+      if (! poptions->quiet)
+	printf ("[PAST] Insert OpenMP/ICC pragmas\n");
+      translate_past_for (program, &root, 1, poptions);
+    }
 
   // Pre-vectorize.
   if (poptions->vectorizer)
@@ -701,7 +705,17 @@ pocc_driver_pastops (scoplib_scop_p program,
 
   // Systematically optimize the loop bounds (hoisting).
   if (poptions->past_optimize_loop_bounds)
-    past_optimize_loop_bounds (root);
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Perform aggressive loop bound optimization\n");
+      past_optimize_loop_bounds (root);
+    }
+  else if (poptions->past_super_optimize_loop_bounds)
+    {
+      if (! poptions->quiet)
+	printf ("[PoCC] Perform aggressive loop bound optimization\n");
+      past_super_optimize_loop_bounds (root);
+    }
 
   // Insert iterators declaration.
   s_symbol_t** iterators = collect_all_loop_iterators (root);
