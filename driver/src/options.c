@@ -472,36 +472,6 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
       options->letsee = 1;
     }
 
-  // Ponos options.
-  if (opt_tab[POCC_OPT_PONOS])
-    options->ponos = 1;
-  if (opt_tab[POCC_OPT_PONOS_QUIET])
-    options->ponos_quiet = 1;
-  if (opt_tab[POCC_OPT_PONOS_DEBUG])
-    options->ponos_debug = 1;
-  if (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION])
-    options->schedule_dim = atoi (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION]);
-  if (opt_tab[POCC_OPT_PONOS_COEF_ARE_POS])
-    options->ponos_coef_are_pos = 1;
-  if (opt_tab[POCC_OPT_PONOS_BUILD_2DP1])
-    options->ponos_build_2d_plus_one = 1;
-  if (opt_tab[POCC_OPT_PONOS_SOLVER_TYPE])
-    {
-      if (! strcmp(opt_tab[POCC_OPT_PONOS_SOLVER_TYPE], "pip"))
-	// hardwire '1', until ponos gets in stable pocc mode.
-	options->ponos_solver_type = 1;
-    }
-  if (opt_tab[POCC_OPT_PONOS_MAXSCALE_SOLVER])
-    options->ponos_maxscale_solver = 1;
-  if (opt_tab[POCC_OPT_PONOS_NOREDUNDANCY_SOLVER])
-    options->ponos_noredundancy_solver = 1;
-  if (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K])
-    options->ponos_legality_constant_K =
-      atoi (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K]);
-  if (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND])
-    options->ponos_schedule_bound =
-      atoi (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND]);
-
 
   // Pluto options.
   if (opt_tab[POCC_OPT_PLUTO])
@@ -644,7 +614,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->use_past = 0;
   if (opt_tab[POCC_OPT_PAST_OPTIMIZE_LOOP_BOUND])
     options->past_optimize_loop_bounds = 1;
-  // Pragmatizer options.
+
+    // Pragmatizer options.
   if (opt_tab[POCC_OPT_PRAGMATIZER])
     options->pragmatizer = 1;
 
@@ -700,6 +671,44 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->array_contraction_keep_outer_par_loops = 1;
   if (opt_tab[POCC_OPT_AC_KEEP_VECTORIZED])
     options->array_contraction_keep_vectorized_loops = 1;
+
+
+
+  // Ponos options.
+  if (opt_tab[POCC_OPT_PONOS])
+    options->ponos = 1;
+  if (opt_tab[POCC_OPT_PONOS_QUIET])
+    options->ponos_quiet = 1;
+  if (opt_tab[POCC_OPT_PONOS_DEBUG])
+    options->ponos_debug = 1;
+  if (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION])
+    options->schedule_dim = atoi (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION]);
+  if (opt_tab[POCC_OPT_PONOS_COEF_ARE_POS])
+    options->ponos_coef_are_pos = 1;
+  if (opt_tab[POCC_OPT_PONOS_BUILD_2DP1])
+    options->ponos_build_2d_plus_one = 1;
+  if (opt_tab[POCC_OPT_PONOS_SOLVER_TYPE])
+    {
+      if (! strcmp(opt_tab[POCC_OPT_PONOS_SOLVER_TYPE], "pip"))
+	// hardwire '1', until ponos gets in stable pocc mode.
+	options->ponos_solver_type = 1;
+    }
+  if (opt_tab[POCC_OPT_PONOS_MAXSCALE_SOLVER])
+    options->ponos_maxscale_solver = 1;
+  if (opt_tab[POCC_OPT_PONOS_NOREDUNDANCY_SOLVER])
+    options->ponos_noredundancy_solver = 1;
+  if (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K])
+    options->ponos_legality_constant_K =
+      atoi (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K]);
+  if (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND])
+    options->ponos_schedule_bound =
+      atoi (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND]);
+
+  // Past options.
+  if (opt_tab[POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND])
+    options->past_super_optimize_loop_bounds = 1;
+
+
 #endif
   // Letsee precut mode implies Pluto mode.
   if (options->letsee && options->letsee_space == LS_TYPE_FS)
