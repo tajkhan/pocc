@@ -54,6 +54,22 @@ pocc_driver_ponos (scoplib_scop_p program,
   //
   ponos_scheduler (program, popts);
 
+  // Dump the scop file, if needed.
+  if (poptions->output_scoplib_file_name)
+    {
+      scoplib_scop_p tempscop = scoplib_scop_dup (program);
+      if (poptions->cloogify_schedules)
+	pocc_cloogify_scop (tempscop);
+      FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");
+      if (scopf)
+	{
+	  scoplib_scop_print_dot_scop (scopf, tempscop);
+	  fclose (scopf);
+	}
+      scoplib_scop_free (tempscop);
+    }
+
+
   ponos_options_free (popts);
 
   return EXIT_SUCCESS;
