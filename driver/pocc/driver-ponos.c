@@ -53,6 +53,11 @@ pocc_driver_ponos (scoplib_scop_p program,
   popts->schedule_coefs_are_pos = poptions->ponos_coef_are_pos;
   popts->objective = poptions->ponos_objective;
 
+  // Candl options: candl is called in ponos for the moment.
+  /// FIXME: enable reading of external deps.
+  popts->candl_deps_isl_simplify = poptions->candl_deps_isl_simplify;
+  popts->candl_deps_prune_transcover = poptions->candl_deps_prune_transcover;
+
   //
   ponos_scheduler (program, popts);
 
