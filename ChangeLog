@@ -1,4 +1,12 @@
 2013-03-03  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* driver/pocc/driver-ponos.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add and manage new options for Ponos.
+
+2013-03-03  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 	This patch add support for Ponos in the devel mode of PoCC.
 
 	* configure.ac: Bump to pocc 1.3-pre.

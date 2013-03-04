@@ -35,6 +35,11 @@
 # include <pluto/pluto.h>
 # include <letsee/options.h>
 
+# ifndef POCC_RELEASE_MODE
+#  include <ponos/solver.h>
+#  include <ponos/objectives.h>
+# endif
+
 #define POCC_TIMER_CODE_ASM	1
 #define POCC_TIMER_CODE_TIME	2
 
@@ -104,13 +109,15 @@ struct s_pocc_options
   int		ponos_quiet;
   int		ponos_debug;
   int		ponos_solver_type;
+  int		ponos_solver_precond;
   int		ponos_coef_are_pos;
   int		ponos_build_2d_plus_one;
   int		ponos_maxscale_solver;
   int		ponos_noredundancy_solver;
   int		ponos_legality_constant_K;
   int		ponos_schedule_bound;
-  int		schedule_dim;
+  int		ponos_schedule_dim;
+  int		ponos_objective;
 
   // PLuTo Options.
   int		pluto; // Run PLuTo (default: no)

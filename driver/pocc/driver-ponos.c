@@ -46,10 +46,12 @@ pocc_driver_ponos (scoplib_scop_p program,
   popts->noredundancy_solver = poptions->ponos_noredundancy_solver;
   popts->legality_constant = poptions->ponos_legality_constant_K;
   popts->schedule_bound = poptions->ponos_schedule_bound;
-  popts->schedule_size = poptions->schedule_dim;
+  popts->schedule_size = poptions->ponos_schedule_dim;
   popts->solver = poptions->ponos_solver_type;
+  popts->solver_precond = poptions->ponos_solver_precond;
   popts->quiet = poptions->ponos_quiet;
   popts->schedule_coefs_are_pos = poptions->ponos_coef_are_pos;
+  popts->objective = poptions->ponos_objective;
 
   //
   ponos_scheduler (program, popts);

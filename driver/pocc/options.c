@@ -82,6 +82,7 @@ pocc_options_malloc ()
   // Ponos options.
   ret->ponos = 0;
   ret->ponos_solver_type = 1;
+  ret->ponos_solver_precond = 0;
   ret->ponos_coef_are_pos = 0;
   ret->ponos_quiet = 0;
   ret->ponos_debug = 0;
@@ -90,7 +91,8 @@ pocc_options_malloc ()
   ret->ponos_noredundancy_solver = 0;
   ret->ponos_legality_constant_K = 10;
   ret->ponos_schedule_bound = 10;
-  ret->schedule_dim = 1;
+  ret->ponos_schedule_dim = 1;
+  ret->ponos_objective = 0;
 
   // Pluto options.
   ret->pluto = 0;

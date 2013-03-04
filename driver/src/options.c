@@ -115,10 +115,12 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ponos-coef-pos", 0, "Ponos: schedule coefficients are >= 0" , "(E)" },
   { '\0', "ponos-build-2dp1", 0, "Ponos: build 2d+1 schedule" , "(E)" },
   { '\0', "ponos-solver", 1, "Ponos: solver: [pip]" , "(E)" },
+  { '\0', "ponos-solver-pre", 0, "Ponos: precondition the PIP" , "(E)" },
   { '\0', "ponos-farkas-max", 0, "Ponos: maxscale FM solver" , "(E)" },
   { '\0', "ponos-farkas-nored", 0, "Ponos: remove redundancy with FM" , "(E)" },
   { '\0', "ponos-K", 1, "Ponos: value for the K constant [10]" , "(E)" },
-  { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]\n" , "(E)" },
+  { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]" , "(E)" },
+  { '\0', "ponos-obj", 1, "Ponos: objective constraints [none],\n\t\t\t\t\tcodelet,pluto\n" , "(E)" },
   { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" }
 
 };
@@ -682,7 +684,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PONOS_DEBUG])
     options->ponos_debug = 1;
   if (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION])
-    options->schedule_dim = atoi (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION]);
+    options->ponos_schedule_dim =
+      atoi (opt_tab[POCC_OPT_PONOS_SCHED_DIMENSION]);
   if (opt_tab[POCC_OPT_PONOS_COEF_ARE_POS])
     options->ponos_coef_are_pos = 1;
   if (opt_tab[POCC_OPT_PONOS_BUILD_2DP1])
@@ -690,13 +693,23 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PONOS_SOLVER_TYPE])
     {
       if (! strcmp(opt_tab[POCC_OPT_PONOS_SOLVER_TYPE], "pip"))
-	// hardwire '1', until ponos gets in stable pocc mode.
-	options->ponos_solver_type = 1;
+	options->ponos_solver_type = PONOS_SOLVER_PIP;
+    }
+  if (opt_tab[POCC_OPT_PONOS_OBJECTIVE])
+    {
+      if (! strcmp(opt_tab[POCC_OPT_PONOS_OBJECTIVE], "none"))
+	options->ponos_objective = PONOS_OBJECTIVES_NONE;
+      else if (! strcmp(opt_tab[POCC_OPT_PONOS_OBJECTIVE], "codelet"))
+	options->ponos_objective = PONOS_OBJECTIVES_CODELET;
+      else if (! strcmp(opt_tab[POCC_OPT_PONOS_OBJECTIVE], "pluto"))
+	options->ponos_objective = PONOS_OBJECTIVES_PLUTO;
     }
   if (opt_tab[POCC_OPT_PONOS_MAXSCALE_SOLVER])
     options->ponos_maxscale_solver = 1;
   if (opt_tab[POCC_OPT_PONOS_NOREDUNDANCY_SOLVER])
     options->ponos_noredundancy_solver = 1;
+  if (opt_tab[POCC_OPT_PONOS_SOLVER_PRECOND])
+    options->ponos_solver_precond = 1;
   if (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K])
     options->ponos_legality_constant_K =
       atoi (opt_tab[POCC_OPT_PONOS_LEGALITY_CONSTANT_K]);
