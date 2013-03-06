@@ -30,6 +30,10 @@
 #include "options.h"
 
 #ifndef POCC_RELEASE_MODE
+# include <ponos/options.h>
+#endif
+
+#ifndef POCC_RELEASE_MODE
 static const struct s_opt       opts[POCC_NB_OPTS] =
 {
   { 'h', "help", 0, "Print this help" , "\t\t(S)" },
@@ -120,7 +124,9 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ponos-farkas-nored", 0, "Ponos: remove redundancy with FM" , "(E)" },
   { '\0', "ponos-K", 1, "Ponos: value for the K constant [10]" , "(E)" },
   { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]" , "(E)" },
-  { '\0', "ponos-obj", 1, "Ponos: objective constraints [none],\n\t\t\t\t\tcodelet,pluto\n" , "(E)" },
+  { '\0', "ponos-obj", 1, "Ponos: objective constraints [none],\n\t\t\t\t\tcodelet,pluto" , "(E)" },
+  { '\0', "ponos-obj-list", 1, "Ponos: constraints/objectives list from\n\t\t\t\t\tsumiterpos,paramcoef0,maxouterpar,\n\t\t\t\t\tmaxinnerpar,maxperm,mindepdist,\n\t\t\t\t\tmaxdepsolve (ex: \"maxperm,paramcoef0\")\n" , "(E)" },
+
   { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" }
 
 };
@@ -703,6 +709,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	options->ponos_objective = PONOS_OBJECTIVES_CODELET;
       else if (! strcmp(opt_tab[POCC_OPT_PONOS_OBJECTIVE], "pluto"))
 	options->ponos_objective = PONOS_OBJECTIVES_PLUTO;
+      else if (! strcmp(opt_tab[POCC_OPT_PONOS_OBJECTIVE], "custom"))
+	options->ponos_objective = PONOS_OBJECTIVES_CUSTOM;
     }
   if (opt_tab[POCC_OPT_PONOS_MAXSCALE_SOLVER])
     options->ponos_maxscale_solver = 1;
@@ -716,6 +724,72 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   if (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND])
     options->ponos_schedule_bound =
       atoi (opt_tab[POCC_OPT_PONOS_SCHED_COEF_BOUND]);
+
+  int pos = 0;
+  int idx = 0;
+  if (opt_tab[POCC_OPT_PONOS_OBJECTIVE_LIST])
+    {
+      char* str = opt_tab[POCC_OPT_PONOS_OBJECTIVE_LIST];
+      while (pos < strlen (opt_tab[POCC_OPT_PONOS_OBJECTIVE_LIST]))
+	{
+	  if (! strncmp (str, "sumiterpos", strlen ("sumiterpos")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_CONSTRAINTS_SUM_ITER_POS;
+	      pos += strlen ("sumiterpos") + 1;
+	      str += strlen ("sumiterpos") + 1;
+	    }
+	  else if (! strncmp (str, "paramcoef0", strlen ("paramcoef0")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_CONSTRAINTS_PARAM_COEF_ZERO;
+	      pos += strlen ("paramcoef0") + 1;
+	      str += strlen ("paramcoef0") + 1;
+	    }
+	  else if (! strncmp (str, "maxouterpar", strlen ("maxouterpar")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_OBJECTIVES_MAX_OUTER_PAR;
+	      pos += strlen ("maxouterpar") + 1;
+	      str += strlen ("maxouterpar") + 1;
+	    }
+	  else if (! strncmp (str, "maxinnerpar", strlen ("maxinnerpar")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_OBJECTIVES_MAX_INNER_PAR;
+	      pos += strlen ("maxinnerpar") + 1;
+	      str += strlen ("maxinnerpar") + 1;
+	    }
+	  else if (! strncmp (str, "maxperm", strlen ("maxperm")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_OBJECTIVES_MAX_PERMUTABILITY;
+	      pos += strlen ("maxperm") + 1;
+	      str += strlen ("maxperm") + 1;
+	    }
+	  else if (! strncmp (str, "mindepdist", strlen ("mindepdist")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_OBJECTIVES_MIN_DEP_DISTANCE;
+	      pos += strlen ("mindepdist") + 1;
+	      str += strlen ("mindepdist") + 1;
+	    }
+	  else if (! strncmp (str, "maxdepsolve", strlen ("maxdepsolve")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_OBJECTIVES_MAX_DEP_SOLVE;
+	      pos += strlen ("maxdepsolve") + 1;
+	      str += strlen ("maxdepsolve") + 1;
+	    }
+	  else
+	    {
+	      printf ("[PoCC][ERROR] unsupported argument: %s\n",
+		      opt_tab[POCC_OPT_PONOS_OBJECTIVE_LIST]);
+	      exit (1);
+	    }
+	}
+    }
+  options->ponos_objective_list[idx] = -1;
 
   // Past options.
   if (opt_tab[POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND])

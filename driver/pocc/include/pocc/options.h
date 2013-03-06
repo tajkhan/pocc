@@ -118,6 +118,7 @@ struct s_pocc_options
   int		ponos_schedule_bound;
   int		ponos_schedule_dim;
   int		ponos_objective;
+  int		ponos_objective_list[256];
 
   // PLuTo Options.
   int		pluto; // Run PLuTo (default: no)

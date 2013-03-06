@@ -52,7 +52,10 @@ pocc_driver_ponos (scoplib_scop_p program,
   popts->quiet = poptions->ponos_quiet;
   popts->schedule_coefs_are_pos = poptions->ponos_coef_are_pos;
   popts->objective = poptions->ponos_objective;
-
+  int i;
+  for (i = 0; poptions->ponos_objective_list[i] != -1; ++i)
+    popts->objective_list[i] = poptions->ponos_objective_list[i];
+  popts->objective_list[i] = -1;
   // Candl options: candl is called in ponos for the moment.
   /// FIXME: enable reading of external deps.
   popts->candl_deps_isl_simplify = poptions->candl_deps_isl_simplify;

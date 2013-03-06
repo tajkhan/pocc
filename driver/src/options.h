@@ -35,7 +35,7 @@
 # include "getopts.h"
 
 # ifndef POCC_RELEASE_MODE
-#  define POCC_NB_OPTS				88
+#  define POCC_NB_OPTS				89
 # else
 #  define POCC_NB_OPTS				68
 # endif
@@ -141,8 +141,9 @@
 #  define POCC_OPT_PONOS_LEGALITY_CONSTANT_K	84
 #  define POCC_OPT_PONOS_SCHED_COEF_BOUND	85
 #  define POCC_OPT_PONOS_OBJECTIVE		86
+#  define POCC_OPT_PONOS_OBJECTIVE_LIST		87
 
-#  define POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND	87
+#  define POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND	88
 
 
 # else

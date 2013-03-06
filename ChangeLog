@@ -1,3 +1,11 @@
+2013-03-05  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* driver/pocc/driver-ponos.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add support for new 'custom' mode of ponos.
+
 2013-03-03  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
 	* driver/pocc/driver-ponos.c,
