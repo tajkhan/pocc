@@ -116,7 +116,7 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ponos-quiet", 0, "Ponos: be quiet" , "\t(E)" },
   { '\0', "ponos-debug", 0, "Ponos: debug mode" , "\t(E)" },
   { '\0', "ponos-sched-sz", 1, "Ponos: schedule dimensionality [1]" , "(E)" },
-  { '\0', "ponos-coef-pos", 0, "Ponos: schedule coefficients are >= 0" , "(E)" },
+  { '\0', "ponos-coef-N", 0, "Ponos: all variables are >= 0" , "\t(E)" },
   { '\0', "ponos-build-2dp1", 0, "Ponos: build 2d+1 schedule" , "(E)" },
   { '\0', "ponos-solver", 1, "Ponos: solver: [pip]" , "(E)" },
   { '\0', "ponos-solver-pre", 0, "Ponos: precondition the PIP" , "(E)" },
