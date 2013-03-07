@@ -26,8 +26,8 @@ echo "#ifdef max
 echo "#ifdef min
 # undef min
 #endif" >> .head;
-echo "#define ceild(x,y) ((x > 0)? (1 + (x - 1)/y): (x / y))" >> .head
-echo "#define floord(x,y) ((x > 0)? ((x - 1)/y): 1 + ((x -1)/ y))" >> .head
+echo "#define ceild(x,y) (((x) > 0)? (1 + ((x) - 1)/(y)): ((x) / (y)))" >> .head
+echo "#define floord(x,y) (((x) > 0)? ((x)/(y)): 1 + (((x) -1)/ (y)))" >> .head
 ### OLDER versions:
 #echo "#define ceild(n,d)  ceil(((double)(n))/((double)(d)))" >> .head
 #echo "#define floord(n,d) floor(((double)(n))/((double)(d)))" >> .head
