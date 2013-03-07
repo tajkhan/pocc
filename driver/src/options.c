@@ -125,7 +125,8 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ponos-K", 1, "Ponos: value for the K constant [10]" , "(E)" },
   { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]" , "(E)" },
   { '\0', "ponos-obj", 1, "Ponos: objective constraints [none],\n\t\t\t\t\tcodelet,pluto" , "(E)" },
-  { '\0', "ponos-obj-list", 1, "Ponos: constraints/objectives list from\n\t\t\t\t\tsumiterpos,paramcoef0,maxouterpar,\n\t\t\t\t\tmaxinnerpar,maxperm,mindepdist,\n\t\t\t\t\tmaxdepsolve (ex: \"maxperm,paramcoef0\")\n" , "(E)" },
+  { '\0', "ponos-obj-list", 1, "Ponos: constraints/objectives list from\n\t\t\t\t\tsumiterpos,paramcoef0,maxouterpar,\n\t\t\t\t\tmaxinnerpar,maxperm,mindepdist,\n\t\t\t\t\tmaxdepsolve (ex: \"maxperm,paramcoef0\")" , "(E)" },
+  { '\0', "ponos-pipsolve-lp", 0, "Ponos: Relax PIP to rational\n" , "(E)" },
 
   { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" }
 
@@ -714,6 +715,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     }
   if (opt_tab[POCC_OPT_PONOS_MAXSCALE_SOLVER])
     options->ponos_maxscale_solver = 1;
+  if (opt_tab[POCC_OPT_PONOS_PIPSOLVE_LP])
+    options->ponos_pipsolve_lp = 1;
   if (opt_tab[POCC_OPT_PONOS_NOREDUNDANCY_SOLVER])
     options->ponos_noredundancy_solver = 1;
   if (opt_tab[POCC_OPT_PONOS_SOLVER_PRECOND])

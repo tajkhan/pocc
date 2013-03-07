@@ -94,7 +94,8 @@ pocc_options_malloc ()
   ret->ponos_schedule_dim = 1;
   ret->ponos_objective = 0;
   ret->ponos_objective_list[0] = -1;
-  
+  ret->ponos_pipsolve_lp = 0;
+
   // Pluto options.
   ret->pluto = 0;
   ret->pluto_parallel = 0;
