@@ -1,5 +1,9 @@
 2013-03-09  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
+	* driver/src/options.c: Add new objective for ponos.
+
+2013-03-09  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
 	* driver/pocc/driver-cloog.c,
 	* driver/pocc/include/pocc/options.h,
 	* driver/pocc/options.c,
