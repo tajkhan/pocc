@@ -125,10 +125,11 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ponos-K", 1, "Ponos: value for the K constant [10]" , "(E)" },
   { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]" , "(E)" },
   { '\0', "ponos-obj", 1, "Ponos: objective constraints [none],\n\t\t\t\t\tcodelet,pluto" , "(E)" },
-  { '\0', "ponos-obj-list", 1, "Ponos: constraints/objectives list from\n\t\t\t\t\tsumiterpos,paramcoef0,maxouterpar,\n\t\t\t\t\tmaxinnerpar,maxperm,mindepdist,\n\t\t\t\t\tmaxdepsolve (ex: \"maxperm,paramcoef0\")" , "(E)" },
+  { '\0', "ponos-obj-list", 1, "Ponos: constraints/objectives list from\n\t\t\t\t\tsumiterpos,paramcoef0,maxouterpar,\n\t\t\t\t\tmaxinnerpar,maxperm,mindepdist,\n\t\t\t\t\tmaxdepsolve,linearind" , "(E)" },
   { '\0', "ponos-pipsolve-lp", 0, "Ponos: Relax PIP to rational\n" , "(E)" },
 
-  { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" }
+  { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" },
+  { '\0', "read-cloog", 0, "read cloog file as input" , "(E)" }
 
 };
 
@@ -784,6 +785,13 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
 	      pos += strlen ("maxdepsolve") + 1;
 	      str += strlen ("maxdepsolve") + 1;
 	    }
+	  else if (! strncmp (str, "linearind", strlen ("linearind")))
+	    {
+	      options->ponos_objective_list[idx++] =
+		PONOS_CONSTRAINTS_LINEAR_INDEP;
+	      pos += strlen ("linearind") + 1;
+	      str += strlen ("linearind") + 1;
+	    }
 	  else
 	    {
 	      printf ("[PoCC][ERROR] unsupported argument: %s\n",
@@ -797,6 +805,10 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
   // Past options.
   if (opt_tab[POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND])
     options->past_super_optimize_loop_bounds = 1;
+
+  // Past options.
+  if (opt_tab[POCC_OPT_READ_CLOOG_FILE])
+    options->read_cloog_file = 1;
 
 
 #endif

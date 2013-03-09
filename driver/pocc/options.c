@@ -89,7 +89,7 @@ pocc_options_malloc ()
   ret->ponos_build_2d_plus_one = 0;
   ret->ponos_maxscale_solver = 0;
   ret->ponos_noredundancy_solver = 0;
-  ret->ponos_legality_constant_K = 10;
+  ret->ponos_legality_constant_K = 3;
   ret->ponos_schedule_bound = 10;
   ret->ponos_schedule_dim = 1;
   ret->ponos_objective = 0;
@@ -124,6 +124,7 @@ pocc_options_malloc ()
   ret->cloog_f = POCC_CLOOG_UNDEF;
   ret->cloog_l = POCC_CLOOG_UNDEF;
   ret->print_cloog_file = 0;
+  ret->read_cloog_file = 0;
 
   // Codegen options.
   ret->codegen = 1;

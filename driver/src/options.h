@@ -35,7 +35,7 @@
 # include "getopts.h"
 
 # ifndef POCC_RELEASE_MODE
-#  define POCC_NB_OPTS				90
+#  define POCC_NB_OPTS				91
 # else
 #  define POCC_NB_OPTS				68
 # endif
@@ -144,6 +144,7 @@
 #  define POCC_OPT_PONOS_OBJECTIVE_LIST		87
 #  define POCC_OPT_PONOS_PIPSOLVE_LP		88
 #  define POCC_OPT_PAST_SUPER_OPT_LOOP_BOUND	89
+#  define POCC_OPT_READ_CLOOG_FILE		90
 
 
 # else

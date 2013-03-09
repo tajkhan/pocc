@@ -68,8 +68,11 @@ int main(int argc, char** argv)
       printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
 
   // (1) Parse the file.
-  scoplib_scop_p scop =
-    pocc_driver_clan (poptions->input_file, poptions, puoptions);
+  scoplib_scop_p scop = NULL;
+  if (! poptions->read_cloog_file)
+    scop = pocc_driver_clan (poptions->input_file, poptions, puoptions);
+  else
+    scop = scoplib_scop_malloc ();
   if (! scop || scop->statement == NULL)
     pocc_error ("[PoCC] Possible parsing error: no statement in SCoP");
   // (2) If pass-thru, run candl.
@@ -97,7 +100,7 @@ int main(int argc, char** argv)
       exit (EXIT_FAILURE);
 #endif
 
-  
+
   if (poptions->output_scoplib_file_name)
     {
       scoplib_scop_p tempscop = scoplib_scop_dup (scop);

@@ -1,3 +1,13 @@
+2013-03-09  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* driver/pocc/driver-cloog.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/pocc.c,
+	* driver/src/options.c: Add development option to read .cloog
+	files as input.
+
 2013-03-07  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
 	* driver/pocc/options.c: Rename --ponos-coef-pos to --ponos-coef-N.

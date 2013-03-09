@@ -173,6 +173,8 @@ pocc_driver_cloog (scoplib_scop_p program,
   struct clast_stmt* root;
 
   // Convert context.
+  if (! program->context)
+    program->context = scoplib_matrix_malloc (0, 2);
   cmat = convert_to_cloogmatrix (program->context);
   CloogDomain* context = cloog_domain_from_cloog_matrix (coptions->state, cmat,
 							program->nb_parameters);
@@ -196,64 +198,79 @@ pocc_driver_cloog (scoplib_scop_p program,
   char** names;
   int nb_tile_loops;
 
-  // Collect the maximal scattering dimensionality.
-  int nb_scatt = 0;
-  for (stm = program->statement; stm; stm = stm->next)
+  if (! poptions->read_cloog_file)
     {
-      int nb_eq = 0;
-      for (i = 0; i < stm->schedule->NbRows; ++i)
-	if (SCOPVAL_get_si(stm->schedule->p[i][0]) == 0)
-	  ++nb_eq;
-      int cur_scatt = nb_eq + (stm->schedule->NbColumns -
-			       stm->domain->elt->NbColumns);
-      nb_scatt = nb_scatt > cur_scatt ? nb_scatt : cur_scatt;
-    }
-
-  for (stm = program->statement; stm; stm = stm->next)
-    {
-      scoplib_matrix_list_p smat;
-      for (smat = stm->domain; smat; smat = smat->next)
+      // Collect the maximal scattering dimensionality.
+      int nb_scatt = 0;
+      for (stm = program->statement; stm; stm = stm->next)
 	{
-	  mat = (scoplib_matrix_p) smat->elt;
-	  cmat = convert_to_cloogmatrix (mat);
-	  dom = cloog_domain_from_cloog_matrix (coptions->state, cmat,
-						program->nb_parameters);
-	  cloog_matrix_free (cmat);
-	  scoplib_matrix_p newsched =
-	    cloogify_schedule ((scoplib_matrix_p) stm->schedule, nb_scatt,
-			       program->nb_parameters);
-	  int total_scatt_dims = newsched->NbColumns - mat->NbColumns;
-	  cmat = convert_to_cloogmatrix (newsched);
-	  scoplib_matrix_free (newsched);
-	  scat = cloog_scattering_from_cloog_matrix (coptions->state, cmat,
-						     total_scatt_dims,
-						     program->nb_parameters);
-	  ud = cloog_union_domain_add_domain (ud, NULL, dom, scat, NULL);
-	  cloog_matrix_free (cmat);
+	  int nb_eq = 0;
+	  for (i = 0; i < stm->schedule->NbRows; ++i)
+	    if (SCOPVAL_get_si(stm->schedule->p[i][0]) == 0)
+	      ++nb_eq;
+	  int cur_scatt = nb_eq + (stm->schedule->NbColumns -
+				   stm->domain->elt->NbColumns);
+	  nb_scatt = nb_scatt > cur_scatt ? nb_scatt : cur_scatt;
 	}
+
+      for (stm = program->statement; stm; stm = stm->next)
+	{
+	  scoplib_matrix_list_p smat;
+	  for (smat = stm->domain; smat; smat = smat->next)
+	    {
+	      mat = (scoplib_matrix_p) smat->elt;
+	      cmat = convert_to_cloogmatrix (mat);
+	      dom = cloog_domain_from_cloog_matrix (coptions->state, cmat,
+						    program->nb_parameters);
+	      cloog_matrix_free (cmat);
+	      scoplib_matrix_p newsched =
+		cloogify_schedule ((scoplib_matrix_p) stm->schedule, nb_scatt,
+				   program->nb_parameters);
+	      int total_scatt_dims = newsched->NbColumns - mat->NbColumns;
+	      cmat = convert_to_cloogmatrix (newsched);
+	      scoplib_matrix_free (newsched);
+	      scat = cloog_scattering_from_cloog_matrix
+		(coptions->state, cmat, total_scatt_dims,
+		 program->nb_parameters);
+	      ud = cloog_union_domain_add_domain (ud, NULL, dom, scat, NULL);
+	      cloog_matrix_free (cmat);
+	    }
+	}
+      // Store the scattering names.
+      for (i = 0; i < nb_scatt; ++i)
+	{
+	  char buffer[16];
+	  sprintf (buffer, "c%d", i);
+	  ud = cloog_union_domain_set_name (ud, CLOOG_SCAT, i,
+					    buffer);
+	}
+
+      // Set the options.
+      //coptions->strides = 0;
+      coptions->quiet = poptions->quiet;
+      input = cloog_input_alloc (context, ud);
     }
-  // Store the scattering names.
-  for (i = 0; i < nb_scatt; ++i)
+  else
     {
-      char buffer[16];
-      sprintf (buffer, "c%d", i);
-      ud = cloog_union_domain_set_name (ud, CLOOG_SCAT, i,
-					buffer);
+      FILE* f = fopen (poptions->input_file_name, "r");
+      if (! f)
+	{
+	  printf ("[PoCC][ERROR] CLooG input file %s cannot be opened\n",
+		  poptions->input_file_name);
+	  exit (1);
+	}
+      input = cloog_input_read (f, coptions);
+      fclose (f);
     }
 
-  // Set the options.
-  //coptions->strides = 0;
-  coptions->quiet = poptions->quiet;
-  input = cloog_input_alloc (context, ud);
   if (poptions->print_cloog_file)
     {
       printf ("[PoCC] CLooG input file:\n");
       cloog_input_dump_cloog(stderr, input, coptions);
     }
-  
+
   // Generate the clast.
   root = cloog_clast_create_from_input (input, coptions);
-
   /// FIXME: reactivate this. input must be passed
   //cloog_input_free (input);
 
