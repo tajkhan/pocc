@@ -1,3 +1,9 @@
+2013-03-10  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* config/cdsc/driver.cfg,
+	* config/cdsc/configure.cfg: New. config files for the CDSC release
+	mode, including HLS support.
+
 2013-03-09  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
 	* driver/src/options.c: Add new objective for ponos.
