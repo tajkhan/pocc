@@ -62,12 +62,12 @@ pocc_copy_transfo_to_scop (s_pocc_utils_options_t* puoptions,
 	{
 	  for (j = 0; j < stm->nb_iterators; ++j)
 	    SCOPVAL_set_si(stm->schedule->p[i][count++],
-			   transfo[i]->vector[j + iter_pos].num);
+			   Z_GET_SI(transfo[i]->vector[j + iter_pos].num));
 	  for (j = 0; j < nb_par; ++j)
 	    SCOPVAL_set_si(stm->schedule->p[i][count++],
-			   transfo[i]->vector[j + par_pos].num);
+			   Z_GET_SI(transfo[i]->vector[j + par_pos].num));
 	  SCOPVAL_set_si(stm->schedule->p[i][count++],
-			 transfo[i]->vector[cst_pos].num);
+			 Z_GET_SI(transfo[i]->vector[cst_pos].num));
 	}
       iter_pos += stm->nb_iterators;
       par_pos += nb_par;

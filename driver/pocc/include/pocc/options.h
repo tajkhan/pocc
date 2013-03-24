@@ -120,6 +120,7 @@ struct s_pocc_options
   int		ponos_objective;
   int		ponos_objective_list[256];
   int		ponos_pipsolve_lp;
+  int		ponos_pipsolve_gmp;
 
   // PLuTo Options.
   int		pluto; // Run PLuTo (default: no)

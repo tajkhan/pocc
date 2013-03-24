@@ -53,6 +53,7 @@ pocc_driver_ponos (scoplib_scop_p program,
   popts->schedule_coefs_are_pos = poptions->ponos_coef_are_pos;
   popts->objective = poptions->ponos_objective;
   popts->pipsolve_lp = poptions->ponos_pipsolve_lp;
+  popts->pipsolve_gmp = poptions->ponos_pipsolve_gmp;
 
   int i;
   for (i = 0; poptions->ponos_objective_list[i] != -1; ++i)

@@ -1,3 +1,17 @@
+2013-03-24  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* driver/pocc/driver-ponos.c,
+	* driver/pocc/include/pocc/options.h,
+	* driver/pocc/driver-letsee.c,
+	* driver/pocc/options.c,
+	* driver/src/options.h,
+	* driver/src/options.c: Add option --ponos-pip-gmp, and propagate
+	changes from FM-0.6.0/GMP.
+
+	* config/devel/configure.cfg,
+	* config/base/configure.cfg: Add required configure flags for FM
+	and Ponos.
+
 2013-03-10  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
 	* config/cdsc/driver.cfg,

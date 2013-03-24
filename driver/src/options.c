@@ -126,10 +126,11 @@ static const struct s_opt       opts[POCC_NB_OPTS] =
   { '\0', "ponos-coef", 1, "Ponos: schedule coefficients bound [10]" , "(E)" },
   { '\0', "ponos-obj", 1, "Ponos: objective constraints [none],\n\t\t\t\t\tcodelet,pluto" , "(E)" },
   { '\0', "ponos-obj-list", 1, "Ponos: constraints/objectives list from\n\t\t\t\t\tsumiterpos,paramcoef0,maxouterpar,\n\t\t\t\t\tmaxinnerpar,maxperm,mindepdist,\n\t\t\t\t\tmaxdepsolve,linearind,gammapos" , "(E)" },
-  { '\0', "ponos-pipsolve-lp", 0, "Ponos: Relax PIP to rational\n" , "(E)" },
+  { '\0', "ponos-pipsolve-lp", 0, "Ponos: Relax PIP to rational" , "(E)" },
+  { '\0', "ponos-pip-gmp", 0, "Ponos: use PIP-gmp\n" , "(E)" },
 
   { '\0', "past-super-hoist", 0, "Hoist loop bounds (super aggresive)" , "(E)" },
-  { '\0', "read-cloog", 0, "read cloog file as input" , "(E)" }
+  { '\0', "read-cloog", 0, "read cloog file as input" , "\t(E)" }
 
 };
 
@@ -718,6 +719,8 @@ pocc_getopts (s_pocc_options_t* options, int argc, char** argv)
     options->ponos_maxscale_solver = 1;
   if (opt_tab[POCC_OPT_PONOS_PIPSOLVE_LP])
     options->ponos_pipsolve_lp = 1;
+  if (opt_tab[POCC_OPT_PONOS_PIPSOLVE_GMP])
+    options->ponos_pipsolve_gmp = 1;
   if (opt_tab[POCC_OPT_PONOS_NOREDUNDANCY_SOLVER])
     options->ponos_noredundancy_solver = 1;
   if (opt_tab[POCC_OPT_PONOS_SOLVER_PRECOND])
