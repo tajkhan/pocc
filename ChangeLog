@@ -1,3 +1,10 @@
+2013-03-25  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
+
+	* config/devel/configure.cfg,
+	* config/devel/driver.cfg,
+	* config/base/configure.cfg,
+	* config/base/driver.cfg: Add piplib-gmp dependence for FM.
+
 2013-03-24  Louis-Noel Pouchet  <pouchet@cs.ucla.edu>
 
 	* driver/pocc/driver-ponos.c,
