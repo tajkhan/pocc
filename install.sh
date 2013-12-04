@@ -17,11 +17,12 @@
 ## - irregular: all modules (development version) including those using
 ##               irregular programs support. Requires SVN access to ALCHEMY.
 ## - stable: all modules (released version)
+## - osl: osl-using tool chain (clan->candl->pluto->cloog)
 ##
 ## To Change the mode on the fly, after the first installation, use
 ## bin/pocc-util alternate <mode>
 ##
-POCC_MODE="base";
+POCC_MODE="osl";
 
 ## **** GMP section ****
 ##
