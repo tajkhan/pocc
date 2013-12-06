@@ -29,32 +29,50 @@
 # include <pocc/driver-candl.h>
 
 void
-pocc_driver_candl (scoplib_scop_p program,
+pocc_driver_candl (osl_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions)
 {
   if (poptions->candl_pass)
     {
       if (! poptions->quiet)
-	printf ("[PoCC] Running Candl\n");
-      CandlOptions* coptions = candl_options_malloc ();
-      CandlProgram* cprogram = candl_program_convert_scop (program, NULL);
-      CandlDependence* deps = candl_dependence (cprogram, coptions);
-      if (poptions->candl_deps_prune_transcover)
-	deps = candl_dependence_prune_transitively_covered (deps);
-      // Simplify dependences with ISL, if needed.
-      if (poptions->candl_deps_isl_simplify)
-	  candl_dependence_isl_simplify(deps, cprogram);
+	      printf ("[PoCC] Running Candl\n");
 
-      if (poptions->verbose)
-	candl_dependence_pprint (stdout, deps);
+      candl_options_p coptions = candl_options_malloc ();
 
-      // Embed dependences in the scop, in case we want pluto to read them.
-      if (poptions->pluto_external_candl)
-	candl_dependence_update_scop_with_deps (program, deps);
+      osl_scop_p scop = program;
+      while (scop) {
 
-      candl_dependence_free (deps);
-      candl_program_free (cprogram);
+        candl_scop_usr_init(scop);
+
+        osl_dependence_p deps = candl_dependence (scop, coptions);
+
+        if (poptions->candl_deps_prune_transcover)
+	        deps = candl_dependence_prune_transitively_covered (deps);
+        // Simplify dependences with ISL, if needed.
+        if (poptions->candl_deps_isl_simplify)
+	        candl_dependence_isl_simplify(deps, scop);
+
+        if (poptions->verbose)
+	        candl_dependence_pprint (stdout, deps);
+
+        // Embed dependences in the scop, in case we want pluto to read them.
+        if (poptions->pluto_external_candl)
+        {
+          osl_generic_p data = osl_generic_shell(deps,
+                                             osl_dependence_interface());
+          data->next = orig_scop->extension;
+          orig_scop->extension = data;
+  	      printf ("[pocc-driver-candl] added dependences to ext\n");
+        }
+        else
+          candl_dependence_free (deps);
+
+        candl_scop_usr_cleanup(scop);
+
+        scop = scop->next;
+      }
+
       candl_options_free (coptions);
     }
 }

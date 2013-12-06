@@ -217,6 +217,137 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
 }
 
 
+/*
+* add tags to parallel/vector loops found-by-pluto in clast
+*/
+int annotate_loops( osl_scop_p program , struct clast_stmt *root){
+
+  int j, nclastloops, nclaststmts;
+  struct clast_for **clastloops = NULL;
+  int *claststmts = NULL;
+
+
+    osl_loop_p ll = osl_generic_lookup(program->extension, OSL_URI_LOOP);
+    while(ll){
+      //for each loop
+  
+        osl_loop_p loop = ll;
+  
+        //osl_loop_dump(stdout, loop);
+        ClastFilter filter = {loop->iter, loop->stmt_ids, 
+                                     loop->nb_stmts, subset};
+        clast_filter(root, filter, &clastloops, &nclastloops, 
+                                     &claststmts, &nclaststmts);
+  
+        /* There should be at least one */
+        if (nclastloops==0) {  //FROM PLUTO
+           /* Sometimes loops may disappear (1) tile size larger than trip count
+           * 2) it's a scalar dimension but can't be determined from the
+           * trans matrix */
+           printf("Warning: parallel poly loop not found in AST\n");
+           ll = ll->next;
+           continue;
+        }
+        for (j=0; j<nclastloops; j++) {
+  
+          if(loop->directive & CLAST_PARALLEL_VEC){
+            clastloops[j]->parallel += CLAST_PARALLEL_VEC;
+          }
+  
+          if(loop->directive & CLAST_PARALLEL_OMP) {
+            clastloops[j]->parallel += CLAST_PARALLEL_OMP;
+            clastloops[j]->private_vars = strdup(loop->private_vars);
+          }
+        }
+  
+
+      if(clastloops){ free(clastloops); clastloops=NULL;}
+      if(claststmts){ free(claststmts); claststmts=NULL;}
+
+      ll = ll->next;
+    }
+
+  return 0;
+}
+
+
+/*sort scops in decending order of coordinates*/
+void sort_scops(osl_scop_p *scop){
+  if(*scop==NULL || (*scop)->next==NULL)
+    return *scop;
+  osl_coordinates_p co = NULL;
+  osl_coordinates_p nco = NULL;
+  int firstnode= 1;
+  osl_scop_p head = *scop;
+
+  //start from head 
+  osl_scop_p listend = NULL; //last element in correct position
+  while(listend != head){
+    osl_scop_p node = head; //start from beginning each time
+    osl_scop_p prev = head;
+    //push this element as far in the list as it could go
+    while(node->next != listend){
+      
+      co = osl_generic_lookup(node->extension, OSL_URI_COORDINATES);
+      nco = osl_generic_lookup(node->next->extension, OSL_URI_COORDINATES);
+      if(co->line_start < nco->line_start){
+        //swap
+        osl_scop_p next = node->next; 
+        node->next = next->next;
+        next->next = node;
+
+        if(node==head){
+          head = next;
+          node = next;
+        }
+        else{
+          node = next;
+          prev->next = next;
+        }
+      }
+
+      prev = node;
+      node = node->next;
+    }
+
+    //update listend to the last sorted element
+    listend = node;
+  } 
+
+  *scop = head;
+}
+
+static void print_macros(FILE *file)
+{
+    fprintf(file, "/* Useful macros. */\n") ;
+    fprintf(file,
+        "#define floord(n,d) (((n)<0) ? -((-(n)+(d)-1)/(d)) : (n)/(d))\n");
+    fprintf(file,
+        "#define ceild(n,d)  (((n)<0) ? -((-(n))/(d)) : ((n)+(d)-1)/(d))\n");
+    fprintf(file, "#define max(x,y)    ((x) > (y) ? (x) : (y))\n") ; 
+    fprintf(file, "#define min(x,y)    ((x) < (y) ? (x) : (y))\n\n") ; 
+}
+
+void print_preamble( char* filename, s_pocc_options_t* poptions){
+
+  FILE* body_file = fopen (filename, "w");
+  if (body_file == NULL)
+    pocc_error ("Cannot open preamble file %s\n", filename);
+
+  if (poptions->pluto_parallel)  {
+      fprintf(body_file, "#include <omp.h>\n\n");
+  }
+
+  print_macros(body_file);
+  
+  if (poptions->pluto_multipipe) {
+      fprintf(body_file, "\tomp_set_nested(1);\n");
+      fprintf(body_file, "\tomp_set_num_threads(2);\n");
+  }
+
+  fclose(body_file);
+
+}
 /**
  *  Generate code for transformed scop.
  *
@@ -233,7 +364,7 @@ pocc_driver_codegen_program_finalize (s_pocc_options_t* poptions)
  *
  */
 void
-pocc_driver_codegen (scoplib_scop_p program,
+pocc_driver_codegen (osl_scop_p program,
 		     s_pocc_options_t* poptions,
 		     s_pocc_utils_options_t* puoptions)
 {
@@ -246,75 +377,85 @@ pocc_driver_codegen (scoplib_scop_p program,
     pocc_error ("Cannot create file .body.c\n");
   poptions->output_file = body_file;
 
-  /* (1) Update statement iterators with tile iterators, if needed. */
-  scoplib_statement_p stm;
-  int i;
-  for (stm = program->statement; stm; stm = stm->next)
-    {
-      int nb_it = stm->domain->elt->NbColumns - program->context->NbColumns;
-
-      if (stm->nb_iterators != nb_it)
-	{
-	  char** iters = XMALLOC(char*, nb_it);
-	  for (i = 0; i < nb_it - stm->nb_iterators; ++i)
-	    {
-	      iters[i] = XMALLOC(char, 16);
-	      sprintf (iters[i], "fk%d", i);
-	    }
-	  for (; i < nb_it; ++i)
-	    iters[i] = stm->iterators[i - nb_it + stm->nb_iterators];
-	  XFREE(stm->iterators);
-	  stm->iterators = iters;
-	  stm->nb_iterators = nb_it;
-	}
-    }
-
   /* (2) Generate polyhedral scanning code with CLooG. */
   if (! poptions->quiet)
     printf ("[PoCC] Running CLooG\n");
   CloogOptions* coptions = poptions->cloog_options;
   if (coptions == NULL)
-    {
-      CloogState* cstate = cloog_state_malloc ();
-      poptions->cloog_options = coptions = cloog_options_malloc (cstate);
-    }
-  coptions->language = 'c';
+  {
+    CloogState* cstate = cloog_state_malloc ();
+    poptions->cloog_options = coptions = cloog_options_malloc (cstate);
 
-  if (poptions->cloog_f != POCC_CLOOG_UNDEF)
-    coptions->f = poptions->cloog_f;
-  if (poptions->cloog_l != POCC_CLOOG_UNDEF)
-    coptions->l = poptions->cloog_l;
+    coptions->language = 'c';
+  
+    if (poptions->cloog_f != POCC_CLOOG_UNDEF)
+      coptions->f = poptions->cloog_f;
+    if (poptions->cloog_l != POCC_CLOOG_UNDEF)
+      coptions->l = poptions->cloog_l;
+  }
 
-  struct clast_stmt* root =
-    pocc_driver_cloog (program, coptions, poptions, puoptions);
 
-  /* (3) Call Clast modules (and pretty-print if required). */
-  pocc_driver_clastops (program, root, poptions, puoptions);
+  /* Backup the default output file. */
+  FILE* out_file = poptions->output_file;
 
-  /* (4) Call PAST modules (and pretty-print if required) */
-  if (poptions->use_past)
-    {
-      // Convert to PAST IR.
-      if (! poptions->quiet)
-	printf ("[PAST] Converting CLAST to PoCC AST\n");
-      s_past_node_t* pastroot = clast2past (root, 1);
-      pocc_driver_pastops (program, pastroot, poptions, puoptions);
-    }
+  strcpy(infile_name, poptions->input_file_name);
+
+  sort_scops( &program); //decending order for writing in file
+  osl_scop_p tmpscop = program;
+  while(tmpscop){
+
+    //To suppress cloog warning!!
+    coptions->l = tmpscop->statement->scattering->nb_output_dims;
+
+    CloogInput *input = cloog_input_from_osl_scop(coptions->state, tmpscop);
+    
+    //cloog_input_dump_cloog(stdout, input, cloogOptions);
+    struct clast_stmt *root = cloog_clast_create_from_input(input, coptions);
+    //   - mark parallel/vector loops
+    annotate_loops(tmpscop, root);
+
+    /* (3) Call Clast modules (and pretty-print if required). */
+      pocc_driver_clastops_coordinates (program, root, poptions, puoptions, infile_name, scopnum);
+
+
+    fclose (poptions->output_file);
+
+    //remove the temporary file
+    if(scopnum >= 1)
+      remove(infile_name);
+
+    strcpy(infile_name,tmpfile_name);
+    scopnum++;
+
+    tmpscop = tmpscop->next;
+  }
+
+
 
   /* Perform PoCC-specific syntactic post-processing. */
-  fclose (poptions->output_file);
+  if(poptions->output_file_name == NULL){
+    char *token = NULL;
+    token = strtok(poptions->input_file_name, ".");    
+    strcat(outfile_name, token);
+    while(token){
+      token = strtok(NULL, ".");    
+      if(!strcmp(token, ".c") )
+        strcat(outfile_name, ".pocc.c");
+      else
+        strcat(outfile_name, token);
+    }
+    
+    poptions->output_file_name = strdup(outfile_name); 
+  }
   pocc_driver_codegen_post_processing (body_file, poptions);
 
+  remove (tmpfile_name);
+  remove (preamble_file);
+
   /* (5) Build the final output file template. */
-  if (pocc_driver_codegen_program_finalize (poptions) == EXIT_FAILURE)
-    {
-      if (! poptions->quiet)
-	printf ("[PoCC] Fatal error with program %s\n",
-		poptions->output_file_name);
-    }
-  else
-    if (! poptions->quiet)
-      printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
+  if (! poptions->quiet)
+    printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
+
   /* Restore the default output file. */
   poptions->output_file = out_file;
 }

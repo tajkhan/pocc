@@ -29,7 +29,7 @@
 # include <pocc/driver-clan.h>
 
 
-scoplib_scop_p
+osl_scop_p
 pocc_driver_clan (FILE* program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
@@ -39,28 +39,32 @@ pocc_driver_clan (FILE* program,
       if (! poptions->quiet)
 	printf ("[PoCC] Reading input scop\n");
 
-      return scoplib_scop_read(poptions->input_file);
+      return osl_scop_read(poptions->input_file);
     }
 
   if (! poptions->quiet)
     printf ("[PoCC] Running Clan\n");
   clan_options_p coptions = clan_options_malloc ();
   coptions->bounded_context = poptions->clan_bounded_context;
+  coptions->precision = 0; //using gmp by default
+  coptions->name = strdup(poptions->input_file_name);
 
-  scoplib_scop_p scop = clan_scop_extract (program, coptions);
+  osl_scop_p scop = clan_scop_extract (program, coptions);
+  fclose(program); //TODO: Taj - multifichiers ??
 
+  //TODO: Taj - multiscop ??
   /* Also deal with the context information. */
   if (poptions->set_default_parameter_values)
     {
       int nb_cols = scop->context->NbColumns;
-      scoplib_matrix_free (scop->context);
-      scop->context = scoplib_matrix_malloc (nb_cols - 2, nb_cols);
+      osl_relation_free (scop->context);
+      scop->context = osl_relation_malloc (nb_cols - 2, nb_cols);
       int i;
       for (i = 0; i < nb_cols - 2; ++i)
 	{
-	  SCOPVAL_set_si(scop->context->p[i][0], 1);
-	  SCOPVAL_set_si(scop->context->p[i][i + 1], 1);
-	  SCOPVAL_set_si(scop->context->p[i][nb_cols - 1], -32);
+	  osl_int_set_si(&scop->context->p[i][0], 1);
+	  osl_int_set_si(&scop->context->p[i][i + 1], 1);
+	  osl_int_set_si(&scop->context->p[i][nb_cols - 1], -32);
 	}
     }
 

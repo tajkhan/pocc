@@ -32,7 +32,6 @@
 #include "options.h"
 #include <pocc/driver-clan.h>
 #include <pocc/driver-candl.h>
-#include <pocc/driver-letsee.h>
 #include <pocc/driver-pluto.h>
 #include <pocc/driver-codegen.h>
 #include <pocc/driver-clastops.h>
@@ -68,24 +67,16 @@ int main(int argc, char** argv)
       printf ("[PoCC] INFO: pass-thru compilation, no optimization enabled\n");
 
   // (1) Parse the file.
-  scoplib_scop_p scop = NULL;
+  osl_scop_p scop = NULL;
   if (! poptions->read_cloog_file)
     scop = pocc_driver_clan (poptions->input_file, poptions, puoptions);
   else
-    scop = scoplib_scop_malloc ();
+    scop = osl_scop_malloc ();  //remove this part ?
   if (! scop || scop->statement == NULL)
     pocc_error ("[PoCC] Possible parsing error: no statement in SCoP");
   // (2) If pass-thru, run candl.
   if (! poptions->letsee || ! poptions->pluto)
     pocc_driver_candl (scop, poptions, puoptions);
-
-  // (3) Run Polyhedral Feature Extraction.
-  if (poptions->polyfeat)
-    pocc_driver_polyfeat (scop, poptions, puoptions);
-
-  // (3) Perform LetSee.
-  if (poptions->letsee)
-    pocc_driver_letsee (scop, poptions, puoptions);
 
   // (4) Perform PLuTo.
   // Don't do it if already performed through LetSee.
@@ -93,35 +84,13 @@ int main(int argc, char** argv)
     if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
       exit (EXIT_FAILURE);
 
-  // (5) Perform Ponos.
-#ifndef POCC_RELEASE_MODE
-  if (poptions->ponos)
-    if (pocc_driver_ponos (scop, poptions, puoptions) == EXIT_FAILURE)
-      exit (EXIT_FAILURE);
-#endif
-
-
-  if (poptions->output_scoplib_file_name)
-    {
-      scoplib_scop_p tempscop = scoplib_scop_dup (scop);
-      if (poptions->cloogify_schedules)
-	pocc_cloogify_scop (tempscop);
-      FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");
-      if (scopf)
-	{
-	  scoplib_scop_print_dot_scop (scopf, tempscop);
-	  fclose (scopf);
-	}
-      scoplib_scop_free (tempscop);
-    }
-
   // (5) Perform codgen.
   // Don't do it if already performed through LetSee.
   if (poptions->codegen && ! poptions->letsee)
     pocc_driver_codegen (scop, poptions, puoptions);
 
   // Be clean.
-  scoplib_scop_free (scop);
+  osl_scop_free (scop);
   pip_close ();
   if (! poptions->quiet)
     printf ("[PoCC] All done.\n");

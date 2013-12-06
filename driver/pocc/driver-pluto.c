@@ -29,6 +29,7 @@
 # include <pocc/driver-pluto.h>
 # include <pocc/driver-cloog.h>
 
+# include <osl/extensions/dependence.h>
 
 
 // Ugly forward declaration to avoid compilation warning. Would have
@@ -36,7 +37,7 @@
 PlutoOptions* pluto_options_alloc ();
 
 int
-pocc_driver_pluto (scoplib_scop_p program,
+pocc_driver_pluto (osl_scop_p program,
 		  s_pocc_options_t* poptions,
 		  s_pocc_utils_options_t* puoptions)
 {
@@ -86,36 +87,25 @@ pocc_driver_pluto (scoplib_scop_p program,
   // Ensure Candl has been run, and scop contains dependence
   // information, if pluto-ext-candl option is set.
   if (poptions->pluto_external_candl)
-    {
-      char* candldeps =
-	scoplib_scop_tag_content (program, "<dependence-polyhedra>",
-				  "</dependence-polyhedra>");
-      if (candldeps == NULL)
-	{
-	  // Dependence computation with candl was not done.
-	  pocc_driver_candl (program, poptions, puoptions);
-	}
-      else
-	free (candldeps);
-    }
+  {
+    osl_dependence_p candldeps =
+	    osl_generic_lookup (program->extension, OSL_URI_DEPENDENCE);
 
-  if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
-    return EXIT_FAILURE;
-  poptions->cloog_options = puoptions->cloog_options;
+    if (candldeps == NULL)
+	    {
+	      // Dependence computation with candl was not done.
+	      pocc_driver_candl (program, poptions, puoptions);
+	    }
+  }
 
-  if (poptions->output_scoplib_file_name)
-    {
-      scoplib_scop_p tempscop = scoplib_scop_dup (program);
-      if (poptions->cloogify_schedules)
-	pocc_cloogify_scop (tempscop);
-      FILE* scopf = fopen (poptions->output_scoplib_file_name, "w");
-      if (scopf)
-	{
-	  scoplib_scop_print_dot_scop (scopf, tempscop);
-	  fclose (scopf);
-	}
-      scoplib_scop_free (tempscop);
-    }
+  //TODO: Taj options for each scop
+  while(program){
+    if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
+      return EXIT_FAILURE;
+    poptions->cloog_options = puoptions->cloog_options;
+
+    program = program->next;
+  }
 
   return EXIT_SUCCESS;
 }
