@@ -38,16 +38,16 @@
 # ifndef SCOPLIB_INT_T_IS_LONGLONG
 #  define SCOPLIB_INT_T_IS_LONGLONG
 # endif
-# include <scoplib/scop.h>
+# include <osl/scop.h>
 
-# include <pluto/pluto.h>
+# include <pluto/libpluto.h>
 
 
 BEGIN_C_DECLS
 
 extern
 int
-pocc_driver_pluto (scoplib_scop_p program,
+pocc_driver_pluto (osl_scop_p program,
 		   s_pocc_options_t* poptions,
 		   s_pocc_utils_options_t* puoptions);
 

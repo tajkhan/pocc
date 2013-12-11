@@ -41,17 +41,22 @@ pocc_driver_candl (osl_scop_p program,
       candl_options_p coptions = candl_options_malloc ();
 
       osl_scop_p scop = program;
+      candl_scop_usr_init(scop);
       while (scop) {
 
-        candl_scop_usr_init(scop);
-
         osl_dependence_p deps = candl_dependence (scop, coptions);
+        osl_scop_print(stdout, scop);
 
+
+#if defined(CANDL_COMPILE_PRUNING_C)
         if (poptions->candl_deps_prune_transcover)
 	        deps = candl_dependence_prune_transitively_covered (deps);
+#endif
         // Simplify dependences with ISL, if needed.
+#ifdef CANDL_SUPPORTS_ISL
         if (poptions->candl_deps_isl_simplify)
 	        candl_dependence_isl_simplify(deps, scop);
+#endif
 
         if (poptions->verbose)
 	        candl_dependence_pprint (stdout, deps);
@@ -61,17 +66,16 @@ pocc_driver_candl (osl_scop_p program,
         {
           osl_generic_p data = osl_generic_shell(deps,
                                              osl_dependence_interface());
-          data->next = orig_scop->extension;
-          orig_scop->extension = data;
+          data->next = scop->extension;
+          scop->extension = data;
   	      printf ("[pocc-driver-candl] added dependences to ext\n");
         }
         else
-          candl_dependence_free (deps);
-
-        candl_scop_usr_cleanup(scop);
+          osl_dependence_free (deps);
 
         scop = scop->next;
       }
+      candl_scop_usr_cleanup(scop);
 
       candl_options_free (coptions);
     }

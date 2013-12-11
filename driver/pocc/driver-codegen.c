@@ -29,6 +29,10 @@
 # ifndef CLOOG_INT_GMP
 #  define CLOOG_INT_GMP
 # endif
+# include <osl/scop.h>
+# include <osl/extensions/loop.h>
+# include <osl/extensions/coordinates.h>
+
 # include <cloog/cloog.h>
 # include <pocc/driver-codegen.h>
 # include <pocc/driver-cloog.h>
@@ -371,7 +375,11 @@ pocc_driver_codegen (osl_scop_p program,
   if (! poptions->quiet)
     printf ("[PoCC] Starting Codegen\n");
   /* Backup the default output file. */
-  FILE* out_file = poptions->output_file;
+  char *infile_name[2048];
+  char *tmpfile_name[2048];
+  char *outfile_name[2048];
+  int scopnum = 0;
+
   FILE* body_file = fopen (".body.c", "w");
   if (body_file == NULL)
     pocc_error ("Cannot create file .body.c\n");
@@ -397,6 +405,7 @@ pocc_driver_codegen (osl_scop_p program,
 
   /* Backup the default output file. */
   FILE* out_file = poptions->output_file;
+  char* preamble_file = ".preamble";
 
   strcpy(infile_name, poptions->input_file_name);
 

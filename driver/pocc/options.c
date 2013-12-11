@@ -65,8 +65,8 @@ pocc_options_malloc ()
 
   // Letsee options.
   ret->letsee = 0; // Run LetSee (default: no)
-  ret->letsee_space = LS_TYPE_FS;
-  ret->letsee_traversal = LS_HEURISTIC_EXHAUST;
+//  ret->letsee_space = LS_TYPE_FS;
+//  ret->letsee_traversal = LS_HEURISTIC_EXHAUST;
   ret->letsee_normspace = 0;
   ret->letsee_scheme_m1 = NULL;
   ret->letsee_prune_precut = 0;
@@ -102,7 +102,7 @@ pocc_options_malloc ()
   ret->pluto_parallel = 0;
   ret->pluto_tile = 0;
   ret->pluto_rar = 0;
-  ret->pluto_fuse = SMART_FUSE;
+//  ret->pluto_fuse = SMART_FUSE;
   ret->pluto_unroll = 0;
   ret->pluto_polyunroll = 0;
   ret->pluto_bee = 0;

@@ -69,17 +69,8 @@ pocc_driver_pluto (osl_scop_p program,
   ploptions->l2tile = poptions->pluto_l2tile;
   ploptions->lastwriter = poptions->pluto_lastwriter;
   ploptions->scalpriv = poptions->pluto_scalpriv;
-  ploptions->external_deps = poptions->pluto_external_candl;
-  ploptions->candl_simplify_deps = poptions->candl_deps_isl_simplify;
-  ploptions->candl_deps_prune_transcover =
-    poptions->candl_deps_prune_transcover;
   //ploptions->debug = poptions->verbose;
   /* Set RAR on cost function only option. */
-  ploptions->rar_cf = poptions->pluto_rar_cf;
-  ploptions->names_are_strings = poptions->names_are_strings;
-
-  ploptions->tiling_in_scattering = poptions->pluto_tiling_in_scatt;
-  ploptions->bound_coefficients = poptions->pluto_bound_coefficients;
   
   pocc_options_init_cloog (poptions);
   puoptions->cloog_options = (void*) poptions->cloog_options;
@@ -100,7 +91,8 @@ pocc_driver_pluto (osl_scop_p program,
 
   //TODO: Taj options for each scop
   while(program){
-    if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
+    //if (pluto_pocc (program, ploptions, puoptions) == EXIT_FAILURE)
+    if (pluto_schedule_osl (program, ploptions) == EXIT_FAILURE)
       return EXIT_FAILURE;
     poptions->cloog_options = puoptions->cloog_options;
 

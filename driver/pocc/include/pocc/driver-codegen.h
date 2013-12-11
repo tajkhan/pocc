@@ -39,14 +39,14 @@
 # ifndef SCOPLIB_INT_T_IS_LONGLONG
 #  define SCOPLIB_INT_T_IS_LONGLONG
 # endif
-# include <scoplib/scop.h>
+# include <osl/scop.h>
 
 
 BEGIN_C_DECLS
 
 extern
 void
-pocc_driver_codegen (scoplib_scop_p program,
+pocc_driver_codegen (osl_scop_p program,
 		     s_pocc_options_t* poptions,
 		     s_pocc_utils_options_t* puoptions);
 

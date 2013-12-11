@@ -36,28 +36,20 @@ INCLUDES		=						\
 	-I$(top_srcdir)/driver/pocc/include				\
 	-I$(top_srcdir)/driver/pocc-utils/include			\
 	-I$(install_prefix)						\
-	-I$(install_prefix)/optimizers/install-letsee/include		\
 	-I$(install_prefix)/optimizers/install-pluto/include		\
-	-I$(install_prefix)/optimizers/install-pvectorizer/include	\
 	-I$(install_prefix)/optimizers/install-storcompacter/include	\
 	-I$(install_prefix)/optimizers/install-vectorizer/include	\
 	-I$(install_prefix)/optimizers/install-dlml/include		\
 	-I$(install_prefix)/ir/install-past/include			\
-	-I$(install_prefix)/ir/install-scoplib/include			\
+	-I$(install_prefix)/ir/install-osl/include			\
 	-I$(install_prefix)/ir/install-scoptools/include		\
-	-I$(install_prefix)/ir/install-irconverter/include		\
 	-I$(install_prefix)/analyzers/install-clan/include		\
 	-I$(install_prefix)/analyzers/install-candl/include		\
-	-I$(install_prefix)/analyzers/install-polyfeat/include		\
 	-I$(install_prefix)/generators/install-cloog/include		\
 	-I$(install_prefix)/generators/install-pragmatize/include	\
 	-I$(install_prefix)/generators/install-clasttools/include	\
-	-I$(install_prefix)/generators/install-clastannotation/include	\
-	-I$(install_prefix)/generators/install-ptile/include		\
-	-I$(install_prefix)/generators/install-punroller/include	\
 	-I$(install_prefix)/math/install-piplib-hybrid/include		\
 	-I$(install_prefix)/math/install-polylib/include		\
-	-I$(install_prefix)/math/install-fm/include			\
 	-I$(install_prefix)/math/external/install/include
 
 if POCC_HAS_HLS
@@ -69,11 +61,6 @@ INCLUDES += \
 	-I$(install_prefix)/math/install-barvinok/include
 endif
 
-if POCC_FULL_MODE
-INCLUDES += \
-	-I$(install_prefix)/optimizers/install-ponos/include		
-endif
-
 
 #############################################################################
 
@@ -81,24 +68,16 @@ pkginclude_HEADERS 	=					\
 		          include/pocc/common.h			\
 		          include/pocc/driver-clan.h		\
 		          include/pocc/driver-candl.h		\
-		          include/pocc/driver-letsee.h		\
 		          include/pocc/driver-clastops.h	\
 		          include/pocc/driver-codegen.h		\
 		          include/pocc/driver-cloog.h		\
-		          include/pocc/driver-pastops.h		\
 		          include/pocc/driver-pluto.h		\
-		          include/pocc/driver-polyfeat.h	\
-		          include/pocc/driver-ptile.h		\
 		          include/pocc/error.h			\
 		          include/pocc/exec.h			\
 		          include/pocc/options.h
 
 if POCC_HAS_HLS
 pkginclude_HEADERS += include/pocc/driver-hlsir.h
-endif
-
-if POCC_FULL_MODE
-pkginclude_HEADERS += include/pocc/driver-ponos.h
 endif
 
 
@@ -108,14 +87,10 @@ lib_LTLIBRARIES 	= libpocc.la
 libpocc_la_SOURCES 	=				\
 			  driver-clan.c			\
 			  driver-candl.c		\
-			  driver-letsee.c		\
 			  driver-pluto.c		\
 			  driver-clastops.c		\
 			  driver-codegen.c		\
 			  driver-cloog.c		\
-			  driver-pastops.c		\
-			  driver-polyfeat.c		\
-			  driver-ptile.c		\
 			  error.c			\
 			  exec.c			\
 		  	  options.c			\
@@ -125,44 +100,24 @@ libpocc_la_SOURCES += driver-hlsir.cc
 endif
 
 
-if POCC_FULL_MODE
-libpocc_la_SOURCES += driver-ponos.c
-endif
-
-
 
 libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 
 
 libpocc_la_LIBADD	=						     \
   $(install_prefix)/ir/install-past/lib/libpast.la			     \
-  $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
+  $(install_prefix)/ir/install-osl/lib/libosl.la		     \
   $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
-  $(install_prefix)/ir/install-irconverter/lib/libirconverter.la	     \
   $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \
   $(install_prefix)/analyzers/install-candl/lib/libcandl.la		     \
-  $(install_prefix)/analyzers/install-polyfeat/lib/libpolyfeat.la	     \
   $(install_prefix)/math/install-isl/lib/libisl.la			     \
-  $(install_prefix)/math/install-piplib-hybrid/lib/libpiplib64.la	     \
-  $(install_prefix)/math/install-piplib-gmp/lib/libpiplib-gmp.la	     \
-  $(install_prefix)/optimizers/install-letsee/lib/libletsee.la		     \
+  $(install_prefix)/math/install-piplib-hybrid/lib/libpiplibMP.la	     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
-  $(install_prefix)/optimizers/install-pvectorizer/lib/libpvectorizer.la     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
   $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
-  $(install_prefix)/generators/install-clasttools/lib/libclasttools.la	     \
-  $(install_prefix)/generators/install-ptile/lib/libptile.la		     \
-  $(install_prefix)/generators/install-punroller/lib/libpunroller.la	     \
-  $(install_prefix)/generators/install-clastannotation/lib/libclastannotation.la  \
-  $(install_prefix)/math/install-fm/lib/libfm.la
+  $(install_prefix)/generators/install-clasttools/lib/libclasttools.la
 
-if POCC_FULL_MODE
-  libpocc_la_LIBADD	+=						     \
-  $(install_prefix)/optimizers/install-storcompacter/lib/libstorcompacter.la \
-  $(install_prefix)/optimizers/install-vectorizer/lib/libvectorizer.la	     \
-  $(install_prefix)/optimizers/install-ponos/lib/libponos.la
-endif
-
+#  $(install_prefix)/math/install-piplib-hybrid/lib/libpiplib64.la
 
 if POCC_HAS_BARVINOK
   libpocc_la_LIBADD	+=						     \

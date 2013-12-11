@@ -27,11 +27,10 @@
 # include <pocc-utils/config.h>
 #endif
 
+#include "osl/scop.h"
+#include "pocc/dummy_defines.h"
+#include "pluto/libpluto.h"
 #include "options.h"
-
-#ifndef POCC_RELEASE_MODE
-# include <ponos/options.h>
-#endif
 
 #ifndef POCC_RELEASE_MODE
 static const struct s_opt       opts[POCC_NB_OPTS] =

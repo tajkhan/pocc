@@ -26,6 +26,7 @@
 # include <pocc-utils/config.h>
 #endif
 
+# include <osl/scop.h>
 # include <pocc/driver-clan.h>
 
 
@@ -56,15 +57,15 @@ pocc_driver_clan (FILE* program,
   /* Also deal with the context information. */
   if (poptions->set_default_parameter_values)
     {
-      int nb_cols = scop->context->NbColumns;
+      int nb_cols = scop->context->nb_columns;
       osl_relation_free (scop->context);
       scop->context = osl_relation_malloc (nb_cols - 2, nb_cols);
       int i;
       for (i = 0; i < nb_cols - 2; ++i)
 	{
-	  osl_int_set_si(&scop->context->p[i][0], 1);
-	  osl_int_set_si(&scop->context->p[i][i + 1], 1);
-	  osl_int_set_si(&scop->context->p[i][nb_cols - 1], -32);
+	  osl_int_set_si(scop->context->precision, &scop->context->m[i][0], 1);
+	  osl_int_set_si(scop->context->precision, &scop->context->m[i][i + 1], 1);
+	  osl_int_set_si(scop->context->precision, &scop->context->m[i][nb_cols - 1], -32);
 	}
     }
 

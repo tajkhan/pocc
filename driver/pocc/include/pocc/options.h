@@ -32,13 +32,6 @@
 # endif
 # include <cloog/cloog.h>
 # include <cloog/options.h>
-# include <pluto/pluto.h>
-# include <letsee/options.h>
-
-# ifndef POCC_RELEASE_MODE
-#  include <ponos/solver.h>
-#  include <ponos/objectives.h>
-# endif
 
 #define POCC_TIMER_CODE_ASM	1
 #define POCC_TIMER_CODE_TIME	2
