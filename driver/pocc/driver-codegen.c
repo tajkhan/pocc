@@ -380,7 +380,8 @@ pocc_driver_codegen (osl_scop_p program,
   char *outfile_name[2048];
   int scopnum = 0;
 
-  FILE* body_file = fopen (".body.c", "w");
+  char* body_file_name = ".body.c";
+  FILE* body_file = fopen (body_file_name, "w");
   if (body_file == NULL)
     pocc_error ("Cannot create file .body.c\n");
   poptions->output_file = body_file;
@@ -462,6 +463,8 @@ pocc_driver_codegen (osl_scop_p program,
   remove (preamble_file);
 
   /* (5) Build the final output file template. */
+  rename(body_file_name, poptions->output_file_name);
+
   if (! poptions->quiet)
     printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
 
