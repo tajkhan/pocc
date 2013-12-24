@@ -95,6 +95,8 @@ int main(int argc, char** argv)
   pip_close ();
   if (! poptions->quiet)
     printf ("[PoCC] All done.\n");
+
+  pocc_utils_options_free(puoptions);
   pocc_options_free (poptions);
 
   return 0;
