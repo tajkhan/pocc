@@ -352,6 +352,39 @@ void print_preamble( char* filename, s_pocc_options_t* poptions){
   fclose(body_file);
 
 }
+
+/*
+ *  cat file1 file2 > file3
+ *
+ */
+static
+void
+concatenate_files ( char* file1, char* file2, char* file3)
+{
+  int read = 1;
+  char c;
+  FILE* in = fopen(file1, "r");
+  if(!in) printf("ERROR opeing iput file\n");
+  FILE* out = fopen(file3, "w");
+  if(!out) printf("ERROR opeing output file\n");
+  while(read!=EOF){
+    read = fscanf(in, "%c", &c);
+    fprintf(out, "%c", c);
+  }
+  fclose(in);
+
+  read = 1;
+  in = fopen(file2, "r");
+  while(read!=EOF){
+    read = fscanf(in, "%c", &c);
+    fprintf(out, "%c", c);
+  }
+  fclose(in);
+  fclose(out);
+}
+
+
+
 /**
  *  Generate code for transformed scop.
  *
@@ -375,16 +408,11 @@ pocc_driver_codegen (osl_scop_p program,
   if (! poptions->quiet)
     printf ("[PoCC] Starting Codegen\n");
   /* Backup the default output file. */
-  char *infile_name[2048];
-  char *tmpfile_name[2048];
-  char *outfile_name[2048];
+  char infile_name[2048];
+  char tmpfile_name[2048];
+  char outfile_name[2048];
   int scopnum = 0;
 
-  char* body_file_name = ".body.c";
-  FILE* body_file = fopen (body_file_name, "w");
-  if (body_file == NULL)
-    pocc_error ("Cannot create file .body.c\n");
-  poptions->output_file = body_file;
 
   /* (2) Generate polyhedral scanning code with CLooG. */
   if (! poptions->quiet)
@@ -406,7 +434,6 @@ pocc_driver_codegen (osl_scop_p program,
 
   /* Backup the default output file. */
   FILE* out_file = poptions->output_file;
-  char* preamble_file = ".preamble";
 
   strcpy(infile_name, poptions->input_file_name);
 
@@ -424,8 +451,11 @@ pocc_driver_codegen (osl_scop_p program,
     //   - mark parallel/vector loops
     annotate_loops(tmpscop, root);
 
+    sprintf(tmpfile_name, ".output_%d.c", scopnum);
+    printf("Opening file: %s\n", tmpfile_name);
+    poptions->output_file = fopen (tmpfile_name, "w");
     /* (3) Call Clast modules (and pretty-print if required). */
-      pocc_driver_clastops_coordinates (program, root, poptions, puoptions, infile_name, scopnum);
+    pocc_driver_clastops_coordinates (tmpscop, root, poptions, puoptions, infile_name, scopnum);
 
 
     fclose (poptions->output_file);
@@ -457,13 +487,17 @@ pocc_driver_codegen (osl_scop_p program,
     
     poptions->output_file_name = strdup(outfile_name); 
   }
-  pocc_driver_codegen_post_processing (body_file, poptions);
 
-  remove (tmpfile_name);
-  remove (preamble_file);
 
   /* (5) Build the final output file template. */
-  rename(body_file_name, poptions->output_file_name);
+  char* preamble_filename = ".preamble";
+  print_preamble( preamble_filename, poptions);
+  /* cat preamble + generated_file > output_file_name */
+  concatenate_files(preamble_filename, infile_name, poptions->output_file_name);
+
+  remove (infile_name);
+  remove (preamble_filename);
+
 
   if (! poptions->quiet)
     printf ("[PoCC] Output file is %s.\n", poptions->output_file_name);
