@@ -437,7 +437,9 @@ pocc_driver_codegen (osl_scop_p program,
 
   strcpy(infile_name, poptions->input_file_name);
 
-  sort_scops( &program); //decending order for writing in file
+  /* SCoPs sorted in descending order in main() */
+  //sort_scops( &program); //decending order for writing in file
+
   osl_scop_p tmpscop = program;
   while(tmpscop){
 
@@ -445,8 +447,6 @@ pocc_driver_codegen (osl_scop_p program,
     coptions->l = tmpscop->statement->scattering->nb_output_dims;
 
     CloogInput *input = cloog_input_from_osl_scop(coptions->state, tmpscop);
-    
-    //cloog_input_dump_cloog(stdout, input, cloogOptions);
     struct clast_stmt *root = cloog_clast_create_from_input(input, coptions);
     //   - mark parallel/vector loops
     annotate_loops(tmpscop, root);
@@ -456,6 +456,7 @@ pocc_driver_codegen (osl_scop_p program,
     poptions->output_file = fopen (tmpfile_name, "w");
     /* (3) Call Clast modules (and pretty-print if required). */
     pocc_driver_clastops_coordinates (tmpscop, root, poptions, puoptions, infile_name, scopnum);
+    cloog_clast_free(root);
 
 
     fclose (poptions->output_file);

@@ -84,6 +84,7 @@ int main(int argc, char** argv)
     if (pocc_driver_pluto (scop, poptions, puoptions) == EXIT_FAILURE)
       exit (EXIT_FAILURE);
 
+  sort_scops(&scop);
   // (5) Perform codgen.
   // Don't do it if already performed through LetSee.
   if (poptions->codegen && ! poptions->letsee)

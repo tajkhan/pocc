@@ -75,7 +75,7 @@ pocc_driver_candl (osl_scop_p program,
 
         scop = scop->next;
       }
-      candl_scop_usr_cleanup(scop);
+      candl_scop_usr_cleanup(program);
 
       candl_options_free (coptions);
     }

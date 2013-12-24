@@ -258,6 +258,7 @@ int print_statement_defines( osl_scop_p program, struct clast_stmt* root, FILE* 
   osl_statement_p stm;
   int i;
   int nb_scatt = 0;
+  char *s = NULL;
   for (stm = program->statement; stm; stm = stm->next)
     {
       fprintf (file, "#define S%d(", st_count++);
@@ -265,16 +266,19 @@ int print_statement_defines( osl_scop_p program, struct clast_stmt* root, FILE* 
       int nb_iter = osl_statement_get_nb_iterators(stm);
       if(stm->body){ //get generic
         osl_body_p stmt_body = (osl_body_p)(stm->body->data); 
-
-      for (i = 0; i < nb_iter; ++i)
-	{
-	  fprintf (file, "%s", stmt_body->iterators->string[i]);
-	  if (i < nb_iter - 1)
-	    fprintf (file, ",");
-	}
-      fprintf (file, ") %s\n", osl_strings_sprint(stmt_body->expression) );
-      nb_scatt = stm->scattering->nb_rows > nb_scatt ?
-	stm->scattering->nb_rows : nb_scatt;
+  
+        for (i = 0; i < nb_iter; ++i)
+      	{
+      	  fprintf (file, "%s", stmt_body->iterators->string[i]);
+      	  if (i < nb_iter - 1)
+      	    fprintf (file, ",");
+      	}
+        s = osl_strings_sprint(stmt_body->expression);
+        fprintf (file, ") %s\n", s);
+        free(s);
+  
+        nb_scatt = stm->scattering->nb_rows > nb_scatt ?
+  	    stm->scattering->nb_rows : nb_scatt;
       }
     }
   /* We now can have statement definition overriden by the array
