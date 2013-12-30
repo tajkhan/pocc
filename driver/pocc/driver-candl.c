@@ -45,8 +45,6 @@ pocc_driver_candl (osl_scop_p program,
       while (scop) {
 
         osl_dependence_p deps = candl_dependence (scop, coptions);
-        osl_scop_print(stdout, scop);
-
 
 #if defined(CANDL_COMPILE_PRUNING_C)
         if (poptions->candl_deps_prune_transcover)

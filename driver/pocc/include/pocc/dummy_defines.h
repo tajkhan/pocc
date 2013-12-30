@@ -27,6 +27,13 @@
 # define LS_HEURISTIC_MAX_SCHEME_SIZE		64
 
 
+/* PLUTO constants*/
+
+//from pluto/libpluto.h
+#define SMART_FUSE 2
+
+
+
 /* PONOS constants*/
 
 //from ponos/solver.h
