@@ -264,8 +264,8 @@ int print_statement_defines( osl_scop_p program, struct clast_stmt* root, FILE* 
       fprintf (file, "#define S%d(", st_count++);
 
       int nb_iter = osl_statement_get_nb_iterators(stm);
-      if(stm->body){ //get generic
-        osl_body_p stmt_body = (osl_body_p)(stm->body->data); 
+      osl_body_p stmt_body = osl_generic_lookup(stm->extension, OSL_URI_BODY); 
+      if(stmt_body){ //get generic
   
         for (i = 0; i < nb_iter; ++i)
       	{
