@@ -204,6 +204,7 @@ sub order_by_deps
 		$deps_i = "";
 	    }
 	    $mod_i = $config{$soft[$i]}{"module"};
+	    print "#$i  $soft[$i] $mod_i\n";
 	    $mod_i =~ s/ //g;
 	    for ($j = $i + 1; $j <= $#soft; $j++) {
 		if (defined($config{$soft[$j]}{"make-depends"})) {
