@@ -369,7 +369,7 @@ void replace_statement_macros(char* infilename, char* outfilename,
   args[0] = "gcc";
   args[1] = "-E";
   args[2] = "-P";
-  args[3] = "-CC";
+  args[3] = "-E";
   args[4] = infilename;
   args[5] = "-o";
   //args[6] = outfilename;
