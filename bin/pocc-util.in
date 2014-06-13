@@ -31,7 +31,8 @@
 # Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
 #
 
-use Switch;
+#use Switch;
+use 5.010;  #min perl version; else the given/when statement gives error
 
 ## Some global variables.
 $BASEDIR = "@abs_top_srcdir@";
@@ -69,9 +70,9 @@ sub parse_args
 	exit 1;
     }
     for($i = 0; $i <= $#args; $i++) {
-	switch ($args[$i]) {
-	    case "help" { print_help; exit 1; }
-	    case "alternate" {
+	given ($args[$i]) {
+	    when ("help") { print_help; exit 1; }
+	    when ("alternate") {
 		die "Missing argument\n" if ($i eq $#args);
 		alternate($BASEDIR, $args[$i + 1]);
 		checkout($BASEDIR, "all");
@@ -86,7 +87,7 @@ sub parse_args
 		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
 	    }
-	    case "checkout" {
+	    when ("checkout") {
 		if ($i < $#args) {
 		    checkout($BASEDIR, $args[$i + 1]);
 		}
@@ -95,7 +96,7 @@ sub parse_args
 		}
 		$i = $#args;
 	    }
-	    case "check-diff" {
+	    when ("check-diff") {
 		if ($i < $#args) {
 		    checkdiff($BASEDIR, $args[$i + 1]);
 		}
@@ -104,7 +105,7 @@ sub parse_args
 		}
 		$i = $#args;
 	    }
-	    case "make" {
+	    when ("make") {
 		if ($i < $#args) {
 		    make($BASEDIR, $INST_PREFIX, $args[$i + 1], "");
 		}
@@ -113,13 +114,13 @@ sub parse_args
 		}
 		$i = $#args;
 	    }
-	    case "buildall" {
+	    when ("buildall") {
 		make($BASEDIR, $INST_PREFIX, "all", "");
 		my $ret = system ("cd $BASEDIR && make install");
 		die "[PoCC] fatal error\n" if ($ret != 0);
 		$i = $#args;
 	    }
-	    case "snapshot" {
+	    when ("snapshot") {
 		die "[PoCC] Missing argument to snapshot" if ($i == $#args);
 		my $type = $args[$i + 1];
 		my $mode = "base";
@@ -127,14 +128,14 @@ sub parse_args
 		snapshot($BASEDIR, $type, $mode);
 		$i = $#args;
 	    }
-	    case "generate-versions" {
+	    when ("generate-versions") {
 		die "[PoCC] Missing argument to snapshot" if ($i == $#args);
 		my $versionfile = $args[$i + 1];
 		my $filename = $args[$i + 2];
 		generate_versions($versionfile, $filename);
 		$i = $#args;
 	    }
-	    case "upgrade" {
+	    when ("upgrade") {
 		if ($i < $#args) {
 		    checkout($BASEDIR, $args[$i + 1]);
 		    make($BASEDIR, $INST_PREFIX, $args[$i + 1], "");
@@ -172,7 +173,7 @@ sub parse_args
 		}
 		$i = $#args;
 	    }
-	    else { print "Unknown argument: $args[$i]\n"; }
+	    default { print "Unknown argument: $args[$i]\n"; }
 	}
     }
 }

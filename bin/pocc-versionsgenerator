@@ -31,7 +31,7 @@
 # Louis-Noel Pouchet <Louis-Noel.Pouchet@inria.fr>
 #
 
-use Switch;
+#use Switch;
 use Term::ANSIColor;
 use Digest::MD5;
 
