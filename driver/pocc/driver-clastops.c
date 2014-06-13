@@ -34,7 +34,6 @@
 //# define CLOOG_SUPPORTS_SCOPLIB
 //# include <cloog/cloog.h>
 //# include <cloog/clast.h>
-# include <pragmatize/pragmatize.h>
 
 # include <clasttools/pprint.h>
 # include <clasttools/clastext.h>

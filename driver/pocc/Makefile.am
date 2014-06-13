@@ -37,16 +37,12 @@ INCLUDES		=						\
 	-I$(top_srcdir)/driver/pocc-utils/include			\
 	-I$(install_prefix)						\
 	-I$(install_prefix)/optimizers/install-pluto/include		\
-	-I$(install_prefix)/optimizers/install-storcompacter/include	\
-	-I$(install_prefix)/optimizers/install-vectorizer/include	\
-	-I$(install_prefix)/optimizers/install-dlml/include		\
 	-I$(install_prefix)/ir/install-past/include			\
 	-I$(install_prefix)/ir/install-osl/include			\
-	-I$(install_prefix)/ir/install-scoptools/include		\
+	-I$(install_prefix)/ir/install-scoplib/include			\
 	-I$(install_prefix)/analyzers/install-clan/include		\
 	-I$(install_prefix)/analyzers/install-candl/include		\
 	-I$(install_prefix)/generators/install-cloog/include		\
-	-I$(install_prefix)/generators/install-pragmatize/include	\
 	-I$(install_prefix)/generators/install-clasttools/include	\
 	-I$(install_prefix)/math/install-piplib-hybrid/include		\
 	-I$(install_prefix)/math/install-polylib/include		\
@@ -107,14 +103,13 @@ libpocc_la_CPPFLAGS	= -DHAVE_LIBPOCC_UTILS -DPOCC_ROOT_DIR=$(abs_top_srcdir)
 libpocc_la_LIBADD	=						     \
   $(install_prefix)/ir/install-past/lib/libpast.la			     \
   $(install_prefix)/ir/install-osl/lib/libosl.la		     \
-  $(install_prefix)/ir/install-scoptools/lib/libscoptools.la		     \
+  $(install_prefix)/ir/install-scoplib/lib/libscoplib.la		     \
   $(install_prefix)/analyzers/install-clan/lib/libclan.la		     \
   $(install_prefix)/analyzers/install-candl/lib/libcandl.la		     \
   $(install_prefix)/math/install-isl/lib/libisl.la			     \
   $(install_prefix)/math/install-piplib-hybrid/lib/libpiplibMP.la	     \
   $(install_prefix)/optimizers/install-pluto/lib/libpluto.la		     \
   $(install_prefix)/generators/install-cloog/lib/libcloog-isl.la	     \
-  $(install_prefix)/generators/install-pragmatize/lib/libpragmatize.la	     \
   $(install_prefix)/generators/install-clasttools/lib/libclasttools.la
 
 #  $(install_prefix)/math/install-piplib-hybrid/lib/libpiplib64.la
